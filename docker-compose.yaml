@@ -1,0 +1,20 @@
+services:
+  # This image is for local backend development. The local devserver, local
+  # migrations, and local tests all use this database.
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: password
+    # `restart: unless-stopped` restarts the service on computer reboot if it
+    # was active before shutdown.
+    restart: unless-stopped
+    volumes:
+      # A tmpfs volume loses all data upon container shutdown. This is OK
+      # because local databases are ephemeral anyways.
+      - type: tmpfs
+        target: /var/lib/postgresql/data/
+        tmpfs:
+          size: 4000000000
+    command: postgres -c log_statement=all -c max_connections=1024
+    ports:
+      - "40852:5432"

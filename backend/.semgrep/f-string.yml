@@ -1,0 +1,12 @@
+rules:
+  - id: missed-f-string
+    languages:
+      - python
+    patterns:
+      - pattern: '"=~/[{}]/"'
+      - pattern-not-inside: f"..."
+      - pattern-not-inside: r"..."
+    message: |
+      Should this string be an f-string? If not, to make this rule shut up, use
+      an f-string with double-braces.
+    severity: WARNING

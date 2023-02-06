@@ -1,0 +1,27 @@
+{
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.tests.{js,jsx,ts,tsx}",
+    "**/*.test.{js,jsx,ts,tsx}",
+    "**/*.spec.{js,jsx,ts,tsx}",
+    "**/*.stories.{js,jsx,ts,tsx}",
+    "**/tests/**",
+    "**/__tests__/**",
+    "**/*.d.ts",
+    "**/dist/**",
+    "**/vite.config.ts",
+    "**/coverage/**"
+  ],
+  "ignoreUnused": [
+    "@vanilla-extract/dynamic"
+  ],
+  "ignoreUnimported": [
+    "foundation/routing/state/prefetch.ts",
+    "foundation/style/utils.ts",
+    "foundation/ui/Card/index.css.ts",
+    "foundation/ui/Card/index.tsx",
+    "foundation/ui/Spacer/index.css.ts",
+    "foundation/ui/Spacer/index.tsx"
+  ],
+  "ignoreUnresolved": []
+}

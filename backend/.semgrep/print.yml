@@ -1,0 +1,11 @@
+rules:
+  - id: no-print
+    languages:
+      - python
+    patterns: 
+      - pattern: print(...)
+      - pattern: pprint(...)
+    message: |
+      Please emit debug statements with logger.debug() instead. They will also
+      be sorted better in pytest.
+    severity: WARNING

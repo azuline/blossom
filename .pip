@@ -1,0 +1,3 @@
+# Reference: https://pip.pypa.io/en/stable/topics/configuration/#configuration
+[global]
+disable-pip-version-check = yes

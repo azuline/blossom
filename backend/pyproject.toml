@@ -1,0 +1,79 @@
+[tool.black]
+line-length = 100
+force-exclude = '''
+(
+  /(
+      \.git          # exclude a few common directories in the
+    | \.mypy_cache   # root of the project
+    | \.tox
+    | \.venv
+    | _build
+    | build
+    | dist
+    | snapshots
+    | codegen
+  )/
+)
+'''
+
+[tool.ruff]
+select = [
+  # pycodestyle
+  "E",
+  # pyflakes
+  "F",
+  # pep8-naming
+  "N",
+  # flake8-unused-arguments
+  "ARG",
+  # pyupgrade
+  "UP",
+  # flake-bugbear
+  "B",
+  # flake8-builtins
+  "A",
+  # isort
+  "I",
+  # flake8-comprehensions
+  "C4",
+  # flake8-import-conventions
+  "ICN",
+  # flake8-pytest-style
+  "PT",
+  # flake8-simplify
+  "SIM",
+  # pandas-vet
+  "PD",
+  # flake8-use-pathlib - in ruff/main but not yet in the nixified version
+  # "PTH",
+]
+ignore = [
+  # Rule: Use `@pytest.mark.asyncio()` over `@pytest.mark.asyncio`
+  # Don't care, seems to be the same thing, less typing for me.
+  "PT023",
+  # Rule: f-string without any placeholders
+  # This conflicts with my semgrep rule to require f-strings when there is a
+  # curly brace in the string. One extra f-string is far more innocuous than a
+  # missed f-string, so I'm picking the semgrep rule.
+  "F541",
+]
+line-length = 100
+exclude = ["snapshots", ".venv", "codegen"]
+src = ["."]
+
+[tool.mypy]
+strict = true
+strict_optional = true
+explicit_package_bases = true
+disallow_untyped_decorators = false  # pytest.mark.asyncio doesn't like this
+plugins = "pydantic.mypy"
+
+[[tool.mypy.overrides]]
+module = "yoyo.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "pytest_asyncio.*"
+ignore_missing_imports = true
+[[tool.mypy.overrides]]
+module = "setuptools"
+ignore_missing_imports = true

@@ -1,0 +1,15 @@
+rules:
+  - id: sx-in-recipes
+    languages:
+      - typescript
+    patterns:
+      - pattern: sx(...)
+      - pattern-inside: |
+          variants: {
+            ...
+          },
+    message: |
+      Do not use `sx` sprinkles inside of recipe's `variants`. Because
+      sprinkles specificity is determined by the sprinkles definition order,
+      the classes set by variants may be overridden by the base.
+    severity: WARNING

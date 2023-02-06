@@ -1,0 +1,38 @@
+name: backend
+on: 
+  push:
+    paths:
+      - .github/workflows/backend.yaml
+      - flake.*
+      - nix/**
+      - backend/**
+defaults:
+  run:
+    working-directory: backend/
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v15
+      - name: Build Nix
+        run: nix build ../\#devShells.x86_64-linux.backend
+      - name: Start Postgres
+        run: docker compose up postgres -d
+      - name: Typecheck
+        if: success() || failure()  # Means that we run all steps even if one fails.
+        run: nix develop ../\#devShells.x86_64-linux.backend --command make typecheck
+      - name: Test
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.backend --command make test
+      - name: Lint
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.backend --command make lintcheck
+      - name: Codegen
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.backend --command make codegen
+      - name: Diff
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.backend --command fail-on-dirty-diff
