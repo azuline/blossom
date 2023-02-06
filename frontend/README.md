@@ -1,7 +1,7 @@
 # Frontend
 
 The frontend is written with full client side React, with the sole rationale of
-being cheaper to deploy. SSR is pretty cool.
+being cheaper to deploy. SSR is pretty cool, but it costs money.
 
 # Doing Things
 

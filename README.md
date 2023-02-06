@@ -18,10 +18,8 @@ Backend:
 - Database migrations with yoyo-migrations.
 - Postgres Row Level Security for secure multi-tenancy.
 - Database queries via the sqlc database ORM
-- A Quart webserver.
-- A RPC framework for python-native RPC definitions with dataclasses. RPC
-  typings are codegenned to the frontend.
-- An ergonomic pytest fixture for efficiently writing maintainable tests.
+- An ergonomic RPC framework with TypeScript binding codegen.
+- A single massive pytest fixture for efficiently writing maintainable tests.
 
 Frontend:
 
@@ -65,7 +63,7 @@ into multiple second-level directories.
 - `product/` contains the product's user-facing application.
 - `codegen/` contains the outputs of codegen tooling.
 
-We believe that this models the [product and platform split](https://newsletter.pragmaticengineer.com/p/program-platform-split-uber)
+We believe that this models the [product and platform split](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at)
 more explicitly and makes the platform's boundaries clearer and easier to
 maintain. This is named foundation instead of platform because Python has a
 standard library module named `platform` (crying).

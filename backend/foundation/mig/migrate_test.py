@@ -15,7 +15,6 @@ async def test_migration_steps(isolated_db: str) -> None:
     Test that, for each migration, the up -> down -> up path doesn't
     cause an error. Ladder our way up through the migration chain.
     """
-    # Lmao I hate Python's ecosystem.
     backend = get_backend(confvars.yoyo_database_url + "/" + isolated_db)
     migrations = read_migrations(str(MIGRATIONS_PATH))
 
