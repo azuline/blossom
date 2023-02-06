@@ -31,9 +31,3 @@ export class RPCError<T extends keyof RPCs, E extends PossibleRPCErrors<T>> exte
     this.transient = this.error != null && TRANSIENT_ERRORS.includes(this.error);
   }
 }
-
-export const isRouteError = <T extends keyof RPCs>(
-  e: unknown,
-): e is RPCError<T, PossibleRPCErrors<T>> => {
-  return e instanceof RPCError;
-};

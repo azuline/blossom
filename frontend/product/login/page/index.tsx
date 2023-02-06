@@ -1,4 +1,4 @@
-import { isRouteError, RPCError } from "@foundation/errors/rpc";
+import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
 import { IconLogo } from "@foundation/icons/IconLogo";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
@@ -30,11 +30,9 @@ const LoginPage: React.FC = () => {
 
   const submit = async (): Promise<void> => {
     const resp = await rpc("Login", form, e => {
-      if (isRouteError(e)) {
-        if (e.error === "InvalidCredentialsError") {
-          setError("Invalid login credentials. Please re-check your email and password.");
-          return true;
-        }
+      if (e.error === "InvalidCredentialsError") {
+        setError("Invalid login credentials. Please re-check your email and password.");
+        return true;
       }
       setError("Unexpected error occurred. Please try again later.");
       throw e;
@@ -42,6 +40,7 @@ const LoginPage: React.FC = () => {
     if (resp instanceof RPCError) {
       return;
     }
+
     await refetchAuth("GetPageLoadInfo");
     // TODO: Redirect to /
   };
@@ -70,8 +69,7 @@ const LoginPage: React.FC = () => {
               label="Remember me"
               onChange={permanent => setForm({ permanent })}
             />
-            {/* TODO: Theme */}
-            {error !== undefined && <Type sx={{ text: "sm", col: "danger" }}>{error}</Type>}
+            {error !== null && <Type sx={{ text: "sm", col: "danger" }}>{error}</Type>}
           </Flex>
           <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
         </Flex>
