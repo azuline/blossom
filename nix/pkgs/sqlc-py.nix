@@ -39,7 +39,7 @@ pkgs.writeShellScriptBin "sqlc-py" ''
   done
 
   # Add migration files to migrations, but omit rollback files.
-  ${pkgs.fd}/bin/fd --type f ".sql" product/migrations \
+  ${pkgs.fd}/bin/fd --type f ".sql" migrations \
       | sort \
       | ${pkgs.ripgrep}/bin/rg -v ".rollback.sql" | while read -r file; do
     ${pkgs.yq-go}/bin/yq -i ".sql[0].schema += \"''${file}\"" sqlc.yaml
