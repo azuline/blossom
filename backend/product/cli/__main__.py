@@ -6,8 +6,8 @@ from pytest_asyncio.plugin import asyncio, functools
 from foundation.log import option_log_level
 from foundation.mig.migrate import run_database_migrations
 from foundation.rpc.codegen import codegen_typescript
+from foundation.webserver import start_app
 from product.users.create import create_user
-from product.webserver import start_app
 
 
 def coro(f: Any) -> Any:

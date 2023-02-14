@@ -10,7 +10,7 @@ from quart.typing import TestClientProtocol
 
 from codegen.sqlc.models import Tenant, User
 from foundation.rpc.route import HEADER_TENANT_EXTERNAL_ID_KEY, SESSION_USER_ID_KEY
-from product.webserver import create_app
+from foundation.webserver import create_app
 
 if TYPE_CHECKING:
     from foundation.test.fixture import TFix

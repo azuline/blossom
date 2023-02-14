@@ -1,7 +1,7 @@
 check: typecheck test lintcheck
 
 start:
-	QUART_DEBUG=1 QUART_APP="product.webserver:debug_app()" quart run --port 40851
+	QUART_DEBUG=1 QUART_APP="foundation.webserver:debug_app()" quart run --port 40851
 
 test:
 	pytest --cov=. --cov-branch .

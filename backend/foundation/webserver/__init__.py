@@ -12,12 +12,9 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart
 
-# Import all modules with routes definitions into this file.
 from foundation.conf import confvars
 from foundation.db import ConnPool, create_pg_pool
 from foundation.rpc.catalog import create_blueprint
-
-# routes is imported to execute all the modules that attach routes to api_blueprint.
 
 SECRET_LENGTH = 32
 
