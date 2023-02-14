@@ -3,8 +3,8 @@ import logging
 import pytest
 from yoyo import get_backend, read_migrations
 
-from foundation.conf import confvars
-from foundation.mig.migrate import MIGRATIONS_PATH
+from foundation.config import confvars
+from foundation.migrate import MIGRATIONS_PATH
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ async def test_migration_steps(isolated_db: str) -> None:
     cause an error. Ladder our way up through the migration chain.
     """
     backend = get_backend(confvars.yoyo_database_url + "/" + isolated_db)
-    migrations = read_migrations(str(MIGRATIONS_PATH))
+    migrations = read_migrations(MIGRATIONS_PATH)
 
     for mig in migrations:
         backend.apply_one(mig)

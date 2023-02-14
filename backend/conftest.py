@@ -21,9 +21,9 @@ from quart.typing import TestClientProtocol
 # Configure logging for tests -- we will set up OpenTelemetry and fix this side effect
 # nonsense later.
 import foundation.log  # noqa
-from foundation.conf import confvars
-from foundation.db import ConnPool, create_pg_pool
-from foundation.mig.migrate import run_database_migrations
+from foundation.config import confvars
+from foundation.database import ConnPool, create_pg_pool
+from foundation.migrate import run_database_migrations
 from foundation.test.factory import TestFactory
 from foundation.test.fixture import TFix
 

@@ -4,7 +4,7 @@ import quart
 from werkzeug.security import check_password_hash
 
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.db import conn_admin
+from foundation.database import conn_admin
 from foundation.rpc.error import APIError
 from foundation.rpc.route import SESSION_USER_ID_KEY, Req, route
 

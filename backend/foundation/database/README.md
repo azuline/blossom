@@ -1,7 +1,7 @@
-# db
+# database
 
-The `db` package exposes abstractions for creating a Postgres connection pool
-and spawning connections from it.
+The `database` package exposes abstractions for creating a Postgres connection
+pool and spawning connections from it.
 
 Two functions are exposed for creating connections, one for `admin` connections
 and another for `customer` connections. The `admin` connection has unrestricted

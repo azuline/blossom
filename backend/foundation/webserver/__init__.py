@@ -12,8 +12,8 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart
 
-from foundation.conf import confvars
-from foundation.db import ConnPool, create_pg_pool
+from foundation.config import confvars
+from foundation.database import ConnPool, create_pg_pool
 from foundation.rpc.catalog import create_blueprint
 
 SECRET_LENGTH = 32

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from codegen.sqlc.models import Tenant, User
-from foundation.db import Conn, ConnPool, set_row_level_security
+from foundation.database import Conn, ConnPool, set_row_level_security
 
 if TYPE_CHECKING:
     from foundation.test.fixture import TFix

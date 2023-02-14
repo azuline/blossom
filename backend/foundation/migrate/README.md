@@ -1,6 +1,6 @@
-# mig
+# migrate
 
-The `mig` package runs database migrations. It is a light facade around
+The `migrate` package runs database migrations. It is a light facade around
 `yoyo-migrations`, nothing special.
 
 This package also contains comprehensive tests against the database schema,

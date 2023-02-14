@@ -16,7 +16,7 @@ from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.db import Conn, ConnPool, conn_admin, conn_cust
+from foundation.database import Conn, ConnPool, conn_admin, conn_cust
 from foundation.rpc.catalog import catalog_global_error, catalog_route
 from foundation.rpc.error import (
     APIError,

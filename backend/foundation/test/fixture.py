@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from foundation.db import ConnPool
+from foundation.database import ConnPool
 from foundation.test.db import TestDB
 from foundation.test.factory import TestFactory
 from foundation.test.rpc import TestRPC

@@ -2,8 +2,8 @@ from werkzeug.security import generate_password_hash
 
 from codegen.sqlc.models import UserSignupStep
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.conf import confvars
-from foundation.db import conn_admin, create_pg_pool
+from foundation.config import confvars
+from foundation.database import conn_admin, create_pg_pool
 
 
 async def create_user(*, email: str, name: str, password: str | None) -> None:

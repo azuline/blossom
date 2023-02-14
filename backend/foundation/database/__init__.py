@@ -8,7 +8,7 @@ from psycopg.sql import SQL, Identifier
 from psycopg_pool import AsyncConnectionPool, AsyncNullConnectionPool
 
 from codegen.sqlc.models import Tenant, User
-from foundation.conf import confvars
+from foundation.config import confvars
 
 # Type aliases for everyone.
 Conn = AsyncConnection[Any]

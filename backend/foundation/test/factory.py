@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, TypeVar
 
 from codegen.sqlc.models import Tenant, TenantsInboundSource, User, UsersTenant
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.db import Conn
+from foundation.database import Conn
 
 if TYPE_CHECKING:
     from foundation.test.fixture import TFix

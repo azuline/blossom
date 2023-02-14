@@ -1,7 +1,16 @@
--- nanoid
+-- setup
 -- depends:
 
-/*
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE FUNCTION updated_at() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE PLPGSQL;
+
+/************************ VENDORED **************************
  * Copyright 2022 Viascom Ltd liab. Co
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,8 +30,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- This is an implementation of nanoid vendored from
 -- https://github.com/viascom/nanoid-postgres.
@@ -66,3 +73,5 @@ BEGIN
         end loop;
 END
 $$;
+
+/************************ END VENDORED **************************/
