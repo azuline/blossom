@@ -3,8 +3,6 @@ from dataclasses import dataclass
 import quart
 from werkzeug.security import check_password_hash
 
-from codegen.sqlc.queries import AsyncQuerier
-from foundation.database import conn_admin
 from foundation.rpc.error import APIError
 from foundation.rpc.route import SESSION_USER_ID_KEY, Req, route
 
@@ -32,10 +30,7 @@ async def login(req: Req[LoginIn]) -> None:
     """
     Log a user in if their credentials are correct.
     """
-    # To read arbitrary users, connect as admin.
-    async with conn_admin(pg_pool=req.pg_pool) as conn:
-        q = AsyncQuerier(conn)
-        user = await q.authn_fetch_user_email(email=req.data.email)
+    user = await req.q.authn_fetch_user_email(email=req.data.email)
 
     # 1. If no user with this email exists
     # 2. If the user has not completed signup

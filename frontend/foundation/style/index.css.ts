@@ -88,7 +88,7 @@ export const t = createGlobalTheme("html", {
     },
     scrollbar: "hsl(0, 0%, 76%)",
     hover: {
-      neutral: "hsla(158, 4%, 30%, 15%)",
+      neutral: "hsla(158, 4%, 35%, 8%)",
       primary: "hsla(227, 59%, 20%, 40%)",
       danger: "hsla(4, 92%, 20%, 40%)",
     },
