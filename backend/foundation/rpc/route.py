@@ -16,7 +16,7 @@ from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
 from foundation.database import ConnPool, ConnQuerier, conn_admin, conn_cust
-from foundation.rpc.catalog import catalog_global_error, catalog_raw_route, catalog_rpc
+from foundation.rpc.catalog import Method, catalog_global_error, catalog_raw_route, catalog_rpc
 from foundation.rpc.error import (
     APIError,
 )
@@ -82,7 +82,7 @@ def route(
     out: type[Any] | None,
     errors: list[type[APIError]],
     authorization: Authorization,
-    method: Literal["GET", "POST"] = "POST",
+    method: Method = "POST",
     # Whether this is a raw route or not.
     type_: Literal["rpc", "raw"] = "rpc",
     # This is for tests. Some tests may not want to mount their temporary routes into the global

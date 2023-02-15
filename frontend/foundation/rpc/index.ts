@@ -1,4 +1,4 @@
-import { RPCErrors, RPCs } from "@codegen/rpc";
+import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
 import { BlossomError } from "@foundation/errors/base";
 import {
   PossibleRPCErrors,
@@ -125,7 +125,7 @@ const baseRPCExecutor = async <
   let text;
   try {
     response = await fetch(`/api/${name}`, {
-      method: "POST",
+      method: RPCMethods[name],
       cache: "no-store",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

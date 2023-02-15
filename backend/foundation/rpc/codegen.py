@@ -8,7 +8,7 @@ from typing import Any, get_args, get_origin, get_type_hints
 
 from jinja2 import BaseLoader, Environment
 
-from foundation.rpc.catalog import Catalog, get_catalog
+from foundation.rpc.catalog import Catalog, Method, get_catalog
 from foundation.rpc.error import APIError
 
 # nosemgrep
@@ -58,6 +58,12 @@ export type RPCs = {
   },
   {% endfor %}
 };
+
+export const RPCMethods = {
+  {% for rpcname, rpc in catalog.rpcs.items() %}
+  {{ rpcname }}: "{{ rpc.method }}",
+  {% endfor %}
+} satisfies Record<keyof RPCs, "GET" | "POST">;
 """
 
 
@@ -81,6 +87,7 @@ def codegen_typescript() -> None:
 class RPCSchema:
     in_: str | None
     out: str | None
+    method: Method
     error_names: list[str]
 
 
@@ -126,13 +133,12 @@ def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
         schema.global_error_names.append(e.__name__)
 
     for r in catalog.rpcs:
-        if not r.codegen:
-            continue
         for e in r.errors:
             add_error_to_schema(e)
         schema.rpcs[r.name] = RPCSchema(
             in_=dataclass_to_str(r.in_) if r.in_ else "null",
             out=dataclass_to_str(r.out) if r.out else "null",
+            method=r.method,
             error_names=[e.__name__ for e in r.errors],
         )
 

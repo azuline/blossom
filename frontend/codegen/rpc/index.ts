@@ -63,3 +63,9 @@ export type RPCs = {
     errors: never;
   };
 };
+
+export const RPCMethods = {
+  Login: "POST",
+  Logout: "POST",
+  GetPageLoadInfo: "GET",
+} satisfies Record<keyof RPCs, "GET" | "POST">;
