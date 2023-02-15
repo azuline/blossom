@@ -1,5 +1,8 @@
 # Backend
 
+The backend is written in Python for the sole reason that I am most experienced
+and efficient in it. I have worries about Python at scale.
+
 # Doing Things
 
 See the `Makefile` for a list of common dev commands.
