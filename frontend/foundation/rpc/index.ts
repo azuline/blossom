@@ -121,15 +121,27 @@ const baseRPCExecutor = async <
   name: T,
   args: RPCs[T]["in"],
 ): Promise<RPCs[T]["out"]> => {
+  const method = RPCMethods[name];
+
+  const url = new URL(`/api/${name}`);
+  let body: string | undefined;
+  if (args != null) {
+    if (method === "GET") {
+      Object.entries(args).forEach(([k, v]) => url.searchParams.append(k, v.toString()));
+    } else {
+      body = JSON.stringify(args);
+    }
+  }
+
   let response;
   let text;
   try {
-    response = await fetch(`/api/${name}`, {
-      method: RPCMethods[name],
+    response = await fetch(url, {
+      method,
       cache: "no-store",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: args === undefined ? undefined : JSON.stringify(args),
+      body,
     });
     text = await response.text();
   } catch (e) {

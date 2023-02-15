@@ -129,7 +129,7 @@ def route(
                 logger.info("Request passed user authorization check.")
 
                 # 5. Parse input data.
-                data = await _validate_data(in_)
+                data = await _validate_data(in_, method)
                 logger.info("Validated request data.")
 
                 # 6. Configure the customer's database connection with
@@ -232,7 +232,7 @@ async def _check_authorization(
 T = TypeVar("T")
 
 
-async def _validate_data(spec: type[T] | None) -> T | None:
+async def _validate_data(spec: type[T] | None, method: Method) -> T | None:
     """
     This decorates a quart endpoint. Taking a pydantic input dataclass as an argument,
     this decorator parses the request data with that dataclass. If parsing fails, this
@@ -241,12 +241,15 @@ async def _validate_data(spec: type[T] | None) -> T | None:
     if spec is None:
         return None
 
-    raw_data = await quart.request.get_data()
-    try:
-        data = json.loads(raw_data) if raw_data else {}
-    except json.JSONDecodeError as e:
-        logger.info(f"Input JSON decode failure: {e}")
-        raise ServerJSONDeserializeError(message="Failed to deserialize input to JSON.") from e
+    if method == "GET":
+        data = quart.request.args.to_dict()
+    else:
+        raw_data = await quart.request.get_data()
+        try:
+            data = json.loads(raw_data) if raw_data else {}
+        except json.JSONDecodeError as e:
+            logger.info(f"Input JSON decode failure: {e}")
+            raise ServerJSONDeserializeError(message="Failed to deserialize input to JSON.") from e
 
     pydantic.dataclasses.dataclass(spec)
     with pydantic.dataclasses.set_validation(spec, True):  # type: ignore

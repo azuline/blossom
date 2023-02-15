@@ -9,6 +9,7 @@ from quart import Quart, Response, json
 from quart.typing import TestClientProtocol
 
 from codegen.sqlc.models import Tenant, User
+from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import HEADER_TENANT_EXTERNAL_ID_KEY, SESSION_USER_ID_KEY
 from foundation.webserver import create_app
 
@@ -45,6 +46,13 @@ class TestRPC:
         self._app = None
         self._client = None
         self._logged_in_as_tenant_external_id = None
+        self._catalog = get_catalog()
+
+    def _get_rpc_method(self, path: str) -> Method:
+        for rpc in self._catalog.rpcs:
+            if rpc.name == path:
+                return rpc.method
+        return "POST"
 
     async def app(self) -> Quart:
         if self._app is not None:
@@ -81,11 +89,20 @@ class TestRPC:
             )
             headers[HEADER_TENANT_EXTERNAL_ID_KEY] = self._logged_in_as_tenant_external_id
 
-        resp = await (await self.client()).post(
-            f"/api/{path}",
-            headers=headers,
-            json=asdict(data) if data else None,
-        )
+        method = self._get_rpc_method(path)
+        if method == "GET":
+            resp = await (await self.client()).get(
+                f"/api/{path}",
+                headers=headers,
+                query_string=asdict(data) if data else None,
+            )
+        else:
+            resp = await (await self.client()).post(
+                f"/api/{path}",
+                headers=headers,
+                json=asdict(data) if data else None,
+            )
+
         logger.debug(f"Request completed with {resp.status_code=} {(await resp.get_data())=}.")
         return resp
 
