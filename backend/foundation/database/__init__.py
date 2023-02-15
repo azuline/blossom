@@ -1,6 +1,7 @@
 import logging
 import sys
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Any, AsyncIterator
 
 from psycopg import AsyncConnection
@@ -8,12 +9,19 @@ from psycopg.sql import SQL, Identifier
 from psycopg_pool import AsyncConnectionPool, AsyncNullConnectionPool
 
 from codegen.sqlc.models import Tenant, User
+from codegen.sqlc.queries import AsyncQuerier
 from foundation.config import confvars
 
 # Type aliases for everyone.
 Conn = AsyncConnection[Any]
 # Unsure why I'm getting type errors if it's only AsyncNullConnectionPool.
 ConnPool = AsyncNullConnectionPool | AsyncConnectionPool
+
+
+@dataclass
+class ConnQuerier:
+    c: Conn
+    q: AsyncQuerier
 
 
 async def create_pg_pool(url: str) -> ConnPool:
@@ -35,9 +43,9 @@ if "pytest" in sys.modules:
 
 
 @asynccontextmanager
-async def conn_admin(pg_pool: ConnPool) -> AsyncIterator[Conn]:
+async def conn_admin(pg_pool: ConnPool) -> AsyncIterator[ConnQuerier]:
     async with pg_pool.connection() as conn:
-        yield conn
+        yield ConnQuerier(c=conn, q=AsyncQuerier(conn))
 
 
 @asynccontextmanager
@@ -45,11 +53,11 @@ async def conn_cust(
     pg_pool: ConnPool,
     user: User | None,
     tenant: Tenant | None,
-) -> AsyncIterator[Conn]:
+) -> AsyncIterator[ConnQuerier]:
     async with pg_pool.connection() as conn:
         await set_row_level_security(conn, user, tenant)
         try:
-            yield conn
+            yield ConnQuerier(c=conn, q=AsyncQuerier(conn))
         finally:
             # We try to clean up the row level security here, and we also clean it up in
             # the `reset` function of ConnPool.

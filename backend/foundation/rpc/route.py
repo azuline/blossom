@@ -16,7 +16,7 @@ from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.database import Conn, ConnPool, conn_admin, conn_cust
+from foundation.database import Conn, ConnPool, ConnQuerier, conn_admin, conn_cust
 from foundation.rpc.catalog import catalog_global_error, catalog_route
 from foundation.rpc.error import (
     APIError,
@@ -134,14 +134,13 @@ def route(
                 # 6. Configure the customer's database connection with
                 # row-level-security (if logged in). Then execute the request.
                 conn_ctx = conn_cust(pg_pool, user, tenant) if user else conn_admin(pg_pool)
-                async with conn_ctx as conn:
-                    q = AsyncQuerier(conn)
+                async with conn_ctx as cq:
                     req = Req(
                         data=data,
                         user=user,
                         tenant=tenant,
-                        conn=conn,
-                        q=q,
+                        conn=cq.c,
+                        q=cq.q,
                         pg_pool=pg_pool,
                     )
                     logger.info(f"Entering request handler with {user is None}.")
@@ -165,13 +164,11 @@ def route(
     return decorator
 
 
-async def _check_session_auth(conn: Conn) -> tuple[User | None, Tenant | None]:
+async def _check_session_auth(cq: ConnQuerier) -> tuple[User | None, Tenant | None]:
     """
     Check the current request's session authentication. If so, fetch the associated user
     and the tenant they're logged in as.
     """
-    q = AsyncQuerier(conn)
-
     user_external_id = quart.session.get(SESSION_USER_ID_KEY, None)
     tenant_external_id = quart.request.headers.get(HEADER_TENANT_EXTERNAL_ID_KEY, None)
 
@@ -180,13 +177,13 @@ async def _check_session_auth(conn: Conn) -> tuple[User | None, Tenant | None]:
 
     logger.info(f"User ID found in session: {user_external_id is not None}")
     if user_external_id:
-        user = await q.user_fetch_ext(external_id=str(user_external_id))
+        user = await cq.q.user_fetch_ext(external_id=str(user_external_id))
         logger.info(f"User found: {user is not None}")
     # Only look for the tenant if the user exists. Otherwise we could potentially be
     # leaking the existence of a tenant.
     logger.info(f"Tenant ID found in headers: {tenant_external_id is not None}")
     if user and tenant_external_id:
-        tenant = await q.rpc_fetch_tenant_associated_with_user(
+        tenant = await cq.q.rpc_fetch_tenant_associated_with_user(
             user_id=user.id,
             external_id=str(tenant_external_id),
         )
