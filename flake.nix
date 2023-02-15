@@ -52,7 +52,7 @@
           # the built backend package.
           blossom = pkgs.writeShellScriptBin "blossom" ''
             cd $BLOSSOM_ROOT/backend
-            python -m product.cli $@
+            python -m cli $@
           '';
         };
       }
