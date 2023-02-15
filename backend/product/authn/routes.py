@@ -30,7 +30,7 @@ async def login(req: Req[LoginIn]) -> None:
     """
     Log a user in if their credentials are correct.
     """
-    user = await req.q.authn_fetch_user_email(email=req.data.email)
+    user = await req.cq.q.authn_fetch_user_email(email=req.data.email)
 
     # 1. If no user with this email exists
     # 2. If the user has not completed signup

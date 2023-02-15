@@ -15,8 +15,7 @@ from pydantic import ValidationError
 from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
-from codegen.sqlc.queries import AsyncQuerier
-from foundation.database import Conn, ConnPool, ConnQuerier, conn_admin, conn_cust
+from foundation.database import ConnPool, ConnQuerier, conn_admin, conn_cust
 from foundation.rpc.catalog import catalog_global_error, catalog_route
 from foundation.rpc.error import (
     APIError,
@@ -35,8 +34,7 @@ D = TypeVar("D")
 
 @dataclass
 class Req(Generic[D]):
-    conn: Conn
-    q: AsyncQuerier
+    cq: ConnQuerier
     user: User | None
     tenant: Tenant | None
     data: D
@@ -142,8 +140,7 @@ def route(
                         data=data,
                         user=user,
                         tenant=tenant,
-                        conn=cq.c,
-                        q=cq.q,
+                        cq=cq,
                         pg_pool=pg_pool,
                     )
                     logger.info(f"Entering request handler with {user is None}.")

@@ -42,6 +42,6 @@ async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
         email=req.user.email,
         tenant=GetPageLoadInfoTenant.from_model(req.tenant) if req.tenant is not None else None,
         available_tenants=[
-            GetPageLoadInfoTenant.from_model(t) async for t in req.q.tenant_fetch_all()
+            GetPageLoadInfoTenant.from_model(t) async for t in req.cq.q.tenant_fetch_all()
         ],
     )
