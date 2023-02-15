@@ -16,7 +16,7 @@ from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
 from foundation.database import ConnPool, ConnQuerier, conn_admin, conn_cust
-from foundation.rpc.catalog import catalog_global_error, catalog_route
+from foundation.rpc.catalog import catalog_global_error, catalog_raw_route, catalog_rpc
 from foundation.rpc.error import (
     APIError,
 )
@@ -82,9 +82,9 @@ def route(
     out: type[Any] | None,
     errors: list[type[APIError]],
     authorization: Authorization,
-    # Whether to generate client bindings for this route. If the route is not intended to be used by
-    # an internal client, pass False here.
-    codegen: bool = True,
+    method: Literal["GET", "POST"] = "POST",
+    # Whether this is a raw route or not.
+    type_: Literal["rpc", "raw"] = "rpc",
     # This is for tests. Some tests may not want to mount their temporary routes into the global
     # catalog because the temporary route is re-defined in every test, leading to test pollution in
     # the global scope.
@@ -147,6 +147,10 @@ def route(
                     rdata = await func(req)
                     logger.info("Exited request handler.")
 
+                # A raw handler should handle its own return value.
+                if type_ == "raw":
+                    return rdata
+                # But an RPC handler returns a dataclass that we serialize.
                 return quart.jsonify(asdict(rdata) if rdata else {"ok": True}), 200
             except APIError as e:
                 logger.debug(f"API endpoint returned error: {e=} {e.serialize()=}")
@@ -157,14 +161,17 @@ def route(
 
         # Register the route and handler into the RPC catalog.
         if mount:
-            catalog_route(
-                name=name,
-                in_=in_,
-                out=out,
-                errors=errors,
-                handler=handler,
-                codegen=codegen,
-            )
+            if type_ == "raw":
+                catalog_raw_route(name=name, method=method, handler=handler)
+            else:
+                catalog_rpc(
+                    name=name,
+                    in_=in_,
+                    out=out,
+                    errors=errors,
+                    method=method,
+                    handler=handler,
+                )
 
         return handler
 

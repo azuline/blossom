@@ -17,6 +17,7 @@ class _Config:
         self.yoyo_database_url = self._yoyo_database_url()
         self.pool_size = self._pool_size()
         self.session_secret = self._session_secret()
+        self.app_url = self._app_url()
 
     def _psycopg_database_url(self) -> str:
         user = os.environ["POSTGRES_USER"]
@@ -40,6 +41,9 @@ class _Config:
 
     def _session_secret(self) -> str:
         return os.environ["SESSION_SECRET"]
+
+    def _app_url(self) -> str:
+        return os.environ["APP_URL"]
 
 
 # Define a Config singleton.
