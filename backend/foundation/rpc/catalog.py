@@ -13,6 +13,8 @@ class Route:
     out: type[Any] | None
     errors: list[type[APIError]]
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]]
+    # Whether to codegen a client binding.
+    codegen: bool
 
 
 @dataclass
@@ -32,12 +34,22 @@ def catalog_route(
     out: type[Any] | None,
     errors: list[type[APIError]],
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]],
+    codegen: bool,
 ) -> None:
     """
     catalog_route adds a route to the RPC catalog. The RPC catalog is read
     when applying the RPC routes to the webserver and codegen.
     """
-    _catalog.rpcs.append(Route(name=name, in_=in_, out=out, errors=errors, handler=handler))
+    _catalog.rpcs.append(
+        Route(
+            name=name,
+            in_=in_,
+            out=out,
+            errors=errors,
+            handler=handler,
+            codegen=codegen,
+        )
+    )
 
 
 def catalog_global_error(error: type[APIError]) -> None:

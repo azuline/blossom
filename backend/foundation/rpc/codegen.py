@@ -126,6 +126,8 @@ def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
         schema.global_error_names.append(e.__name__)
 
     for r in catalog.rpcs:
+        if not r.codegen:
+            continue
         for e in r.errors:
             add_error_to_schema(e)
         schema.rpcs[r.name] = RPCSchema(

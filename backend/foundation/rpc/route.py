@@ -84,9 +84,12 @@ def route(
     out: type[Any] | None,
     errors: list[type[APIError]],
     authorization: Authorization,
-    # This is for tests. Some tests may not want to mount their temporary routes
-    # into the global catalog because the temporary route is re-defined in every test,
-    # leading to test pollution in the global scope.
+    # Whether to generate client bindings for this route. If the route is not intended to be used by
+    # an internal client, pass False here.
+    codegen: bool = True,
+    # This is for tests. Some tests may not want to mount their temporary routes into the global
+    # catalog because the temporary route is re-defined in every test, leading to test pollution in
+    # the global scope.
     mount: bool = True,
 ) -> Callable[
     [Callable[[Req[Any]], Awaitable[Any]]],
@@ -157,7 +160,14 @@ def route(
 
         # Register the route and handler into the RPC catalog.
         if mount:
-            catalog_route(name=name, in_=in_, out=out, errors=errors, handler=handler)
+            catalog_route(
+                name=name,
+                in_=in_,
+                out=out,
+                errors=errors,
+                handler=handler,
+                codegen=codegen,
+            )
 
         return handler
 
