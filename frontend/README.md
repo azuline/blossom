@@ -7,7 +7,14 @@ being cheaper to deploy. SSR is pretty cool, but it costs money.
 
 See the `Makefile` for a list of common dev tool commands.
 
-# Stack
+# Directories
+
+- `codegen/` contains the outputs of codegen systems.
+- `foundation/` contains the developer platform.
+- `product/` contains the product-specific code.
+- `public/` contains static assets.
+
+## Stack
 
 - Language: TypeScript
 - Builds: Vite (esbuild/Rollup)

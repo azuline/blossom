@@ -7,7 +7,7 @@ setuptools.setup(
     author="blissful",
     author_email="blissful@sunsetglow.net",
     license="Apache-2.0",
-    entry_points={"console_scripts": ["blossom = product.cli.__main__:cli"]},
+    entry_points={"console_scripts": ["blossom = cli.__main__:cli"]},
     packages=setuptools.find_namespace_packages(
         where=".",
         exclude=["htmlcov"],

@@ -1,11 +1,17 @@
 # Backend
 
-The backend is written in Python with the sole rationale that Python is my most
-efficient and comfortable language. I don't recommend Python in production.
-
 # Doing Things
 
-See the `Makefile` for a list of common dev tool commands.
+See the `Makefile` for a list of common dev commands.
+
+# Directories
+
+- `cli/` contains the backend entrypoint CLI. This CLI contains everything from
+  developer commands to production operations.
+- `codegen/` contains the outputs of codegen systems.
+- `foundation/` contains the developer platform.
+- `migrations/` contains Postgres database migrations.
+- `product/` contains the product-specific code.
 
 # Stack
 
