@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: cachix/install-nix-action@v15
       - name: Build Nix
-        run: nix build ../\#devShells.x86_64-linux.backend
+        run: nix build -j8 ../\#devShells.x86_64-linux.backend
       - name: Start Postgres
         run: docker compose up postgres -d
       - name: Typecheck
