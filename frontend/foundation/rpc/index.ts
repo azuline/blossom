@@ -123,11 +123,13 @@ const baseRPCExecutor = async <
 ): Promise<RPCs[T]["out"]> => {
   const method = RPCMethods[name];
 
-  const url = new URL(`/api/${name}`);
+  let url = `/api/${name}`;
   let body: string | undefined;
   if (args != null) {
     if (method === "GET") {
-      Object.entries(args).forEach(([k, v]) => url.searchParams.append(k, v.toString()));
+      const params = new URLSearchParams();
+      Object.entries(args).forEach(([k, v]) => params.append(k, v.toString()));
+      url += `?${params.toString()}`;
     } else {
       body = JSON.stringify(args);
     }
