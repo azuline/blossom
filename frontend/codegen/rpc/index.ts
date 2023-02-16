@@ -48,9 +48,9 @@ export type RPCs = {
   GetPageLoadInfo: {
     in: null;
     out: {
-      external_id: string;
-      name: string;
-      email: string;
+      external_id: string | null;
+      name: string | null;
+      email: string | null;
       tenant: {
         external_id: string;
         name: string;

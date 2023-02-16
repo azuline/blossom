@@ -9,12 +9,9 @@ type Props = { children: ReactNode };
 
 // BlockOnAuth blocks render until the initial auth endpoint has loaded.
 export const BlockOnAuth: React.FC<Props> = props => {
-  const { isLoading, error } = useRPC("GetPageLoadInfo", null);
-  if (isLoading) {
+  const { status } = useRPC("GetPageLoadInfo", null);
+  if (status === "loading") {
     return <AppLoader />;
-  }
-  if (error) {
-    throw error;
   }
   return <>{props.children}</>;
 };

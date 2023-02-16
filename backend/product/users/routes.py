@@ -21,27 +21,34 @@ class GetPageLoadInfoTenant:
 
 @dataclass
 class GetPageLoadInfoOut:
-    external_id: str
-    name: str
-    email: str
+    external_id: str | None
+    name: str | None
+    email: str | None
     tenant: GetPageLoadInfoTenant | None
     available_tenants: list[GetPageLoadInfoTenant]
 
 
 @route(
     name="GetPageLoadInfo",
-    authorization="user",
+    authorization="public",
     in_=None,
     out=GetPageLoadInfoOut,
     method="GET",
     errors=[],
 )
-async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
+async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut | None:
     """
     Fetch the information needed at time of page load to identify the logged in user and
     display the application-wide page architecture.
     """
-    assert req.user is not None
+    if req.user is None:
+        return GetPageLoadInfoOut(
+            external_id=None,
+            name=None,
+            email=None,
+            tenant=None,
+            available_tenants=[],
+        )
 
     return GetPageLoadInfoOut(
         external_id=req.user.external_id,

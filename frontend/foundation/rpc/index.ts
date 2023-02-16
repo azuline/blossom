@@ -4,7 +4,7 @@ import {
   PossibleRPCErrors,
   RPCError,
 } from "@foundation/errors/rpc";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { Getter } from "jotai";
 import { atomsWithQuery } from "jotai-tanstack-query";
 import { useCallback } from "react";
@@ -46,17 +46,28 @@ type UseRPC<T extends keyof RPCs> = ReturnType<
   >
 >;
 
+type UseRPCOptions<T extends keyof RPCs> = UseQueryOptions<
+  RPCs[T]["out"],
+  RPCError<T, PossibleRPCErrors<T>>,
+  RPCs[T]["out"],
+  [T, RPCs[T]["in"]]
+>;
+
 /**
  * useRPC is a facade over TanStack Query with superior bindings and inference for the
  * RPC system.
  */
-export const useRPC = <T extends keyof RPCs>(rpcName: T, args: RPCs[T]["in"]): UseRPC<T> => {
+export const useRPC = <T extends keyof RPCs>(
+  rpcName: T,
+  args: RPCs[T]["in"],
+  options?: UseRPCOptions<T>,
+): UseRPC<T> => {
   return useQuery<
     RPCs[T]["out"],
     RPCError<T, PossibleRPCErrors<T>>,
     RPCs[T]["out"],
     [T, RPCs[T]["in"]]
-  >([rpcName, args], ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]));
+  >([rpcName, args], ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]), options);
 };
 
 type RPCAtom<T extends keyof RPCs> = ReturnType<
