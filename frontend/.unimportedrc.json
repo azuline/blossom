@@ -18,6 +18,8 @@
   "ignoreUnimported": [
     "foundation/routing/state/prefetch.ts",
     "foundation/style/utils.ts",
+    "foundation/ui/Bleed/index.css.ts",
+    "foundation/ui/Bleed/index.tsx",
     "foundation/ui/Card/index.css.ts",
     "foundation/ui/Card/index.tsx",
     "foundation/ui/Spacer/index.css.ts",

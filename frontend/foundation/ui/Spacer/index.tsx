@@ -12,19 +12,22 @@ type Props = RecipeVariants<typeof sSpacer> & {
   children?: React.ReactNode;
 };
 
-export const Spacer: React.FC<Props> = props => (
-  <View
-    {...props}
-    className={clsx(
-      props.className,
-      sSpacer({ x: props.x, y: props.y }),
-    )}
-    style={setSXVars({
-      [spacerXVar]: props.vars?.x,
-      [spacerYVar]: props.vars?.y,
-    })}
-    sx={props.sx}
-  >
-    {props.children}
-  </View>
-);
+export const Spacer: React.FC<Props> = props => {
+  const { className, x, y, vars, sx, children, ...passthru } = props;
+  return (
+    <View
+      {...passthru}
+      className={clsx(
+        className,
+        sSpacer({ x, y }),
+      )}
+      style={setSXVars({
+        [spacerXVar]: vars?.x,
+        [spacerYVar]: vars?.y,
+      })}
+      sx={sx}
+    >
+      {children}
+    </View>
+  );
+};

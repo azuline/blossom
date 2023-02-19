@@ -14,6 +14,7 @@ export const activeColor = createVar();
 
 export const sButton = recipe({
   base: {
+    whiteSpace: "nowrap",
     borderRadius: t.radius.circle,
     cursor: "pointer",
     position: "relative",
