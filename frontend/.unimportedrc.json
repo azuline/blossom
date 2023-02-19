@@ -9,6 +9,7 @@
     "**/__tests__/**",
     "**/*.d.ts",
     "**/dist/**",
+    "**/build/**",
     "**/vite.config.ts",
     "**/coverage/**"
   ],
