@@ -19,7 +19,7 @@
     "memberExpression.preferSingleLine": "true"
   },
   "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json}"],
-  "excludes": ["**/node_modules", "**/*-lock.json", "coverage", "dist"],
+  "excludes": ["**/node_modules", "**/*-lock.json", "coverage", "dist", "build"],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.80.2.wasm",
     "https://plugins.dprint.dev/json-0.17.0.wasm"

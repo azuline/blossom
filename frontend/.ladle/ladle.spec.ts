@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import fetch from "sync-fetch";
 
 // URL where Ladle is served
-const url = "http://host.docker.internal:40854";
+const url = "http://host.docker.internal:40855";
 
 // fetch Ladle's meta file
 // https://ladle.dev/docs/meta

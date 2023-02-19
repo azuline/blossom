@@ -92,3 +92,4 @@ There isn't much infrastructure yet.
 - 40852: Postgres
 - 40853: Frontend
 - 40854: Ladle
+- 40855: Visual Tests

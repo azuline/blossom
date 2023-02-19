@@ -26,14 +26,14 @@ test:
 
 test-visual: visual-container
 	pnpm start-server-and-test \
-		'pnpm ladle build && pnpm ladle preview --port 40854' \
-		'http://172.17.0.1:40854' \
+		'pnpm ladle build && pnpm ladle preview --port 40855' \
+		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest'
 
 update-visual: visual-container
 	pnpm start-server-and-test \
-		'pnpm ladle build && pnpm ladle preview --port 40854' \
-		'http://172.17.0.1:40854' \
+		'pnpm ladle build && pnpm ladle preview --port 40855' \
+		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
 
 typecheck:
