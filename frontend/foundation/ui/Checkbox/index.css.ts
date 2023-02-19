@@ -12,7 +12,7 @@ export const sCheckbox = recipe({
       true: {
         background: t.color.background.brand.default,
         borderColor: t.color.background.brand.default,
-        color: t.color.content.inverse.strong,
+        color: t.color.content.brand.tint,
       },
     },
     disabled: {
