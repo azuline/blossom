@@ -51,10 +51,6 @@ export type RPCs = {
       external_id: string | null;
       name: string | null;
       email: string | null;
-      tenant: {
-        external_id: string;
-        name: string;
-      } | null;
       available_tenants: {
         external_id: string;
         name: string;

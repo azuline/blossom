@@ -16,10 +16,6 @@ async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
-        tenant=GetPageLoadInfoTenant(
-            external_id=tenant.external_id,
-            name=tenant.name,
-        ),
         available_tenants=[
             GetPageLoadInfoTenant(
                 external_id=tenant.external_id,
@@ -41,6 +37,5 @@ async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
-        tenant=None,
         available_tenants=[],
     )

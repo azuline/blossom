@@ -24,7 +24,6 @@ class GetPageLoadInfoOut:
     external_id: str | None
     name: str | None
     email: str | None
-    tenant: GetPageLoadInfoTenant | None
     available_tenants: list[GetPageLoadInfoTenant]
 
 
@@ -46,7 +45,6 @@ async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut | None:
             external_id=None,
             name=None,
             email=None,
-            tenant=None,
             available_tenants=[],
         )
 
@@ -54,7 +52,6 @@ async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut | None:
         external_id=req.user.external_id,
         name=req.user.name,
         email=req.user.email,
-        tenant=GetPageLoadInfoTenant.from_model(req.tenant) if req.tenant is not None else None,
         available_tenants=[
             GetPageLoadInfoTenant.from_model(t) async for t in req.cq.q.tenant_fetch_all()
         ],
