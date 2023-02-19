@@ -1,4 +1,4 @@
-import { SX } from "@foundation/style/index.css";
+import { SX } from "@foundation/style/sprinkles.css";
 import { View } from "@foundation/ui/View";
 
 type Props = {

@@ -1,4 +1,4 @@
-import { SX } from "@foundation/style/index.css";
+import { SX } from "@foundation/style/sprinkles.css";
 import { sCenter } from "@foundation/ui/Center/index.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";

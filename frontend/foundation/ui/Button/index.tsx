@@ -1,12 +1,12 @@
 import { ReactNode, useRef } from "react";
 
-import { SX } from "@foundation/style/index.css";
+import { SX } from "@foundation/style/sprinkles.css";
 import { sButton } from "@foundation/ui/Button/index.css";
 import { Center } from "@foundation/ui/Center";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import { AriaButtonProps, useButton } from "react-aria";
 
-type Props = RecipeVariants<typeof sButton> & {
+type Props = Exclude<RecipeVariants<typeof sButton>, "disabled"> & {
   children: ReactNode;
   onPress: (() => void) | (() => Promise<void>);
   disabled?: boolean;
@@ -29,7 +29,7 @@ export const Button: React.FC<Props> = props => {
       ref={ref}
       className={sButton({
         variant: props.variant,
-        color: props.disabled ? "disabled" : props.color,
+        disabled: props.disabled,
         size: props.size,
         fullWidth: props.fullWidth,
       })}

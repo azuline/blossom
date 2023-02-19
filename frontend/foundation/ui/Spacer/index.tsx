@@ -1,4 +1,4 @@
-import { SX } from "@foundation/style/index.css";
+import { SX } from "@foundation/style/sprinkles.css";
 import { setSXVars } from "@foundation/style/utils";
 import { spacerXVar, spacerYVar, sSpacer } from "@foundation/ui/Spacer/index.css";
 import { View } from "@foundation/ui/View";

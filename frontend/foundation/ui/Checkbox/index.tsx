@@ -1,5 +1,5 @@
 import { IconCheck } from "@foundation/icons/IconCheck";
-import { SX } from "@foundation/style/index.css";
+import { SX } from "@foundation/style/sprinkles.css";
 import { sCheckbox } from "@foundation/ui/Checkbox/index.css";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
@@ -35,7 +35,7 @@ export const Checkbox: React.FC<Props> = props => {
       as="label"
       sx={{
         align: "center",
-        gap: "4",
+        gap: "8",
         cursor: props.disabled ? "not-allowed" : "pointer",
         ...props.sx,
       }}
@@ -54,7 +54,7 @@ export const Checkbox: React.FC<Props> = props => {
         {props.checked && <IconCheck size="full" />}
       </View>
       {props.label !== undefined && (
-        <Type sx={{ col: props.disabled ? "neutral.4" : "neutral.2" }}>{props.label}</Type>
+        <Type sx={{ col: props.disabled ? "neutral.weak" : "neutral.default" }}>{props.label}</Type>
       )}
     </Flex>
   );

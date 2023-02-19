@@ -5,9 +5,9 @@ import { ApplicationLayout } from "@product/layout";
 
 const NotFoundPage: React.FC = () => (
   <ApplicationLayout>
-    <Flex sx={{ dir: "column", align: "center", justify: "center", h: "full", gap: "9" }}>
-      <Flex sx={{ align: "center", gap: "9" }}>
-        <IconLogo size="10" />
+    <Flex sx={{ dir: "column", align: "center", justify: "center", h: "full", gap: "44" }}>
+      <Flex sx={{ align: "center", gap: "44" }}>
+        <IconLogo size="64" />
         <Type sx={{ text: "disp-xxl" }}>404 Page Not Found</Type>
       </Flex>
       <Type sx={{ text: "disp-xxl" }}>Go Home TODO Link Component</Type>

@@ -47,13 +47,13 @@ const LoginPage: React.FC = () => {
 
   return (
     <ApplicationLayout>
-      <Center sx={{ h: "full" }}>
-        <Flex sx={{ dir: "column", gap: "8", w: "16" }}>
+      <Center>
+        <Flex sx={{ dir: "column", gap: "36", w: "356" }}>
           <Center axis="vertical">
-            <IconLogo size="10" />
+            <IconLogo size="64" />
           </Center>
           <Type sx={{ text: "disp-xl" }}>Welcome back!</Type>
-          <Flex sx={{ dir: "column", gap: "7" }}>
+          <Flex sx={{ dir: "column", gap: "20" }}>
             <TextField
               label="Email"
               value={form.email}
@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
               label="Remember me"
               onChange={permanent => setForm({ permanent })}
             />
-            {error !== null && <Type sx={{ text: "sm", col: "danger" }}>{error}</Type>}
+            {error !== null && <Type sx={{ text: "sm", col: "negative.default" }}>{error}</Type>}
           </Flex>
           <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
         </Flex>

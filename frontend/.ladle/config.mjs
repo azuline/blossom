@@ -8,10 +8,10 @@ export default {
   appendToHead: `
     <style>
       #ladle-root {
-        --ladle-bg-color-secondary: hsl(158, 6%, 93%);
+        --ladle-bg-color-secondary: #E7E6F0;
       }
       .ladle-main {
-        background: hsl(158, 6%, 97%);
+        background: #F1F1F6;
       }
       .ladle-addons {
         bottom: 1em;

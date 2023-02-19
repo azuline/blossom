@@ -1,4 +1,5 @@
 import { Checkbox } from "@foundation/ui/Checkbox";
+import { Flex } from "@foundation/ui/Flex";
 import { atom, useAtom } from "jotai";
 
 export default {
@@ -7,17 +8,15 @@ export default {
 
 const checkedAtom = atom(false);
 
-export const DefaultInteractive: React.FC = () => {
+export const Gallery: React.FC = () => {
   const [checked, onChange] = useAtom(checkedAtom);
-  return <Checkbox checked={checked} label="Check me!" onChange={onChange} />;
+
+  return (
+    <Flex sx={{ dir: "column", gap: "16" }}>
+      <Checkbox checked={checked} label="Interactive checkbox" onChange={onChange} />
+      <Checkbox checked label="Checked" onChange={() => {}} />
+      <Checkbox disabled checked={false} label="Disabled unchecked" onChange={() => {}} />
+      <Checkbox checked disabled label="Disabled checked" onChange={() => {}} />
+    </Flex>
+  );
 };
-
-export const Checked: React.FC = () => <Checkbox checked label="Check me!" onChange={() => {}} />;
-
-export const DisabledUnchecked: React.FC = () => (
-  <Checkbox disabled checked={false} label="Check me!" onChange={() => {}} />
-);
-
-export const DisabledChecked: React.FC = () => (
-  <Checkbox checked disabled label="Check me!" onChange={() => {}} />
-);

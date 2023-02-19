@@ -1,3 +1,4 @@
+import { Flex } from "@foundation/ui/Flex";
 import { TextField } from "@foundation/ui/TextField";
 import { atom, useAtom } from "jotai";
 
@@ -7,24 +8,19 @@ export default {
 
 const valueAtom = atom("Lorem ipsun");
 
-export const Default: React.FC = () => {
+export const Gallery: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
-  return <TextField label="Label" value={value} onChange={setValue} />;
-};
 
-export const Disabled: React.FC = () => {
-  const [value, setValue] = useAtom(valueAtom);
-  return <TextField disabled label="Label" value={value} onChange={setValue} />;
-};
-
-export const Error: React.FC = () => {
-  const [value, setValue] = useAtom(valueAtom);
   return (
-    <TextField
-      errorMessage="Value is not cool enough."
-      label="Label"
-      value={value}
-      onChange={setValue}
-    />
+    <Flex sx={{ dir: "column", maxw: "356", gap: "28" }}>
+      <TextField label="Default" value={value} onChange={setValue} />
+      <TextField disabled label="Disabled" value={value} onChange={setValue} />
+      <TextField
+        errorMessage="Value is not cool enough."
+        label="Errored"
+        value={value}
+        onChange={setValue}
+      />
+    </Flex>
   );
 };

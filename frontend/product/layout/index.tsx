@@ -5,5 +5,5 @@ type Props = {
 };
 
 export const ApplicationLayout: React.FC<Props> = props => {
-  return <View sx={{ h: "full", p: "5" }}>{props.children}</View>;
+  return <View sx={{ h: "full", p: "12" }}>{props.children}</View>;
 };

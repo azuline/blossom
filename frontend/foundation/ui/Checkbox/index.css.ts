@@ -1,29 +1,30 @@
-import { sx, t } from "@foundation/style/index.css";
+import { sx } from "@foundation/style/sprinkles.css";
+import { t } from "@foundation/style/theme.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCheckbox = recipe({
   base: [
-    sx({ w: "7", h: "7", radius: "6", bcol: "neutral.2", bwidth: "1" }),
+    sx({ w: "20", h: "20", radius: "6", bcol: "neutral.strong", bwidth: "1" }),
     { transition: "all 0.1s ease-out" },
   ],
   variants: {
     checked: {
       true: {
-        background: t.color.bg.primary,
-        borderColor: t.color.bg.primary,
-        color: t.color.content.neutral[7],
+        background: t.color.background.brand.default,
+        borderColor: t.color.background.brand.default,
+        color: t.color.content.inverse.strong,
       },
     },
     disabled: {
       true: {
-        background: t.color.bg.neutral[3],
-        borderColor: t.color.border.neutral[3],
-        color: t.color.content.neutral[4],
+        background: t.color.background.neutral.default,
+        borderColor: t.color.border.neutral.weak,
+        color: t.color.content.neutral.weak,
       },
     },
     focused: {
       true: {
-        outline: t.color.border.focus,
+        outline: t.color.focus.outline,
       },
     },
   },

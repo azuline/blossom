@@ -1,31 +1,40 @@
 import { Card } from "@foundation/ui/Card";
+import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";
-import { View } from "@foundation/ui/View";
 
 export default {
   title: "Components/Primitives/Flex",
 };
 
-export const Row: React.FC = () => (
-  <Card sx={{ maxw: "16", h: "12" }}>
-    <Flex sx={{ w: "full", h: "full", gap: "4" }}>
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-    </Flex>
-  </Card>
-);
-
-export const Column: React.FC = () => (
-  <Card sx={{ maxw: "12", h: "16" }}>
-    <Flex sx={{ dir: "column", w: "full", h: "full", gap: "4" }}>
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-      <View sx={{ h: "full", w: "full", bg: "primary" }} />
-    </Flex>
-  </Card>
+export const Gallery: React.FC = () => (
+  <Flex sx={{ dir: "column", gap: "16" }}>
+    <Card sx={{ w: "356", h: "128" }}>
+      <Flex sx={{ w: "full", h: "full", gap: "8" }}>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>Row</Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>Row</Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>Row</Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>Row</Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>Row</Center>
+      </Flex>
+    </Card>
+    <Card sx={{ w: "128", h: "356" }}>
+      <Flex sx={{ dir: "column", w: "full", h: "full", gap: "8" }}>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>
+          Column
+        </Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>
+          Column
+        </Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>
+          Column
+        </Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>
+          Column
+        </Center>
+        <Center sx={{ h: "full", w: "full", bg: "brand.default", col: "brand.tint" }}>
+          Column
+        </Center>
+      </Flex>
+    </Card>
+  </Flex>
 );

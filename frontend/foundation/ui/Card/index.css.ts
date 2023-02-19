@@ -1,20 +1,21 @@
-import { sx, t } from "@foundation/style/index.css";
+import { sx } from "@foundation/style/sprinkles.css";
+import { t } from "@foundation/style/theme.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCard = recipe({
-  base: sx({ bwidth: "1", bcol: "neutral.4", radius: "8", p: "5", shadow: "light" }),
+  base: sx({ bwidth: "1", bcol: "neutral.default", radius: "8", p: "12", shadow: "weak" }),
   variants: {
     emph: {
-      "1": { background: t.color.bg.neutral[1] },
-      "2": { background: t.color.bg.neutral[2] },
-      "3": { background: t.color.bg.neutral[3] },
+      strong: { background: t.color.background.neutral.strong },
+      default: { background: t.color.background.neutral.default },
+      weak: { background: t.color.background.neutral.weak },
       inverse: {
-        background: t.color.bg.neutral[7],
-        color: t.color.content.neutral[7],
+        background: t.color.background.inverse.default,
+        color: t.color.content.inverse.default,
       },
     },
   },
   defaultVariants: {
-    emph: "1",
+    emph: "default",
   },
 });
