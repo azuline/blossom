@@ -1,10 +1,10 @@
 import { IconLogo } from "@foundation/icons/IconLogo";
-import { ApplicationLayout } from "@foundation/layout/ApplicationLayout";
+import { LayoutPadding } from "@foundation/layout/LayoutPadding";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 
 const NotFoundPage: React.FC = () => (
-  <ApplicationLayout>
+  <LayoutPadding>
     <Flex sx={{ dir: "column", align: "center", justify: "center", h: "full", gap: "44" }}>
       <Flex sx={{ align: "center", gap: "44" }}>
         <IconLogo size="64" />
@@ -12,7 +12,7 @@ const NotFoundPage: React.FC = () => (
       </Flex>
       <Type sx={{ text: "disp-xl" }}>Go Home TODO Link Component</Type>
     </Flex>
-  </ApplicationLayout>
+  </LayoutPadding>
 );
 
 export default NotFoundPage;

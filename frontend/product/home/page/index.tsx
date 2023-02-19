@@ -1,4 +1,4 @@
-import { ApplicationLayout } from "@foundation/layout/ApplicationLayout";
+import { LayoutPadding } from "@foundation/layout/LayoutPadding";
 import { WithHeader } from "@foundation/layout/WithHeader";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
@@ -6,8 +6,8 @@ import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 
 const HomePage: React.FC = () => (
-  <ApplicationLayout>
-    <WithHeader>
+  <WithHeader>
+    <LayoutPadding>
       <Center sx={{ h: "full" }}>
         <Flex sx={{ dir: "column", gap: "36" }}>
           <Flex sx={{ dir: "column", gap: "12", maxw: "480" }}>
@@ -20,8 +20,8 @@ const HomePage: React.FC = () => (
           <Button onPress={() => {}}>CTA Here</Button>
         </Flex>
       </Center>
-    </WithHeader>
-  </ApplicationLayout>
+    </LayoutPadding>
+  </WithHeader>
 );
 
 export default HomePage;

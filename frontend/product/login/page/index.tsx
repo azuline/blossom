@@ -1,7 +1,7 @@
 import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
 import { IconLogo } from "@foundation/icons/IconLogo";
-import { ApplicationLayout } from "@foundation/layout/ApplicationLayout";
+import { LayoutPadding } from "@foundation/layout/LayoutPadding";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <ApplicationLayout>
+    <LayoutPadding>
       <Center>
         <Flex sx={{ dir: "column", gap: "36", w: "356" }}>
           <Center axis="vertical">
@@ -74,7 +74,7 @@ const LoginPage: React.FC = () => {
           <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
         </Flex>
       </Center>
-    </ApplicationLayout>
+    </LayoutPadding>
   );
 };
 
