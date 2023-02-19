@@ -5,6 +5,7 @@ from typing import Any
 from foundation.database import ConnPool
 from foundation.test.db import TestDB
 from foundation.test.factory import TestFactory
+from foundation.test.rand import TestRandGen
 from foundation.test.rpc import TestRPC
 
 
@@ -20,6 +21,7 @@ class TFix:
     f: TestFactory
     db: TestDB
     rpc: TestRPC
+    rand: TestRandGen
 
     @classmethod
     async def create(cls, *, pg_pool: ConnPool) -> TFix:
@@ -28,6 +30,7 @@ class TFix:
         t.db = TestDB(t, pg_pool=pg_pool)
         t.f = TestFactory(t, conn=await t.db.conn_admin())
         t.rpc = TestRPC(t)
+        t.rand = TestRandGen()
         return t
 
     async def __aenter__(self) -> TFix:

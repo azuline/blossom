@@ -46,7 +46,7 @@ class TestDB:
         tenant = None
         if with_tenant:
             tenant = await self._t.f.tenant()
-            await self._t.f.user_tenant_create(user_id=user.id, tenant_id=tenant.id)
+            await self._t.f.tenant_user_create(user_id=user.id, tenant_id=tenant.id)
         # Generally unsafe, but TFix calls `putconn()` for us in `__aexit__` so it's ok.
         self._conn_customer = await self.pg_pool.getconn()
         await set_row_level_security(self._conn_customer, user, tenant)

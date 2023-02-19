@@ -26,7 +26,7 @@ ALTER TABLE tenants ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenants_self_all ON tenants
     USING (id = current_tenant_id());
 
-CREATE TABLE users_tenants (
+CREATE TABLE tenants_users (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     external_id text NOT NULL UNIQUE DEFAULT generate_external_id('utn'),
     created_at timestamptz NOT NULL DEFAULT NOW(),
@@ -40,27 +40,27 @@ CREATE TABLE users_tenants (
     removed_at timestamptz,
     removed_by_user bigint REFERENCES users (id)
 );
-CREATE TRIGGER updated_at BEFORE UPDATE ON users_tenants
+CREATE TRIGGER updated_at BEFORE UPDATE ON tenants_users
 FOR EACH ROW EXECUTE PROCEDURE updated_at ();
 -- A user can have been removed from a tenant and re-added later, but they
 -- cannot be added without expiring the previous memberships.
-CREATE UNIQUE INDEX users_tenants_membership ON users_tenants (tenant_id, user_id)
+CREATE UNIQUE INDEX tenants_users_membership ON tenants_users (tenant_id, user_id)
     WHERE removed_at IS NOT NULL;
 -- The inverse index so that user->tenant lookups are performant.
-CREATE INDEX users_tenants_user_id ON users_tenants (user_id);
+CREATE INDEX tenants_users_user_id ON tenants_users (user_id);
 
 -- Index the foreign keys to remove a bad access pattern footgun.
-CREATE INDEX users_tenants_removed_by_user_idx ON users_tenants (removed_by_user);
-CREATE INDEX users_tenants_tenant_id_idx ON users_tenants (tenant_id);
+CREATE INDEX tenants_users_removed_by_user_idx ON tenants_users (removed_by_user);
+CREATE INDEX tenants_users_tenant_id_idx ON tenants_users (tenant_id);
 
-ALTER TABLE users_tenants ENABLE ROW LEVEL SECURITY;
-CREATE POLICY users_tenants_self_all ON users_tenants
+ALTER TABLE tenants_users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenants_users_self_all ON tenants_users
     USING (tenant_id = current_tenant_id());
 
 -- Let users read other users on their tenant.
 CREATE POLICY users_shared_tenant_select ON users FOR SELECT
     USING (EXISTS (
-        SELECT 1 FROM users_tenants ut
+        SELECT 1 FROM tenants_users ut
         WHERE ut.tenant_id = current_tenant_id()
             AND ut.user_id = id
     ));

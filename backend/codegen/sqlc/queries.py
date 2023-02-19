@@ -20,10 +20,24 @@ SELECT id, external_id, created_at, updated_at, name, inbound_source FROM tenant
 WHERE t.external_id = %s
     AND EXISTS (
         SELECT id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
-        FROM users_tenants ut
-        WHERE ut.user_id = %s
-            AND ut.tenant_id = t.id
+        FROM tenants_users tu
+        WHERE tu.user_id = %s
+            AND tu.tenant_id = t.id
     )
+"""
+
+
+TENANT_ADD_USER = """-- name: tenant_add_user \\:one
+INSERT INTO tenants_users (tenant_id, user_id)
+VALUES (%s, %s)
+RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
+"""
+
+
+TENANT_CREATE = """-- name: tenant_create \\:one
+INSERT INTO tenants (name, inbound_source)
+VALUES (%s, %s)
+RETURNING id, external_id, created_at, updated_at, name, inbound_source
 """
 
 
@@ -54,6 +68,13 @@ RETURNING id, external_id, created_at, updated_at, name, inbound_source
 """
 
 
+TEST_TENANT_USER_CREATE = """-- name: test_tenant_user_create \\:one
+INSERT INTO tenants_users (user_id, tenant_id)
+VALUES (%s, %s)
+RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
+"""
+
+
 TEST_USER_CREATE = """-- name: test_user_create \\:one
 INSERT INTO users (name, email, password_hash, signup_step)
 VALUES (%s, %s, %s, 'complete')
@@ -75,16 +96,10 @@ RETURNING id, external_id, created_at, updated_at, name, email, password_hash, s
 """
 
 
-TEST_USER_TENANT_CREATE = """-- name: test_user_tenant_create \\:one
-INSERT INTO users_tenants (user_id, tenant_id)
-VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
-"""
-
-
-USER_CREATE = """-- name: user_create \\:exec
+USER_CREATE = """-- name: user_create \\:one
 INSERT INTO users (name, email, password_hash, signup_step)
 VALUES (%s, %s, %s, %s)
+RETURNING id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
 
@@ -125,6 +140,34 @@ class AsyncQuerier:
 
     async def rpc_fetch_tenant_associated_with_user(self, *, external_id: str, user_id: int) -> Optional[models.Tenant]:
         row = await (await self._conn.execute(RPC_FETCH_TENANT_ASSOCIATED_WITH_USER, (external_id, user_id))).fetchone()
+        if row is None:
+            return None
+        return models.Tenant(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def tenant_add_user(self, *, tenant_id: int, user_id: int) -> Optional[models.TenantsUser]:
+        row = await (await self._conn.execute(TENANT_ADD_USER, (tenant_id, user_id))).fetchone()
+        if row is None:
+            return None
+        return models.TenantsUser(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            user_id=row[4],
+            tenant_id=row[5],
+            removed_at=row[6],
+            removed_by_user=row[7],
+        )
+
+    async def tenant_create(self, *, name: str, inbound_source: models.TenantsInboundSource) -> Optional[models.Tenant]:
+        row = await (await self._conn.execute(TENANT_CREATE, (name, inbound_source))).fetchone()
         if row is None:
             return None
         return models.Tenant(
@@ -187,6 +230,21 @@ class AsyncQuerier:
             inbound_source=row[5],
         )
 
+    async def test_tenant_user_create(self, *, user_id: int, tenant_id: int) -> Optional[models.TenantsUser]:
+        row = await (await self._conn.execute(TEST_TENANT_USER_CREATE, (user_id, tenant_id))).fetchone()
+        if row is None:
+            return None
+        return models.TenantsUser(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            user_id=row[4],
+            tenant_id=row[5],
+            removed_at=row[6],
+            removed_by_user=row[7],
+        )
+
     async def test_user_create(self, *, name: str, email: str, password_hash: Optional[str]) -> Optional[models.User]:
         row = await (await self._conn.execute(TEST_USER_CREATE, (name, email, password_hash))).fetchone()
         if row is None:
@@ -238,23 +296,22 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def test_user_tenant_create(self, *, user_id: int, tenant_id: int) -> Optional[models.UsersTenant]:
-        row = await (await self._conn.execute(TEST_USER_TENANT_CREATE, (user_id, tenant_id))).fetchone()
+    async def user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: models.UserSignupStep) -> Optional[models.User]:
+        row = await (await self._conn.execute(USER_CREATE, (name, email, password_hash, signup_step))).fetchone()
         if row is None:
             return None
-        return models.UsersTenant(
+        return models.User(
             id=row[0],
             external_id=row[1],
             created_at=row[2],
             updated_at=row[3],
-            user_id=row[4],
-            tenant_id=row[5],
-            removed_at=row[6],
-            removed_by_user=row[7],
+            name=row[4],
+            email=row[5],
+            password_hash=row[6],
+            signup_step=row[7],
+            is_enabled=row[8],
+            last_visited_at=row[9],
         )
-
-    async def user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: models.UserSignupStep) -> None:
-        await self._conn.execute(USER_CREATE, (name, email, password_hash, signup_step))
 
     async def user_fetch(self, *, id: int) -> Optional[models.User]:
         row = await (await self._conn.execute(USER_FETCH, (id, ))).fetchone()

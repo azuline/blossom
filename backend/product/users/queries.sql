@@ -8,6 +8,7 @@ SELECT *
 FROM users
 WHERE external_id = $1;
 
--- name: UserCreate :exec
+-- name: UserCreate :one
 INSERT INTO users (name, email, password_hash, signup_step)
-VALUES ($1, $2, $3, $4);
+VALUES ($1, $2, $3, $4)
+RETURNING *;

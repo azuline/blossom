@@ -44,7 +44,7 @@ async def test_auth_login_nonexistent_email(t: TFix) -> None:
     resp = await t.rpc.execute(
         "Login",
         LoginIn(
-            email=t.f.email(),
+            email=t.rand.email(),
             password="password",
             permanent=True,
         ),

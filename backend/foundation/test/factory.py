@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import random
-from string import ascii_letters
 from typing import TYPE_CHECKING, TypeVar
 
-from codegen.sqlc.models import Tenant, TenantsInboundSource, User, UsersTenant
+from codegen.sqlc.models import Tenant, TenantsInboundSource, TenantsUser, User
 from codegen.sqlc.queries import AsyncQuerier
 from foundation.database import Conn
 
@@ -31,16 +29,6 @@ class TestFactory:
         self._conn = conn
         self._query = AsyncQuerier(conn)
 
-    # Utility factory.
-
-    def rand_str(self, length: int = 12) -> str:
-        return "".join(random.choice(ascii_letters) for _ in range(length))
-
-    def email(self) -> str:
-        return self.rand_str() + "@sunsetglow" + self.rand_str(4) + ".net"
-
-    # Model factory.
-
     async def __finalizer(self, rv: T | None) -> T:
         await self._conn.commit()
         assert rv is not None
@@ -52,7 +40,7 @@ class TestFactory:
         """
         user = await self.user()
         tenant = await self.tenant()
-        await self.user_tenant_create(user_id=user.id, tenant_id=tenant.id)
+        await self.tenant_user_create(user_id=user.id, tenant_id=tenant.id)
         return user, tenant
 
     async def tenant(
@@ -61,41 +49,41 @@ class TestFactory:
         inbound_source: TenantsInboundSource = TenantsInboundSource.ORGANIC,
     ) -> Tenant:
         rv = await self._query.test_tenant_create(
-            name=self.rand_str(),
+            name=self._t.rand.string(),
             inbound_source=inbound_source,
         )
         return await self.__finalizer(rv)
 
     async def user(self) -> User:
         rv = await self._query.test_user_create(
-            name=self.rand_str(),
-            email=self.email(),
+            name=self._t.rand.string(),
+            email=self._t.rand.email(),
             password_hash=DEFAULT_PASSWORD_HASH,
         )
         return await self.__finalizer(rv)
 
     async def user_disabled(self) -> User:
         rv = await self._query.test_user_create_disabled(
-            name=self.rand_str(),
-            email=self.email(),
+            name=self._t.rand.string(),
+            email=self._t.rand.email(),
             password_hash=DEFAULT_PASSWORD_HASH,
         )
         return await self.__finalizer(rv)
 
     async def user_not_signed_up(self) -> User:
         rv = await self._query.test_user_create_not_signed_up(
-            name=self.rand_str(),
-            email=self.email(),
+            name=self._t.rand.string(),
+            email=self._t.rand.email(),
         )
         return await self.__finalizer(rv)
 
-    async def user_tenant_create(
+    async def tenant_user_create(
         self,
         *,
         user_id: int,
         tenant_id: int,
-    ) -> UsersTenant:
-        rv = await self._query.test_user_tenant_create(
+    ) -> TenantsUser:
+        rv = await self._query.test_tenant_user_create(
             user_id=user_id,
             tenant_id=tenant_id,
         )

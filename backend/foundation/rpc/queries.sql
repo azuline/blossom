@@ -3,7 +3,7 @@ SELECT * FROM tenants t
 WHERE t.external_id = $1
     AND EXISTS (
         SELECT *
-        FROM users_tenants ut
-        WHERE ut.user_id = $2
-            AND ut.tenant_id = t.id
+        FROM tenants_users tu
+        WHERE tu.user_id = $2
+            AND tu.tenant_id = t.id
     );

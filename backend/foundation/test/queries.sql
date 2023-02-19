@@ -18,7 +18,7 @@ INSERT INTO tenants (name, inbound_source)
 VALUES ($1, $2)
 RETURNING *;
 
--- name: TestUserTenantCreate :one
-INSERT INTO users_tenants (user_id, tenant_id)
+-- name: TestTenantUserCreate :one
+INSERT INTO tenants_users (user_id, tenant_id)
 VALUES ($1, $2)
 RETURNING *;

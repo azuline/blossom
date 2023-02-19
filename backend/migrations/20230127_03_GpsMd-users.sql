@@ -39,7 +39,7 @@ CREATE POLICY users_self_all ON users
 --
 -- This still functions well even with tenants. When a user is invited to a
 -- tenant, the user is created in a `created` signup step, inserted into
--- `users_tenants`, and given an active row in invites. Upon invite completion,
+-- `tenants_users`, and given an active row in invites. Upon invite completion,
 -- the user transitions to a `completed` signup step and has already been added
 -- to the tenant.
 CREATE TABLE invites (

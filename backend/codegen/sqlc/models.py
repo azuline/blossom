@@ -43,6 +43,18 @@ class Tenant:
 
 
 @dataclasses.dataclass()
+class TenantsUser:
+    id: int
+    external_id: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    user_id: int
+    tenant_id: int
+    removed_at: Optional[datetime.datetime]
+    removed_by_user: Optional[int]
+
+
+@dataclasses.dataclass()
 class User:
     id: int
     external_id: str
@@ -54,15 +66,3 @@ class User:
     signup_step: UserSignupStep
     is_enabled: bool
     last_visited_at: Optional[datetime.datetime]
-
-
-@dataclasses.dataclass()
-class UsersTenant:
-    id: int
-    external_id: str
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    user_id: int
-    tenant_id: int
-    removed_at: Optional[datetime.datetime]
-    removed_by_user: Optional[int]
