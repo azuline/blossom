@@ -78,7 +78,7 @@ export const sButton = recipe({
           [backgroundDisabled]: t.color.background.neutral.weak,
           [hoverColor]: t.color.background.overlay.hover,
           [activeColor]: t.color.background.overlay.active,
-          [color]: t.color.content.neutral.strong,
+          [color]: t.color.content.neutral.default,
           [colorDisabled]: t.color.content.neutral.weak,
           [borderWidth]: t.border[1],
           [borderColor]: t.color.border.neutral.strong,
