@@ -1,3 +1,4 @@
+import { sApplicationLayout } from "@foundation/layout/ApplicationLayout/index.css";
 import { View } from "@foundation/ui/View";
 
 type Props = {
@@ -5,5 +6,5 @@ type Props = {
 };
 
 export const ApplicationLayout: React.FC<Props> = props => {
-  return <View sx={{ h: "full", p: "12" }}>{props.children}</View>;
+  return <View className={sApplicationLayout}>{props.children}</View>;
 };

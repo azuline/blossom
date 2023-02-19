@@ -5,7 +5,7 @@ import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 const conditions = {
   conditions: {
     // responsive
-    all: {},
+    initial: {},
     xxl: { "@media": breakpoints.xxl },
     xl: { "@media": breakpoints.xl },
     lg: { "@media": breakpoints.lg },
@@ -16,7 +16,7 @@ const conditions = {
     hover: { selector: "&:hover" },
     focus: { selector: "&:focus" },
   },
-  defaultCondition: "all",
+  defaultCondition: "initial",
 } as const;
 
 export const sxsets = {

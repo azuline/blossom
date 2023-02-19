@@ -1,6 +1,7 @@
 import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
 import { IconLogo } from "@foundation/icons/IconLogo";
+import { ApplicationLayout } from "@foundation/layout/ApplicationLayout";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
@@ -8,7 +9,6 @@ import { Checkbox } from "@foundation/ui/Checkbox";
 import { Flex } from "@foundation/ui/Flex";
 import { TextField } from "@foundation/ui/TextField";
 import { Type } from "@foundation/ui/Type";
-import { ApplicationLayout } from "@product/layout";
 import { atom, useAtom } from "jotai";
 
 const loginFormAtom = atomForm<{
