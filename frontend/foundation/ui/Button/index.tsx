@@ -19,7 +19,14 @@ type Props = Exclude<RecipeVariants<typeof sButton>, "disabled"> & {
 export const Button: React.FC<Props> = props => {
   const ref = useRef(null);
 
-  const ariaProps: AriaButtonProps = { ...props, isDisabled: props.disabled };
+  const ariaProps: AriaButtonProps = {
+    ...props,
+    isDisabled: props.disabled,
+    // This is an undocumented property.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    preventFocusOnPress: true,
+  };
   const { buttonProps } = useButton(ariaProps, ref);
 
   return (

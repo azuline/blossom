@@ -13,7 +13,6 @@ globalStyle("html, body, #root", {
   height: "100%",
 });
 globalStyle("body", {
-  // lineHeight: 1.5,
   WebkitFontSmoothing: "antialiased",
 });
 globalStyle("img, picture, video, canvas, svg", {
@@ -28,6 +27,16 @@ globalStyle("p, h1, h2, h3, h4, h5, h6", {
 });
 globalStyle("#root", {
   isolation: "isolate",
+});
+globalStyle("*:focus:not(:focus-visible)", {
+  // Turn off focus styles on click. Only set them when focus is visible (i.e. keyboard
+  // navigation).
+  outline: "none !important",
+});
+globalStyle("*:focus-visible", {
+  // Set a custom focus style.
+  outline: t.outline.focus.value,
+  outlineOffset: t.outline.focus.offset,
 });
 
 // Custom component resets. We define them here instead of in the components themselves

@@ -24,7 +24,8 @@ export const sCheckbox = recipe({
     },
     focused: {
       true: {
-        outline: t.color.focus.outline,
+        outline: t.outline.focus.value,
+        outlineOffset: t.outline.focus.offset,
       },
     },
   },

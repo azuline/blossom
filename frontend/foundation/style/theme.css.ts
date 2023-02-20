@@ -147,9 +147,11 @@ export const t = createGlobalTheme("html", {
         default: palette.Red[65],
       },
     },
+  },
+  outline: {
     focus: {
-      // TODO: Add focus ring style.
-      outline: "1px blue",
+      value: `2px solid ${palette.Brand[64]}`,
+      offset: "2px",
     },
   },
   shadows: {
