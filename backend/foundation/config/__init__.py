@@ -29,6 +29,7 @@ class _Config:
         self.yoyo_database_url = self._yoyo_database_url()
         self.pool_size = self._pool_size()
         self.session_secret = self._session_secret()
+        self.vault_encryption_key = self._vault_encryption_key()
         self.app_url = self._app_url()
 
     def _psycopg_database_url(self) -> str:
@@ -53,6 +54,9 @@ class _Config:
 
     def _session_secret(self) -> str:
         return env["SESSION_SECRET"]
+
+    def _vault_encryption_key(self) -> bytes:
+        return bytes.fromhex(env["VAULT_ENCRYPTION_KEY"])
 
     def _app_url(self) -> str:
         return env["APP_URL"]

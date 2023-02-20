@@ -167,6 +167,20 @@ WHERE external_id = %s
 """
 
 
+VAULT_CREATE_SECRET = """-- name: vault_create_secret \\:one
+INSERT INTO vaulted_secrets (tenant_id, ciphertext, nonce)
+VALUES (%s, %s, %s)
+RETURNING id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
+"""
+
+
+VAULT_FETCH_SECRET = """-- name: vault_fetch_secret \\:one
+SELECT id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
+FROM vaulted_secrets
+WHERE id = %s
+"""
+
+
 class AsyncQuerier:
     def __init__(self, conn: psycopg.AsyncConnection[Any]):
         self._conn = conn
@@ -471,4 +485,32 @@ class AsyncQuerier:
             signup_step=row[7],
             is_enabled=row[8],
             last_visited_at=row[9],
+        )
+
+    async def vault_create_secret(self, *, tenant_id: int, ciphertext: str, nonce: str) -> Optional[models.VaultedSecret]:
+        row = await (await self._conn.execute(VAULT_CREATE_SECRET, (tenant_id, ciphertext, nonce))).fetchone()
+        if row is None:
+            return None
+        return models.VaultedSecret(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            tenant_id=row[4],
+            ciphertext=row[5],
+            nonce=row[6],
+        )
+
+    async def vault_fetch_secret(self, *, id: int) -> Optional[models.VaultedSecret]:
+        row = await (await self._conn.execute(VAULT_FETCH_SECRET, (id, ))).fetchone()
+        if row is None:
+            return None
+        return models.VaultedSecret(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            tenant_id=row[4],
+            ciphertext=row[5],
+            nonce=row[6],
         )

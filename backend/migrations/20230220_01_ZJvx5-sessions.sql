@@ -7,8 +7,8 @@ CREATE TABLE sessions (
     created_at timestamptz NOT NULL DEFAULT NOW(),
     updated_at timestamptz NOT NULL DEFAULT NOW(),
 
-    user_id bigint NOT NULL REFERENCES users(id),
-    tenant_id bigint REFERENCES tenants(id),
+    user_id bigint NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    tenant_id bigint REFERENCES tenants(id) ON DELETE CASCADE,
     last_seen_at timestamptz NOT NULL DEFAULT NOW(),
     expired_at timestamptz
 );

@@ -32,7 +32,7 @@ CREATE TABLE tenants_users (
     created_at timestamptz NOT NULL DEFAULT NOW(),
     updated_at timestamptz NOT NULL DEFAULT NOW(),
 
-    user_id bigint NOT NULL REFERENCES users (id),
+    user_id bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     tenant_id bigint NOT NULL DEFAULT current_tenant_id() REFERENCES tenants (id) ON DELETE CASCADE,
 
     -- If this is not null, it means the user was removed from the tenant at

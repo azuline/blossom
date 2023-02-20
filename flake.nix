@@ -21,6 +21,7 @@
             echo "$path"
           }
 
+          export ENVIRONMENT=development
           export BLOSSOM_ROOT="$(find-up .monorepo-root)"
 
           # We intentionally do not allow installing Python packages to the

@@ -78,3 +78,14 @@ class User:
     signup_step: UserSignupStep
     is_enabled: bool
     last_visited_at: Optional[datetime.datetime]
+
+
+@dataclasses.dataclass()
+class VaultedSecret:
+    id: int
+    external_id: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    tenant_id: int
+    ciphertext: str
+    nonce: str

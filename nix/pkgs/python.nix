@@ -26,6 +26,7 @@ let
   };
   runtime-deps = with python.pkgs; [
     click
+    cryptography
     jinja2
     psycopg
     psycopg.pool
