@@ -136,6 +136,7 @@ module.exports = {
         "**/*.spec.ts",
         "**/*.spec.tsx",
         "**/*.config.ts",
+        "**/foundation/testing/**",
       ],
     }],
   },

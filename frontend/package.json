@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^2.0.0",
+    "msw": "^1.0.1",
     "rollup-plugin-analyzer": "^4.0.0",
     "start-server-and-test": "^1.15.3",
     "sync-fetch": "^0.4.2",
