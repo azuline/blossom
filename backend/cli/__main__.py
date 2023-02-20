@@ -4,7 +4,8 @@
 from typing import Any
 
 import click
-from pytest_asyncio.plugin import asyncio, functools
+import asyncio
+import functools
 
 from codegen.sqlc.models import TenantsInboundSource
 from foundation.database import ConnQuerier, conn_admin, create_pg_pool

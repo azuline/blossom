@@ -1,4 +1,4 @@
-from pytest_asyncio.plugin import pytest
+import pytest
 
 from foundation.rpc.route import SESSION_ID_KEY
 from foundation.test.fixture import TFix

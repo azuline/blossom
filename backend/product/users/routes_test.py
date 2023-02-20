@@ -1,4 +1,4 @@
-from pytest_asyncio.plugin import pytest
+import pytest
 
 from foundation.test.fixture import TFix
 from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoTenant

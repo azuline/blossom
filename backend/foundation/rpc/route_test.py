@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
 
-from pytest_asyncio.plugin import pytest
+import pytest
 from quart import Blueprint, Quart, json
 
 from foundation.rpc.error import APIError
