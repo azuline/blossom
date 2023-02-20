@@ -1,8 +1,16 @@
 import os
 
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 
-load_dotenv()
+env: dict[str, str] = {
+    # This is committed to git and contains non-sensitive keys.
+    **dotenv_values(".env"),  # type: ignore
+    # The is not committed to git and contains sensitive overrides.
+    **dotenv_values(".env.local"),  # type: ignore
+    **os.environ,
+}
+# Remove os.environ from scope so that it doesn't accidentally get used.
+del os
 
 
 class InvalidConfigValueError(Exception):
@@ -20,30 +28,30 @@ class _Config:
         self.app_url = self._app_url()
 
     def _psycopg_database_url(self) -> str:
-        user = os.environ["POSTGRES_USER"]
-        password = os.environ["POSTGRES_PASSWORD"]
-        host = os.environ["POSTGRES_HOST"]
-        port = os.environ["POSTGRES_PORT"]
+        user = env["POSTGRES_USER"]
+        password = env["POSTGRES_PASSWORD"]
+        host = env["POSTGRES_HOST"]
+        port = env["POSTGRES_PORT"]
         return f"postgresql://{user}:{password}@{host}:{port}"
 
     def _yoyo_database_url(self) -> str:
-        user = os.environ["POSTGRES_USER"]
-        password = os.environ["POSTGRES_PASSWORD"]
-        host = os.environ["POSTGRES_HOST"]
-        port = os.environ["POSTGRES_PORT"]
+        user = env["POSTGRES_USER"]
+        password = env["POSTGRES_PASSWORD"]
+        host = env["POSTGRES_HOST"]
+        port = env["POSTGRES_PORT"]
         return f"postgresql+psycopg://{user}:{password}@{host}:{port}"
 
     def _pool_size(self) -> int:
         try:
-            return int(os.environ.get("POOL_SIZE", 20))
+            return int(env.get("POOL_SIZE", 20))
         except ValueError as e:
             raise InvalidConfigValueError("Failed to parse POOL_SIZE to int.") from e
 
     def _session_secret(self) -> str:
-        return os.environ["SESSION_SECRET"]
+        return env["SESSION_SECRET"]
 
     def _app_url(self) -> str:
-        return os.environ["APP_URL"]
+        return env["APP_URL"]
 
 
 # Define a Config singleton.
