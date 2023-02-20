@@ -3,7 +3,7 @@ import { currentTenantIDAtom } from "@foundation/auth/components/BlockOnAuth";
 import { BlossomError } from "@foundation/errors/base";
 import {
   PossibleRPCErrors,
-  RPCError
+  RPCError,
 } from "@foundation/errors/rpc";
 import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { getDefaultStore, Getter } from "jotai";
