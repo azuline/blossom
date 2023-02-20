@@ -1,52 +1,30 @@
-{ pkgs, builds }:
+{ pkgs }:
 
 rec {
-  general = pkgs.buildEnv {
-    name = "blossom general";
-    paths = with pkgs; [
-      coreutils
-      docker
-      gnumake
-      semgrep
-      fail-on-dirty-diff
-    ];
-  };
-  backend = pkgs.buildEnv {
-    name = "blossom backend";
-    paths = with pkgs; [
-      general
-      builds.backend.env
-      # Python developer tools.
-      black
-      pip-audit
-      ruff
-      sqlc-py
-      sqlc-gen-python
-      dprint # needed for typescript codegen
-    ];
-  };
-  frontend = pkgs.buildEnv {
-    name = "blossom frontend";
-    paths = with pkgs; [
-      general
-      dprint
-      nodejs-18_x
-      nodePackages.pnpm
-    ];
-  };
-  interactive = pkgs.buildEnv {
-    name = "blossom interactive";
-    paths = with pkgs; [
-      postgresql_15
-    ];
-  };
-  all = pkgs.buildEnv {
-    name = "blossom all";
-    paths = [
-      general
-      backend
-      frontend
-      interactive
-    ];
-  };
+  general = with pkgs; [
+    coreutils
+    docker
+    gnumake
+    semgrep
+    fail-on-dirty-diff
+  ];
+  backend = general ++ (with pkgs; [
+    # mypy is defined as a part of python-dev so it can read the dependencies
+    black
+    pip-audit
+    python-dev
+    ruff
+    sqlc-py
+    sqlc-gen-python
+    dprint # needed for typescript codegen
+  ]);
+  frontend = general ++ (with pkgs; [
+    dprint
+    nodejs-18_x
+    nodePackages.pnpm
+  ]);
+  interactive = with pkgs; [
+    postgresql_15
+  ];
+  all = general ++ backend ++ frontend ++ interactive;
 }

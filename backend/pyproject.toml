@@ -1,35 +1,3 @@
-[tool.poetry]
-name = "backend"
-version = "0.0.0"
-description = ""
-authors = ["blissful <blissful@sunsetglow.net>"]
-license = "Apache-2.0"
-
-[tool.poetry.dependencies]
-python = "^3.10"
-click = "^8.1.3"
-jinja2 = "^3.1.2"
-pendulum = "^2.1.2"
-procrastinate = "^0.27.0"
-psycopg = {extras = ["pool", "binary"], version = "^3.1.8"}
-pydantic = "^1.10.5"
-python-dotenv = "^0.21.1"
-quart = "^0.18.3"
-werkzeug = "^2.2.3"
-yoyo-migrations = "^8.2.0"
-
-[tool.poetry.group.dev.dependencies]
-dacite = "^1.8.0"
-mypy = "^1.0.1"
-pytest = "^7.2.1"
-pytest-asyncio = "^0.20.3"
-pytest-cov = "^4.0.0"
-pytest-xdist = "^3.2.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.black]
 line-length = 100
 force-exclude = '''

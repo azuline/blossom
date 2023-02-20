@@ -4,19 +4,14 @@
   inputs = {
     nixpkgs.url = github:nixos/nixpkgs/nixos-unstable;
     flake-utils.url = github:numtide/flake-utils;
-    poetry2nix-src = {
-      url = "github:nix-community/poetry2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
-  outputs = { self, nixpkgs, flake-utils, poetry2nix-src }:
+
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        # see https://github.com/nix-community/poetry2nix/tree/master#api for more functions and examples.
-        poetry2nix = poetry2nix-src.legacyPackages.${system};
         pkgs = import ./nix/pkgs { inherit nixpkgs system; };
-        builds = import ./nix/builds { inherit pkgs poetry2nix; };
-        toolchains = import ./nix/toolchains { inherit pkgs builds; };
+        toolchains = import ./nix/toolchains { inherit pkgs; };
+        builds = import ./nix/builds { inherit nixpkgs; };
         shellHook = ''
           find-up () {
             path=$(pwd)
@@ -33,33 +28,21 @@
           # handled via a virtualenv.
           export PIP_CONFIG_FILE="$BLOSSOM_ROOT"/.pip
         '';
+        makeDevShell = chain: pkgs.mkShell {
+          inherit shellHook;
+          buildInputs = [
+            (pkgs.buildEnv {
+              name = "blossom dev shell";
+              paths = chain;
+            })
+          ];
+        };
       in
       rec {
         devShells = {
-          default = pkgs.mkShell {
-            inherit shellHook;
-            buildInputs = [
-              toolchains.all
-              (pkgs.buildEnv {
-                name = "blossom app";
-                paths = [ apps.blossom ];
-              })
-            ];
-          };
-          backend = pkgs.mkShell {
-            inherit shellHook;
-            buildInputs = [
-              toolchains.backend
-              (pkgs.buildEnv {
-                name = "blossom app";
-                paths = [ apps.blossom ];
-              })
-            ];
-          };
-          frontend = pkgs.mkShell {
-            inherit shellHook;
-            buildInputs = [ toolchains.frontend ];
-          };
+          default = makeDevShell (toolchains.all ++ [ apps.blossom ]);
+          backend = makeDevShell (toolchains.backend ++ [ apps.blossom ]);
+          frontend = makeDevShell toolchains.frontend;
         };
         packages = {
           backend = builds.backend;
