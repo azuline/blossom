@@ -99,6 +99,11 @@ export const sxsets = {
           fontWeight: t.font.weight.medium,
         },
       },
+      paragraph: {
+        true: {
+          lineHeight: t.font.lineHeight.paragraph,
+        },
+      },
       fontSize: t.font.size,
       fontWeight: t.font.weight,
       whiteSpace: ["normal", "nowrap", "pre", "pre-line", "pre-wrap"],

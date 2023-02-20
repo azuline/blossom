@@ -12,12 +12,12 @@ const HomePage: React.FC = () => (
         <Flex sx={{ dir: "column", gap: "36" }}>
           <Flex sx={{ dir: "column", gap: "12", maxw: "480" }}>
             <Type sx={{ text: "disp-lg" }}>Hi, hello, welcome home!</Type>
-            <Type sx={{ col: "neutral.weak" }}>
+            <Type sx={{ col: "neutral.weak", paragraph: "true" }}>
               Lauren ipson lauren ipson lauren ipson lauren ipson lauren ipson lauren ipson lauren
               ipson lauren ipson lauren ipson.
             </Type>
           </Flex>
-          <Button onPress={() => {}}>CTA Here</Button>
+          <Button onPress={() => { }}>CTA Here</Button>
         </Flex>
       </Center>
     </LayoutPadding>

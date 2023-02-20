@@ -78,6 +78,9 @@ export const t = createGlobalTheme("html", {
       xl: "32px",
       xxl: "40px",
     },
+    lineHeight: {
+      paragraph: "1.4",
+    },
   },
   color: {
     background: {
