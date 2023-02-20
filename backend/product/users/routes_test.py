@@ -7,6 +7,11 @@ from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoTenant
 @pytest.mark.asyncio
 async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
     user, tenant = await t.f.customer()
+    # Make a second tenant that the user belongs to..
+    tenant2 = await t.f.tenant()
+    await t.f.tenant_user_create(user_id=user.id, tenant_id=tenant2.id)
+    # Make a third tenant that the user does not belong to.
+    await t.f.tenant()
     await t.rpc.login_as(user, tenant)
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
@@ -20,7 +25,11 @@ async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
             GetPageLoadInfoTenant(
                 external_id=tenant.external_id,
                 name=tenant.name,
-            )
+            ),
+            GetPageLoadInfoTenant(
+                external_id=tenant2.external_id,
+                name=tenant2.name,
+            ),
         ],
     )
 

@@ -49,8 +49,10 @@ WHERE id = %s
 
 
 TENANT_FETCH_ALL = """-- name: tenant_fetch_all \\:many
-SELECT id, external_id, created_at, updated_at, name, inbound_source
-FROM tenants
+SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+FROM tenants t
+JOIN tenants_users tu ON tu.tenant_id = t.id
+WHERE tu.user_id = %s
 """
 
 
@@ -192,8 +194,8 @@ class AsyncQuerier:
             inbound_source=row[5],
         )
 
-    async def tenant_fetch_all(self) -> AsyncIterator[models.Tenant]:
-        cursor = await self._conn.execute(TENANT_FETCH_ALL)
+    async def tenant_fetch_all(self, *, user_id: int) -> AsyncIterator[models.Tenant]:
+        cursor = await self._conn.execute(TENANT_FETCH_ALL, (user_id, ))
         async for row in cursor:
             yield models.Tenant(
                 id=row[0],

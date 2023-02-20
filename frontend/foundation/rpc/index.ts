@@ -1,11 +1,12 @@
 import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
+import { currentTenantIDAtom } from "@foundation/auth/components/BlockOnAuth";
 import { BlossomError } from "@foundation/errors/base";
 import {
   PossibleRPCErrors,
-  RPCError,
+  RPCError
 } from "@foundation/errors/rpc";
 import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
-import { Getter } from "jotai";
+import { getDefaultStore, Getter } from "jotai";
 import { atomsWithQuery } from "jotai-tanstack-query";
 import { useCallback } from "react";
 
@@ -146,6 +147,13 @@ const baseRPCExecutor = async <
     }
   }
 
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const jotaiStore = getDefaultStore();
+  const currentTenantID = jotaiStore.get(currentTenantIDAtom);
+  if (currentTenantID !== null) {
+    headers["X-Tenant-ID"] = currentTenantID;
+  }
+
   let response;
   let text;
   try {
@@ -153,7 +161,7 @@ const baseRPCExecutor = async <
       method,
       cache: "no-store",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body,
     });
     text = await response.text();

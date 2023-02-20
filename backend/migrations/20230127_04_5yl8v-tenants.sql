@@ -54,8 +54,10 @@ CREATE INDEX tenants_users_removed_by_user_idx ON tenants_users (removed_by_user
 CREATE INDEX tenants_users_tenant_id_idx ON tenants_users (tenant_id);
 
 ALTER TABLE tenants_users ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenants_users_self_all ON tenants_users
+CREATE POLICY tenants_users_on_tenant_all ON tenants_users
     USING (tenant_id = current_tenant_id());
+CREATE POLICY tenants_users_on_user_all ON tenants_users
+    USING (user_id = current_user_id());
 
 -- Let users read other users on their tenant.
 CREATE POLICY users_shared_tenant_select ON users FOR SELECT

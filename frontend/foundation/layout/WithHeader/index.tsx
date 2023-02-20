@@ -1,6 +1,6 @@
+import { useCurrentTenant } from "@foundation/auth/state";
 import { sHeaderLayout } from "@foundation/layout/WithHeader/index.css";
 import { TypeLoader } from "@foundation/loaders/TypeLoader";
-import { useRPC } from "@foundation/rpc";
 import { Avatar } from "@foundation/ui/Avatar";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
@@ -11,8 +11,7 @@ type Props = {
 };
 
 export const WithHeader: React.FC<Props> = props => {
-  const { data } = useRPC("GetPageLoadInfo", null);
-  const tenant = data?.tenant?.name;
+  const tenant = useCurrentTenant();
 
   return (
     <Flex sx={{ dir: "column", h: "full" }}>
@@ -20,8 +19,7 @@ export const WithHeader: React.FC<Props> = props => {
         <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
           <Type sx={{ text: "disp-xl" }}>blossom</Type>
           <Flex sx={{ gap: "16", align: "center" }}>
-            {/* TODO: Loader */}
-            {tenant !== undefined ? <Type>{tenant}</Type> : <TypeLoader w="96" />}
+            {tenant !== undefined ? <Type>{tenant.name}</Type> : <TypeLoader w="96" />}
             <Avatar size="36" />
           </Flex>
         </Flex>

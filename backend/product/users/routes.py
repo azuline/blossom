@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from codegen.sqlc.models import Tenant
+from foundation.database import conn_admin
 from foundation.rpc.route import Req, route
 
 
@@ -48,11 +49,14 @@ async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut | None:
             available_tenants=[],
         )
 
+    # By default, our Row Level Security only allow for the active tenant to be read. So we need to
+    # drop to admin to read all available tenants.
+    async with conn_admin(req.pg_pool) as cq_admin:
+        available_tenants = [x async for x in cq_admin.q.tenant_fetch_all(user_id=req.user.id)]
+
     return GetPageLoadInfoOut(
         external_id=req.user.external_id,
         name=req.user.name,
         email=req.user.email,
-        available_tenants=[
-            GetPageLoadInfoTenant.from_model(t) async for t in req.cq.q.tenant_fetch_all()
-        ],
+        available_tenants=[GetPageLoadInfoTenant.from_model(t) for t in available_tenants],
     )

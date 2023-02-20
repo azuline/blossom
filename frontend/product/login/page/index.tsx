@@ -26,7 +26,7 @@ const errorAtom = atom<string | null>(null);
 const LoginPage: React.FC = () => {
   const [form, setForm] = useAtom(loginFormAtom);
   const [error, setError] = useAtom(errorAtom);
-  const refetchAuth = useRefetchRPC();
+  const refetchRPC = useRefetchRPC();
 
   const submit = async (): Promise<void> => {
     const resp = await rpc("Login", form, e => {
@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    await refetchAuth("GetPageLoadInfo");
+    await refetchRPC("GetPageLoadInfo");
     // TODO: Redirect to /
   };
 

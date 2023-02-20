@@ -9,8 +9,10 @@ FROM tenants
 WHERE external_id = $1;
 
 -- name: TenantFetchAll :many
-SELECT *
-FROM tenants;
+SELECT t.*
+FROM tenants t
+JOIN tenants_users tu ON tu.tenant_id = t.id
+WHERE tu.user_id = $1;
 
 -- name: TenantCreate :one
 INSERT INTO tenants (name, inbound_source)
