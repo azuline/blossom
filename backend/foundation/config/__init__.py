@@ -7,8 +7,12 @@ env: dict[str, str] = {
     **dotenv_values(".env"),  # type: ignore
     # The is not committed to git and contains sensitive overrides.
     **dotenv_values(".env.local"),  # type: ignore
-    **os.environ,
 }
+
+# Quart auto-loads .env into os.environ when dotenv is installed, so we will override .env.local
+# if we load in os.envion. However, in Production, we always want os.environ to be at the end.
+if os.environ.get("QUART_DEBUG", 0) != "1":
+    env = {**env, **os.environ}
 # Remove os.environ from scope so that it doesn't accidentally get used.
 del os
 

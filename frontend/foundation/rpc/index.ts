@@ -28,12 +28,10 @@ import { useCallback } from "react";
 export const rpc = async <T extends keyof RPCs>(
   name: T,
   args: RPCs[T]["in"],
-  onError: (e: RPCError<T, PossibleRPCErrors<T>>) => true,
 ): Promise<RPCs[T]["out"] | RPCError<T, PossibleRPCErrors<T>>> => {
   try {
     return await baseRPCExecutor(name, args);
   } catch (e) {
-    onError(e as RPCError<T, PossibleRPCErrors<T>>);
     return e as RPCError<T, PossibleRPCErrors<T>>;
   }
 };

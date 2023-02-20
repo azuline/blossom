@@ -80,8 +80,9 @@ def get_catalog() -> Catalog:
     # Because routes register themselves into the catalog upon import,
     # we need a central place to define the import paths for all routes.
     # This function is that central place.
-    import product.authn.routes  # noqa: F401
-    import product.users.routes  # noqa: F401
+    # ruff: noqa: F401
+    import product.authn.routes
+    import product.users.routes
 
     return _catalog
 
@@ -92,4 +93,6 @@ def create_blueprint() -> Blueprint:
     bp = Blueprint("api", __name__, url_prefix="/api")
     for route in catalog.rpcs:
         bp.route("/" + route.name, methods=[route.method])(route.handler)
+    for rawr in catalog.raw_routes:
+        bp.route("/" + rawr.name, methods=[rawr.method])(rawr.handler)
     return bp

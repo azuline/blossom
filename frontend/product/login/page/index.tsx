@@ -29,16 +29,14 @@ const LoginPage: React.FC = () => {
   const refetchRPC = useRefetchRPC();
 
   const submit = async (): Promise<void> => {
-    const resp = await rpc("Login", form, e => {
-      if (e.error === "InvalidCredentialsError") {
+    const resp = await rpc("Login", form);
+    if (resp instanceof RPCError) {
+      if (resp.error === "InvalidCredentialsError") {
         setError("Invalid login credentials. Please re-check your email and password.");
-        return true;
+        return;
       }
       setError("Unexpected error occurred. Please try again later.");
-      throw e;
-    });
-    if (resp instanceof RPCError) {
-      return;
+      throw resp;
     }
 
     await refetchRPC("GetPageLoadInfo");

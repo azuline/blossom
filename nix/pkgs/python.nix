@@ -20,7 +20,6 @@ let
       jinja2
       markupsafe
       pydata-sphinx-theme
-      python-dotenv
       typing-extensions
       werkzeug
     ];
