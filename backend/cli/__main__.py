@@ -46,11 +46,16 @@ def cli() -> None:
     """Blossom CLI"""
 
 
-@cli.command()
+@cli.group()
+def start() -> None:
+    """Start backend services."""
+
+
+@start.command()
 @click.option("--host", "-h", default="127.0.0.1", help="Address to listen on.")
 @click.option("--port", "-p", default=40851, help="Port to listen on.")
-def start(host: str, port: int) -> None:
-    """Start the backend services."""
+def webserver(host: str, port: int) -> None:
+    """Start the backend webserver."""
     start_app(host, port)
 
 
