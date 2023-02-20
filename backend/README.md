@@ -20,7 +20,7 @@ See the `Makefile` for a list of common dev commands.
 
 - Language: Python + mypy
 - Builds: Nix
-- Package Manager: Nix
+- Package Manager: Nix (w/ poetry2nix)
 - Database: Postgres
 - ORM: sqlc (w/ psycopg engine)
 - Web Framework: Quart

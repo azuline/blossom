@@ -1,5 +1,5 @@
-{ pkgs }:
+{ pkgs, poetry2nix }:
 
 {
-  backend = import ./backend.nix { inherit pkgs; };
+  backend = import ./backend.nix { inherit pkgs poetry2nix; };
 }
