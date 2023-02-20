@@ -1,5 +1,5 @@
 import { RPCErrors, RPCs, RPCSystemErrors } from "@codegen/rpc";
-import { BlossomError, ErrorOptions } from "@foundation/errors/base";
+import { BaseError, ErrorOptions } from "@foundation/errors/base";
 
 const TRANSIENT_ERRORS: readonly (keyof RPCErrors)[] = [
   "NetworkError",
@@ -16,7 +16,7 @@ export type RPCErrorOptions<T extends keyof RPCs, E extends PossibleRPCErrors<T>
   data: RPCErrors[E];
 };
 
-export class RPCError<T extends keyof RPCs, E extends PossibleRPCErrors<T>> extends BlossomError {
+export class RPCError<T extends keyof RPCs, E extends PossibleRPCErrors<T>> extends BaseError {
   rpc: RPCErrorOptions<T, E>["rpc"];
 
   error: RPCErrorOptions<T, E>["error"];

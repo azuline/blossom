@@ -1,5 +1,5 @@
 import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
-import { BlossomError } from "@foundation/errors/base";
+import { BaseError } from "@foundation/errors/base";
 import {
   PossibleRPCErrors,
   RPCError,
@@ -170,7 +170,7 @@ const baseRPCExecutor = async <
         data: null,
       });
     }
-    throw new BlossomError("Unknown error from fetch", { cause: e as Error });
+    throw new BaseError("Unknown error from fetch", { cause: e as Error });
   }
 
   let data: unknown;

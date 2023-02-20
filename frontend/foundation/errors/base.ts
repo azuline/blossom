@@ -8,7 +8,7 @@ export type ErrorOptions = {
  * The base error class. All of our errors subclass from this. In this base error class,
  * we implement error chaining and store more metadata.
  */
-export class BlossomError extends Error {
+export class BaseError extends Error {
   /**
    * If the error occurs during normal user interaction. For example, backend form
    * validation is expected to occasionally error. These errors should be caught and
