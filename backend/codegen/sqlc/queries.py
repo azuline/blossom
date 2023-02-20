@@ -2,6 +2,7 @@
 # versions:
 #   sqlc v1.16.0
 # source: queries.sql
+import datetime
 from typing import Any, AsyncIterator, Optional
 
 import psycopg
@@ -9,21 +10,61 @@ import psycopg
 from codegen.sqlc import models
 
 
+AUTHN_CREATE_SESSION = """-- name: authn_create_session \\:one
+INSERT INTO sessions (user_id, tenant_id)
+VALUES (%s, %s)
+RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+"""
+
+
+AUTHN_EXPIRE_SESSION = """-- name: authn_expire_session \\:exec
+UPDATE sessions
+SET expired_at = NOW() 
+WHERE external_id = %s
+"""
+
+
+AUTHN_FETCH_LINKED_TENANT = """-- name: authn_fetch_linked_tenant \\:one
+SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+FROM tenants t
+JOIN tenants_users tu ON tu.tenant_id = t.id
+WHERE tu.user_id = %s AND t.external_id = %s
+"""
+
+
+AUTHN_FETCH_MOST_RECENTLY_ACCESSED_TENANT = """-- name: authn_fetch_most_recently_accessed_tenant \\:one
+SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+FROM tenants t
+JOIN tenants_users tu ON tu.tenant_id = t.id
+LEFT JOIN sessions s ON s.tenant_id = t.id AND s.user_id = tu.user_id
+WHERE tu.user_id = %s
+ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
+LIMIT 1
+"""
+
+
+AUTHN_FETCH_SESSION_BY_USER = """-- name: authn_fetch_session_by_user \\:one
+SELECT id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+FROM sessions
+WHERE user_id = %s
+ORDER BY last_seen_at DESC
+LIMIT 1
+"""
+
+
 AUTHN_FETCH_USER_EMAIL = """-- name: authn_fetch_user_email \\:one
-SELECT id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at FROM users
+SELECT id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
+FROM users
 WHERE email = %s
 """
 
 
-RPC_FETCH_TENANT_ASSOCIATED_WITH_USER = """-- name: rpc_fetch_tenant_associated_with_user \\:one
-SELECT id, external_id, created_at, updated_at, name, inbound_source FROM tenants t
-WHERE t.external_id = %s
-    AND EXISTS (
-        SELECT id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
-        FROM tenants_users tu
-        WHERE tu.user_id = %s
-            AND tu.tenant_id = t.id
-    )
+RPC_FETCH_UNEXPIRED_SESSION = """-- name: rpc_fetch_unexpired_session \\:one
+SELECT id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+FROM sessions
+WHERE external_id = %s
+AND expired_at IS NULL
+AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
 
 
@@ -60,6 +101,13 @@ TENANT_FETCH_EXT = """-- name: tenant_fetch_ext \\:one
 SELECT id, external_id, created_at, updated_at, name, inbound_source
 FROM tenants
 WHERE external_id = %s
+"""
+
+
+TEST_SESSION_CREATE = """-- name: test_session_create \\:one
+INSERT INTO sessions (user_id, tenant_id, expired_at, last_seen_at)
+VALUES (%s, %s, %s, %s)
+RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
 """
 
 
@@ -123,6 +171,65 @@ class AsyncQuerier:
     def __init__(self, conn: psycopg.AsyncConnection[Any]):
         self._conn = conn
 
+    async def authn_create_session(self, *, user_id: int, tenant_id: Optional[int]) -> Optional[models.Session]:
+        row = await (await self._conn.execute(AUTHN_CREATE_SESSION, (user_id, tenant_id))).fetchone()
+        if row is None:
+            return None
+        return models.Session(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            user_id=row[4],
+            tenant_id=row[5],
+            last_seen_at=row[6],
+            expired_at=row[7],
+        )
+
+    async def authn_expire_session(self, *, external_id: str) -> None:
+        await self._conn.execute(AUTHN_EXPIRE_SESSION, (external_id, ))
+
+    async def authn_fetch_linked_tenant(self, *, user_id: int, external_id: str) -> Optional[models.Tenant]:
+        row = await (await self._conn.execute(AUTHN_FETCH_LINKED_TENANT, (user_id, external_id))).fetchone()
+        if row is None:
+            return None
+        return models.Tenant(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def authn_fetch_most_recently_accessed_tenant(self, *, user_id: int) -> Optional[models.Tenant]:
+        row = await (await self._conn.execute(AUTHN_FETCH_MOST_RECENTLY_ACCESSED_TENANT, (user_id, ))).fetchone()
+        if row is None:
+            return None
+        return models.Tenant(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def authn_fetch_session_by_user(self, *, user_id: int) -> Optional[models.Session]:
+        row = await (await self._conn.execute(AUTHN_FETCH_SESSION_BY_USER, (user_id, ))).fetchone()
+        if row is None:
+            return None
+        return models.Session(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            user_id=row[4],
+            tenant_id=row[5],
+            last_seen_at=row[6],
+            expired_at=row[7],
+        )
+
     async def authn_fetch_user_email(self, *, email: str) -> Optional[models.User]:
         row = await (await self._conn.execute(AUTHN_FETCH_USER_EMAIL, (email, ))).fetchone()
         if row is None:
@@ -140,17 +247,19 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def rpc_fetch_tenant_associated_with_user(self, *, external_id: str, user_id: int) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(RPC_FETCH_TENANT_ASSOCIATED_WITH_USER, (external_id, user_id))).fetchone()
+    async def rpc_fetch_unexpired_session(self, *, external_id: str) -> Optional[models.Session]:
+        row = await (await self._conn.execute(RPC_FETCH_UNEXPIRED_SESSION, (external_id, ))).fetchone()
         if row is None:
             return None
-        return models.Tenant(
+        return models.Session(
             id=row[0],
             external_id=row[1],
             created_at=row[2],
             updated_at=row[3],
-            name=row[4],
-            inbound_source=row[5],
+            user_id=row[4],
+            tenant_id=row[5],
+            last_seen_at=row[6],
+            expired_at=row[7],
         )
 
     async def tenant_add_user(self, *, tenant_id: int, user_id: int) -> Optional[models.TenantsUser]:
@@ -217,6 +326,21 @@ class AsyncQuerier:
             updated_at=row[3],
             name=row[4],
             inbound_source=row[5],
+        )
+
+    async def test_session_create(self, *, user_id: int, tenant_id: Optional[int], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
+        row = await (await self._conn.execute(TEST_SESSION_CREATE, (user_id, tenant_id, expired_at, last_seen_at))).fetchone()
+        if row is None:
+            return None
+        return models.Session(
+            id=row[0],
+            external_id=row[1],
+            created_at=row[2],
+            updated_at=row[3],
+            user_id=row[4],
+            tenant_id=row[5],
+            last_seen_at=row[6],
+            expired_at=row[7],
         )
 
     async def test_tenant_create(self, *, name: str, inbound_source: models.TenantsInboundSource) -> Optional[models.Tenant]:

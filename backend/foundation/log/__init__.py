@@ -9,7 +9,7 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
-def option_log_level(func: Callable[P, T]) -> Callable[P, T]:
+def option_log_level(func: Callable[P, T]) -> Callable[P, T]:  # pragma: no cover
     """
     A decorator to add some shared click options to a Click command. Currently, the
     ``--log-level`` option is implemented by this decorator.

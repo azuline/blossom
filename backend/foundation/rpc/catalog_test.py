@@ -39,16 +39,16 @@ def test_no_invalid_id_attribute_exposed() -> None:
 
     for route in catalog.rpcs:
         if route.in_ and check_dataclass_has_id_field(route.in_):
-            invalid.append(f"{route.name} Input")
+            invalid.append(f"{route.name} Input")  # pragma: no cover
         if route.out and check_dataclass_has_id_field(route.out):
-            invalid.append(f"{route.name} Output")
+            invalid.append(f"{route.name} Output")  # pragma: no cover
         for err in route.errors:
             if check_dataclass_has_id_field(err):
-                invalid.append(f"{route.name}.{err.__name__} Error")
+                invalid.append(f"{route.name}.{err.__name__} Error")  # pragma: no cover
 
     assert not invalid, f"""\
 Do not expose the `id` field in {", ".join(invalid)}.
 Outside of the backend, all entities must be referenced via their external id.
 Failing models:
 {nl.join([f"- {x}" for x in invalid])}
-"""
+"""  # pragma: no cover

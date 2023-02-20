@@ -50,11 +50,11 @@ async def create_app(
     return app
 
 
-def debug_app() -> Quart:
+def debug_app() -> Quart:  # pragma no cover
     return asyncio.run(create_app())
 
 
-def start_app(host: str, port: int) -> None:
+def start_app(host: str, port: int) -> None:  # pragma no cover
     config = Config()
     config.bind = [f"{host}:{port}"]
     # Run one worker per container.

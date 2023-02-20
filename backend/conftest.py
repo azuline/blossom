@@ -90,10 +90,10 @@ def resolve_package_path(path: pathlib.Path) -> pathlib.Path | None:
     result = resolve_pkg_path_orig(path)
     if result is None:
         result = path  # let's search from the current directory upwards
-    for parent in result.parents:
+    for parent in result.parents:  # pragma: no cover
         if str(parent) in namespace_pkg_dirs:
             return parent
-    return None
+    return None  # pragma: no cover
 
 
 # apply patch

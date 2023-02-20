@@ -11,7 +11,7 @@ env: dict[str, str] = {
 
 # Quart auto-loads .env into os.environ when dotenv is installed, so we will override .env.local
 # if we load in os.envion. However, in Production, we always want os.environ to be at the end.
-if os.environ.get("QUART_DEBUG", 0) != "1":
+if os.environ.get("QUART_DEBUG", 0) != "1":  # pragma: no cover
     env = {**env, **os.environ}
 # Remove os.environ from scope so that it doesn't accidentally get used.
 del os
@@ -48,7 +48,7 @@ class _Config:
     def _pool_size(self) -> int:
         try:
             return int(env.get("POOL_SIZE", 20))
-        except ValueError as e:
+        except ValueError as e:  # pragma: no cover
             raise InvalidConfigValueError("Failed to parse POOL_SIZE to int.") from e
 
     def _session_secret(self) -> str:

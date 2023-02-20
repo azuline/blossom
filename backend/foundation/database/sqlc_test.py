@@ -33,10 +33,10 @@ def test_sqlc_query_prefixes() -> None:
                 and not query_name.startswith(package.removesuffix("s"))
                 and not query_name.startswith(package.removesuffix("es"))
             ):
-                failed.append(f"{qf_name}:{query_name}")
+                failed.append(f"{qf_name}:{query_name}")  # pragma: no cover
 
     assert not failed, f"""\
 The following queries should be prefixed with their package name:
 
 {nl.join([f"- {x}" for x in failed])}
-"""
+"""  # pragma: no cover

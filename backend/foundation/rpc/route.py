@@ -23,8 +23,7 @@ from foundation.rpc.error import (
 
 logger = logging.getLogger(__name__)
 
-SESSION_USER_ID_KEY = "user_external_id"
-HEADER_TENANT_EXTERNAL_ID_KEY = "X-Tenant-ID"
+SESSION_ID_KEY = "session_external_id"
 
 Authorization = Literal["public", "user", "tenant"]
 
@@ -183,25 +182,19 @@ async def _check_session_auth(cq: ConnQuerier) -> tuple[User | None, Tenant | No
     Check the current request's session authentication. If so, fetch the associated user
     and the tenant they're logged in as.
     """
-    user_external_id = quart.session.get(SESSION_USER_ID_KEY, None)
-    tenant_external_id = quart.request.headers.get(HEADER_TENANT_EXTERNAL_ID_KEY, None)
+    session_external_id = quart.session.get(SESSION_ID_KEY, None)
 
     user = None
     tenant = None
 
-    logger.info(f"User ID found in session: {user_external_id is not None}")
-    if user_external_id:
-        user = await cq.q.user_fetch_ext(external_id=str(user_external_id))
-        logger.info(f"User found: {user is not None}")
-    # Only look for the tenant if the user exists. Otherwise we could potentially be
-    # leaking the existence of a tenant.
-    logger.info(f"Tenant ID found in headers: {tenant_external_id is not None}")
-    if user and tenant_external_id:
-        tenant = await cq.q.rpc_fetch_tenant_associated_with_user(
-            user_id=user.id,
-            external_id=str(tenant_external_id),
-        )
-        logger.info(f"Tenant found: {tenant is not None}")
+    logger.info(f"Session ID found in session: {session_external_id is not None}")
+    if session_external_id:
+        session = await cq.q.rpc_fetch_unexpired_session(external_id=session_external_id)
+        logger.info(f"Session found: {session is not None}")
+        if session is not None:
+            user = await cq.q.user_fetch(id=session.user_id)
+            if session.tenant_id is not None:
+                tenant = await cq.q.tenant_fetch(id=session.tenant_id)
 
     return user, tenant
 

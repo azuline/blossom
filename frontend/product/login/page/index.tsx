@@ -1,3 +1,4 @@
+import { RPCs } from "@codegen/rpc";
 import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
 import { IconLogo } from "@foundation/icons/IconLogo";
@@ -11,14 +12,11 @@ import { TextField } from "@foundation/ui/TextField";
 import { Type } from "@foundation/ui/Type";
 import { atom, useAtom } from "jotai";
 
-const loginFormAtom = atomForm<{
-  email: string;
-  password: string;
-  permanent: boolean;
-}>({
+const loginFormAtom = atomForm<RPCs["Login"]["in"]>({
   email: "",
   password: "",
   permanent: false,
+  tenant_external_id: null,
 });
 
 const errorAtom = atom<string | null>(null);

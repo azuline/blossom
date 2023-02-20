@@ -11,6 +11,7 @@ export type RPCErrors = {
     fields: Record<string, unknown>;
   };
   InvalidCredentialsError: null;
+  AuthTenantNotFoundError: null;
   // These are errors that the frontend RPC executor can raise.
   NetworkError: null;
   InternalServerError: null;
@@ -36,9 +37,12 @@ export type RPCs = {
       email: string;
       password: string;
       permanent: boolean;
+      tenant_external_id: string | null;
     };
     out: null;
-    errors: "InvalidCredentialsError";
+    errors:
+      | "InvalidCredentialsError"
+      | "AuthTenantNotFoundError";
   };
   Logout: {
     in: null;
@@ -51,6 +55,10 @@ export type RPCs = {
       external_id: string | null;
       name: string | null;
       email: string | null;
+      tenant: {
+        external_id: string;
+        name: string;
+      } | null;
       available_tenants: {
         external_id: string;
         name: string;

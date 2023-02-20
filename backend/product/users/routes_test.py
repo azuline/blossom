@@ -21,6 +21,10 @@ async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
+        tenant=GetPageLoadInfoTenant(
+            external_id=tenant.external_id,
+            name=tenant.name,
+        ),
         available_tenants=[
             GetPageLoadInfoTenant(
                 external_id=tenant.external_id,
@@ -46,5 +50,20 @@ async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
+        tenant=None,
+        available_tenants=[],
+    )
+
+
+@pytest.mark.asyncio
+async def test_page_load_info_not_logged_in(t: TFix) -> None:
+    resp = await t.rpc.execute("GetPageLoadInfo")
+    t.rpc.assert_success(resp)
+    out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
+    assert out == GetPageLoadInfoOut(
+        external_id=None,
+        name=None,
+        email=None,
+        tenant=None,
         available_tenants=[],
     )

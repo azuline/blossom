@@ -10,8 +10,8 @@ nl = "\n"  # can't put backslash in f-string expression
 
 @pytest.mark.asyncio
 async def test_valid_autoincrementing_pkeys(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT a.attrelid::regclass::text
         FROM pg_attribute a
@@ -40,13 +40,13 @@ Primary keys should be defined as:
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_timestamptz(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
 		FROM information_schema.columns c
@@ -71,13 +71,13 @@ Timezone-unaware timestamps are not allowed.
 
 Failing columns:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_tables_have_created_at_and_updated_at(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT t.table_name
 		FROM information_schema.tables t
@@ -111,13 +111,13 @@ Please update tables {", ".join(failing)} to have created_at and updated_at colu
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_created_and_updated_at_definition(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
 		FROM information_schema.columns c
@@ -138,13 +138,13 @@ Please update columns {", ".join(failing)} to NOT NULL DEFAULT NOW().
 
 Failing columns:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_updated_at_columns_have_trigger(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.table_name
 		FROM information_schema.columns c
@@ -176,13 +176,13 @@ Every table should have this trigger:
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_integers_should_be_bigints(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
 		FROM information_schema.columns c
@@ -205,13 +205,13 @@ Please update columns {", ".join(failing)} to be of the bigint type.
 
 Failing columns:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_tables_have_external_ids(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT t.table_name
 		FROM information_schema.tables t
@@ -239,13 +239,13 @@ External IDs are used externally to avoid leaking information.
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_external_ids_have_not_null_unique(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT t.table_name
 		FROM information_schema.columns c
@@ -276,13 +276,13 @@ All rows require a unique external IDs for us to reference them externally.
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_external_id_validation(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_default
 		FROM information_schema.columns c
@@ -317,8 +317,8 @@ class MissingFK:
 
 @pytest.mark.asyncio
 async def test_foreign_key_indexes(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         -- Based on https://www.cybertec-postgresql.com/en/index-your-foreign-key/.
 		SELECT
@@ -370,13 +370,13 @@ Fixes:
     f"CREATE INDEX {x.table}_{'_'.join(x.columns)}_idx ON {x.table} ({', '.join(x.columns)});"
     for x in failing
 ])}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_tables_have_customer_security_policy(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.relname
         FROM pg_class c
@@ -405,13 +405,13 @@ required to give them access to that data.
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover
 
 
 @pytest.mark.asyncio
 async def test_all_views_have_security_invoker_true(t: TFix) -> None:
-    conn = await t.db.conn_admin()
-    cursor = await conn.execute(
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
         """
         SELECT c.relname
         FROM pg_class c
@@ -437,4 +437,4 @@ To enable Security Invoker, please define the view as:
 
 Failing views:
 {nl.join(f"- {t}" for t in failing)}
-"""
+"""  # pragma: no cover

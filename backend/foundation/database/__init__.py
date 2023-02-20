@@ -37,7 +37,7 @@ async def create_pg_pool(url: str) -> ConnPool:
     )
 
 
-if "pytest" in sys.modules:
+if "pytest" in sys.modules:  # pragma: no cover
     logging.getLogger("psycopg").setLevel(logging.DEBUG)
     logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)
 

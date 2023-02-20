@@ -28,7 +28,7 @@ class TFix:
         """Async alternative to __init__"""
         t = cls()
         t.db = TestDB(t, pg_pool=pg_pool)
-        t.f = TestFactory(t, conn=await t.db.conn_admin())
+        t.f = TestFactory(t, cq=await t.db.conn_admin())
         t.rpc = TestRPC(t)
         t.rand = TestRandGen()
         return t

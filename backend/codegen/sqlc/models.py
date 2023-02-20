@@ -33,6 +33,18 @@ class Invite:
 
 
 @dataclasses.dataclass()
+class Session:
+    id: int
+    external_id: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    user_id: int
+    tenant_id: Optional[int]
+    last_seen_at: datetime.datetime
+    expired_at: Optional[datetime.datetime]
+
+
+@dataclasses.dataclass()
 class Tenant:
     id: int
     external_id: str

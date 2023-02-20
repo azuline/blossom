@@ -1,4 +1,5 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import Any
 
 from pytest_asyncio.plugin import pytest
@@ -6,8 +7,7 @@ from quart import Blueprint, Quart, json
 
 from foundation.rpc.error import APIError
 from foundation.rpc.route import (
-    HEADER_TENANT_EXTERNAL_ID_KEY,
-    SESSION_USER_ID_KEY,
+    SESSION_ID_KEY,
     Authorization,
     DataMismatchError,
     InputValidationError,
@@ -100,21 +100,14 @@ async def test_route_auth_user(t: TFix) -> None:
 
 
 @pytest.mark.asyncio
-async def test_route_auth_tenant_invalid_tenant_id(t: TFix) -> None:
-    user = await t.f.user()
-    await make_test_route(await t.rpc.app(), "tenant")
-
-    await t.rpc.login_as(user)
-    resp = await (await t.rpc.client()).post(
-        "/api/Test",
-        json=asdict(SpecTestIn(cherry="blossom")),
-        headers={HEADER_TENANT_EXTERNAL_ID_KEY: "incorrect_garbage"},
-    )
+async def test_route_auth_user_fail(t: TFix) -> None:
+    await make_test_route(await t.rpc.app(), "user")
+    resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
 @pytest.mark.asyncio
-async def test_route_auth_fail(t: TFix) -> None:
+async def test_route_auth_tenant_fail(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "tenant")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
@@ -123,7 +116,33 @@ async def test_route_auth_fail(t: TFix) -> None:
 @pytest.mark.asyncio
 async def test_route_invalid_session(t: TFix) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
-        sess[SESSION_USER_ID_KEY] = 1234
+        sess[SESSION_ID_KEY] = "1234"
+
+    await make_test_route(await t.rpc.app(), "tenant")
+    resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
+    await t.rpc.assert_error(resp, UnauthorizedError)
+
+
+@pytest.mark.asyncio
+async def test_route_expired_session_expired_at(t: TFix) -> None:
+    user = await t.f.user()
+    session = await t.f.session(user_id=user.id, expired_at=datetime.now())
+
+    async with (await t.rpc.client()).session_transaction() as sess:
+        sess[SESSION_ID_KEY] = session.external_id
+
+    await make_test_route(await t.rpc.app(), "tenant")
+    resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
+    await t.rpc.assert_error(resp, UnauthorizedError)
+
+
+@pytest.mark.asyncio
+async def test_route_expired_session_last_seen_at(t: TFix) -> None:
+    user = await t.f.user()
+    session = await t.f.session(user_id=user.id, last_seen_at=datetime.now() - timedelta(days=20))
+
+    async with (await t.rpc.client()).session_transaction() as sess:
+        sess[SESSION_ID_KEY] = session.external_id
 
     await make_test_route(await t.rpc.app(), "tenant")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))

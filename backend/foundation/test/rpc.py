@@ -10,10 +10,10 @@ from quart.typing import TestClientProtocol
 
 from codegen.sqlc.models import Tenant, User
 from foundation.rpc.catalog import Method, get_catalog
-from foundation.rpc.route import HEADER_TENANT_EXTERNAL_ID_KEY, SESSION_USER_ID_KEY
+from foundation.rpc.route import SESSION_ID_KEY
 from foundation.webserver import create_app
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from foundation.test.fixture import TFix
 
 T = TypeVar("T")
@@ -68,11 +68,12 @@ class TestRPC:
 
     async def login_as(self, user: User, tenant: Tenant | None = None) -> None:
         logger.debug(f"Setting session to user {user.external_id} - {user.email}.")
-        async with (await self.client()).session_transaction() as sess:
-            sess[SESSION_USER_ID_KEY] = user.external_id
-        if tenant:
-            logger.debug(f"Setting session to tenant {tenant.external_id}.")
-            self._logged_in_as_tenant_external_id = tenant.external_id
+        async with (await self.client()).session_transaction() as quart_sess:
+            session = await self._t.f.session(
+                user_id=user.id,
+                tenant_id=tenant.id if tenant else None,
+            )
+            quart_sess[SESSION_ID_KEY] = session.external_id
 
     async def execute(
         self,
@@ -81,25 +82,15 @@ class TestRPC:
         data: Any = None,
     ) -> Response:
         logger.debug(f"Executing request to {path} with {data}.")
-        # Once we have the RPC Registry set up, expose that to tests via this function.
-        headers = {}
-        if self._logged_in_as_tenant_external_id:
-            logger.debug(
-                f"Executing request with tenant set to {self._logged_in_as_tenant_external_id}."
-            )
-            headers[HEADER_TENANT_EXTERNAL_ID_KEY] = self._logged_in_as_tenant_external_id
-
         method = self._get_rpc_method(path)
         if method == "GET":
             resp = await (await self.client()).get(
                 f"/api/{path}",
-                headers=headers,
                 query_string=asdict(data) if data else None,
             )
         else:
             resp = await (await self.client()).post(
                 f"/api/{path}",
-                headers=headers,
                 json=asdict(data) if data else None,
             )
 
