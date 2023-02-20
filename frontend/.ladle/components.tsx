@@ -1,17 +1,15 @@
 import type { GlobalProvider } from "@ladle/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
 
 import { LayoutPaddingVariableSetter } from "../foundation/layout/LayoutPadding";
-import { DEFAULT_MOCK_RPC_OUTPUT, mockRPCs } from "../foundation/testing/msw";
+import { DEFAULT_MOCK_RPC_OUTPUT, mockRPCsWorker } from "../foundation/testing/msw.client";
 
 import "../foundation/style/global.css";
 
 const queryClient = new QueryClient();
 
 // Set up MSW with dummy endpoints.
-const server = mockRPCs(DEFAULT_MOCK_RPC_OUTPUT);
-server.start();
+mockRPCsWorker(DEFAULT_MOCK_RPC_OUTPUT);
 
 export const Provider: GlobalProvider = ({ children }) => {
   return (
