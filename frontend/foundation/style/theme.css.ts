@@ -157,6 +157,10 @@ export const t = createGlobalTheme("html", {
       value: `2px solid ${palette.Brand[64]}`,
       offset: "2px",
     },
+    error: {
+      value: `2px solid ${palette.Red[43]}`,
+      offset: "2px",
+    },
   },
   shadows: {
     weak: "0px 4px 4px rgba(220, 220, 220, 0.25), 0px 12px 14px rgba(198, 198, 198, 0.05)",

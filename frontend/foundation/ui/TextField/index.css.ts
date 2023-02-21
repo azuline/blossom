@@ -20,6 +20,9 @@ export const sTextField = recipe({
     error: {
       true: {
         borderColor: t.color.border.negative.default,
+        ":focus-visible": {
+          outline: t.outline.error.value,
+        },
       },
     },
   },
