@@ -6,6 +6,7 @@ specifiers:
   '@swc-jotai/react-refresh': ^0.0.4
   '@tanstack/query-core': ^4.24.9
   '@tanstack/react-query': ^4.24.9
+  '@total-typescript/ts-reset': ^0.3.7
   '@types/node': ^18.11.18
   '@types/react': ^18.0.28
   '@types/react-dom': ^18.0.11
@@ -48,6 +49,7 @@ specifiers:
 dependencies:
   '@tanstack/query-core': 4.24.9
   '@tanstack/react-query': 4.24.9_biqbaboplfbrettd7655fr4n2y
+  '@total-typescript/ts-reset': 0.3.7
   '@vanilla-extract/css': 1.9.5
   '@vanilla-extract/dynamic': 2.0.3
   '@vanilla-extract/recipes': 0.3.0_@vanilla-extract+css@1.9.5
@@ -2240,6 +2242,10 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  /@total-typescript/ts-reset/0.3.7:
+    resolution: {integrity: sha512-yXt2BRRVCJVvzWaxac5n0nCXzIrQEBE/MeYlNQ8/Iq7UeelNmm/AdnUAu18ilSS893mbEQ4u6whPt/HvOPc4rw==}
     dev: false
 
   /@types/acorn/4.0.6:

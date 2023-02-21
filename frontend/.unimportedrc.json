@@ -29,6 +29,8 @@
     "foundation/ui/Bleed/index.tsx",
     "foundation/ui/Card/index.css.ts",
     "foundation/ui/Card/index.tsx",
+    "foundation/ui/Link/index.css.ts",
+    "foundation/ui/Link/index.tsx",
     "foundation/ui/Spacer/index.css.ts",
     "foundation/ui/Spacer/index.tsx"
   ],
