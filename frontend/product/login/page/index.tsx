@@ -3,6 +3,7 @@ import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
 import { IconLogo } from "@foundation/icons/IconLogo";
 import { LayoutPadding } from "@foundation/layout/LayoutPadding";
+import { useRedirect } from "@foundation/routing/state/redirect";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
@@ -25,6 +26,7 @@ const LoginPage: React.FC = () => {
   const [form, setForm] = useAtom(loginFormAtom);
   const [error, setError] = useAtom(errorAtom);
   const refetchRPC = useRefetchRPC();
+  const redirectHome = useRedirect("/");
 
   const submit = async (): Promise<void> => {
     const resp = await rpc("Login", form);
@@ -38,7 +40,7 @@ const LoginPage: React.FC = () => {
     }
 
     await refetchRPC("GetPageLoadInfo");
-    // TODO: Redirect to /
+    redirectHome();
   };
 
   return (
