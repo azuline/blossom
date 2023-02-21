@@ -1,5 +1,5 @@
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { useCallback, useEffect } from "react";
+import { startTransition, useCallback, useEffect } from "react";
 import { useLocation } from "wouter";
 
 export type RedirectFn = () => void;
@@ -17,7 +17,12 @@ export const useRedirect = (route: string): RedirectFn => {
   const prefetch = usePrefetchPath();
   useEffect(() => prefetch(route), [prefetch, route]);
   const [, setLocation] = useLocation();
-  return useCallback(() => setLocation(route), [setLocation, route]);
+  return useCallback(() => {
+    // TODO: Does startTransition even work with the history API?
+    startTransition(() => {
+      setLocation(route);
+    });
+  }, [setLocation, route]);
 };
 
 /**
@@ -27,5 +32,9 @@ export const useRedirect = (route: string): RedirectFn => {
  */
 export const useRedirectWithoutPrefetch = (): RedirectFnWithoutPrefetch => {
   const [, setLocation] = useLocation();
-  return setLocation;
+  return useCallback((route: string) => {
+    startTransition(() => {
+      setLocation(route);
+    });
+  }, [setLocation]);
 };
