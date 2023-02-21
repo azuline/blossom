@@ -11,7 +11,8 @@ import { Checkbox } from "@foundation/ui/Checkbox";
 import { Flex } from "@foundation/ui/Flex";
 import { TextField } from "@foundation/ui/TextField";
 import { Type } from "@foundation/ui/Type";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
+import { useState } from "react";
 
 const loginFormAtom = atomForm<RPCs["Login"]["in"]>({
   email: "",
@@ -20,11 +21,9 @@ const loginFormAtom = atomForm<RPCs["Login"]["in"]>({
   tenant_external_id: null,
 });
 
-const errorAtom = atom<string | null>(null);
-
 const LoginPage: React.FC = () => {
   const [form, setForm] = useAtom(loginFormAtom);
-  const [error, setError] = useAtom(errorAtom);
+  const [error, setError] = useState<string | null>(null);
   const refetchRPC = useRefetchRPC();
   const redirectHome = useRedirect("/");
 
