@@ -13,8 +13,9 @@ const HomePage: React.FC = () => (
           <Flex sx={{ dir: "column", gap: "12", maxw: "480" }}>
             <Type sx={{ text: "disp-lg" }}>Hi, hello, welcome home!</Type>
             <Type sx={{ col: "neutral.weak", paragraph: "true" }}>
-              Lauren ipson lauren ipson lauren ipson lauren ipson lauren ipson lauren ipson lauren
-              ipson lauren ipson lauren ipson.
+              In the Northern Ocean there is a fish called Kun which is many thousand li in size. It
+              changes into a bird named Peng whose back is many thousand li in breadth. When it
+              rises and flies, its wings are like clouds filling the sky.
             </Type>
           </Flex>
           <Button onPress={() => {}}>CTA Here</Button>

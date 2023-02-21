@@ -128,6 +128,7 @@ export const t = createGlobalTheme("html", {
         tint: palette.Brand[94],
         disabled: palette.Brand[64],
         default: palette.Brand[54],
+        hover: palette.Brand[40],
       },
       negative: {
         tint: palette.Red[92],

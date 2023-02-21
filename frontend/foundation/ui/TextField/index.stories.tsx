@@ -6,7 +6,7 @@ export default {
   title: "Components/Atoms/TextField",
 };
 
-const valueAtom = atom("Lorem ipsun");
+const valueAtom = atom("Type on me");
 
 export const Gallery: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
