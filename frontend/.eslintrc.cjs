@@ -51,6 +51,9 @@ module.exports = {
     "no-underscore-dangle": "off",
     // I happen to like large files sometimes.
     "max-classes-per-file": "off",
+    // There is a time and place for both, and honestly I don't think it
+    // matters which one is used or even if its inconsistent.
+    "prefer-arrow-callback": "off",
 
     // Disallow types and interfaces to begin with `I`.
     "@typescript-eslint/naming-convention": [

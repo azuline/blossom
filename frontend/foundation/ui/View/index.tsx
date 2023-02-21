@@ -1,25 +1,26 @@
 import { SX, sx } from "@foundation/style/sprinkles.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import clsx from "clsx";
-import { CSSProperties } from "react";
+import { CSSProperties, forwardRef } from "react";
 
-type Props = PolymorphicProp & {
+type Props = Record<string, unknown> & PolymorphicProp & {
   className?: string;
   sx?: SX;
   children?: React.ReactNode;
   style?: CSSProperties;
 };
 
-export const View: React.FC<Props> = props => {
+export const View = forwardRef(function ViewWithRef(props: Props, ref) {
   const { as, className, sx: sxArgs = {}, style, children, ...passthru } = props;
   const Component = as ?? "div";
   return (
     <Component
       {...passthru}
+      ref={ref}
       className={clsx(className, sx(sxArgs))}
       style={style}
     >
       {children}
     </Component>
   );
-};
+});
