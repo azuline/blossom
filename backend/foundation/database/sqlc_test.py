@@ -1,7 +1,8 @@
-import os
 import re
 from glob import glob
 from pathlib import Path
+
+from foundation.root import BACKEND_ROOT
 
 QUERY_NAME_REGEX = re.compile(r"^-- name: ([^ ]+)")
 
@@ -11,7 +12,7 @@ nl = "\n"
 def test_sqlc_query_prefixes() -> None:
     failed: list[str] = []
 
-    query_files = glob(f"{os.environ['BLOSSOM_ROOT']}/backend/**/queries.sql", recursive=True)
+    query_files = glob(f"{BACKEND_ROOT}/**/queries.sql", recursive=True)
     for qf_name in query_files:
         qf = Path(qf_name)
         package = qf.parent.name

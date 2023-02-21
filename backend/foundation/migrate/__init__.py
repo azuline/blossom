@@ -1,11 +1,10 @@
-from pathlib import Path
 
 from yoyo import get_backend, read_migrations
-from yoyo.migrations import os
 
 from foundation.config import confvars
+from foundation.root import BACKEND_ROOT
 
-MIGRATIONS_PATH = str(Path(os.environ["BLOSSOM_ROOT"]) / "backend" / "migrations")
+MIGRATIONS_PATH = str(BACKEND_ROOT / "migrations")
 
 
 def run_database_migrations(url: str = confvars.yoyo_database_url) -> None:

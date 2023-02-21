@@ -5,9 +5,18 @@ let
     pname = "blossom";
     version = "0.0.0";
     src = ../../backend;
-    vendorSha256 = "sha256-O9u8ThzGOcfWrDjA87RaOPez8pfqUo+AcciSSAw2sfk=";
     propagatedBuildInputs = pkgs.python-prod-deps;
   };
 in
-# TODO: Docker image
-python-package
+pkgs.dockerTools.buildImage {
+  name = "blossom-backend";
+  tag = "latest";
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ python-package ];
+    pathsToLink = [ "/bin" ];
+  };
+  config = {
+    Entrypoint = [ "/bin/blossom" ];
+  };
+}

@@ -10,8 +10,8 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import ./nix/pkgs { inherit nixpkgs system; };
+        builds = import ./nix/builds { inherit pkgs; };
         toolchains = import ./nix/toolchains { inherit pkgs; };
-        builds = import ./nix/builds { inherit nixpkgs; };
         shellHook = ''
           find-up () {
             path=$(pwd)
@@ -41,20 +41,23 @@
       in
       rec {
         devShells = {
-          default = makeDevShell (toolchains.all ++ [ apps.blossom ]);
-          backend = makeDevShell (toolchains.backend ++ [ apps.blossom ]);
+          default = makeDevShell (toolchains.all ++ [ apps.blossom-dev-cli ]);
+          backend = makeDevShell (toolchains.backend ++ [ apps.blossom-dev-cli ]);
           frontend = makeDevShell toolchains.frontend;
         };
         packages = {
-          backend = builds.backend;
+          backend-image = builds.backend;
         };
         apps = {
           # Blossom is the backend CLI in development mode. In production, use
           # the built backend package.
-          blossom = pkgs.writeShellScriptBin "blossom" ''
-            cd $BLOSSOM_ROOT/backend
-            python -m cli $@
-          '';
+          blossom-dev-cli = {
+            type = "app";
+            program = pkgs.writeShellScriptBin "blossom" ''
+              cd $BLOSSOM_ROOT/backend
+              python -m cli $@
+            '';
+          };
         };
       }
     );
