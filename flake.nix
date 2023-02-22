@@ -41,23 +41,16 @@
       in
       rec {
         devShells = {
-          default = makeDevShell (toolchains.all ++ [ apps.blossom-dev-cli ]);
-          backend = makeDevShell (toolchains.backend ++ [ apps.blossom-dev-cli ]);
+          default = makeDevShell (toolchains.all ++ [ packages.blossom-dev-cli ]);
+          backend = makeDevShell (toolchains.backend ++ [ packages.blossom-dev-cli ]);
           frontend = makeDevShell toolchains.frontend;
         };
         packages = {
           backend-image = builds.backend;
-        };
-        apps = {
-          # Blossom is the backend CLI in development mode. In production, use
-          # the built backend package.
-          blossom-dev-cli = {
-            type = "app";
-            program = pkgs.writeShellScriptBin "blossom" ''
-              cd $BLOSSOM_ROOT/backend
-              python -m cli $@
-            '';
-          };
+          blossom-dev-cli = pkgs.writeShellScriptBin "blossom" ''
+            cd $BLOSSOM_ROOT/backend
+            python -m cli $@
+          '';
         };
       }
     );

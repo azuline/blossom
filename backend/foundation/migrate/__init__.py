@@ -1,4 +1,3 @@
-
 from yoyo import get_backend, read_migrations
 
 from foundation.config import confvars
