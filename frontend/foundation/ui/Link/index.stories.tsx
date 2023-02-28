@@ -12,8 +12,7 @@ export const Gallery: React.FC = () => (
       In the Northern Ocean there is a fish called Kun which is many thousand li in size. It changes
       into a bird named Peng whose back is many thousand li in breadth. When it rises and flies, its
       wings are like clouds filling the sky. When this bird moves across the ocean, it heads for the
-      South Sea, the Celestial Lake.
-      {" "}
+      South Sea, the Celestial Lake.{" "}
       <Link href="/">
         In Chi Hsieh’s record of wonders it says: “When Peng is heading toward the Southern Ocean it
         splashes along the water for three thousand li. It rises with the wind and wings its way up
