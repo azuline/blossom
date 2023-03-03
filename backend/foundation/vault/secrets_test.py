@@ -10,5 +10,5 @@ async def test_vaulted_secrets(t: TFix) -> None:
     plaintext = "YELLOW SUBMARINE"
     cq = await t.db.conn_admin()
     vs = await vault_secret(cq, tenant.id, plaintext)
-    recv = await fetch_vaulted_secret(cq, vs.id)
+    recv = await fetch_vaulted_secret(cq, tenant.id, vs.id)
     assert recv == plaintext

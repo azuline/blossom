@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 from codegen.sqlc.models import VaultedSecret
 from foundation.config import confvars
 from foundation.database import ConnQuerier
+from foundation.std.bytes import int_to_bytes
 
 NONCE_LENGTH = 12
 Secret = str
@@ -20,7 +21,9 @@ async def vault_secret(cq: ConnQuerier, tenant_id: int, secret: Secret) -> Vault
     ciphertext = cipher.encrypt(
         nonce=nonce,
         data=secret.encode(),
-        associated_data=None,
+        # Authenticate the secret with the tenant ID so that secrets can only be decrypted when
+        # operating under the same tenant that the secret was encrypted by.
+        associated_data=int_to_bytes(tenant_id),
     )
     vs = await cq.q.vault_create_secret(
         tenant_id=tenant_id,
@@ -35,7 +38,7 @@ class SecretNotFoundError(Exception):
     pass
 
 
-async def fetch_vaulted_secret(cq: ConnQuerier, secret_id: int) -> Secret:
+async def fetch_vaulted_secret(cq: ConnQuerier, tenant_id: int, secret_id: int) -> Secret:
     """
     fetch_vaulted_secret fetches and decrypts a secret from the vault table.
 
@@ -49,6 +52,6 @@ async def fetch_vaulted_secret(cq: ConnQuerier, secret_id: int) -> Secret:
     plaintext = cipher.decrypt(
         nonce=bytes.fromhex(vs.nonce),
         data=bytes.fromhex(vs.ciphertext),
-        associated_data=None,
+        associated_data=int_to_bytes(tenant_id),
     )
     return plaintext.decode()
