@@ -7,7 +7,7 @@ type Props = {
 
 export const Variant: React.FC<Props> = props => (
   <Type sx={{ whiteSpace: "nowrap" }}>
-    <Type sx={{ color: "neutral.weak" }} variant="xs">{props.label}=</Type>
-    <Type sx={{ color: "neutral.default" }} variant="xs">{props.value}</Type>
+    <Type sx={{ color: "neutral.default" }} variant="xs">{props.label}=</Type>
+    <Type sx={{ color: "neutral.strong" }} variant="xs">{props.value}</Type>
   </Type>
 );
