@@ -44,6 +44,7 @@
           default = makeDevShell (toolchains.all ++ [ packages.blossom-dev-cli ]);
           backend = makeDevShell (toolchains.backend ++ [ packages.blossom-dev-cli ]);
           frontend = makeDevShell toolchains.frontend;
+          deployments = makeDevShell toolchains.deployments;
         };
         packages = {
           backend-image = builds.backend;

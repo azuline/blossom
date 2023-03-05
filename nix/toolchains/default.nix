@@ -5,6 +5,7 @@ rec {
     coreutils
     docker
     gnumake
+    gnutar
     semgrep
     fail-on-dirty-diff
   ];
@@ -22,6 +23,10 @@ rec {
     dprint
     nodejs-18_x
     nodePackages.pnpm
+  ]);
+  deployments = general ++ (with pkgs; [
+    nomad
+    jq
   ]);
   interactive = with pkgs; [
     postgresql_15
