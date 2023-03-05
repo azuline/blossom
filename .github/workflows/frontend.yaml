@@ -106,6 +106,7 @@ jobs:
       working-directory: nomad/
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      ARTIFACT_SOURCE_URL: ${{ needs.build-ladle.outputs.artifact_source_url }}
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v20
@@ -124,8 +125,6 @@ jobs:
       - name: Tailscale test
         run: tailscale status
       - name: Deploy
-        env:
-          ARTIFACT_SOURCE_URL: ${{ needs.build-ladle.outputs.artifact_source_url }}
         run: |
           nix develop ../\#devShells.x86_64-linux.deployments
           echo "{}" | jq ".artifact_source_url = $ARTIFACT_SOURCE_URL" > vars.json
