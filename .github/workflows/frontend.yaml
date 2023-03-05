@@ -71,18 +71,30 @@ jobs:
         run: nix develop ../\#devShells.x86_64-linux.frontend --command make build-stories
       - name: Create Tarball
         run: nix develop ../\#devShells.x86_64-linux.frontend --command bash -c '(cd ./build && tar -czvf ../ladle.tar.gz *)'
-      - name: Release
-        id: release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: Auto-release with built Ladle
-          files: ladle.tar.gz
-          name: ${{ github.sha }}
-      - name: Store Ladle artifact download URL
+      - name: Create release and upload tarball
         run: |
-          url=$(echo "${{ steps.release.outputs.assets }}" | jq '.[0].browser_download_url')
-          echo "${ladle_artifact_url}=${url}"
-          echo "${ladle_artifact_url}=${url}" >> $GITHUB_OUTPUT
+          # Reference: https://github.com/peterldowns/nix-search-cli/blob/main/.github/workflows/release.yaml
+          commit_sha="$(git rev-parse --short HEAD)"
+          timestamp="$(date +%Y-%m-%d_%k-%M-%S)"
+          release_name="ladle-$commit_sha-$timestamp"
+          token=${{ secrets.GITHUB_TOKEN }}
+          #
+          # https://docs.github.com/en/rest/releases/releases#create-a-release
+          # https://stackoverflow.com/questions/45240336/how-to-use-github-release-api-to-make-a-release-without-source-code
+          upload_url=$(curl -s -H "Authorization: token $token" \
+            -d "{\"tag_name\": \"$release_name\", \"name\":\"$release_name\",\"target_comitish\": \"$commit_sha\"}" \
+            "https://api.github.com/repos/azuline/blossom/releases" | jq -r '.upload_url')
+          upload_url="${upload_url%\{*}"
+
+          response=$(curl -s -H "Authorization: token $token" \
+            -H "Content-Type: application/gzip" \
+            --data-binary @ladle.tar.gz \
+            "$upload_url?name=ladle.tar.gz&label=ladle.tar.gz")
+          echo "$response"
+
+          artifact_url="$(echo "$response" | jq '.[0].browser_download_url')"
+          echo "ladle_artifact_url=${url}"
+          echo "ladle_artifact_url=${url}" >> $GITHUB_OUTPUT
   # deploy-ladle:
   #   runs-on: ubuntu-latest
   #   env:
