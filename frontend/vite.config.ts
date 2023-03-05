@@ -32,7 +32,7 @@ export default defineConfig({
     //
     // I'm not sure how this works on computers without Docker installed, but you should
     // have Docker installed!
-    host: "172.17.0.1",
+    host: "127.0.0.1",
     // Don't open by default.
     open: false,
     proxy: {

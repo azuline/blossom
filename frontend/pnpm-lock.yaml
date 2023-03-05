@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  '@ladle/react@2.9.0':
+    hash: 5kqrtevrvfklmho6wot23u4je4
+    path: patches/@ladle__react@2.9.0.patch
+
 specifiers:
   '@ladle/react': ^2.9.0
   '@playwright/test': 1.30.0
@@ -64,7 +69,7 @@ dependencies:
   wouter: 2.10.0_react@18.2.0
 
 devDependencies:
-  '@ladle/react': 2.9.0_gkjzc5kkpbuaafw6p6qyth4wbi
+  '@ladle/react': 2.9.0_5kqrtevrvfklmho6wot23u4je4_gkjzc5kkpbuaafw6p6qyth4wbi
   '@playwright/test': 1.30.0
   '@swc-jotai/react-refresh': 0.0.4
   '@types/node': 18.11.18
@@ -722,7 +727,7 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: true
 
-  /@ladle/react/2.9.0_gkjzc5kkpbuaafw6p6qyth4wbi:
+  /@ladle/react/2.9.0_5kqrtevrvfklmho6wot23u4je4_gkjzc5kkpbuaafw6p6qyth4wbi:
     resolution: {integrity: sha512-dGVf4C2kWp1b+ofwYtO7mrf+Vi1i593YAKcoALiThRBO1HFFGc/39exQUBSzC06eOhkbE4VnKAlmRJG19vJkgQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
@@ -779,6 +784,7 @@ packages:
       - terser
       - typescript
     dev: true
+    patched: true
 
   /@mdx-js/mdx/2.3.0:
     resolution: {integrity: sha512-jLuwRlz8DQfQNiUCJR50Y09CGPq3fLtmtUQfVrj79E0JWu3dvsVcxVIcfhR5h0iXu+/z++zDrYeiJqifRynJkA==}

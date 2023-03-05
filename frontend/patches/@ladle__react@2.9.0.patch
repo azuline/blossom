@@ -1,0 +1,102 @@
+diff --git a/lib/cli/apply-cli-config.js b/lib/cli/apply-cli-config.js
+index 9b84f635bcf5ba8ba17aa586be2a3e9e6d9e6087..a329f74cbf4b8e79f0d14f41bbfd1874857ead68 100644
+--- a/lib/cli/apply-cli-config.js
++++ b/lib/cli/apply-cli-config.js
+@@ -9,6 +9,7 @@ import loadConfig from "./load-config.js";
+ export default async function applyCLIConfig(params) {
+   debug(`CLI theme: ${params.theme}`);
+   debug(`CLI stories: ${params.stories}`);
++  debug(`CLI host: ${params.host || "undefined"}`);
+   debug(`CLI port: ${params.port || "undefined"}`);
+   debug(`CLI out: ${params.outDir || "undefined"}`);
+   params.config = params.config || ".ladle";
+diff --git a/lib/cli/cli.js b/lib/cli/cli.js
+index 2f52353434899e7fd2f76fe11ed953b2ed494dd2..ce5dd6ef6fcaaf82abf7dcbd7f37cca813557236 100755
+--- a/lib/cli/cli.js
++++ b/lib/cli/cli.js
+@@ -16,6 +16,7 @@ program
+   .command("serve")
+   .alias("dev")
+   .description("start developing")
++  .option("-h, --host [string]", "host to serve the application")
+   .option("-p, --port [number]", "port to serve the application", strToInt)
+   .option("--stories [string]", "glob to find stories")
+   .option("--theme [string]", "theme light, dark or auto")
+@@ -47,13 +48,14 @@ program
+   .command("preview")
+   .description("start a server to preview the build in outDir")
+   .option("-o, --outDir <path>", "output directory")
++  .option("-h, --host [string]", "host to serve the application")
+   .option("-p, --port [number]", "port to serve the application", strToInt)
+   .option("--config [string]", "folder where config is located, default .ladle")
+   .option("--viteConfig [string]", "file with Vite configuration")
+   .option("--base [string]", "base URL path for build output")
+   .option("--mode [string]", "Vite mode")
+   .action(async (params) => {
+-    await preview({ ...params, previewPort: params.port });
++    await preview({ ...params, previewHost: params.host, previewPort: params.port });
+   });
+ 
+ program.parse(process.argv);
+diff --git a/lib/cli/vite-dev.js b/lib/cli/vite-dev.js
+index 9f0d26f30038f3c590d64ddf8524d4cdf46ef296..58ba8d7188efd9a5823a6f783bf3cd7d1ce559a2 100644
+--- a/lib/cli/vite-dev.js
++++ b/lib/cli/vite-dev.js
+@@ -34,6 +34,7 @@ const bundler = async (config, configFolder) => {
+     const viteConfig = await getBaseViteConfig(config, configFolder, {
+       mode: config.mode || "development",
+       server: {
++        host: config.host,
+         port: config.port,
+         hmr: {
+           port: hmrPort,
+@@ -88,14 +89,15 @@ const bundler = async (config, configFolder) => {
+       vite.config.server.https.key &&
+       vite.config.server.https.cert;
+     const hostname =
+-      vite.config.server.host === true
+-        ? "0.0.0.0"
+-        : typeof vite.config.server.host === "string"
+-        ? vite.config.server.host
+-        : "localhost";
+-    const serverUrl = `${useHttps ? "https" : "http"}://${hostname}:${port}${
+-      vite.config.base || ""
+-    }`;
++      config.host ?? (
++        vite.config.server.host === true
++          ? "0.0.0.0"
++          : typeof vite.config.server.host === "string"
++            ? vite.config.server.host
++            : "localhost"
++      );
++    const serverUrl = `${useHttps ? "https" : "http"}://${hostname}:${port}${vite.config.base || ""
++      }`;
+ 
+     const listenCallback = async () => {
+       console.log(
+diff --git a/lib/cli/vite-preview.js b/lib/cli/vite-preview.js
+index f6140f3d4ebf7fe9375b4b79813f062bf0f17916..1a99f79e656b14394f8507412119737699b2280e 100644
+--- a/lib/cli/vite-preview.js
++++ b/lib/cli/vite-preview.js
+@@ -20,6 +20,7 @@ const vitePreview = async (config, configFolder) => {
+         emptyOutDir: true,
+       },
+       preview: {
++        host: config.previewHost,
+         port: config.previewPort,
+       },
+     });
+diff --git a/lib/shared/types.ts b/lib/shared/types.ts
+index aaae4a3537ccc76df2c7d8d21e978512916c4536..4c6b3aa4b262f5fb9cfe9ff711fdcd8cf9a2533e 100644
+--- a/lib/shared/types.ts
++++ b/lib/shared/types.ts
+@@ -169,7 +169,9 @@ export type Config = {
+   storyOrder: StoryOrder;
+   appendToHead: string;
+   viteConfig?: string;
++  host?: string;
+   port: number;
++  previewHost?: string;
+   previewPort: number;
+   outDir: string;
+   base?: string;

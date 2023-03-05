@@ -50,5 +50,10 @@
     "unimported": "^1.24.0",
     "vite": "^4.1.0-beta.0",
     "vitest": "^0.28.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@ladle/react@2.9.0": "patches/@ladle__react@2.9.0.patch"
+    }
   }
 }
