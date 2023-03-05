@@ -20,7 +20,7 @@
       "@*": ["./*"]
     }
   },
-  "include": ["**/*"],
-  "exclude": ["node_modules", "dist", "coverage", ".eslintrc.cjs", "vite.config.ts", "patches"],
+  "include": ["**/*", "playwright.config.ts", "vite.config.ts"],
+  "exclude": ["node_modules", "dist", "coverage", "patches", ".eslintrc.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

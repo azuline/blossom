@@ -35,7 +35,8 @@
     "foundation/ui/Link/index.css.ts",
     "foundation/ui/Link/index.tsx",
     "foundation/ui/Spacer/index.css.ts",
-    "foundation/ui/Spacer/index.tsx"
+    "foundation/ui/Spacer/index.tsx",
+    "playwright.config.ts"
   ],
   "ignoreUnresolved": []
 }
