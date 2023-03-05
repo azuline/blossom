@@ -9,6 +9,7 @@ type Props = PolymorphicProp & {
   variant?: FontVariant;
   children?: React.ReactNode;
   strong?: boolean;
+  italic?: boolean;
   underline?: boolean;
   /**
    * If the text is multi-line paragraph body font. By default, label text has no
@@ -26,6 +27,7 @@ export const Type: React.FC<Props> = props => {
     children,
     variant,
     strong,
+    italic,
     underline,
     paragraph,
     ...passthru
@@ -33,10 +35,11 @@ export const Type: React.FC<Props> = props => {
 
   const style = variant === undefined
       && strong === undefined
+      && italic === undefined
       && underline === undefined
       && paragraph === undefined
     ? undefined
-    : t.fn.font(variant ?? "sm", { strong, underline, paragraph });
+    : t.fn.font(variant ?? "sm", { strong, underline, italic, paragraph });
 
   return (
     <View

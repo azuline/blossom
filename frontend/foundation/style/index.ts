@@ -8,6 +8,7 @@ export type FontVariant = typeof bodyVariants[number] | typeof displayVariants[n
 
 export type FontVariantOptions = {
   strong?: boolean;
+  italic?: boolean;
   underline?: boolean;
   /**
    * If the text is multi-line paragraph body font. By default, label text has no
@@ -41,6 +42,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     "disp-xl": theme.font.size.xl,
     "disp-xxl": theme.font.size.xxl,
   }[variant];
+  const fontStyle = options.italic === true ? "italic" : undefined;
   const textDecoration = options.underline === true ? "underline" : undefined;
   const textDecorationColor = options.underline === true
     ? theme.color.content.neutral.weak
@@ -51,6 +53,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     fontWeight,
     lineHeight,
     fontSize,
+    fontStyle,
     textDecoration,
     textDecorationColor,
   };

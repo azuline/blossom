@@ -6,3 +6,10 @@ export const sHeaderLayout = style({
   height: t.size[96],
   padding: `0px ${layoutPadding}`,
 });
+
+export const sLogoFont = style({
+  fontFamily: t.font.face.display,
+  fontWeight: "Light",
+  fontSize: t.font.size.lg,
+  fontStyle: "italic",
+});
