@@ -93,9 +93,9 @@ jobs:
           curl -s -H "Authorization: token $token" \
             -H "Content-Type: application/gzip" \
             --data-binary @ladle.tar.gz \
-            "$upload_url?name=ladle.tar.gz&label=ladle.tar.gz" | tee upload-artifact.txt
+            "$upload_url?name=ladle.tar.gz&label=ladle.tar.gz" | tee upload-artifact.log
 
-          artifact_url="$(cat upload-output.txt | jq -r '.[0].browser_download_url')"
+          artifact_url="$(cat upload-artifact.log | jq -r '.[0].browser_download_url')"
           echo "ladle_artifact_url=${artifact_url}"
           echo "ladle_artifact_url=${artifact_url}" >> $GITHUB_OUTPUT
   # deploy-ladle:
