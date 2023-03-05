@@ -1,8 +1,6 @@
 import { Flex } from "@foundation/ui/Flex";
 import { AriaTextFieldProps, useTextField } from "react-aria";
 
-import { View } from "@foundation/ui/View";
-
 import { sTextField } from "@foundation/ui/TextField/index.css";
 import { Type } from "@foundation/ui/Type";
 import { LabellableProps } from "@foundation/ui/types";
@@ -33,8 +31,7 @@ export const TextField: React.FC<Props> = props => {
           {props.label}
         </Type>
       )}
-      <View
-        as="input"
+      <input
         className={sTextField({
           disabled: props.disabled,
           error: props.errorMessage !== undefined,

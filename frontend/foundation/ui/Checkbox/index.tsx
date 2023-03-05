@@ -1,23 +1,34 @@
 import { IconCheck } from "@foundation/icons/IconCheck";
-import { SX } from "@foundation/style/sprinkles.css";
-import { sCheckbox } from "@foundation/ui/Checkbox/index.css";
-import { Flex } from "@foundation/ui/Flex";
+import { SX, sx } from "@foundation/style/sprinkles.css";
+import {
+  sCheckboxBox,
+  sCheckboxLayout,
+} from "@foundation/ui/Checkbox/index.css";
 import { Type } from "@foundation/ui/Type";
 import { LabellableProps } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
-import { useRef } from "react";
+import clsx from "clsx";
+import { useId, useRef } from "react";
 import { AriaCheckboxProps, useCheckbox, useFocusRing, VisuallyHidden } from "react-aria";
 import { useToggleState } from "react-stately";
 
 type Props = LabellableProps & {
   checked: boolean;
-  onChange: (checked: boolean) => void;
+  onChange?: (checked: boolean) => void;
+  error?: boolean;
   disabled?: boolean;
   id?: string;
   sx?: SX;
 };
 
-export const Checkbox: React.FC<Props> = props => {
+export const Checkbox: React.FC<Props> = _props => {
+  const props = {
+    ..._props,
+    disabled: _props.disabled ?? false,
+    error: _props.error ?? false,
+  };
+
+  const id = useId();
   const ref = useRef(null);
 
   const ariaProps: AriaCheckboxProps = {
@@ -31,25 +42,26 @@ export const Checkbox: React.FC<Props> = props => {
   const { isFocusVisible, focusProps } = useFocusRing();
 
   return (
-    <Flex
-      as="label"
-      sx={{
-        align: "center",
-        gap: "8",
-        cursor: props.disabled ? "not-allowed" : "pointer",
-        ...props.sx,
-      }}
+    <label
+      className={clsx(
+        sCheckboxLayout({ disabled: props.disabled }),
+        sx(props.sx ?? {}),
+      )}
+      htmlFor={id}
     >
       <VisuallyHidden>
-        <input {...inputProps} {...focusProps} ref={ref} />
+        <input id={id} {...inputProps} {...focusProps} ref={ref} />
       </VisuallyHidden>
       <View
         aria-hidden="true"
-        className={sCheckbox({
-          checked: props.checked,
-          disabled: props.disabled,
-          focused: isFocusVisible,
-        })}
+        className={clsx(
+          sCheckboxBox({
+            checked: props.checked,
+            disabled: props.disabled,
+            error: props.error,
+            focused: isFocusVisible,
+          }),
+        )}
       >
         {props.checked && <IconCheck size="full" />}
       </View>
@@ -58,6 +70,6 @@ export const Checkbox: React.FC<Props> = props => {
           {props.label}
         </Type>
       )}
-    </Flex>
+    </label>
   );
 };

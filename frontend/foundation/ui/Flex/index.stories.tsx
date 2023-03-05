@@ -3,10 +3,10 @@ import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";
 
 export default {
-  title: "Components/Primitives/Flex",
+  title: "Components/Primitives",
 };
 
-export const Gallery: React.FC = () => (
+export const Flex_: React.FC = () => (
   <Flex sx={{ direction: "column", gap: "16" }}>
     <Card sx={{ w: "356", h: "128" }}>
       <Flex sx={{ w: "full", h: "full", gap: "8" }}>

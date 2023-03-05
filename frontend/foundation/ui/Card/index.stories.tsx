@@ -3,10 +3,10 @@ import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Components/Atoms/Card",
+  title: "Components/Atoms",
 };
 
-export const Gallery: React.FC = () => (
+export const Card_: React.FC = () => (
   <Flex sx={{ wrap: "wrap", gap: "16" }}>
     <Card emph="strong" sx={{ maxw: "272" }}>
       <Type paragraph>

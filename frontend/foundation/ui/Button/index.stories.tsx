@@ -4,13 +4,13 @@ import { Button } from "@foundation/ui/Button";
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Components/Atoms/Button",
+  title: "Components/Atoms",
 };
 
 // eslint-disable-next-line no-alert
 const onPress = (): void => alert("Pressed!");
 
-export const Gallery: React.FC = () => (
+export const Button_: React.FC = () => (
   <StoryGallery columns={5}>
     <Type />
     <Type />

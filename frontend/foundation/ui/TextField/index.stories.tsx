@@ -3,12 +3,12 @@ import { TextField } from "@foundation/ui/TextField";
 import { atom, useAtom } from "jotai";
 
 export default {
-  title: "Components/Atoms/TextField",
+  title: "Components/Atoms",
 };
 
 const valueAtom = atom("Type on me");
 
-export const Gallery: React.FC = () => {
+export const TextField_: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
 
   return (

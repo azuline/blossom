@@ -6,10 +6,10 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Primitives/Bleed",
+  title: "Components/Primitives",
 };
 
-export const Gallery: React.FC = () => (
+export const Bleed_: React.FC = () => (
   <Flex sx={{ wrap: "wrap", gap: "64" }}>
     <Card sx={{ w: "128", h: "128" }}>
       <Bleed m="36">

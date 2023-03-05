@@ -5,10 +5,10 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Primitives/Spacer",
+  title: "Components/Primitives",
 };
 
-export const Gallery: React.FC = () => (
+export const Spacer_: React.FC = () => (
   <Flex sx={{ wrap: "wrap", gap: "16" }}>
     <Card sx={{ w: "356", h: "128" }}>
       <Flex sx={{ direction: "column", h: "full", gap: "8" }}>

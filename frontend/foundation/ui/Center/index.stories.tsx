@@ -4,10 +4,10 @@ import { Flex } from "@foundation/ui/Flex";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Primitives/Center",
+  title: "Components/Primitives",
 };
 
-export const Gallery: React.FC = () => (
+export const Center_: React.FC = () => (
   <Flex sx={{ gap: "16", wrap: "wrap" }}>
     <Card sx={{ w: "272", h: "272" }}>
       <Center>

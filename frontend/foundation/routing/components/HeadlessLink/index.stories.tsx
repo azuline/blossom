@@ -1,12 +1,12 @@
 import { HeadlessLink } from ".";
 
 export default {
-  title: "Components/Primitives/HeadlessLink",
+  title: "Components/Primitives",
 };
 
-export const Default: React.FC = () => {
+export const HeadlessLink_: React.FC = () => {
   return (
-    <HeadlessLink href="/?story=components--primitives--headlesslink--default">
+    <HeadlessLink href="/?story=components--primitives--headlesslink-">
       Testing testing
     </HeadlessLink>
   );

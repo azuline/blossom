@@ -2,10 +2,10 @@ import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Components/Primitives/Type",
+  title: "Components/Primitives",
 };
 
-export const Gallery: React.FC = () => (
+export const Type_: React.FC = () => (
   <Flex sx={{ direction: "column", gap: "16" }}>
     <Type variant="disp-xxl">DISP-XXL Text</Type>
     <Type variant="disp-xl">DISP-XL Text</Type>

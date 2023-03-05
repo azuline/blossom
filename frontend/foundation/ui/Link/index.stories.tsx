@@ -3,10 +3,10 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Atoms/Link",
+  title: "Components/Atoms",
 };
 
-export const Gallery: React.FC = () => (
+export const Link_: React.FC = () => (
   <View sx={{ maxw: "356" }}>
     <Type paragraph>
       In the Northern Ocean there is a fish called Kun which is many thousand li in size. It changes

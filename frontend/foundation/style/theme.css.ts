@@ -147,5 +147,10 @@ export const rawTheme = createGlobalTheme("html", {
     "40": "40",
     "50": "50",
   },
+  transition: {
+    easeOut: {
+      fast: "all 0.2s easeOut",
+    },
+  },
   media: breakpoints,
 });
