@@ -26,6 +26,7 @@ rec {
   ]);
   deployments = general ++ (with pkgs; [
     nomad
+    levant
     jq
   ]);
   interactive = with pkgs; [
