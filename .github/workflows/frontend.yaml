@@ -78,7 +78,7 @@ jobs:
           name: ${{ github.sha }}
       - name: Store Ladle artifact download URL
         run: |
-          url=$(echo "${{ step.release.outputs.assets }}" | jq '.[0].browser_download_url')
+          url=$(echo "${{ steps.release.outputs.assets }}" | jq '.[0].browser_download_url')
           echo "${ladle_artifact_url}=${url}"
           echo "${ladle_artifact_url}=${url}" >> $GITHUB_OUTPUT
   # deploy-ladle:
