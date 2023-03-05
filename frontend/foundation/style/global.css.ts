@@ -52,22 +52,10 @@ globalStyle("button", {
 });
 
 // Custom global styles.
-globalFontFace(t.font.face.body, {
-  fontStyle: "normal",
-  fontWeight: "100 900",
-  fontDisplay: "swap",
-  src: "url('/fonts/Inter.var.woff2') format('woff2-variations')",
-});
-globalFontFace(t.font.face.body, {
-  fontStyle: "italic",
-  fontWeight: "100 900",
-  fontDisplay: "swap",
-  src: "url('/fonts/Inter-Italic.var.woff2') format('woff2-variations')",
-});
 
 // Default all typography to the standard text.
 globalStyle("html", {
-  fontFamily: `${t.font.face.body}, sans-serif`,
+  fontFamily: `${t.font.face.body}, Inter, sans-serif`,
   fontWeight: t.font.weight.body.default,
   lineHeight: t.font.lineHeight.label,
   fontSize: t.font.size.sm,
@@ -77,4 +65,54 @@ globalStyle("html", {
 globalStyle("*", {
   borderStyle: "solid",
   borderWidth: 0,
+});
+
+// Font loading.
+globalFontFace(t.font.face.body, {
+  fontStyle: "normal",
+  fontWeight: "400",
+  fontDisplay: "swap",
+  src: "url('/fonts/AlegreyaSans-Regular.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.body, {
+  fontStyle: "italic",
+  fontWeight: "400",
+  fontDisplay: "swap",
+  src: "url('/fonts/AlegreyaSans-Italic.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.body, {
+  fontStyle: "normal",
+  fontWeight: "700",
+  fontDisplay: "swap",
+  src: "url('/fonts/AlegreyaSans-Bold.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.body, {
+  fontStyle: "italic",
+  fontWeight: "700",
+  fontDisplay: "swap",
+  src: "url('/fonts/AlegreyaSans-BoldItalic.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.display, {
+  fontStyle: "normal",
+  fontWeight: "500",
+  fontDisplay: "swap",
+  src: "url('/fonts/CormorantGaramond-Medium.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.display, {
+  fontStyle: "italic",
+  fontWeight: "500",
+  fontDisplay: "swap",
+  src: "url('/fonts/CormorantGaramond-MediumItalic.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.display, {
+  fontStyle: "normal",
+  fontWeight: "700",
+  fontDisplay: "swap",
+  src: "url('/fonts/CormorantGaramond-Bold.woff2') format('woff2')",
+});
+globalFontFace(t.font.face.display, {
+  fontStyle: "italic",
+  fontWeight: "700",
+  fontDisplay: "swap",
+  src: "url('/fonts/CormorantGaramond-BoldItalic.woff2') format('woff2')",
 });
