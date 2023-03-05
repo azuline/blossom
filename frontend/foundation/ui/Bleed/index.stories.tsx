@@ -4,6 +4,7 @@ import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
+import { ReactNode } from "react";
 
 export default {
   title: "Components/Primitives",
@@ -11,68 +12,58 @@ export default {
 
 export const Bleed_: React.FC = () => (
   <Flex sx={{ wrap: "wrap", gap: "64" }}>
-    <Card sx={{ w: "128", h: "128" }}>
+    <CardWrapper>
       <Bleed m="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>m=36</Type>
-          </Center>
-        </View>
+        <Content>m=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed my="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>my=36</Type>
-          </Center>
-        </View>
+        <Content>my=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed mx="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>mx=36</Type>
-          </Center>
-        </View>
+        <Content>mx=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed mt="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>mt=36</Type>
-          </Center>
-        </View>
+        <Content>mt=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed mr="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>mr=36</Type>
-          </Center>
-        </View>
+        <Content>mr=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed mb="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>mb=36</Type>
-          </Center>
-        </View>
+        <Content>mb=36</Content>
       </Bleed>
-    </Card>
-    <Card sx={{ w: "128", h: "128" }}>
+    </CardWrapper>
+    <CardWrapper>
       <Bleed ml="36">
-        <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
-          <Center>
-            <Type>ml=36</Type>
-          </Center>
-        </View>
+        <Content>ml=36</Content>
       </Bleed>
-    </Card>
+    </CardWrapper>
   </Flex>
+);
+
+type CardWrapperProps = { children: ReactNode };
+
+const CardWrapper: React.FC<CardWrapperProps> = props => (
+  <Card sx={{ w: "128", h: "128" }}>
+    {props.children}
+  </Card>
+);
+
+type ContentProps = { children: ReactNode };
+
+const Content: React.FC<ContentProps> = props => (
+  <View style={{ border: "1px solid red" }} sx={{ w: "full", h: "full" }}>
+    <Center>
+      <Type>{props.children}</Type>
+    </Center>
+  </View>
 );
