@@ -59,6 +59,7 @@ export const sButton = recipe({
         cursor: "not-allowed",
         background: backgroundDisabled,
         color: colorDisabled,
+        borderWidth,
         borderColor: borderColorDisabled,
       },
     },
@@ -76,7 +77,6 @@ export const sButton = recipe({
       },
       secondary: {
         vars: {
-          [backgroundDisabled]: t.color.background.neutral.weak,
           [hoverColor]: t.color.background.overlay.hover,
           [activeColor]: t.color.background.overlay.active,
           [color]: t.color.content.neutral.default,
@@ -104,10 +104,10 @@ export const sButton = recipe({
         fontSize: t.font.size.sm,
       },
       md: {
-        padding: "10px 24px",
+        padding: "8px 24px",
       },
       lg: {
-        padding: "14px 32px",
+        padding: "12px 32px",
       },
     },
     fullWidth: {

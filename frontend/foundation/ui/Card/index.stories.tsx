@@ -15,10 +15,6 @@ export const Gallery: React.FC = () => (
       Default card card card. There is something. There is nothing. There is something before the
       beginning of something and nothing, and something before that.
     </Card>
-    <Card emph="weak" sx={{ maxw: "272" }}>
-      Weak card card card. Suddenly there is something and nothing. But between something and
-      nothing, I still don’t really know which is something and which is nothing.
-    </Card>
     <Card emph="inverse" sx={{ maxw: "272" }}>
       Inverse card card card. Now, I’ve just said something, but I don’t really know whether I’ve
       said anything or not.

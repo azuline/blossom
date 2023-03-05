@@ -14,7 +14,7 @@ export const sTextField = recipe({
     disabled: {
       true: {
         cursor: "not-allowed",
-        background: t.color.background.neutral.weak,
+        borderColor: t.color.border.neutral.weak,
       },
     },
     error: {

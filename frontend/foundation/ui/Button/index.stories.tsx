@@ -18,7 +18,7 @@ export const Gallery: React.FC = () => (
     <Variant label="size" value="md" />
     <Variant label="size" value="lg" />
 
-    <Variant label="kind" value="primary" />
+    <Variant label="variant" value="primary" />
     <Variant label="state" value="enabled" />
     <Button size="sm" onPress={onPress}>Sign up</Button>
     <Button size="md" onPress={onPress}>Sign up</Button>
@@ -30,7 +30,7 @@ export const Gallery: React.FC = () => (
     <Button disabled size="md" onPress={onPress}>Sign up</Button>
     <Button disabled size="lg" onPress={onPress}>Sign up</Button>
 
-    <Variant label="kind" value="secondary" />
+    <Variant label="variant" value="secondary" />
     <Variant label="state" value="enabled" />
     <Button size="sm" variant="secondary" onPress={onPress}>Sign up</Button>
     <Button size="md" variant="secondary" onPress={onPress}>Sign up</Button>
@@ -42,7 +42,7 @@ export const Gallery: React.FC = () => (
     <Button disabled size="md" variant="secondary" onPress={onPress}>Sign up</Button>
     <Button disabled size="lg" variant="secondary" onPress={onPress}>Sign up</Button>
 
-    <Variant label="kind" value="danger" />
+    <Variant label="variant" value="danger" />
     <Variant label="state" value="enabled" />
     <Button size="sm" variant="danger" onPress={onPress}>Sign up</Button>
     <Button size="md" variant="danger" onPress={onPress}>Sign up</Button>

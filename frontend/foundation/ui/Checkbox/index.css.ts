@@ -17,7 +17,7 @@ export const sCheckbox = recipe({
     },
     disabled: {
       true: {
-        background: t.color.background.neutral.default,
+        background: t.color.background.neutral.base,
         borderColor: t.color.border.neutral.weak,
         color: t.color.content.neutral.weak,
       },
