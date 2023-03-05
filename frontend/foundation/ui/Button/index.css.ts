@@ -1,5 +1,5 @@
 import { t } from "@foundation/style/theme.css";
-import { createVar, style } from "@vanilla-extract/css";
+import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const background = createVar();
@@ -134,11 +134,4 @@ export const sButton = recipe({
     fullWidth: false,
     fullHeight: false,
   },
-});
-
-export const sButtonGallery = style({
-  display: "grid",
-  grid: "auto-flow 1fr / repeat(6, 1fr)",
-  gap: t.space[8],
-  alignItems: "center",
 });
