@@ -45,12 +45,12 @@ const LoginPage: React.FC = () => {
   return (
     <LayoutPadding>
       <Center>
-        <Flex sx={{ dir: "column", gap: "36", w: "356" }}>
+        <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
           <Center axis="vertical">
             <IconLogo size="64" />
           </Center>
-          <Type sx={{ text: "disp-xl" }}>Welcome back!</Type>
-          <Flex sx={{ dir: "column", gap: "20" }}>
+          <Type variant="disp-xl">Welcome back!</Type>
+          <Flex sx={{ direction: "column", gap: "20" }}>
             <TextField
               label="Email"
               value={form.email}
@@ -66,7 +66,7 @@ const LoginPage: React.FC = () => {
               label="Remember me"
               onChange={permanent => setForm({ permanent })}
             />
-            {error !== null && <Type sx={{ text: "sm", col: "negative.default" }}>{error}</Type>}
+            {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
           </Flex>
           <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
         </Flex>

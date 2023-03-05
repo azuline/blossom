@@ -54,7 +54,9 @@ export const Checkbox: React.FC<Props> = props => {
         {props.checked && <IconCheck size="full" />}
       </View>
       {props.label !== undefined && (
-        <Type sx={{ col: props.disabled ? "neutral.weak" : "neutral.default" }}>{props.label}</Type>
+        <Type sx={{ color: props.disabled ? "neutral.weak" : "neutral.default" }}>
+          {props.label}
+        </Type>
       )}
     </Flex>
   );

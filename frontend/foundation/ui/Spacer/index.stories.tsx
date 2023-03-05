@@ -11,26 +11,26 @@ export default {
 export const Gallery: React.FC = () => (
   <Flex sx={{ wrap: "wrap", gap: "16" }}>
     <Card sx={{ w: "356", h: "128" }}>
-      <Flex sx={{ dir: "column", h: "full", gap: "8" }}>
+      <Flex sx={{ direction: "column", h: "full", gap: "8" }}>
         <Type>Horizontal</Type>
         <Flex sx={{ w: "full", h: "full" }}>
-          <View sx={{ h: "full", w: "64", bg: "brand.default" }} />
+          <View sx={{ h: "full", w: "64", background: "brand.default" }} />
           <Spacer x="64" />
-          <View sx={{ h: "full", w: "64", bg: "brand.default" }} />
+          <View sx={{ h: "full", w: "64", background: "brand.default" }} />
           <Spacer x="20" />
-          <View sx={{ h: "full", w: "64", bg: "brand.default" }} />
+          <View sx={{ h: "full", w: "64", background: "brand.default" }} />
         </Flex>
       </Flex>
     </Card>
     <Card sx={{ w: "128", h: "356" }}>
-      <Flex sx={{ dir: "column", h: "full", gap: "8" }}>
+      <Flex sx={{ direction: "column", h: "full", gap: "8" }}>
         <Type>Vertical</Type>
-        <Flex sx={{ dir: "column", w: "full", h: "full" }}>
-          <View sx={{ h: "64", w: "full", bg: "brand.default" }} />
+        <Flex sx={{ direction: "column", w: "full", h: "full" }}>
+          <View sx={{ h: "64", w: "full", background: "brand.default" }} />
           <Spacer y="64" />
-          <View sx={{ h: "64", w: "full", bg: "brand.default" }} />
+          <View sx={{ h: "64", w: "full", background: "brand.default" }} />
           <Spacer y="20" />
-          <View sx={{ h: "64", w: "full", bg: "brand.default" }} />
+          <View sx={{ h: "64", w: "full", background: "brand.default" }} />
         </Flex>
       </Flex>
     </Card>

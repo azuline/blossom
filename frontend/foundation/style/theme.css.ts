@@ -20,25 +20,38 @@ export const breakpoints = {
   xs: "(max-width: 508px)",
 } as const;
 
-export const t = createGlobalTheme("html", {
+export const rawTheme = createGlobalTheme("html", {
   font: {
     face: {
-      body: "Inter",
+      display: "Cormorant Garamond",
+      body: "Alegreya Sans",
     },
     weight: {
-      regular: "400",
-      medium: "500",
+      display: {
+        default: "500",
+        strong: "700",
+      },
+      body: {
+        default: "400",
+        strong: "600",
+      },
     },
     size: {
-      xs: "12px",
-      sm: "14px",
-      md: "16px",
-      lg: "22px",
-      xl: "32px",
-      xxl: "40px",
+      xs: "13px",
+      sm: "16px",
+      md: "20px",
+      lg: "28px",
+      xl: "40px",
+      xxl: "54px",
     },
     lineHeight: {
-      paragraph: "1.4",
+      label: "1",
+      paragraph: {
+        xs: "20px",
+        sm: "24px",
+        md: "30px",
+        lg: "36px",
+      },
     },
   },
   color: moonlightLight,
@@ -61,6 +74,7 @@ export const t = createGlobalTheme("html", {
     "4": "4px",
     "6": "6px",
     "8": "8px",
+    "10": "10px",
     "12": "12px",
     "16": "16px",
     "20": "20px",
@@ -95,6 +109,7 @@ export const t = createGlobalTheme("html", {
     "4": "4px",
     "6": "6px",
     "8": "8px",
+    "10": "10px",
     "12": "12px",
     "16": "16px",
     "20": "20px",

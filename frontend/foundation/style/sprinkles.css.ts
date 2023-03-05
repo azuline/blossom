@@ -1,5 +1,6 @@
 import { flattenRecord } from "@foundation/lib/flattenRecord";
-import { breakpoints, t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
+import { breakpoints } from "@foundation/style/theme.css";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 
 const conditions = {
@@ -69,43 +70,6 @@ export const sxsets = {
   typography: defineProperties({
     ...conditions,
     properties: {
-      text: {
-        xs: {
-          fontSize: t.font.size.xs,
-          fontWeight: t.font.weight.regular,
-        },
-        sm: {
-          fontSize: t.font.size.sm,
-          fontWeight: t.font.weight.regular,
-        },
-        md: {
-          fontSize: t.font.size.md,
-          fontWeight: t.font.weight.regular,
-        },
-        lg: {
-          fontSize: t.font.size.lg,
-          fontWeight: t.font.weight.regular,
-        },
-        "disp-lg": {
-          fontSize: t.font.size.lg,
-          fontWeight: t.font.weight.medium,
-        },
-        "disp-xl": {
-          fontSize: t.font.size.xl,
-          fontWeight: t.font.weight.medium,
-        },
-        "disp-xxl": {
-          fontSize: t.font.size.xxl,
-          fontWeight: t.font.weight.medium,
-        },
-      },
-      paragraph: {
-        true: {
-          lineHeight: t.font.lineHeight.paragraph,
-        },
-      },
-      fontSize: t.font.size,
-      fontWeight: t.font.weight,
       whiteSpace: ["normal", "nowrap", "pre", "pre-line", "pre-wrap"],
       truncate: {
         true: {
@@ -114,10 +78,6 @@ export const sxsets = {
           whiteSpace: "nowrap",
         },
       },
-    },
-    shorthands: {
-      size: ["fontSize"],
-      weight: ["fontWeight"],
     },
   }),
   radius: defineProperties({
@@ -153,7 +113,7 @@ export const sxsets = {
       },
     },
     shorthands: {
-      dir: ["flexDirection"],
+      direction: ["flexDirection"],
       wrap: ["flexWrap"],
       justify: ["justifyContent"],
       align: ["alignItems"],
@@ -163,9 +123,6 @@ export const sxsets = {
     ...conditions,
     properties: {
       position: ["relative", "static", "fixed", "absolute", "sticky"],
-    },
-    shorthands: {
-      pos: ["position"],
     },
   }),
   display: defineProperties({
@@ -184,19 +141,12 @@ export const sxsets = {
         "contents",
       ],
     },
-    shorthands: {
-      disp: ["display"],
-    },
   }),
   color: defineProperties({
     ...conditions,
     properties: {
       color: flattenRecord(t.color.content),
       background: flattenRecord(t.color.background),
-    },
-    shorthands: {
-      col: ["color"],
-      bg: ["background"],
     },
   }),
   border: defineProperties({
@@ -266,17 +216,11 @@ export type SX = Omit<
   | "paddingLeft"
   | "paddingRight"
   | "padding"
-  | "fontSize"
-  | "fontWeight"
   | "borderRadius"
   | "flexDirection"
   | "flexWrap"
   | "justifyContent"
   | "alignItems"
-  | "position"
-  | "display"
-  | "color"
-  | "background"
   | "borderWidth"
   | "borderColor"
   | "borderStyle"

@@ -5,7 +5,7 @@ import "@foundation/style/global.css";
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPadding";
 
 export const App: React.FC = () => (
-  <View sx={{ h: "full", bg: "neutral.default", col: "neutral.default" }}>
+  <View sx={{ h: "full", background: "neutral.base", color: "neutral.default" }}>
     <Contexts>
       <LayoutPaddingVariableSetter>
         <Router />

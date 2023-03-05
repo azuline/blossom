@@ -15,7 +15,7 @@ export const Flex: React.FC<Props> = props => {
       {...passthru}
       as={as}
       className={className}
-      sx={{ disp: "flex", ...sx }}
+      sx={{ display: "flex", ...sx }}
     >
       {children}
     </View>

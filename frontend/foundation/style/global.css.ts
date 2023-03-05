@@ -1,4 +1,4 @@
-import { t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
 
 // Reset
@@ -68,12 +68,9 @@ globalFontFace(t.font.face.body, {
 // Default all typography to the standard text.
 globalStyle("html", {
   fontFamily: `${t.font.face.body}, sans-serif`,
-  fontSize: t.font.size.md,
-  fontWeight: t.font.weight.regular,
-});
-// Enable optical sizing to enable Inter Display.
-globalStyle("html", {
-  fontOpticalSizing: "auto",
+  fontWeight: t.font.weight.body.default,
+  lineHeight: t.font.lineHeight.label,
+  fontSize: t.font.size.sm,
 });
 // Default all borders to solid style. This way, we do not need to specify `bstyle`
 // everywhere.

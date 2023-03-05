@@ -12,7 +12,7 @@ export const Gallery: React.FC = () => {
   const [checked, onChange] = useAtom(checkedAtom);
 
   return (
-    <Flex sx={{ dir: "column", gap: "16" }}>
+    <Flex sx={{ direction: "column", gap: "16" }}>
       <Checkbox checked={checked} label="Interactive checkbox" onChange={onChange} />
       <Checkbox checked label="Checked" onChange={() => {}} />
       <Checkbox disabled checked={false} label="Disabled unchecked" onChange={() => {}} />

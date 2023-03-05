@@ -12,7 +12,7 @@ export const Gallery: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
 
   return (
-    <Flex sx={{ dir: "column", maxw: "356", gap: "28" }}>
+    <Flex sx={{ direction: "column", maxw: "356", gap: "28" }}>
       <TextField label="Default" value={value} onChange={setValue} />
       <TextField disabled label="Disabled" value={value} onChange={setValue} />
       <TextField

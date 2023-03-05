@@ -1,7 +1,6 @@
 import { sHeadlessLink } from "@foundation/routing/components/HeadlessLink/index.css";
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { SX } from "@foundation/style/sprinkles.css";
-import { View } from "@foundation/ui/View";
+import { SX, sx } from "@foundation/style/sprinkles.css";
 import { clsx } from "clsx";
 import { ReactNode, useEffect, useRef } from "react";
 
@@ -18,14 +17,12 @@ export const HeadlessLink: React.FC<Props> = props => {
 
   const ref = useRef(null);
   return (
-    <View
+    <a
       ref={ref}
-      as="a"
-      className={clsx(sHeadlessLink, props.className)}
+      className={clsx(sHeadlessLink, props.className, sx(props.sx ?? {}))}
       href={props.href}
-      sx={props.sx}
     >
       {props.children}
-    </View>
+    </a>
   );
 };

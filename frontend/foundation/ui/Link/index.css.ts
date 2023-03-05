@@ -1,4 +1,4 @@
-import { t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
 import { style } from "@vanilla-extract/css";
 
 export const sLink = style({

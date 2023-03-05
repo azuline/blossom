@@ -1,5 +1,5 @@
+import { t } from "@foundation/style";
 import { sx } from "@foundation/style/sprinkles.css";
-import { t } from "@foundation/style/theme.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCard = recipe({

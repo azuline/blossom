@@ -14,10 +14,10 @@ export const WithHeader: React.FC<Props> = props => {
   const tenant = useCurrentTenant();
 
   return (
-    <Flex sx={{ dir: "column", h: "full" }}>
+    <Flex sx={{ direction: "column", h: "full" }}>
       <View className={sHeaderLayout}>
         <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
-          <Type sx={{ text: "disp-xl" }}>blossom</Type>
+          <Type variant="disp-xl">blossom</Type>
           <Flex sx={{ gap: "16", align: "center" }}>
             {tenant !== undefined ? <Type>{tenant.name}</Type> : <TypeLoader w="96" />}
             <Avatar size="36" />

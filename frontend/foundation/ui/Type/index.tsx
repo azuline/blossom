@@ -1,3 +1,4 @@
+import { FontVariant, t } from "@foundation/style";
 import { SX } from "@foundation/style/sprinkles.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
@@ -5,17 +6,45 @@ import { View } from "@foundation/ui/View";
 type Props = PolymorphicProp & {
   className?: string;
   sx?: SX;
+  variant?: FontVariant;
   children?: React.ReactNode;
+  strong?: boolean;
+  underline?: boolean;
+  /**
+   * If the text is multi-line paragraph body font. By default, label text has no
+   * additional line height, which inhibits readability for multi-line paragraphs. This
+   * option adds additional line height for comfortable paragraph reading.
+   */
+  paragraph?: boolean;
 };
 
 export const Type: React.FC<Props> = props => {
-  const { as = "span", className, sx, children, ...passthru } = props;
+  const {
+    as = "span",
+    className,
+    sx,
+    children,
+    variant,
+    strong,
+    underline,
+    paragraph,
+    ...passthru
+  } = props;
+
+  const style = variant === undefined
+      && strong === undefined
+      && underline === undefined
+      && paragraph === undefined
+    ? undefined
+    : t.fn.font(variant ?? "sm", { strong, underline, paragraph });
+
   return (
     <View
       {...passthru}
       as={as}
       className={className}
-      sx={{ disp: "inline", ...sx }}
+      style={style}
+      sx={{ display: "inline", ...sx }}
     >
       {children}
     </View>

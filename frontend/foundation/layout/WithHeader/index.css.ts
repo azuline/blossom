@@ -1,5 +1,5 @@
 import { layoutPadding } from "@foundation/layout/LayoutPadding/index.css";
-import { t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
 import { style } from "@vanilla-extract/css";
 
 export const sHeaderLayout = style({

@@ -15,7 +15,7 @@ export const Link: React.FC<Props> = props => {
     <HeadlessLink
       className={clsx(props.className, sLink)}
       href={props.href}
-      sx={{ disp: "inline", ...props.sx }}
+      sx={{ display: "inline", ...props.sx }}
     >
       {props.children}
     </HeadlessLink>

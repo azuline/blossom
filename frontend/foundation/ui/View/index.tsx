@@ -3,7 +3,7 @@ import { PolymorphicProp } from "@foundation/ui/types";
 import clsx from "clsx";
 import { CSSProperties, forwardRef } from "react";
 
-type Props = Record<string, unknown> & PolymorphicProp & {
+type Props = PolymorphicProp & {
   className?: string;
   sx?: SX;
   children?: React.ReactNode;

@@ -8,7 +8,7 @@ export default {
 
 export const Gallery: React.FC = () => (
   <View sx={{ maxw: "356" }}>
-    <Type sx={{ text: "md", paragraph: "true" }}>
+    <Type paragraph>
       In the Northern Ocean there is a fish called Kun which is many thousand li in size. It changes
       into a bird named Peng whose back is many thousand li in breadth. When it rises and flies, its
       wings are like clouds filling the sky. When this bird moves across the ocean, it heads for the
@@ -17,7 +17,7 @@ export const Gallery: React.FC = () => (
         In Chi Hsieh’s record of wonders it says: “When Peng is heading toward the Southern Ocean it
         splashes along the water for three thousand li. It rises with the wind and wings its way up
         to ninety thousand li; it flies for six months, and then it rests.”
-      </Link>
+      </Link>{" "}
       Heat shimmers in the air like galloping horses, dust floats like the morning mist, and living
       creatures are blown about in the sky. The sky is blue. Is that really so? Or does it only look
       blue because it stretches off into infinity? When Peng looks down from above, it will also

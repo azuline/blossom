@@ -1,4 +1,4 @@
-import { t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
 import { createVar, style } from "@vanilla-extract/css";
 
 export const sStoryGalleryColumns = createVar();

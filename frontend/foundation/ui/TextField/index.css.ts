@@ -1,11 +1,12 @@
+import { t } from "@foundation/style";
 import { sx } from "@foundation/style/sprinkles.css";
-import { t } from "@foundation/style/theme.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sTextField = recipe({
   base: sx({
     w: "full",
-    p: "12",
+    px: "12",
+    py: "8",
     bcol: "neutral.strong",
     bwidth: "1",
     radius: "8",

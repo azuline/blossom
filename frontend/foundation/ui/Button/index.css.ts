@@ -1,4 +1,4 @@
-import { t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
@@ -101,7 +101,7 @@ export const sButton = recipe({
     size: {
       sm: {
         padding: "6px 16px",
-        fontSize: t.font.size.sm,
+        fontSize: t.font.size.xs,
       },
       md: {
         padding: "8px 24px",

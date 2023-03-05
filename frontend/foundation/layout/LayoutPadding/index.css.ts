@@ -1,4 +1,5 @@
-import { breakpoints, t } from "@foundation/style/theme.css";
+import { t } from "@foundation/style";
+import { breakpoints } from "@foundation/style/theme.css";
 import { createVar, style } from "@vanilla-extract/css";
 
 export const layoutPadding = createVar();

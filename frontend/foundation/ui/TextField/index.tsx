@@ -27,9 +27,9 @@ export const TextField: React.FC<Props> = props => {
   const { labelProps, inputProps, errorMessageProps } = useTextField(ariaProps, ref);
 
   return (
-    <Flex sx={{ dir: "column", gap: "6" }}>
+    <Flex sx={{ direction: "column", gap: "8" }}>
       {props.label !== undefined && (
-        <Type as="label" sx={{ text: "md", col: "neutral.default" }} {...labelProps}>
+        <Type as="label" sx={{ color: "neutral.default" }} variant="xs" {...labelProps}>
           {props.label}
         </Type>
       )}
@@ -42,7 +42,7 @@ export const TextField: React.FC<Props> = props => {
         {...inputProps}
       />
       {props.errorMessage !== undefined && (
-        <Type sx={{ text: "md", col: "negative.default" }} {...errorMessageProps}>
+        <Type sx={{ color: "negative.default" }} variant="xs" {...errorMessageProps}>
           {props.errorMessage}
         </Type>
       )}
