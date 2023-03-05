@@ -54,6 +54,8 @@ jobs:
         run: nix develop ../\#devShells.x86_64-linux.frontend --command make test-visual
   build-ladle:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
