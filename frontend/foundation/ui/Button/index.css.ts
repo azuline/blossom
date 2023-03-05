@@ -19,18 +19,7 @@ export const sButton = recipe({
     cursor: "pointer",
     position: "relative",
     selectors: {
-      "&:hover:not(&:active)::before": {
-        position: "absolute",
-        top: "0",
-        left: "0",
-        content: "\" \"",
-        width: "100%",
-        height: "100%",
-        borderRadius: t.radius.circle,
-        pointerEvents: "none",
-        userSelect: "none",
-      },
-      "&:active::before": {
+      "&::before": {
         position: "absolute",
         top: "0",
         left: "0",
