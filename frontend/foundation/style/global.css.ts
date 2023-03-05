@@ -50,6 +50,10 @@ globalStyle("button", {
   borderColor: "none",
   borderWidth: "none",
 });
+globalStyle("a", {
+  textDecoration: "none",
+  color: "inherit",
+});
 
 // Custom global styles.
 

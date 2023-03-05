@@ -12,11 +12,11 @@ type Props = RecipeVariants<typeof sCard> & {
 };
 
 export const Card: React.FC<Props> = props => {
-  const { emph, sx, className, children, ...passthru } = props;
+  const { variant, padding, sx, className, children, ...passthru } = props;
   return (
     <View
       {...passthru}
-      className={clsx(className, sCard({ emph }))}
+      className={clsx(className, sCard({ variant, padding }))}
       sx={sx}
     >
       {children}

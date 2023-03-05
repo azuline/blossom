@@ -1,5 +1,5 @@
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { startTransition, useCallback, useEffect } from "react";
+import { startTransition, useCallback } from "react";
 import { useLocation } from "wouter";
 
 export type RedirectFn = (arg0?: { replace: boolean }) => void;
@@ -14,8 +14,7 @@ export type RedirectFnWithoutPrefetch = (route: string, arg1?: { replace: boolea
  * route parameter at hook call time.
  */
 export const useRedirect = (route: string): RedirectFn => {
-  const prefetch = usePrefetchPath();
-  useEffect(() => prefetch(route), [prefetch, route]);
+  usePrefetchPath(route);
   const [, setLocation] = useLocation();
   return useCallback(opts => {
     // TODO: Does startTransition even work with the history API?

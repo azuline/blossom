@@ -1,26 +1,26 @@
-import { sHeadlessLink } from "@foundation/routing/components/HeadlessLink/index.css";
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
 import { SX, sx } from "@foundation/style/sprinkles.css";
 import { clsx } from "clsx";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
 
-type Props = {
+export type HeadlessLinkProps = {
   href: string;
+  open?: "here" | "new-tab";
   children: ReactNode;
   className?: string;
   sx?: SX;
 };
 
-export const HeadlessLink: React.FC<Props> = props => {
-  const prefetchPath = usePrefetchPath();
-  useEffect(() => prefetchPath(props.href), [prefetchPath, props.href]);
-
+export const HeadlessLink: React.FC<HeadlessLinkProps> = props => {
+  usePrefetchPath(props.href);
   const ref = useRef(null);
   return (
     <a
       ref={ref}
-      className={clsx(sHeadlessLink, props.className, sx(props.sx ?? {}))}
+      className={clsx(props.className, sx({ cursor: "pointer", ...props.sx }))}
       href={props.href}
+      rel="noreferrer"
+      target={props.open === "new-tab" ? "_blank" : undefined}
     >
       {props.children}
     </a>

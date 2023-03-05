@@ -1,5 +1,6 @@
 import { IconLogo } from "@foundation/icons/IconLogo";
 import { LayoutPadding } from "@foundation/layout/LayoutPadding";
+import { Button } from "@foundation/ui/Button";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 
@@ -10,7 +11,7 @@ const NotFoundPage: React.FC = () => (
         <IconLogo size="64" />
         <Type variant="disp-xl">404 Page Not Found</Type>
       </Flex>
-      <Type variant="disp-xl">Go Home TODO Link Component</Type>
+      <Button href="/">Return home</Button>
     </Flex>
   </LayoutPadding>
 );
