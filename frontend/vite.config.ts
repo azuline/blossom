@@ -40,6 +40,6 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: [".ladle", "node_modules", "dist"],
+    exclude: [".ladle", "visualtest", "node_modules", "dist"],
   },
 });

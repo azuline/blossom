@@ -11,11 +11,12 @@ const url = "http://host.docker.internal:40855";
 const { stories } = fetch(`${url}/meta.json`).json() as { stories: string[] };
 
 // remove snapshots that no longer correspond to a story
-const storyDir = `${__dirname}/ladle.spec.ts-snapshots`;
+const storyDir = `${__dirname}/visual.spec.ts-snapshots`;
 fs.readdirSync(storyDir).forEach(file => {
   const storyName = file.replace(/-linux.png$/, "");
   const fetchedStoryKeys = Object.keys(stories);
   if (!fetchedStoryKeys.includes(storyName)) {
+    // eslint-disable-next-line no-console
     console.log(`Removed dangling visual snapshot: ${storyName}.`);
     fs.rmSync(`${storyDir}/${storyName}-linux.png`);
   }

@@ -11,8 +11,10 @@ See the `Makefile` for a list of common dev tool commands.
 
 - `codegen/` contains the outputs of codegen systems.
 - `foundation/` contains the developer platform.
+- `patches/` contains override patches for third-party dependencies.
 - `product/` contains the product-specific code.
 - `public/` contains static assets.
+- `visualtest/` contains the visual testing harness and snapshots.
 
 ## Stack
 
