@@ -122,7 +122,7 @@ jobs:
       - name: Build Nix
         run: nix build -j8 ../\#devShells.x86_64-linux.deployments
       - name: Nomad test
-        run: nix develop ../\#devShells.x86_64-linux.deployments --command nomad status
+        run: NOMAD_ADDR=http://100.71.28.44:4646 nix develop ../\#devShells.x86_64-linux.deployments --command nomad status
       - name: Tailscale test
         run: tailscale status
       - name: Deploy
