@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { JSXElementConstructor, ReactNode, useRef } from "react";
 
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
 import { SX } from "@foundation/style/sprinkles.css";
@@ -35,12 +35,15 @@ export const Button: React.FC<Props> = props => {
   const ariaProps: AriaButtonProps = {
     ...props,
     isDisabled: props.disabled,
+    elementType: (props.href !== undefined ? "a" : "button") as unknown as JSXElementConstructor<
+      unknown
+    >,
     // This is an undocumented property.
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     preventFocusOnPress: true,
   };
-  const { buttonProps } = useButton(ariaProps, ref);
+  const { buttonProps, isPressed } = useButton(ariaProps, ref);
 
   const Element = props.href !== undefined ? "a" : "button";
 
@@ -54,6 +57,7 @@ export const Button: React.FC<Props> = props => {
         disabled: props.disabled,
         size: props.size,
         fullWidth: props.fullWidth,
+        active: isPressed,
       })}
       href={props.href}
       rel={props.href !== undefined ? "noreferrer" : undefined}

@@ -16,6 +16,12 @@ job "blossom-ladle" {
       connect {
         sidecar_service {}
       }
+      check {
+        type     = "http"
+        path     = "/meta.json"
+        interval = "10s"
+        timeout  = "2s"
+      }
     }
 
     task "blossom-ladle" {
@@ -45,5 +51,16 @@ EOF
         change_signal = "SIGHUP"
       }
     }
+  }
+
+  update {
+    max_parallel = 1
+    health_check = "checks"
+    min_healthy_time = "10s"
+    healthy_deadline  = "1m"
+    progress_deadline = "10m"
+    auto_revert       = true
+    auto_promote      = true
+    canary            = 1
   }
 }
