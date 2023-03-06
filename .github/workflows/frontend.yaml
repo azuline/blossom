@@ -102,8 +102,9 @@ jobs:
   deploy-ladle:
     runs-on: ubuntu-latest
     needs: build-ladle
-    run:
-      working-directory: nomad/
+    defaults:
+      run:
+        working-directory: nomad/
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ARTIFACT_SOURCE_URL: ${{ needs.build-ladle.outputs.artifact_source_url }}
