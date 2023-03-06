@@ -56,7 +56,7 @@ export const Button: React.FC<Props> = props => {
         fullWidth: props.fullWidth,
       })}
       href={props.href}
-      rel="noreferrer"
+      rel={props.href !== undefined ? "noreferrer" : undefined}
       target={props.open === "new-tab" ? "_blank" : undefined}
       {...(buttonProps as Record<string, unknown>)}
     >
