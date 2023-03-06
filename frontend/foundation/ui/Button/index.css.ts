@@ -12,6 +12,8 @@ export const colorDisabled = createVar();
 export const hoverColor = createVar();
 export const activeColor = createVar();
 
+export const backgroundOverlayColor = createVar();
+
 export const sButton = recipe({
   base: {
     whiteSpace: "nowrap",
@@ -29,6 +31,7 @@ export const sButton = recipe({
         borderRadius: t.radius.circle,
         pointerEvents: "none",
         userSelect: "none",
+        background: backgroundOverlayColor,
       },
     },
   },
@@ -39,10 +42,6 @@ export const sButton = recipe({
         borderColor,
         borderWidth,
         color,
-        selectors: {
-          "&:hover:not(&:active)::before": { background: hoverColor },
-          "&:active::before": { background: activeColor },
-        },
       },
       true: {
         cursor: "not-allowed",
@@ -115,7 +114,35 @@ export const sButton = recipe({
         height: "fit-content",
       },
     },
+    active: {
+      true: {},
+      false: {},
+    },
   },
+  compoundVariants: [
+    {
+      variants: {
+        active: true,
+        disabled: false,
+      },
+      style: {
+        vars: { [backgroundOverlayColor]: activeColor },
+      },
+    },
+    {
+      variants: {
+        active: false,
+        disabled: false,
+      },
+      style: {
+        selectors: {
+          "&:hover": {
+            vars: { [backgroundOverlayColor]: hoverColor },
+          },
+        },
+      },
+    },
+  ],
   defaultVariants: {
     variant: "primary",
     size: "md",
