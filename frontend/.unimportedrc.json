@@ -17,7 +17,6 @@
     "@vanilla-extract/dynamic"
   ],
   "ignoreUnimported": [
-    "foundation/routing/components/HeadlessLink/index.css.ts",
     "foundation/routing/components/HeadlessLink/index.tsx",
     "foundation/routing/state/prefetch.ts",
     "foundation/routing/state/redirect.ts",
@@ -37,7 +36,8 @@
     "foundation/ui/Link/index.tsx",
     "foundation/ui/Spacer/index.css.ts",
     "foundation/ui/Spacer/index.tsx",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "public/mockServiceWorker.js"
   ],
   "ignoreUnresolved": []
 }

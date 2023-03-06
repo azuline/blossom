@@ -1,13 +1,11 @@
 import { t } from "@foundation/style";
-import { sx } from "@foundation/style/sprinkles.css";
-import { createVar } from "@vanilla-extract/css";
+import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
-export const sCheckboxLayout = recipe({
-  base: sx({ display: "flex", align: "center", gap: "8", cursor: "pointer" }),
-  variants: {
-    disabled: { true: { cursor: "not-allowed" } },
-  },
+export const sCheckboxLayout = style({
+  display: "flex",
+  alignItems: "center",
+  gap: t.space[8],
 });
 
 const checkedBackgroundColor = createVar();
@@ -29,10 +27,10 @@ export const sCheckboxBox = recipe({
         background: checkedBackgroundColor,
         color: checkedColor,
         selectors: {
-          [`${sCheckboxLayout()}:hover &`]: {
+          [`${sCheckboxLayout}:hover &`]: {
             background: checkedBackgroundHoverColor,
           },
-          [`${sCheckboxLayout()}:active &`]: {
+          [`${sCheckboxLayout}:active &`]: {
             background: checkedBackgroundActiveColor,
           },
         },
@@ -41,10 +39,10 @@ export const sCheckboxBox = recipe({
         borderWidth: t.border[1],
         borderColor: uncheckedBorderColor,
         selectors: {
-          [`${sCheckboxLayout()}:hover &`]: {
+          [`${sCheckboxLayout}:hover &`]: {
             background: t.color.background.overlay.hover,
           },
-          [`${sCheckboxLayout()}:active &`]: {
+          [`${sCheckboxLayout}:active &`]: {
             background: t.color.background.overlay.active,
           },
         },
@@ -77,10 +75,10 @@ export const sCheckboxBox = recipe({
         borderColor: t.color.border.neutral.weak,
         color: t.color.content.neutral.weak,
         selectors: {
-          [`${sCheckboxLayout()}:hover &`]: {
+          [`${sCheckboxLayout}:hover &`]: {
             background: t.color.background.neutral.base,
           },
-          [`${sCheckboxLayout()}:active &`]: {
+          [`${sCheckboxLayout}:active &`]: {
             background: t.color.background.neutral.base,
           },
         },

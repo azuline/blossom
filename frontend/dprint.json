@@ -26,6 +26,7 @@
     "dist",
     "build",
     "patches",
+    "public",
     ".unimportedrc.json"
   ],
   "plugins": [

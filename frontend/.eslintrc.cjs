@@ -30,7 +30,7 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint", "unused-imports", "import-alias"],
   env: { es6: true, browser: true, jest: true },
-  ignorePatterns: ["coverage", ".eslintrc.cjs"],
+  ignorePatterns: ["coverage", ".eslintrc.cjs", "public"],
   rules: {
     // This goes off when we have useEffects that return either nothing or a cleanup
     // function.

@@ -44,8 +44,8 @@ export const Checkbox: React.FC<Props> = _props => {
   return (
     <label
       className={clsx(
-        sCheckboxLayout({ disabled: props.disabled }),
-        sx(props.sx ?? {}),
+        sCheckboxLayout,
+        sx({ cursor: props.disabled ? "not-allowed" : "pointer", ...props.sx }),
       )}
       htmlFor={id}
     >
