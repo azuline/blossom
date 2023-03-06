@@ -6,4 +6,4 @@ WORKDIR /usr/app
 # in the host!
 RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
-ENTRYPOINT ["pnpm", "playwright", "test", ".ladle"]
+ENTRYPOINT ["pnpm", "playwright", "test", "visualtest"]
