@@ -58,8 +58,8 @@ globalStyle("a", {
 // Custom global styles.
 
 // Default all typography to the standard text.
-globalStyle("html", {
-  fontFamily: `${t.font.face.body}, Inter, sans-serif`,
+globalStyle("html, .ladle-main", {
+  fontFamily: `${t.font.face.body}, sans-serif`,
   fontWeight: t.font.weight.body.default,
   lineHeight: t.font.lineHeight.label,
   fontSize: t.font.size.sm,
