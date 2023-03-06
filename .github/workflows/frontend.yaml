@@ -79,7 +79,7 @@ jobs:
         id: upload
         run: |
           commit_sha="$(git rev-parse --short HEAD)"
-          timestamp="$(date +%Y-%m-%d_%k-%M-%S)"
+          timestamp="$(date +%Y-%m-%d_%H-%M-%S)"
           release_name="ladle-${timestamp}-${commit_sha}"
           token=${{ secrets.GITHUB_TOKEN }}
 
@@ -94,7 +94,7 @@ jobs:
           artifact_url="$(curl -s -H "Authorization: token $token" \
             -H "Content-Type: application/gzip" \
             --data-binary @ladle.tar.gz \
-            "$upload_url?name=ladle.tar.gz&label=ladle.tar.gz"| jq -r '.browser_download_url')"
+            "$upload_url?name=ladle.tar.gz&label=ladle.tar.gz" | jq -r '.browser_download_url')"
           echo "Uploaded ladle.tar.gz to release"
 
           echo "ladle_artifact_url=${artifact_url}"
