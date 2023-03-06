@@ -49,12 +49,12 @@ async def test_all_timestamptz(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE t.table_type = 'BASE TABLE'
-		    AND c.table_schema = 'public'
-		    AND c.data_type = 'timestamp without time zone'
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE t.table_type = 'BASE TABLE'
+            AND c.table_schema = 'public'
+            AND c.data_type = 'timestamp without time zone'
             AND c.table_name || '.' || c.column_name NOT IN (
                 'yoyo_lock.ctime',
                 '_yoyo_log.created_at_utc',
@@ -80,8 +80,8 @@ async def test_all_tables_have_created_at_and_updated_at(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT t.table_name
-		FROM information_schema.tables t
-		WHERE t.table_type = 'BASE TABLE'
+        FROM information_schema.tables t
+        WHERE t.table_type = 'BASE TABLE'
             AND t.table_schema = 'public'
             AND (
                 NOT EXISTS (
@@ -120,13 +120,13 @@ async def test_all_created_and_updated_at_definition(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE c.column_name IN ('created_at', 'updated_at')
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name IN ('created_at', 'updated_at')
             AND t.table_schema = 'public'
             AND t.table_type = 'BASE TABLE'
-			AND (
+            AND (
                 c.column_default IS DISTINCT FROM 'now()'
                 OR c.is_nullable = 'YES'
             )
@@ -147,21 +147,21 @@ async def test_all_updated_at_columns_have_trigger(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT c.table_name
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE c.column_name = 'updated_at'
-			AND t.table_schema = 'public'
-			AND t.table_type = 'BASE TABLE'
-			AND t.table_name NOT IN (
-				SELECT event_object_table
-				FROM information_schema.triggers
-				WHERE trigger_schema = 'public'
-					AND trigger_name = 'updated_at'
-					AND event_manipulation = 'UPDATE'
-					AND action_statement = 'EXECUTE FUNCTION updated_at()'
-					AND action_orientation = 'ROW'
-					AND action_timing = 'BEFORE'
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name = 'updated_at'
+            AND t.table_schema = 'public'
+            AND t.table_type = 'BASE TABLE'
+            AND t.table_name NOT IN (
+                SELECT event_object_table
+                FROM information_schema.triggers
+                WHERE trigger_schema = 'public'
+                    AND trigger_name = 'updated_at'
+                    AND event_manipulation = 'UPDATE'
+                    AND action_statement = 'EXECUTE FUNCTION updated_at()'
+                    AND action_orientation = 'ROW'
+                    AND action_timing = 'BEFORE'
             )
         """
     )
@@ -185,12 +185,12 @@ async def test_integers_should_be_bigints(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_name
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE c.data_type = 'integer'
-			AND t.table_schema = 'public'
-			AND t.table_type = 'BASE TABLE'
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.data_type = 'integer'
+            AND t.table_schema = 'public'
+            AND t.table_type = 'BASE TABLE'
             AND t.table_name NOT IN (
                 'yoyo_lock',
                 '_yoyo_version'
@@ -214,8 +214,8 @@ async def test_all_tables_have_external_ids(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT t.table_name
-		FROM information_schema.tables t
-		WHERE t.table_type = 'BASE TABLE'
+        FROM information_schema.tables t
+        WHERE t.table_type = 'BASE TABLE'
             AND t.table_schema = 'public'
             AND NOT EXISTS (
                 SELECT *
@@ -248,11 +248,11 @@ async def test_all_external_ids_have_not_null_unique(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT t.table_name
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE c.column_name = 'external_id'
-		    AND t.table_type = 'BASE TABLE'
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name = 'external_id'
+            AND t.table_type = 'BASE TABLE'
             AND t.table_schema = 'public'
             AND (
                 NOT EXISTS (
@@ -285,12 +285,12 @@ async def test_external_id_validation(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         SELECT c.table_name, c.column_default
-		FROM information_schema.columns c
-		JOIN information_schema.tables t
-			ON c.table_name = t.table_name
-		WHERE c.column_name = 'external_id'
-		AND t.table_schema = 'public'
-		AND t.table_type = 'BASE TABLE';
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name = 'external_id'
+        AND t.table_schema = 'public'
+        AND t.table_type = 'BASE TABLE';
         """
     )
     prefix_regex = re.compile(r"^[a-z]{3}$")
@@ -321,39 +321,45 @@ async def test_foreign_key_indexes(t: TFix) -> None:
     cursor = await cq.c.execute(
         """
         -- Based on https://www.cybertec-postgresql.com/en/index-your-foreign-key/.
-		SELECT
+        SELECT
             c.conrelid::regclass AS table,
-			-- List of key column names in order.
-			array_agg(a.attname ORDER BY x.n)::TEXT[] AS columns
-		FROM pg_catalog.pg_constraint c
-			-- Enumerated key column numbers per foreign key.
-			CROSS JOIN LATERAL unnest(c.conkey) WITH ORDINALITY AS x(attnum, n)
-			-- Name for each key column.
-			JOIN pg_catalog.pg_attribute a ON a.attnum = x.attnum AND a.attrelid = c.conrelid
-		WHERE
+            -- List of key column names in order.
+            array_agg(a.attname ORDER BY x.n)::TEXT[] AS columns
+        FROM pg_catalog.pg_constraint c
+            -- Enumerated key column numbers per foreign key.
+            CROSS JOIN LATERAL unnest(c.conkey) WITH ORDINALITY AS x(attnum, n)
+            -- Name for each key column.
+            JOIN pg_catalog.pg_attribute a ON a.attnum = x.attnum AND a.attrelid = c.conrelid
+        WHERE
             -- Is there a matching index for the constraint? A matching index is one that has the
             -- first column set to the foreign key column and is not partial.
-			NOT EXISTS (
+            NOT EXISTS (
                 SELECT FROM pg_catalog.pg_index i
-				WHERE i.indrelid = c.conrelid
-					-- It must not be a partial index.
-					AND i.indpred IS NULL
-					-- The first index columns must be the same as the key columns, but order doesn't matter.
-					AND (i.indkey::smallint[])[0:cardinality(c.conkey)-1] OPERATOR(pg_catalog.@>) c.conkey)
-			-- Is there a matching partial index for this constraint? This only allowed for cases where
-			-- a single column is being indexed and the expression is IS NOT NULL. This allows for
-            -- more optimized nullable foreign key indexes.
-			AND NOT EXISTS (
+                WHERE i.indrelid = c.conrelid
+                    -- It must not be a partial index.
+                    AND i.indpred IS NULL
+                    -- The first index columns must be the same as the key columns, but order
+                    -- doesn't matter.
+                    AND (i.indkey::smallint[])[0:cardinality(c.conkey)-1]
+                        OPERATOR(pg_catalog.@>) c.conkey
+            )
+            -- Is there a matching partial index for this constraint? This only allowed for cases
+            -- where a single column is being indexed and the expression is IS NOT NULL. This allows
+            -- for more optimized nullable foreign key indexes.
+            AND NOT EXISTS (
                 SELECT FROM pg_catalog.pg_index i
-				WHERE i.indrelid = c.conrelid
-					-- It must have a single indexed column.
-					AND array_length(indkey::smallint[], 1) = 1
-					-- The predicate is IS NOT NULL
-					AND pg_get_expr(i.indpred, i.indrelid) LIKE '(% IS NOT NULL)'
-					-- The first index columns must be the same as the key columns, but order doesn't matter.
-					AND (i.indkey::smallint[])[0:cardinality(c.conkey)-1] OPERATOR(pg_catalog.@>) c.conkey)
-			AND c.contype = 'f'
-		GROUP BY c.conrelid, c.conname
+                WHERE i.indrelid = c.conrelid
+                    -- It must have a single indexed column.
+                    AND array_length(indkey::smallint[], 1) = 1
+                    -- The predicate is IS NOT NULL
+                    AND pg_get_expr(i.indpred, i.indrelid) LIKE '(% IS NOT NULL)'
+                    -- The first index columns must be the same as the key columns, but order
+                    -- doesn't matter.
+                    AND (i.indkey::smallint[])[0:cardinality(c.conkey)-1]
+                        OPERATOR(pg_catalog.@>) c.conkey
+            )
+            AND c.contype = 'f'
+        GROUP BY c.conrelid, c.conname
         """
     )
     failing = [MissingFK(table=x[0], columns=x[1]) for x in await cursor.fetchall()]

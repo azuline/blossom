@@ -1,5 +1,6 @@
+from collections.abc import Iterator
 from dataclasses import fields, is_dataclass
-from typing import Any, Iterator, get_args, get_type_hints
+from typing import Any, get_args, get_type_hints
 
 from foundation.rpc.catalog import get_catalog
 

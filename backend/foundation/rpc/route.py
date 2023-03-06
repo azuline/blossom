@@ -6,8 +6,9 @@ utilities for the web application package.
 import functools
 import json
 import logging
+from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Awaitable, Callable, Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 
 import pydantic.dataclasses
 import quart
