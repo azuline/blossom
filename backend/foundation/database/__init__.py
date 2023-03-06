@@ -1,8 +1,9 @@
 import logging
 import sys
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
-from typing import Any, AsyncIterator
+from typing import Any
 
 from psycopg import AsyncConnection
 from psycopg.sql import SQL, Identifier

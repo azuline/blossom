@@ -9,13 +9,14 @@ import logging
 import pathlib
 import random
 from asyncio import AbstractEventLoop
+from collections.abc import AsyncIterator, Iterator
 from string import ascii_lowercase
-from typing import AsyncIterator, Iterator
 
 import _pytest.pathlib
 import psycopg
 import pytest
 import pytest_asyncio
+from psycopg.sql import SQL, Identifier
 from quart.typing import TestClientProtocol
 
 # Configure logging for tests -- we will set up OpenTelemetry and fix this side effect
@@ -50,7 +51,8 @@ def event_loop(request: pytest.FixtureRequest) -> Iterator[AbstractEventLoop]:  
 async def db() -> AsyncIterator[str]:
     db_name = "test_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
     with psycopg.connect(confvars.psycopg_database_url, autocommit=True) as conn:
-        conn.execute(f"CREATE DATABASE {db_name}")
+        # nosemgrep
+        conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     run_database_migrations(confvars.yoyo_database_url + "/" + db_name)
     yield db_name
 
@@ -59,7 +61,8 @@ async def db() -> AsyncIterator[str]:
 def isolated_db() -> str:
     db_name = "test_iso_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
     with psycopg.connect(confvars.psycopg_database_url, autocommit=True) as conn:
-        conn.execute(f"CREATE DATABASE {db_name}")
+        # nosemgrep
+        conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     return db_name
 
 
