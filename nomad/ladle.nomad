@@ -24,17 +24,26 @@ job "blossom-ladle" {
         image   = "nginx"
         volumes = [
           "local/ladle:/www",
+          "local/nginx.conf:/etc/nginx/conf.d/default.conf",
         ]
       }
       artifact {
         source      = "[[.artifact_source_url]]"
         destination = "local/ladle"
       }
+      template {
+        data          = <<EOF
+server {
+	listen 80;
+	listen [::]:80;
+	root /www;
+	index index.html;
+}
+EOF
+        destination   = "local/nginx.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
     }
-  }
-
-  # Always deploy a new version.
-  meta {
-    run_uuid = "${uuidv4()}"
   }
 }
