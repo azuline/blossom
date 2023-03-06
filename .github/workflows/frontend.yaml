@@ -110,6 +110,7 @@ jobs:
       ARTIFACT_SOURCE_URL: ${{ needs.build-ladle.outputs.artifact_source_url }}
       NOMAD_ADDR: http://100.71.28.44:4646 
       NOMAD_NAMESPACE: blossom
+      NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v20
