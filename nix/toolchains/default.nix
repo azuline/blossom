@@ -3,28 +3,30 @@
 rec {
   general = with pkgs; [
     coreutils
-    docker
     gnumake
-    gnutar
-    semgrep
     fail-on-dirty-diff
   ];
   backend = general ++ (with pkgs; [
     # mypy is defined as a part of python-dev so it can read the dependencies
     black
+    docker
     pip-audit
     python-dev
     ruff
+    semgrep
     sqlc-py
     sqlc-gen-python
     dprint # needed for typescript codegen
   ]);
   frontend = general ++ (with pkgs; [
+    docker
     dprint
     nodejs-18_x
     nodePackages.pnpm
+    semgrep
   ]);
   deployments = general ++ (with pkgs; [
+    gnutar
     nomad
     levant
     jq
