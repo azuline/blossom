@@ -108,6 +108,8 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       ARTIFACT_SOURCE_URL: ${{ needs.build-ladle.outputs.artifact_source_url }}
+      NOMAD_ADDR: http://100.71.28.44:4646 
+      NOMAD_NAMESPACE: blossom
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v20
@@ -122,11 +124,11 @@ jobs:
       - name: Build Nix
         run: nix build -j8 ../\#devShells.x86_64-linux.deployments
       - name: Nomad test
-        run: NOMAD_ADDR=http://100.71.28.44:4646 nix develop ../\#devShells.x86_64-linux.deployments --command nomad status
+        run: nix develop ../\#devShells.x86_64-linux.deployments --command nomad status
       - name: Tailscale test
         run: tailscale status
       - name: Deploy
         run: |
           nix develop ../\#devShells.x86_64-linux.deployments
           echo "{}" | jq ".artifact_source_url = $ARTIFACT_SOURCE_URL" > vars.json
-          levant deploy -log-level=debug -address=http://100.71.28.44:4646 -var-file vars.json ladle.nomad
+          levant deploy -log-level=debug -var-file vars.json ladle.nomad
