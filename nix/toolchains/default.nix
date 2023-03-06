@@ -32,5 +32,5 @@ rec {
   interactive = with pkgs; [
     postgresql_15
   ];
-  all = general ++ backend ++ frontend ++ interactive;
+  all = general ++ backend ++ frontend ++ deployments ++ interactive;
 }
