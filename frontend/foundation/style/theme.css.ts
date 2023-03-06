@@ -20,12 +20,14 @@ export const breakpoints = {
   xs: "(max-width: 508px)",
 } as const;
 
+export const fontFaces = {
+  display: "Cormorant Garamond",
+  body: "Alegreya Sans",
+} as const;
+
 export const rawTheme = createGlobalTheme("html", {
   font: {
-    face: {
-      display: "Cormorant Garamond",
-      body: "Alegreya Sans",
-    },
+    face: fontFaces,
     weight: {
       display: {
         default: "500",

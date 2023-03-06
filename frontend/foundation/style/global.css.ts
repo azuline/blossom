@@ -1,4 +1,5 @@
 import { t } from "@foundation/style";
+import { fontFaces } from "@foundation/style/theme.css";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
 
 // Reset
@@ -72,55 +73,55 @@ globalStyle("*", {
 });
 
 // Font loading.
-globalFontFace(t.font.face.body, {
+globalFontFace(fontFaces.body, {
   fontStyle: "normal",
   fontWeight: "400",
   fontDisplay: "swap",
   src: "url('/fonts/AlegreyaSans-Regular.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.body, {
+globalFontFace(fontFaces.body, {
   fontStyle: "italic",
   fontWeight: "400",
   fontDisplay: "swap",
   src: "url('/fonts/AlegreyaSans-Italic.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.body, {
+globalFontFace(fontFaces.body, {
   fontStyle: "normal",
   fontWeight: "700",
   fontDisplay: "swap",
   src: "url('/fonts/AlegreyaSans-Bold.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.body, {
+globalFontFace(fontFaces.body, {
   fontStyle: "italic",
   fontWeight: "700",
   fontDisplay: "swap",
   src: "url('/fonts/AlegreyaSans-BoldItalic.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.display, {
+globalFontFace(fontFaces.display, {
   fontStyle: "normal",
   fontWeight: "500",
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-Medium.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.display, {
+globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "500",
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-MediumItalic.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.display, {
+globalFontFace(fontFaces.display, {
   fontStyle: "normal",
   fontWeight: "700",
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-Bold.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.display, {
+globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "700",
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-BoldItalic.woff2') format('woff2')",
 });
-globalFontFace(t.font.face.display, {
+globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "300",
   fontDisplay: "swap",
