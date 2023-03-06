@@ -54,6 +54,7 @@ jobs:
         run: nix develop ../\#devShells.x86_64-linux.frontend --command make test-visual
   build-ladle:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     permissions:
       contents: write
     outputs:
