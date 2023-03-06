@@ -124,10 +124,6 @@ jobs:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
       - name: Build Nix
         run: nix build -j8 ../\#devShells.x86_64-linux.deployments
-      - name: Nomad test
-        run: nix develop ../\#devShells.x86_64-linux.deployments --command nomad status
-      - name: Tailscale test
-        run: tailscale status
       - name: Deploy
         run: |
           nix develop ../\#devShells.x86_64-linux.deployments
