@@ -13,9 +13,6 @@ const conditions = {
     md: { "@media": breakpoints.md },
     sm: { "@media": breakpoints.sm },
     xs: { "@media": breakpoints.xs },
-    // interactive
-    hover: { selector: "&:hover" },
-    focus: { selector: "&:focus" },
   },
   defaultCondition: "initial",
 } as const;
@@ -68,7 +65,6 @@ export const sxsets = {
     },
   }),
   typography: defineProperties({
-    ...conditions,
     properties: {
       whiteSpace: ["normal", "nowrap", "pre", "pre-line", "pre-wrap"],
       truncate: {
@@ -143,14 +139,12 @@ export const sxsets = {
     },
   }),
   color: defineProperties({
-    ...conditions,
     properties: {
       color: flattenRecord(t.color.content),
       background: flattenRecord(t.color.background),
     },
   }),
   border: defineProperties({
-    ...conditions,
     properties: {
       borderStyle: ["solid", "dashed", "dotted", "hidden", "none"],
       borderWidth: t.border,
@@ -163,13 +157,11 @@ export const sxsets = {
     },
   }),
   cursor: defineProperties({
-    ...conditions,
     properties: {
       cursor: ["auto", "pointer", "not-allowed"],
     },
   }),
   shadow: defineProperties({
-    ...conditions,
     properties: {
       boxShadow: t.shadows,
     },
@@ -178,7 +170,6 @@ export const sxsets = {
     },
   }),
   isolation: defineProperties({
-    ...conditions,
     properties: {
       isolation: ["isolate"],
     },
