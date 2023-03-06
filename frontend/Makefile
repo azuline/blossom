@@ -21,6 +21,9 @@ preview:
 stories:
 	pnpm ladle serve --port 40854
 
+build-stories:
+	pnpm ladle build
+
 test:
 	pnpm vitest run --coverage
 
