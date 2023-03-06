@@ -6,6 +6,7 @@ on:
       - flake.*
       - nix/**
       - frontend/**
+      - nomad/ladle.nomad
 defaults:
   run:
     working-directory: frontend/
