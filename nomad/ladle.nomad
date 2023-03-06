@@ -1,7 +1,7 @@
 job "blossom-ladle" {
   datacenters = ["zen"]
-  namespace = "blossom"
-  type = "service"
+  namespace   = "blossom"
+  type        = "service"
 
   group "blossom-ladle" {
     count = 1
@@ -17,8 +17,9 @@ job "blossom-ladle" {
         sidecar_service {}
       }
       check {
+        expose   = true
         type     = "http"
-        path     = "/meta.json"
+        path     = "/health"
         interval = "10s"
         timeout  = "2s"
       }
@@ -27,7 +28,7 @@ job "blossom-ladle" {
     task "blossom-ladle" {
       driver = "docker"
       config {
-        image   = "nginx"
+        image = "nginx"
         volumes = [
           "local/ladle:/www",
           "local/nginx.conf:/etc/nginx/conf.d/default.conf",
@@ -44,6 +45,10 @@ server {
 	listen [::]:80;
 	root /www;
 	index index.html;
+
+  location /health {
+    return 200 'ok';
+  }
 }
 EOF
         destination   = "local/nginx.conf"
@@ -54,9 +59,9 @@ EOF
   }
 
   update {
-    max_parallel = 1
-    health_check = "checks"
-    min_healthy_time = "10s"
+    max_parallel      = 1
+    health_check      = "checks"
+    min_healthy_time  = "10s"
     healthy_deadline  = "1m"
     progress_deadline = "10m"
     auto_revert       = true
