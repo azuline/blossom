@@ -80,7 +80,7 @@ jobs:
         run: |
           commit_sha="$(git rev-parse --short HEAD)"
           timestamp="$(date +%Y-%m-%d_%k-%M-%S)"
-          release_name="ladle-${commit_sha}-${timestamp}"
+          release_name="ladle-${timestamp}-${commit_sha}"
           token=${{ secrets.GITHUB_TOKEN }}
 
           # https://docs.github.com/en/rest/releases/releases#create-a-release
