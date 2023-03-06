@@ -55,5 +55,8 @@
     "patchedDependencies": {
       "@ladle/react@2.9.0": "patches/@ladle__react@2.9.0.patch"
     }
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
