@@ -1,5 +1,5 @@
-import { StoryGallery } from "@foundation/stories/StoryGallery";
 import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Flex } from "@foundation/ui/Flex";
 import { Link } from "@foundation/ui/Link";
 import { Type } from "@foundation/ui/Type";
@@ -11,13 +11,13 @@ export default {
 
 export const Link_: React.FC = () => (
   <Flex sx={{ direction: "column", gap: "64" }}>
-    <StoryGallery columns={2}>
+    <VariantsGallery columns={2}>
       <Variant label="variant" value="primary" />
       <Link href="/" variant="primary">Forgot my password</Link>
 
       <Variant label="variant" value="secondary" />
       <Link href="/" variant="secondary">Forgot my password</Link>
-    </StoryGallery>
+    </VariantsGallery>
     <View sx={{ maxw: "576" }}>
       <Type paragraph>
         In the Northern Ocean there is a fish called Kun which is many thousand li in size. It

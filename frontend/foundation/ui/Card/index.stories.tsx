@@ -1,5 +1,5 @@
-import { StoryGallery } from "@foundation/stories/StoryGallery";
 import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
 import { Type } from "@foundation/ui/Type";
 
@@ -9,7 +9,7 @@ export default {
 
 // dprint-ignore
 export const Card_: React.FC = () => (
-  <StoryGallery columns={5}>
+  <VariantsGallery columns={5}>
     <Type />
     <Variant label="padding" value="none" />
     <Variant label="padding" value="sm" />
@@ -33,7 +33,7 @@ export const Card_: React.FC = () => (
     <Card padding="sm" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
     <Card padding="md" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
     <Card padding="lg" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-  </StoryGallery>
+  </VariantsGallery>
 );
 
 const Text1: React.FC = () => (

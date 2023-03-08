@@ -1,5 +1,5 @@
-import { StoryGallery } from "@foundation/stories/StoryGallery";
 import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Button } from "@foundation/ui/Button";
 import { Type } from "@foundation/ui/Type";
 
@@ -11,7 +11,7 @@ export default {
 const onPress = (): void => alert("Pressed!");
 
 export const Button_: React.FC = () => (
-  <StoryGallery columns={5}>
+  <VariantsGallery columns={5}>
     <Type />
     <Type />
     <Variant label="size" value="sm" />
@@ -53,5 +53,5 @@ export const Button_: React.FC = () => (
     <Button disabled size="sm" variant="danger" onPress={onPress}>Sign up</Button>
     <Button disabled size="md" variant="danger" onPress={onPress}>Sign up</Button>
     <Button disabled size="lg" variant="danger" onPress={onPress}>Sign up</Button>
-  </StoryGallery>
+  </VariantsGallery>
 );

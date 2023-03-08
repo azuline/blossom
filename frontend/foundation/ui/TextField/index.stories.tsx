@@ -1,5 +1,5 @@
-import { StoryGallery } from "@foundation/stories/StoryGallery";
 import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { TextField } from "@foundation/ui/TextField";
 import { atom, useAtom } from "jotai";
 
@@ -13,7 +13,7 @@ export const TextField_: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
 
   return (
-    <StoryGallery columns={2}>
+    <VariantsGallery columns={2}>
       <Variant label="state" value="default" />
       <TextField label="What's your favorite color?" value={value} onChange={setValue} />
 
@@ -27,6 +27,6 @@ export const TextField_: React.FC = () => {
         value={value}
         onChange={setValue}
       />
-    </StoryGallery>
+    </VariantsGallery>
   );
 };

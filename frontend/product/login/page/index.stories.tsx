@@ -1,4 +1,4 @@
-import { PageWrapper } from "@foundation/stories/PageWrapper";
+import { PageStory } from "@foundation/stories/PageStory";
 import LoginPage from ".";
 
 export default {
@@ -6,7 +6,7 @@ export default {
 };
 
 export const Default: React.FC = () => (
-  <PageWrapper>
+  <PageStory>
     <LoginPage />
-  </PageWrapper>
+  </PageStory>
 );

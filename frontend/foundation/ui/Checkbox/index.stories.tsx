@@ -1,5 +1,5 @@
-import { StoryGallery } from "@foundation/stories/StoryGallery";
 import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Checkbox } from "@foundation/ui/Checkbox";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
@@ -17,7 +17,7 @@ export const Checkbox_: React.FC = () => {
   return (
     <Flex sx={{ direction: "column", gap: "36" }}>
       <Checkbox checked={checked} label="Interactive checkbox" onChange={onChange} />
-      <StoryGallery columns={3}>
+      <VariantsGallery columns={3}>
         <Type />
         <Variant label="checked" value="false" />
         <Variant label="checked" value="true" />
@@ -37,7 +37,7 @@ export const Checkbox_: React.FC = () => {
         <Variant label="state" value="error+disabled" />
         <Checkbox disabled error checked={false} label="Remember me" />
         <Checkbox checked disabled error label="Remember me" />
-      </StoryGallery>
+      </VariantsGallery>
     </Flex>
   );
 };
