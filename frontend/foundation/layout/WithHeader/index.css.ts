@@ -3,8 +3,7 @@ import { t } from "@foundation/style";
 import { style } from "@vanilla-extract/css";
 
 export const sHeaderLayout = style({
-  height: t.size[96],
-  padding: `0px ${layoutPadding}`,
+  padding: `${t.size[28]} ${layoutPadding} ${t.size[16]}`,
 });
 
 export const sLogoFont = style({

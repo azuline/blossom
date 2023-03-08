@@ -21,8 +21,8 @@ export const sxsets = {
   size: defineProperties({
     ...conditions,
     properties: {
-      width: t.size,
-      height: t.size,
+      width: { ...t.size, "fit-content": "fit-content" },
+      height: { ...t.size, "fit-content": "fit-content" },
       minHeight: t.size,
       minWidth: t.size,
       maxHeight: t.size,

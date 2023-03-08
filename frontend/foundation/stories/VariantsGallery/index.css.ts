@@ -6,7 +6,9 @@ export const sVariantsGalleryColumns = createVar();
 export const sVariantsGallery = style({
   display: "grid",
   grid: `auto-flow max-content / repeat(${sVariantsGalleryColumns}, max-content)`,
-  gap: `${t.space[28]} ${t.space[36]}`,
+  gap: t.fn.space("28", "36"),
   alignItems: "center",
   justifyItems: "center",
+  padding: t.fn.space("16", "36"),
+  width: "fit-content",
 });
