@@ -1,7 +1,7 @@
 import { RPCs } from "@codegen/rpc";
 import { RPCError } from "@foundation/errors/rpc";
 import { atomForm } from "@foundation/form/state";
-import { IconLogo } from "@foundation/icons/IconLogo";
+import { Icon } from "@foundation/icons/Icon";
 import { LayoutPadding } from "@foundation/layout/LayoutPadding";
 import { useRedirect } from "@foundation/routing/state/redirect";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
@@ -47,7 +47,7 @@ const LoginPage: React.FC = () => {
       <Center>
         <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
           <Center axis="vertical">
-            <IconLogo size="64" />
+            <Icon icon="logo" sx={{ w: "64", h: "64" }} />
           </Center>
           <Type variant="disp-xl">Welcome back!</Type>
           <Flex sx={{ direction: "column", gap: "20" }}>
