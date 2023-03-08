@@ -59,9 +59,28 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   };
 };
 
+type Space = keyof typeof theme.space;
+
+/**
+ * This function takes in a sequence of space values and produces a single output CSS value.
+ */
+const space = (a: Space, b?: Space, c?: Space, d?: Space): string => {
+  if (a && b && c && d) {
+    return `${t.space[a]} ${t.space[b]} ${t.space[c]} ${t.space[d]}`;
+  }
+  if (a && b && c) {
+    return `${t.space[a]} ${t.space[b]} ${t.space[c]}`;
+  }
+  if (a && b) {
+    return `${t.space[a]} ${t.space[b]}`;
+  }
+  return `${t.space[a]}`;
+};
+
 export const t = {
   ...theme,
   fn: {
     font,
+    space,
   },
 } as const;

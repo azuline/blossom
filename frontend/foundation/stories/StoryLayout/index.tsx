@@ -5,8 +5,8 @@ type Props = {
   children: ReactNode;
 };
 
-export const DocumentationStory: React.FC<Props> = props => (
-  <Flex sx={{ w: "full", h: "full", direction: "column", gap: "20" }}>
+export const StoryLayout: React.FC<Props> = props => (
+  <Flex sx={{ w: "full", p: "36", direction: "column", gap: "44" }}>
     {props.children}
   </Flex>
 );
