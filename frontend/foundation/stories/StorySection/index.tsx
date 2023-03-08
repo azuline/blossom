@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const StorySection: React.FC<Props> = props => (
-  <Flex sx={{ direction: "column", gap: "20" }}>
+  <Flex sx={{ direction: "column", gap: "28" }}>
     <Type variant="disp-xl">{props.title}</Type>
     {props.children}
   </Flex>

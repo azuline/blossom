@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { LayoutPaddingVariableSetter } from "../foundation/layout/LayoutPadding";
 import { StoryLayout } from "../foundation/stories/StoryLayout";
+import { sx } from "../foundation/style/sprinkles.css";
 import { mockRPCsWorker } from "../foundation/testing/msw.client";
 import { DEFAULT_MOCK_RPC_OUTPUT } from "../foundation/testing/rpc";
 
@@ -16,7 +17,7 @@ mockRPCsWorker(DEFAULT_MOCK_RPC_OUTPUT);
 export const Provider: GlobalProvider = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <LayoutPaddingVariableSetter>
+      <LayoutPaddingVariableSetter className={sx({ w: "fit-content" })}>
         <StoryLayout>
           {children}
         </StoryLayout>

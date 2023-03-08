@@ -22,19 +22,10 @@ export const PageStory: React.FC<Props> = props => (
     {SCREEN_SIZES.map(width => (
       <StorySection key={width} title={<>Screen {width}px</>}>
         <View
-          style={{ height: Math.max(540, (width * 9) / 16) }}
-          sx={{
-            w: "fit-content",
-            maxw: "full",
-            bcol: "neutral.default",
-            bwidth: "1",
-            radius: "16",
-            overflowX: "auto",
-          }}
+          style={{ width, height: Math.max(540, (width * 9) / 16) }}
+          sx={{ bcol: "neutral.default", bwidth: "1", radius: "16" }}
         >
-          <View style={{ width }} sx={{ h: "full" }}>
-            {props.children}
-          </View>
+          {props.children}
         </View>
       </StorySection>
     ))}

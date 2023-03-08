@@ -9,6 +9,4 @@ export const sVariantsGallery = style({
   gap: t.fn.space("28", "36"),
   alignItems: "center",
   justifyItems: "center",
-  padding: t.fn.space("16", "36"),
-  width: "fit-content",
 });
