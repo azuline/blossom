@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StorySection } from "@foundation/stories/StorySection";
 import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
@@ -10,7 +11,7 @@ export default {
 };
 
 export const Link_: React.FC = () => (
-  <>
+  <DocumentationStory>
     <VariantsGallery columns={2}>
       <Variant label="variant" value="primary" />
       <Link href="/" variant="primary">Forgot my password</Link>
@@ -45,5 +46,5 @@ export const Link_: React.FC = () => (
         </Type>
       </View>
     </StorySection>
-  </>
+  </DocumentationStory>
 );

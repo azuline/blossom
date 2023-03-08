@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
 import { Flex } from "@foundation/ui/Flex";
 import { Spacer } from "@foundation/ui/Spacer";
@@ -9,7 +10,7 @@ export default {
 };
 
 export const Spacer_: React.FC = () => (
-  <Flex sx={{ wrap: "wrap", gap: "16" }}>
+  <DocumentationStory>
     <Card sx={{ w: "356", h: "128" }}>
       <Flex sx={{ direction: "column", h: "full", gap: "8" }}>
         <Type>Horizontal</Type>
@@ -34,5 +35,5 @@ export const Spacer_: React.FC = () => (
         </Flex>
       </Flex>
     </Card>
-  </Flex>
+  </DocumentationStory>
 );

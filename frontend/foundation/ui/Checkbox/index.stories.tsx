@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StorySection } from "@foundation/stories/StorySection";
 import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
@@ -15,7 +16,7 @@ export const Checkbox_: React.FC = () => {
   const [checked, onChange] = useAtom(checkedAtom);
 
   return (
-    <>
+    <DocumentationStory>
       <StorySection title="Playground">
         <Checkbox checked={checked} label="Interactive checkbox" onChange={onChange} />
       </StorySection>
@@ -40,6 +41,6 @@ export const Checkbox_: React.FC = () => {
         <Checkbox disabled error checked={false} label="Remember me" />
         <Checkbox checked disabled error label="Remember me" />
       </VariantsGallery>
-    </>
+    </DocumentationStory>
   );
 };

@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { Bleed } from "@foundation/ui/Bleed";
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
@@ -11,43 +12,45 @@ export default {
 };
 
 export const Bleed_: React.FC = () => (
-  <Flex sx={{ wrap: "wrap", gap: "64" }}>
-    <CardWrapper>
-      <Bleed m="36">
-        <Content>m=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed my="36">
-        <Content>my=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed mx="36">
-        <Content>mx=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed mt="36">
-        <Content>mt=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed mr="36">
-        <Content>mr=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed mb="36">
-        <Content>mb=36</Content>
-      </Bleed>
-    </CardWrapper>
-    <CardWrapper>
-      <Bleed ml="36">
-        <Content>ml=36</Content>
-      </Bleed>
-    </CardWrapper>
-  </Flex>
+  <DocumentationStory>
+    <Flex sx={{ wrap: "wrap", gap: "64" }}>
+      <CardWrapper>
+        <Bleed m="36">
+          <Content>m=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed my="36">
+          <Content>my=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed mx="36">
+          <Content>mx=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed mt="36">
+          <Content>mt=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed mr="36">
+          <Content>mr=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed mb="36">
+          <Content>mb=36</Content>
+        </Bleed>
+      </CardWrapper>
+      <CardWrapper>
+        <Bleed ml="36">
+          <Content>ml=36</Content>
+        </Bleed>
+      </CardWrapper>
+    </Flex>
+  </DocumentationStory>
 );
 
 type CardWrapperProps = { children: ReactNode };

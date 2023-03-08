@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
@@ -9,31 +10,33 @@ export default {
 
 // dprint-ignore
 export const Card_: React.FC = () => (
-  <VariantsGallery columns={5}>
-    <Type />
-    <Variant label="padding" value="none" />
-    <Variant label="padding" value="sm" />
-    <Variant label="padding" value="md" />
-    <Variant label="padding" value="lg" />
+  <DocumentationStory>
+    <VariantsGallery columns={5}>
+      <Type />
+      <Variant label="padding" value="none" />
+      <Variant label="padding" value="sm" />
+      <Variant label="padding" value="md" />
+      <Variant label="padding" value="lg" />
 
-    <Variant label="variant" value="strong" />
-    <Card padding="none" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-    <Card padding="sm" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-    <Card padding="md" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-    <Card padding="lg" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
+      <Variant label="variant" value="strong" />
+      <Card padding="none" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
+      <Card padding="sm" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
+      <Card padding="md" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
+      <Card padding="lg" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
 
-    <Variant label="variant" value="default" />
-    <Card padding="none" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-    <Card padding="sm" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-    <Card padding="md" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-    <Card padding="lg" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
+      <Variant label="variant" value="default" />
+      <Card padding="none" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
+      <Card padding="sm" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
+      <Card padding="md" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
+      <Card padding="lg" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
 
-    <Variant label="variant" value="inverse" />
-    <Card padding="none" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-    <Card padding="sm" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-    <Card padding="md" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-    <Card padding="lg" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-  </VariantsGallery>
+      <Variant label="variant" value="inverse" />
+      <Card padding="none" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
+      <Card padding="sm" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
+      <Card padding="md" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
+      <Card padding="lg" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
+    </VariantsGallery>
+  </DocumentationStory>
 );
 
 const Text1: React.FC = () => (

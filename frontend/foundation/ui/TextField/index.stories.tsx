@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { TextField } from "@foundation/ui/TextField";
@@ -13,20 +14,22 @@ export const TextField_: React.FC = () => {
   const [value, setValue] = useAtom(valueAtom);
 
   return (
-    <VariantsGallery columns={2}>
-      <Variant label="state" value="default" />
-      <TextField label="What's your favorite color?" value={value} onChange={setValue} />
+    <DocumentationStory>
+      <VariantsGallery columns={2}>
+        <Variant label="state" value="default" />
+        <TextField label="What's your favorite color?" value={value} onChange={setValue} />
 
-      <Variant label="state" value="disabled" />
-      <TextField disabled label="What's your favorite color?" value={value} onChange={setValue} />
+        <Variant label="state" value="disabled" />
+        <TextField disabled label="What's your favorite color?" value={value} onChange={setValue} />
 
-      <Variant label="state" value="error" />
-      <TextField
-        errorMessage="Value is not cool enough."
-        label="What's your favorite color?"
-        value={value}
-        onChange={setValue}
-      />
-    </VariantsGallery>
+        <Variant label="state" value="error" />
+        <TextField
+          errorMessage="Value is not cool enough."
+          label="What's your favorite color?"
+          value={value}
+          onChange={setValue}
+        />
+      </VariantsGallery>
+    </DocumentationStory>
   );
 };

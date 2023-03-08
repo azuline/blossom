@@ -1,3 +1,4 @@
+import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";
@@ -7,7 +8,7 @@ export default {
 };
 
 export const Flex_: React.FC = () => (
-  <Flex sx={{ direction: "column", gap: "16" }}>
+  <DocumentationStory>
     <Card sx={{ w: "356", h: "128" }}>
       <Flex sx={{ w: "full", h: "full", gap: "8" }}>
         <Center sx={{ h: "full", w: "full", background: "brand.default", color: "brand.tint" }}>
@@ -46,5 +47,5 @@ export const Flex_: React.FC = () => (
         </Center>
       </Flex>
     </Card>
-  </Flex>
+  </DocumentationStory>
 );

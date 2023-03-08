@@ -6,9 +6,11 @@ export default {
 };
 
 export const View_: React.FC = () => (
-  <View sx={{ bwidth: "1", maxw: "272", p: "36" }}>
-    <Type paragraph>
-      I&apos;m a polymorphic component (default div) that accepts all styles via the sx prop!
-    </Type>
-  </View>
+  <DocumentationStory>
+    <View sx={{ bwidth: "1", maxw: "272", p: "36" }}>
+      <Type paragraph>
+        I&apos;m a polymorphic component (default div) that accepts all styles via the sx prop!
+      </Type>
+    </View>
+  </DocumentationStory>
 );
