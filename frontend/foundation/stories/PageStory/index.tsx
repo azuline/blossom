@@ -1,3 +1,4 @@
+import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPadding";
 import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";
 
@@ -6,7 +7,9 @@ type Props = {
 };
 
 export const PageStory: React.FC<Props> = props => (
-  <View sx={{ w: "full", h: "full" }}>
-    {props.children}
-  </View>
+  <LayoutPaddingVariableSetter>
+    <View sx={{ w: "full", h: "full" }}>
+      {props.children}
+    </View>
+  </LayoutPaddingVariableSetter>
 );

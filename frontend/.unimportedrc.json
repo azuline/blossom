@@ -11,25 +11,20 @@
     "**/dist/**",
     "**/build/**",
     "**/vite.config.ts",
-    "**/coverage/**"
+    "**/coverage/**",
+    "**/public/**",
+    "**/foundation/stories/**",
+    "**/foundation/testing/**"
   ],
   "ignoreUnused": [
     "@vanilla-extract/dynamic"
   ],
   "ignoreUnimported": [
+    "foundation/icons/Icon/index.css.ts",
     "foundation/routing/components/HeadlessLink/index.tsx",
     "foundation/routing/state/prefetch.ts",
     "foundation/routing/state/redirect.ts",
-    "foundation/stories/PageStory/index.tsx",
-    "foundation/stories/StoryLayout/index.tsx",
-    "foundation/stories/StorySection/index.tsx",
-    "foundation/stories/Variant/index.tsx",
-    "foundation/stories/VariantsGallery/index.css.ts",
-    "foundation/stories/VariantsGallery/index.tsx",
     "foundation/style/utils.ts",
-    "foundation/testing/msw.client.ts",
-    "foundation/testing/msw.server.ts",
-    "foundation/testing/rpc.ts",
     "foundation/ui/Bleed/index.css.ts",
     "foundation/ui/Bleed/index.tsx",
     "foundation/ui/Card/index.css.ts",
