@@ -47,7 +47,7 @@ export const Icon_: React.FC = () => (
         {Object.keys(ICONS_MAP).sort().map(name => (
           <Flex key={name} sx={{ direction: "column", gap: "4", align: "center" }}>
             <Icon color="neutral.strong" icon={name as keyof typeof ICONS_MAP} size="sm" />
-            <Type variant="xs">{name}</Type>
+            <Type sx={{ color: "neutral.weak" }} variant="xs">{name}</Type>
           </Flex>
         ))}
       </View>
