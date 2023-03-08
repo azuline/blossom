@@ -10,8 +10,8 @@ type Props = {
 // because that would prevent Playwright from taking a screenshot of the full
 // container in our visual tests.
 export const DocumentationStory: React.FC<Props> = props => (
-  <Flex sx={{ p: "36", w: "fit-content", h: "full" }}>
-    <Flex sx={{ direction: "column", gap: "44", w: "fit-content", h: "full" }}>
+  <Flex sx={{ p: "36", w: "fit-content", h: "fit-content" }}>
+    <Flex sx={{ direction: "column", gap: "44", w: "fit-content", h: "fit-content" }}>
       {props.children}
     </Flex>
   </Flex>

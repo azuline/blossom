@@ -1,4 +1,4 @@
-import { IconCheck } from "@foundation/icons/IconCheck";
+import { Icon } from "@foundation/icons/Icon";
 import { SX, sx } from "@foundation/style/sprinkles.css";
 import {
   sCheckboxBox,
@@ -63,7 +63,7 @@ export const Checkbox: React.FC<Props> = _props => {
           }),
         )}
       >
-        {props.checked && <IconCheck size="full" />}
+        {props.checked && <Icon icon="check" size="full" />}
       </View>
       {props.label !== undefined && (
         <Type sx={{ color: props.disabled ? "neutral.weak" : "neutral.default" }}>
