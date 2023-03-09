@@ -6,21 +6,19 @@ _Still pretty early WIP!_
 
 ## What's this?
 
-We can bucket most systems into [Product systems and Platform systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
-Product systems solve an end user problem and serve the customer. Product
-systems are built on top of platform systems, which solve foundational problems
-for product systems to enable efficient and correct delivery.
+In web applications, we can bucket most systems into two categories:
+[Product systems and Platform systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
+_Product systems_ solve an end user problem and serve the customer. They are
+built on top of _platform systems_, which solve foundational problems and
+enable efficient and correct delivery.
 
-While end user problems are specific to the product being built, many products
+While product systems are specific to the product being built, many products
 tend to share similar platform problems, especially prior to reaching scale.
-
-My pet projects have similarly shaped platform problems. _blossom_ is this
-factored out shared platform.
+My pet projects have similarly shaped platform problems. _blossom_ is a shared
+platform to solve platform problems across my pet projects.
 
 More generally, _blossom_ solves a set of common platform problems that
-small-to-medium scale monolithic web applications have. It can serve as a
-reference for an existing web application or as a template for a greenfield
-project.
+small-to-medium scale monolithic web applications have.
 
 _blossom_ contains opinionated design decisions and modern library choices. All
 libraries are cohesively integrated together at the platform layer, so that
@@ -28,17 +26,21 @@ product development can easily use all platform libraries with zero-friction.
 
 ## What's in here?
 
-_blossom_ contains a platform that spans from infrastructure to design. In this
-section, we'll cover interesting features and design decisions that _blossom_
-contains. Each feature is further documented in its own README. This section
-links to those READMEs.
+_blossom_ contains a platform that solves problems ranging from infrastructure
+to design.
+
+In this section, we'll cover interesting features and design decisions that
+_blossom_ contains. Each feature is further documented in its own README. This
+section links to those READMEs.
 
 ### Infrastructure
 
 _blossom's_ infrastructure currently solves for developer environments, builds,
-CI/CD pipelines, and service orchestration. We operate the assumption that
-hardware is already provisioned and managed with a functioning Nomad+Consul
-cluster. My NixOS/Nomad/Consul configurations are located [here](https://github.com/azuline/nixos).
+CI/CD pipelines, and service orchestration.
+
+We operate under the assumption that hardware is already provisioned and
+managed with a functioning Nomad+Consul cluster. For reference, my
+NixOS+Nomad+Consul configurations are located [here](https://github.com/azuline/nixos).
 
 - Nix for package management & developer environments.
 - Nomad for service orchestration.
@@ -70,7 +72,7 @@ with Python.
 ### Frontend
 
 _blossom's_ frontend is a React SPA written in TypeScript. An SPA was chosen
-purely for cheap cost of deployment (S3+CDN :money_with_wings:).
+purely for cheap cost of deployment (CDNs :money_with_wings:).
 
 - Design System built with React Aria and vanilla-extract.
 - Light and dark theme support.
@@ -111,35 +113,41 @@ defined in `nix/`. To bootstrap the developer environment and get started:
 3. [Install `direnv`](https://nixos.wiki/wiki/Development_environment_with_nix-shell#direnv).
    (Or run `nix develop` to start a dev shell).
 
+After installing Nix and activating the developer environment, all tools and
+commands should work.
+
 ## Monorepo Organization
 
-The monorepo is organized at the top-level by service type. For example,
-backends go into `backend/`, frontends go into `frontend/`.
+The monorepo is organized at the top-level by service type. Examples of service
+types are frontend, backend, nix, and nomad. Each service type has its own
+internal organization.
 
-## Backend & Frontend
+### Application Services
 
-We've adopted a pattern inside `backend/` and `frontend/` that splits packages
-into multiple second-level directories.
-
-- `foundation/` contains platform libraries and tools. This is named
-  `foundation` instead of `platform` because `platform` is a Python standard
-  library.
-- `product/` contains the product's user-facing application.
-- `codegen/` contains the outputs of codegen tooling.
-
-Within each second-level directory live packages. Each package contains a
+The application services (the backend and frontend services) are organized as
+packages. Each package solves one class of problems or feature and contains a
 README that document its purpose, context, and usage.
 
-So the directory structure is three-tiered: `service type -> app/foundation -> package`.
+Packages are sorted into _package groups_. The package groups are:
 
-## Infrastructure
+- `foundation/` contains platform packages.
+- `product/` contains the product packages.
+- `codegen/` contains the packages that are produced from codegen tooling.
 
-Infrastructure code is structured similarly. The top level is organized by
-what type of infrastructure it is.
+Inside each package group, packages are arranged in a flat structure. All
+package directories are direct children of a package group directory.
+
+_Note: The platform packages live in `foundation` instead of `platform` because
+`platform` is a Python standard library package._
+
+### Infrastructure
+
+Infrastructure is structured similarly. The top level is organized by type of
+infrastructure.
 
 - `flake.nix` aggregates all of Nix outputs derivations into a single flake.
 - `docker-compose.yaml` defines all services used in the local environment.
-- `nix/` contains Nix derivations for our packages and toolchains.
+- `nix/` contains Nix derivations for our packages, toolchains, and builds.
 - `nomad/` contains Nomad service definitions.
 - `.github/workflows/` contains the CI/CD pipeline configurations.
 
