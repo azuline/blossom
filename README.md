@@ -35,12 +35,21 @@ links to those READMEs.
 
 ### Infrastructure
 
+_blossom's_ infrastructure currently solves for developer environments, builds,
+CI/CD pipelines, and service orchestration. We operate the assumption that
+hardware is already provisioned and managed with a functioning Nomad+Consul
+cluster. My NixOS/Nomad/Consul configurations are located [here](https://github.com/azuline/nixos).
+
 - Nix for package management & developer environments.
 - Nomad for service orchestration.
 - Github Actions CI pipeline.
 - Github Actions CD pipeline with Nomad and Tailscale.
 
 ### Backend
+
+_blossom's_ backend is a monolithic Python (+mypy) application backed by
+Postgres. Python was chosen because I am the most comfortable and efficient
+with Python.
 
 - Multi-tenant account system.
 - RPC framework with TypeScript type codegen.
@@ -60,7 +69,11 @@ links to those READMEs.
 
 ### Frontend
 
+_blossom's_ frontend is a React SPA written in TypeScript. An SPA was chosen
+purely for cheap cost of deployment (S3+CDN :money_with_wings:).
+
 - Design System built with React Aria and vanilla-extract.
+- Light and dark theme support.
 - RPC framework with imperative, Jotai, and Tanstack Query bindings.
 - Jotai state management.
 - Error handling with rich metadata and stacktraces.
@@ -73,9 +86,18 @@ links to those READMEs.
 - Unit and integration tests with Vitest.
 - Visual snapshot tests with Playwright and Ladle.
 - RPC mocks with msw for Ladle stories and Vitest testing.
-- SPA builds with the Vite toolchain (SWC+esbuild+Rollup).
 - Linting with eslint+dprint+Semgrep.
+- Builds with the Vite toolchain (SWC+esbuild+Rollup).
 - pnpm dependency management.
+
+### Design
+
+Designs are built in Figma. The Figma files are still private; might publish
+them later if I'm feeling cute idk~
+
+- Figma Tokens file for the Design System.
+- Figma component library for the Design System components.
+- Figma libraries for the palette and themes.
 
 ## Getting Started
 
