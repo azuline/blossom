@@ -14,6 +14,7 @@
     "**/coverage/**",
     "**/public/**",
     "**/foundation/stories/**",
+    "**/foundation/ui/**",
     "**/foundation/testing/**"
   ],
   "ignoreUnused": [
@@ -25,14 +26,6 @@
     "foundation/routing/state/prefetch.ts",
     "foundation/routing/state/redirect.ts",
     "foundation/style/utils.ts",
-    "foundation/ui/Bleed/index.css.ts",
-    "foundation/ui/Bleed/index.tsx",
-    "foundation/ui/Card/index.css.ts",
-    "foundation/ui/Card/index.tsx",
-    "foundation/ui/Link/index.css.ts",
-    "foundation/ui/Link/index.tsx",
-    "foundation/ui/Spacer/index.css.ts",
-    "foundation/ui/Spacer/index.tsx",
     "playwright.config.ts",
     "public/mockServiceWorker.js"
   ],

@@ -27,7 +27,6 @@ See the `Makefile` for a list of common dev tool commands.
 - CSS Framework: vanilla-extract
 - Router: Wouter
 - Requests: Tanstack Query
-- Data Validation: Zod [TODO]
 - Linters/Formatters: ESLint + Dprint + Semgrep
 - Test Runner: Vitest
 - Component Stories: Ladle

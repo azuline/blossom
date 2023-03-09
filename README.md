@@ -1,53 +1,95 @@
-# Blossom
+# blossom
 
-This repository contains a template for a full stack web application that I
-pulled out from some of my other projects. This repository doesn't contain any
-code specific to a single project; it mainly contains a developer platform and
-some developer tooling.
+A platform for an excellent full stack web application developer experience.
 
-This is still pretty early WIP; as my other projects mature, this repository
-will cherry-pick code from them. Better documentation will come with time.
+_Still pretty early WIP!_
 
-# Contents
+## What's this?
 
-There's a lot of stuff in this repository, but some of the more fun contents
-are:
+We can bucket most systems into [_Product_ systems and _Platform_ systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
+Product systems solve an end user problem and serve the customer. Product
+systems are built on top of platform systems, which solve foundational problems
+for product systems to enable efficient and correct delivery.
 
-Backend:
+While end user problems are specific to the product being built, many products
+tend to share similar platform problems, especially prior to reaching scale.
 
-- Database migrations with yoyo-migrations.
+My pet projects have similarly shaped platform problems. _blossom_ is this
+factored out shared platform.
+
+More generally, _blossom_ solves a set of common platform problems that
+small-to-medium scale monolithic web applications have. It can serve as a
+reference for an existing web application, or as a template for a greenfield
+project.
+
+_blossom_ contains opinionated design decisions and modern library choices. All
+libraries are cohesively integrated together at the platform layer, so that
+product development can easily use all platform libraries with zero-friction.
+
+## What's in here?
+
+_blossom_ contains a platform that spans from infrastructure to design. In this
+section, we'll cover interesting features and design decisions that _blossom_
+contains. Each feature is further documented in its own README. This section
+links to those READMEs.
+
+### Infrastructure
+
+- Nix for package management & developer environments.
+- Nomad for service orchestration.
+- Github Actions CI pipeline.
+- Github Actions CD pipeline with Nomad and Tailscale.
+
+### Backend
+
+- Multi-tenant account system.
+- RPC framework with TypeScript type codegen.
+- Nix dependency management.
+- Nix builds.
+- Ergonomic test fixture system for concise and maintainable tests.
+- Highly performant parallelized tests that share a single database.
 - Postgres Row Level Security for secure multi-tenancy.
-- Database queries via the sqlc database ORM
-- An ergonomic RPC framework with TypeScript binding codegen.
-- A single massive pytest fixture for efficiently writing maintainable tests.
+- Secrets vault for secure encrypted secret storage.
+- Database migrations with yoyo-migrations.
+- Database table conventions and tests to enforce them.
+- Database queries with the sqlc database ORM.
+- Monolithic CLI for service operations and developer tooling.
+- Quart webserver served with Hypercorn.
+- Configuration via environment variables.
+- Linting with black, Ruff, and Semgrep.
 
-Frontend:
+### Frontend
 
-- A Design System built with React Aria and vanilla-extract. Tokens and
-  components contained in this repository; design guidelines unwritten.
-- An RPC framework with function, Tanstack Query, and Jotai bindings. Contracts
-  are codegenned from the backend.
-- Unit testing with Vitest and React Testing Library (TODO).
-- Visual testing with Ladle and Playwright.
+- Design System built with React Aria and vanilla-extract.
+- RPC framework with imperative, Jotai, and Tanstack Query bindings.
+- Jotai state management.
+- Error handling with rich metadata and stacktraces.
+- Icon system with tokenized colors and sizes, and lazy-loading.
+- Form system for convenient form creation.
+- Page layout primitives for consistency and flexibility.
+- Loader components for consistent crafted loading states.
+- Page routing with code splitting and prefetching.
+- Ladle stories with a library for easy story development.
+- Unit and integration tests with Vitest.
+- Visual snapshot tests with Playwright and Ladle.
+- RPC mocks with msw for Ladle stories and Vitest testing.
+- SPA builds with the Vite toolchain (SWC+esbuild+Rollup).
+- Linting with eslint+dprint+Semgrep.
+- pnpm dependency management.
 
-Infrastructure:
+## Getting Started
 
-- Nix package management & developer environment.
-
-# Getting Started
-
-We use Nix to manage development environments. All packages we use are
-declaratively defined in `nix/` alongside some other modifications to the
-shell.
+We use Nix to manage developer environments. All tools we use are declaratively
+defined in `nix/`. To bootstrap the developer environment and get started:
 
 1. Follow the [Linux guide](https://nixos.wiki/wiki/Nix_Installation_Guide)
    or [MacOS nix-darwin](https://github.com/LnL7/nix-darwin) guide to install
    Nix.
 2. [Enable Nix Flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes).
 3. [Install `direnv`](https://nixos.wiki/wiki/Development_environment_with_nix-shell#direnv).
-   (Or run `nix develop` to start a devshell).
+   (Or run `nix develop` to start a dev shell).
 
-# Monorepo Organization
+## Monorepo Organization
 
 The monorepo is organized at the top-level by service type. For example,
 backends go into `backend/`, frontends go into `frontend/`.
@@ -57,20 +99,14 @@ backends go into `backend/`, frontends go into `frontend/`.
 We've adopted a pattern inside `backend/` and `frontend/` that splits packages
 into multiple second-level directories.
 
-- `foundation/` contains application-agnostic libraries and tools that support
-  and improve product development. This directory contains the developer
-  platform.
+- `foundation/` contains platform libraries and tools. This is named
+  `foundation` instead of `platform` because `platform` is a Python standard
+  library.
 - `product/` contains the product's user-facing application.
 - `codegen/` contains the outputs of codegen tooling.
 
-We believe that this models the [product and platform split](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at)
-more explicitly and makes the platform's boundaries clearer and easier to
-maintain. This is named foundation instead of platform because Python has a
-standard library module named `platform` (crying).
-
-Within each second-level directory live packages. All packages contain READMEs
-that document their purpose, context, and usage. Though I'm a little lazy with
-this so it's not so good right now.
+Within each second-level directory live packages. Each package contains a
+README that document its purpose, context, and usage.
 
 So the directory structure is three-tiered: `service type -> app/foundation -> package`.
 
@@ -82,11 +118,10 @@ what type of infrastructure it is.
 - `flake.nix` aggregates all of Nix outputs derivations into a single flake.
 - `docker-compose.yaml` defines all services used in the local environment.
 - `nix/` contains Nix derivations for our packages and toolchains.
-- `.github/` contains the CI configurations.
+- `nomad/` contains Nomad service definitions.
+- `.github/workflows/` contains the CI/CD pipeline configurations.
 
-There isn't much infrastructure yet.
-
-# Developer Port Space
+## Developer Port Space
 
 - 40851: Backend
 - 40852: Postgres
