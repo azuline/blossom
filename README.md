@@ -6,7 +6,7 @@ _Still pretty early WIP!_
 
 ## What's this?
 
-We can bucket most systems into [_Product_ systems and _Platform_ systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
+We can bucket most systems into [Product systems and Platform systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
 Product systems solve an end user problem and serve the customer. Product
 systems are built on top of platform systems, which solve foundational problems
 for product systems to enable efficient and correct delivery.
@@ -19,7 +19,7 @@ factored out shared platform.
 
 More generally, _blossom_ solves a set of common platform problems that
 small-to-medium scale monolithic web applications have. It can serve as a
-reference for an existing web application, or as a template for a greenfield
+reference for an existing web application or as a template for a greenfield
 project.
 
 _blossom_ contains opinionated design decisions and modern library choices. All
