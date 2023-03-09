@@ -42,10 +42,10 @@ We operate under the assumption that hardware is already provisioned and
 managed with a functioning Nomad+Consul cluster. For reference, my
 NixOS+Nomad+Consul configurations are located [here](https://github.com/azuline/nixos).
 
-- Nix for package management & developer environments.
-- Nomad for service orchestration.
-- Github Actions CI pipeline.
-- Github Actions CD pipeline with Nomad and Tailscale.
+- [Nix](./nix) for package management & developer environments.
+- [Nomad](./nomad) for service orchestration.
+- [Github Actions CI](./github/workflows) pipeline.
+- [Github Actions CD](./github/workflows) pipeline with Nomad and Tailscale.
 
 ## Backend
 

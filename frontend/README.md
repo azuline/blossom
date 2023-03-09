@@ -1,8 +1,5 @@
 # Frontend
 
-The frontend is written with full client side React, with the sole rationale of
-being cheaper to deploy. SSR is pretty cool, but it costs money.
-
 # Doing Things
 
 See the `Makefile` for a list of common dev tool commands.
@@ -19,7 +16,7 @@ See the `Makefile` for a list of common dev tool commands.
 ## Stack
 
 - Language: TypeScript
-- Builds: Vite (esbuild/Rollup)
+- Builds: Vite (SWC+esbuild+Rollup)
 - Package Manager: pnpm
 - State Management: Jotai
 - UI Framework: React
@@ -27,8 +24,8 @@ See the `Makefile` for a list of common dev tool commands.
 - CSS Framework: vanilla-extract
 - Router: Wouter
 - Requests: Tanstack Query
-- Linters/Formatters: ESLint + Dprint + Semgrep
+- Linters/Formatters: ESLint+dprint+Semgrep
 - Test Runner: Vitest
 - Component Stories: Ladle
-- Visual Test Runner: Ladle + Playwright
+- Visual Test Runner: Ladle+Playwright
 - E2E Test Runner: Playwright [TODO]
