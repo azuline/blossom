@@ -74,20 +74,21 @@ with Python.
 _blossom's_ frontend is a React SPA written in TypeScript. An SPA was chosen
 purely for cheap cost of deployment (CDNs :money_with_wings:).
 
-- Design System built with React Aria and vanilla-extract.
-- Light and dark theme support.
-- RPC framework with imperative, Jotai, and Tanstack Query bindings.
+- [Design System](./frontend/foundation/ui) built with React Aria and vanilla-extract.
+- [Light and dark theme support](./frontend/foundation/style).
+- [RPC framework](./frontend/foundation/rpc) with imperative, Jotai, and Tanstack Query bindings.
 - Jotai state management.
-- Error handling with rich metadata and stacktraces.
-- Icon system with tokenized colors and sizes, and lazy-loading.
-- Form system for convenient form creation.
-- Page layout primitives for consistency and flexibility.
-- Loader components for consistent crafted loading states.
-- Page routing with code splitting and prefetching.
-- Ladle stories with a library for easy story development.
+- [Error handling](./frontend/foundation/errors) with rich metadata and stacktraces.
+- [Icon system](./frontend/foundation/icons) with tokenized colors and sizes, and lazy-loading.
+- [Form system](./frontend/foundation/forms) for convenient form creation.
+- [Page layout primitives](./frontend/foundation/layout) for consistency and flexibility.
+- [Loader components](./frontend/foundation/loaders) for consistent crafted loading states.
+- [Page routing](./frontend/foundation/routing) with code splitting and prefetching.
+- [Ladle stories](https://celestial.sunsetglow.net/) with a
+  [library for easy story development](./frontend/foundation/stories).
 - Unit and integration tests with Vitest.
-- Visual snapshot tests with Playwright and Ladle.
-- RPC mocks with msw for Ladle stories and Vitest testing.
+- [Visual snapshot tests](./frontend/visualtest) with Playwright and Ladle.
+- [RPC mocks](./frontend/foundation/testing) with msw for Ladle stories and Vitest testing.
 - Linting with eslint+dprint+Semgrep.
 - Builds with the Vite toolchain (SWC+esbuild+Rollup).
 - pnpm dependency management.

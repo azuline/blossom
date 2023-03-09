@@ -1,8 +1,17 @@
 # icons
 
-The `icons` package TODO.
+The `icons` package exposes a single `Icon` component with which icons can be
+rendered in the application.
 
-Icons are vendored from [Radix Icons](https://icons.radix-ui.com/).
+The `Icon` component lazy loads icons, preventing icons from increasing the
+initial bundle size. This also allows for a single `Icon` component to be used
+as the entrypoint for all icons: a superior developer experience.
+
+Visit the [story](https://celestial.sunsetglow.net/?story=components--atoms--icon-)
+for additional documentation on the icon component.
+
+Currently, icons are vendored from [Radix Icons](https://icons.radix-ui.com/).
+This will likely change.
 
 ### Radix Icons License
 

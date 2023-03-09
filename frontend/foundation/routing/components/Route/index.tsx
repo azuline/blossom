@@ -1,6 +1,6 @@
 import { filterObject } from "@foundation/lib/filterObject";
 import { AppLoader } from "@foundation/loaders/AppLoader";
-import { pathsAtom } from "@foundation/routing/state/paths";
+import { availablePathsAtom } from "@foundation/routing/state/paths";
 import { useAtom } from "jotai";
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { Route as WouterRoute, useRoute } from "wouter";
@@ -15,7 +15,7 @@ export const Route = (props: RouteProps): React.ReactElement => {
   const [matches, params] = useRoute(props.path);
   const Page = useMemo(() => lazy(props.factory), [props.factory]);
 
-  const [, setPaths] = useAtom(pathsAtom);
+  const [, setPaths] = useAtom(availablePathsAtom);
 
   useEffect(() => {
     setPaths(ps => ({ ...ps, [props.path]: props.factory }));

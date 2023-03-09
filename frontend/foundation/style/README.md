@@ -1,13 +1,11 @@
 # style
 
-The `style` package contains:
+The `style` package contains our application theme and global styles. We export
+a token object at `t` and a vanilla-extract sprinkles function as `sx`.
 
-1. Theme token definitions.
-2. The `sprinkles` and `style` functions for creating new styles.
-3. Global styles.
-4. CSS reset.
+## CSS Reset
 
-We style the application with [vanilla-extract](https://vanilla-extract.style/).
+We use Josh Comeau's [Modern CSS Reset](https://www.joshwcomeau.com/css/custom-css-reset/).
 
-We use Inter 4.0-beta7 as our font, which supports Inter Display as an
-optical-size axis on the variable font.
+We also have a series of component-specific custom resets to smooth over the
+browser implementations so that the UI Library doesn't clash with native styles.

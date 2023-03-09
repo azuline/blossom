@@ -100,7 +100,8 @@ export const moonlightLight = {
       strong: moonlightPalette["neutral"]["6"],
       default: moonlightPalette["neutral"]["28"],
       weak: moonlightPalette["neutral"]["48"],
-      loader: moonlightPalette["neutral"]["85"],
+      loader: `linear-gradient(91.22deg, ${moonlightPalette["neutral"]["92"]} 0%, ${moonlightPalette["neutral"]["85"]
+        } 80%)`,
     },
     inverse: {
       strong: moonlightPalette["neutral"]["98"],

@@ -13,6 +13,10 @@ See the `Makefile` for a list of common dev tool commands.
 - `public/` contains static assets.
 - `visualtest/` contains the visual testing harness and snapshots.
 
+# Stories
+
+The frontend stories are hosted with Ladle at https://celestial.sunsetglow.net.
+
 ## Stack
 
 - Language: TypeScript

@@ -1,10 +1,10 @@
 import { RPCs } from "@codegen/rpc";
-import { RPCError } from "@foundation/errors/rpc";
-import { atomForm } from "@foundation/form/state";
+import { atomForm } from "@foundation/forms/state";
 import { Icon } from "@foundation/icons/Icon";
 import { LayoutPadding } from "@foundation/layout/LayoutPadding";
 import { useRedirect } from "@foundation/routing/state/redirect";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
+import { RPCError } from "@foundation/rpc/error";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
 import { Checkbox } from "@foundation/ui/Checkbox";

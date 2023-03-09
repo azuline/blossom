@@ -1,5 +1,5 @@
 import { RPCErrors, RPCs, RPCSystemErrors } from "@codegen/rpc";
-import { BaseError, ErrorOptions } from "@foundation/errors/base";
+import { BaseError, ErrorOptions } from "@foundation/errors";
 
 const TRANSIENT_ERRORS: readonly (keyof RPCErrors)[] = [
   "NetworkError",

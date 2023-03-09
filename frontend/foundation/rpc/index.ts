@@ -1,13 +1,13 @@
 import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
-import { BaseError } from "@foundation/errors/base";
-import {
-  PossibleRPCErrors,
-  RPCError,
-} from "@foundation/errors/rpc";
+import { BaseError } from "@foundation/errors";
 import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { Getter } from "jotai";
 import { atomsWithQuery } from "jotai-tanstack-query";
 import { useCallback } from "react";
+import {
+  PossibleRPCErrors,
+  RPCError,
+} from "./error";
 
 /**
  * rpc executes an RPC request to the backend handler of the provided RPC name with the

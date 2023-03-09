@@ -1,11 +1,11 @@
-import { pathsAtom } from "@foundation/routing/state/paths";
+import { availablePathsAtom } from "@foundation/routing/state/paths";
 import { useAtom } from "jotai";
 import { useCallback, useEffect } from "react";
 import { useRouter } from "wouter";
 
 export const usePrefetchPath = (route: string | undefined): void => {
   const router = useRouter();
-  const [paths] = useAtom(pathsAtom);
+  const [paths] = useAtom(availablePathsAtom);
 
   const prefetch = useCallback((to: string) => {
     const path = Array.from(Object.keys(paths)).find(
