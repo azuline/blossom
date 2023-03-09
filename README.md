@@ -1,10 +1,10 @@
-# blossom
+# _blossom_
 
 A platform for an excellent full stack web application developer experience.
 
 _Still pretty early WIP!_
 
-## What's this?
+# What's this?
 
 In web applications, we can bucket most systems into two categories:
 [Product systems and Platform systems](https://newsletter.pragmaticengineer.com/p/the-platform-and-program-split-at).
@@ -24,7 +24,7 @@ _blossom_ contains opinionated design decisions and modern library choices. All
 libraries are cohesively integrated together at the platform layer, so that
 product development can easily use all platform libraries with zero-friction.
 
-## What's in here?
+# What's in here?
 
 _blossom_ contains a platform that solves problems ranging from infrastructure
 to design.
@@ -33,7 +33,7 @@ In this section, we'll cover interesting features and design decisions that
 _blossom_ contains. Each feature is further documented in its own README. This
 section links to those READMEs.
 
-### Infrastructure
+## Infrastructure
 
 _blossom's_ infrastructure currently solves for developer environments, builds,
 CI/CD pipelines, and service orchestration.
@@ -47,7 +47,7 @@ NixOS+Nomad+Consul configurations are located [here](https://github.com/azuline/
 - Github Actions CI pipeline.
 - Github Actions CD pipeline with Nomad and Tailscale.
 
-### Backend
+## Backend
 
 _blossom's_ backend is a monolithic Python (+mypy) application backed by
 Postgres. Python was chosen because I am the most comfortable and efficient
@@ -69,7 +69,7 @@ with Python.
 - Configuration via environment variables.
 - Linting with black, Ruff, and Semgrep.
 
-### Frontend
+## Frontend
 
 _blossom's_ frontend is a React SPA written in TypeScript. An SPA was chosen
 purely for cheap cost of deployment (CDNs :money_with_wings:).
@@ -92,7 +92,7 @@ purely for cheap cost of deployment (CDNs :money_with_wings:).
 - Builds with the Vite toolchain (SWC+esbuild+Rollup).
 - pnpm dependency management.
 
-### Design
+## Design
 
 Designs are built in Figma. The Figma files are still private; might publish
 them later if I'm feeling cute idk~
@@ -101,7 +101,7 @@ them later if I'm feeling cute idk~
 - Figma component library for the Design System components.
 - Figma libraries for the palette and themes.
 
-## Getting Started
+# Getting Started
 
 We use Nix to manage developer environments. All tools we use are declaratively
 defined in `nix/`. To bootstrap the developer environment and get started:
@@ -116,13 +116,13 @@ defined in `nix/`. To bootstrap the developer environment and get started:
 After installing Nix and activating the developer environment, all tools and
 commands should work.
 
-## Monorepo Organization
+# Monorepo Organization
 
 The monorepo is organized at the top-level by service type. Examples of service
 types are frontend, backend, nix, and nomad. Each service type has its own
 internal organization.
 
-### Application Services
+## Application Services
 
 The application services (the backend and frontend services) are organized as
 packages. Each package solves one class of problems or feature and contains a
@@ -140,7 +140,7 @@ package directories are direct children of a package group directory.
 _Note: The platform packages live in `foundation` instead of `platform` because
 `platform` is a Python standard library package._
 
-### Infrastructure
+## Infrastructure
 
 Infrastructure is structured similarly. The top level is organized by type of
 infrastructure.
@@ -151,7 +151,7 @@ infrastructure.
 - `nomad/` contains Nomad service definitions.
 - `.github/workflows/` contains the CI/CD pipeline configurations.
 
-## Developer Port Space
+# Developer Port Space
 
 - 40851: Backend
 - 40852: Postgres
