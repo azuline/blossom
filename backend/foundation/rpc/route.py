@@ -257,7 +257,7 @@ async def _validate_data(spec: type[T], method: Method) -> T | None:
     this decorator parses the request data with that dataclass. If parsing fails, this
     decorator returns an error to the requester.
     """
-    if spec is None:
+    if spec.__name__ == "NoneType":
         return None
 
     if method == "GET":

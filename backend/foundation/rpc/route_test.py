@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Any
 
-from quart import Blueprint, Quart, json
+from quart import Blueprint, Quart
 
 from foundation.rpc.route import (
     SESSION_ID_KEY,
@@ -38,7 +37,7 @@ async def make_test_route(
         authorization=authorization,
         mount=False,
     )
-    async def test(req: Req[Any]) -> SpecTestOut:
+    async def test(req: Req[SpecTestIn]) -> SpecTestOut:
         return SpecTestOut(
             data=req.data,
             user_id=req.user.id if req.user else None,
@@ -155,7 +154,4 @@ async def test_route_data_wrong_type(t: TFix) -> None:
 async def test_route_no_data(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await t.rpc.execute("Test")
-    t.rpc.assert_success(resp)
-
-    outdata = json.loads(await resp.get_data())
-    assert outdata["data"] is None
+    await t.rpc.assert_error(resp, DataMismatchError)
