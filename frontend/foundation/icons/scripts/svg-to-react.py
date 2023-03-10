@@ -24,15 +24,18 @@ def indent(s: str, i: int) -> str:
 
 
 for f in icons_dir.glob("**/*.svg"):
-    print(f"Handling icon: {f}")
+    iset = f.parent.name
+    print(f"Handling icon {f.name} of set {iset}")
     with f.open("r") as fp:
         contents = fp.read()
 
-    # Replace width+heights.
-    contents = re.sub(r'width="[^"]+"', 'width="100%"', contents)
-    contents = re.sub(r'height="[^"]+"', 'height="100%"', contents)
-    # Remove any classes.
-    contents = re.sub(r'class="[^"]+"', "", contents)
+    # Per-set changes.
+    if iset == "feather":
+        # Replace width+heights.
+        contents = re.sub(r'width="24"', 'width="100%"', contents)
+        contents = re.sub(r'height="24"', 'height="100%"', contents)
+        # Remove feather classes.
+        contents = re.sub(r'class="[^"]+"', "", contents)
 
     # Turn into React component.
     contents = f"""\
