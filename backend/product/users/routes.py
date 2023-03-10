@@ -29,11 +29,7 @@ class GetPageLoadInfoOut:
     available_tenants: list[GetPageLoadInfoTenant]
 
 
-@route(
-    authorization="public",
-    method="GET",
-    errors=[],
-)
+@route(authorization="public", method="GET", errors=[])
 async def get_page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
     """
     Fetch the information needed at time of page load to identify the logged in user and

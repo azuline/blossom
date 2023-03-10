@@ -32,11 +32,7 @@ async def make_test_route(
     app: Quart,
     authorization: Authorization,
 ) -> None:
-    @route(
-        errors=[],
-        authorization=authorization,
-        mount=False,
-    )
+    @route(errors=[], authorization=authorization, mount=False)
     async def test(req: Req[SpecTestIn]) -> SpecTestOut:
         return SpecTestOut(
             data=req.data,
