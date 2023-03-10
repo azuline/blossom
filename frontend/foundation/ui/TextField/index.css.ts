@@ -7,7 +7,7 @@ export const sTextField = recipe({
     w: "full",
     px: "12",
     py: "8",
-    bcol: "neutral.strong",
+    bcol: "neutral.default",
     bwidth: "1",
     radius: "8",
   }),
