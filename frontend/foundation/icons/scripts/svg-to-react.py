@@ -10,8 +10,8 @@ Changes:
 """
 
 import re
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 icons_dir = Path(__file__).parent.parent / "svgs"
 output_dir = Path(__file__).parent.parent / "codegen" / "icons"
