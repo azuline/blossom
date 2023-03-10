@@ -6,6 +6,7 @@ import pytest
 
 from foundation.config import confvars
 from foundation.database import Conn, create_pg_pool, set_row_level_security
+from foundation.migrate import run_database_migrations
 
 
 @dataclass
@@ -19,6 +20,8 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     This test checks whether the Connection Pool is correctly scrubbing app.current_user_id and
     app.current_tenant_id from the connections in the pool upon their return into the pool.
     """
+
+    run_database_migrations(confvars.yoyo_database_url + "/" + isolated_db)
 
     async def get_user_id(c: Conn) -> int | None:
         try:
