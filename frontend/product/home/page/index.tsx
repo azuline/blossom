@@ -6,7 +6,7 @@ import { Type } from "@foundation/ui/Type";
 
 const HomePage: React.FC = () => (
   <WithHeader>
-    <PageContent center topPadding>
+    <PageContent center>
       <Flex sx={{ direction: "column", gap: "36" }}>
         <Flex sx={{ direction: "column", gap: "12", maxw: "480" }}>
           <Type variant="disp-lg">Hi, hello, welcome home!</Type>

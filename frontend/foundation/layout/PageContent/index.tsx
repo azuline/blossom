@@ -1,8 +1,9 @@
 import { useHeaderExists } from "@foundation/layout/WithHeader/state";
+import { mergeRefs } from "@foundation/lib/mergeRefs";
 import { useScrollObserver } from "@foundation/lib/useScrollObserver";
 import { View } from "@foundation/ui/View";
 import { clsx } from "clsx";
-import { useRef, useState } from "react";
+import { MutableRefObject, useRef, useState } from "react";
 import {
   sPageContentPadding,
   sPageContentScroll,
@@ -12,11 +13,20 @@ type PageContentProps = {
   children: React.ReactNode;
   className?: string;
   /**
-   * Whether the top of the page should have padding. If false, the page content will
-   * hug the header. If true, the header and content will have well-balanced spacing.
-   * @default true
+   * The padding of the page.
+   * - `full` sets padding on the top, left, and right axes.
+   * - `x` sets padding on the left and right axes only. The content will hug the
+   *   header.
+   * - `none` sets no padding.
+   *
+   * The application-wide shared padding tokens are used; exact padding values are not
+   * configurable per-page.
+   *
+   * Bottom padding is set if the page is scrollable.
+   *
+   * @default full
    */
-  topPadding?: boolean;
+  padding?: "full" | "x" | "none";
   /**
    * Whether the page should scroll on content overflow. Set to false to have the page
    * grow with the content.
@@ -28,6 +38,9 @@ type PageContentProps = {
    * @default false
    */
   center?: boolean;
+
+  /** FOR VISUAL TESTING. DO NOT USE. */
+  _scrollRef?: MutableRefObject<unknown>;
 };
 
 /**
@@ -37,10 +50,11 @@ type PageContentProps = {
  */
 export const PageContent: React.FC<PageContentProps> = ({
   scroll = true,
-  topPadding = true,
+  padding = "full",
   center = false,
   children,
   className,
+  _scrollRef,
 }) => {
   // If the header exists, offset a centered page by a little bit.
   const headerExists = useHeaderExists();
@@ -54,8 +68,13 @@ export const PageContent: React.FC<PageContentProps> = ({
   // We need padding to live within scroll so that we don't suffer from padding collapse
   // on the right border.
   return (
-    <View ref={ref} className={clsx(className, sPageContentScroll({ scroll, scrolled }))}>
-      <View className={sPageContentPadding({ topPadding, scroll, center, headerExists })}>
+    <View
+      ref={mergeRefs([ref, _scrollRef])}
+      className={clsx(className, sPageContentScroll({ scroll, scrolled, headerExists }))}
+    >
+      <View
+        className={sPageContentPadding({ padding, scroll, center, headerExists })}
+      >
         {children}
       </View>
     </View>
