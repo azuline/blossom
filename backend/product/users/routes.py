@@ -37,7 +37,7 @@ class GetPageLoadInfoOut:
     method="GET",
     errors=[],
 )
-async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut | None:
+async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
     """
     Fetch the information needed at time of page load to identify the logged in user and
     display the application-wide page architecture.

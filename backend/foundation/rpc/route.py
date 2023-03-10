@@ -17,7 +17,12 @@ from quart import ResponseReturnValue
 
 from codegen.sqlc.models import Tenant, User
 from foundation.database import ConnPool, ConnQuerier, conn_admin, conn_cust
-from foundation.rpc.catalog import Method, catalog_global_error, catalog_raw_route, catalog_rpc
+from foundation.rpc.catalog import (
+    Method,
+    catalog_global_error,
+    catalog_raw_route,
+    catalog_rpc,
+)
 from foundation.rpc.error import (
     APIError,
 )
@@ -80,8 +85,8 @@ def route(
     name: str,
     in_: type[Any] | None,
     out: type[Any] | None,
-    errors: list[type[APIError]],
     authorization: Authorization,
+    errors: list[type[APIError]],
     method: Method = "POST",
     # Whether this is a raw route or not.
     type_: Literal["rpc", "raw"] = "rpc",

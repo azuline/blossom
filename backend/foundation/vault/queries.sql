@@ -7,3 +7,8 @@ RETURNING *;
 SELECT *
 FROM vaulted_secrets
 WHERE id = $1;
+
+-- name: VaultDeleteSecret :exec
+DELETE
+FROM vaulted_secrets
+WHERE id = $1;

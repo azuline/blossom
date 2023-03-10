@@ -37,6 +37,17 @@ class Catalog:
 _catalog = Catalog(global_errors=[], rpcs=[], raw_routes=[])
 
 
+def get_catalog() -> Catalog:
+    # Because routes register themselves into the catalog upon import,
+    # we need a central place to define the import paths for all routes.
+    # This function is that central place.
+    # ruff: noqa: F401
+    import product.authn.routes
+    import product.users.routes
+
+    return _catalog
+
+
 def catalog_rpc(
     *,
     name: str,
@@ -74,17 +85,6 @@ def catalog_global_error(error: type[APIError]) -> None:
     codegen.
     """
     _catalog.global_errors.append(error)
-
-
-def get_catalog() -> Catalog:
-    # Because routes register themselves into the catalog upon import,
-    # we need a central place to define the import paths for all routes.
-    # This function is that central place.
-    # ruff: noqa: F401
-    import product.authn.routes
-    import product.users.routes
-
-    return _catalog
 
 
 def create_blueprint() -> Blueprint:

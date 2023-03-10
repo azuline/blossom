@@ -33,6 +33,8 @@ In this section, we'll cover interesting features and design decisions that
 _blossom_ contains. Each feature is further documented in its own README. This
 section links to those READMEs.
 
+Generally, _blossom_'s documentation is stored in READMEs in the repository.
+
 ## Infrastructure
 
 _blossom's_ infrastructure currently solves for developer environments, builds,
@@ -54,19 +56,20 @@ Postgres. Python was chosen because I am the most comfortable and efficient
 with Python.
 
 - Multi-tenant account system.
-- RPC framework with TypeScript type codegen.
-- Nix dependency management.
-- Nix builds.
-- Ergonomic test fixture system for concise and maintainable tests.
+- [RPC framework](./backend/foundation/rpc) with TypeScript type codegen.
+- [Nix dependency management](./nix).
+- [Nix builds](./nix).
+- Ergonomic [test fixture system](./foundation/test) for concise and maintainable tests.
 - Highly performant parallelized tests that share a single database.
-- Postgres Row Level Security for secure multi-tenancy.
-- Secrets vault for secure encrypted secret storage.
-- Database migrations with yoyo-migrations.
-- Database table conventions and tests to enforce them.
-- Database queries with the sqlc database ORM.
-- Monolithic CLI for service operations and developer tooling.
-- Quart webserver served with Hypercorn.
-- Configuration via environment variables.
+- [Postgres Row Level Security](./backend/foundation/database) for secure
+  multi-tenancy.
+- [Secrets vault](./backend/foundation/vault) for secure encrypted secret storage.
+- [Database migrations](./backend/foundation/migrate) with yoyo-migrations.
+- [Database table conventions](./backend/foundation/migrate) and tests to enforce them.
+- [Database queries](./backend/codegen/sqlc) with the sqlc database ORM.
+- [Monolithic CLI](./backend/cli) for service operations and developer tooling.
+- [Quart webserver](./backend/foundation/webserver) served with Hypercorn.
+- [Configuration](./backend/foundation/config) via environment variables.
 - Linting with black, Ruff, and Semgrep.
 
 ## Frontend

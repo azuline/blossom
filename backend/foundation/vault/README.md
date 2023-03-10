@@ -1,5 +1,10 @@
-# secretsvault
+# vault
 
-The `secretsvault` package is a primitive secrets vaulting abstraction. At
-scale, this should be a separate service with a different database and access
-model.
+The `vault` package provides an encrypted secrets vaulting abstraction.
+Functions are exposed for creating, reading, and deleting encrypted secrets.
+
+Secrets are encrypted with ChaCha20+Poly1305 and authenticated with the tenant
+ID.
+
+At scale, this package should instead invoke a mature and well tested secrets
+vault service, such as [Hashicorp Vault](https://www.hashicorp.com/products/vault).

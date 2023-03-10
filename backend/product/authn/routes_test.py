@@ -2,7 +2,11 @@ import pytest
 
 from foundation.rpc.route import SESSION_ID_KEY
 from foundation.test.fixture import TFix
-from product.authn.routes import AuthTenantNotFoundError, InvalidCredentialsError, LoginIn
+from product.authn.routes import (
+    AuthTenantNotFoundError,
+    InvalidCredentialsError,
+    LoginIn,
+)
 
 
 @pytest.mark.asyncio

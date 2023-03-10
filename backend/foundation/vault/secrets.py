@@ -55,3 +55,11 @@ async def fetch_vaulted_secret(cq: ConnQuerier, tenant_id: int, secret_id: int) 
         associated_data=int_to_bytes(tenant_id),
     )
     return plaintext.decode()
+
+
+async def delete_vaulted_secret(cq: ConnQuerier, secret_id: int) -> None:
+    """
+    delete_vaulted_secret deletes an encrypted secret.
+    returns the created vault entry.
+    """
+    await cq.q.vault_delete_secret(id=secret_id)

@@ -174,6 +174,13 @@ RETURNING id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
 """
 
 
+VAULT_DELETE_SECRET = """-- name: vault_delete_secret \\:exec
+DELETE
+FROM vaulted_secrets
+WHERE id = %s
+"""
+
+
 VAULT_FETCH_SECRET = """-- name: vault_fetch_secret \\:one
 SELECT id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
 FROM vaulted_secrets
@@ -500,6 +507,9 @@ class AsyncQuerier:
             ciphertext=row[5],
             nonce=row[6],
         )
+
+    async def vault_delete_secret(self, *, id: int) -> None:
+        await self._conn.execute(VAULT_DELETE_SECRET, (id, ))
 
     async def vault_fetch_secret(self, *, id: int) -> Optional[models.VaultedSecret]:
         row = await (await self._conn.execute(VAULT_FETCH_SECRET, (id, ))).fetchone()

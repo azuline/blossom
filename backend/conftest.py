@@ -41,7 +41,9 @@ logger = logging.getLogger(__name__)
 # async fixtures, as per:
 # https://github.com/pytest-dev/pytest-asyncio/issues/75#issuecomment-570611843
 @pytest.fixture(scope="session")
-def event_loop(request: pytest.FixtureRequest) -> Iterator[AbstractEventLoop]:  # noqa: ARG001
+def event_loop(
+    request: pytest.FixtureRequest,  # noqa: ARG001
+) -> Iterator[AbstractEventLoop]:
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
