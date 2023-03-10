@@ -1,4 +1,4 @@
-import { ICONS_MAP } from "@foundation/icons/codegen";
+import { ICONS_MAP } from "@foundation/icons/codegen/imports";
 import { t } from "@foundation/style";
 import { SX } from "@foundation/style/sprinkles.css";
 import { View } from "@foundation/ui/View";
