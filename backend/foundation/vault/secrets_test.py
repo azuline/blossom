@@ -9,7 +9,6 @@ from foundation.vault.secrets import (
 )
 
 
-@pytest.mark.asyncio
 async def test_vaulted_secrets(t: TFix) -> None:
     tenant = await t.f.tenant()
     cq = await t.db.conn_admin()

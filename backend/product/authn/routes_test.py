@@ -1,5 +1,3 @@
-import pytest
-
 from foundation.rpc.route import SESSION_ID_KEY
 from foundation.test.fixture import TFix
 from product.authn.routes import (
@@ -9,7 +7,6 @@ from product.authn.routes import (
 )
 
 
-@pytest.mark.asyncio
 async def test_auth_login_success(t: TFix) -> None:
     user = await t.f.user()
     resp = await t.rpc.execute(
@@ -31,7 +28,6 @@ async def test_auth_login_success(t: TFix) -> None:
         assert quart_sess.permanent
 
 
-@pytest.mark.asyncio
 async def test_auth_login_success_impermanent(t: TFix) -> None:
     user = await t.f.user()
     resp = await t.rpc.execute(
@@ -48,7 +44,6 @@ async def test_auth_login_success_impermanent(t: TFix) -> None:
         assert not quart_sess.permanent
 
 
-@pytest.mark.asyncio
 async def test_auth_login_external_tenant_id(t: TFix) -> None:
     user = await t.f.user()
     # Make multiple tenants.
@@ -74,7 +69,6 @@ async def test_auth_login_external_tenant_id(t: TFix) -> None:
     assert session.tenant_id == tenant2.id
 
 
-@pytest.mark.asyncio
 async def test_auth_login_nonexistent_tenant_id(t: TFix) -> None:
     user = await t.f.user()
 
@@ -90,7 +84,6 @@ async def test_auth_login_nonexistent_tenant_id(t: TFix) -> None:
     await t.rpc.assert_error(resp, AuthTenantNotFoundError)
 
 
-@pytest.mark.asyncio
 async def test_auth_login_default_tenant_most_recent(t: TFix) -> None:
     user = await t.f.user()
     # Make multiple tenants.
@@ -117,7 +110,6 @@ async def test_auth_login_default_tenant_most_recent(t: TFix) -> None:
     assert session.tenant_id == tenant2.id
 
 
-@pytest.mark.asyncio
 async def test_auth_login_default_tenant_oldest(t: TFix) -> None:
     user = await t.f.user()
     # Make multiple tenants.
@@ -143,7 +135,6 @@ async def test_auth_login_default_tenant_oldest(t: TFix) -> None:
     assert session.tenant_id == tenant1.id
 
 
-@pytest.mark.asyncio
 async def test_auth_login_nonexistent_email(t: TFix) -> None:
     resp = await t.rpc.execute(
         "Login",
@@ -157,7 +148,6 @@ async def test_auth_login_nonexistent_email(t: TFix) -> None:
     await t.rpc.assert_error(resp, InvalidCredentialsError)
 
 
-@pytest.mark.asyncio
 async def test_auth_login_incomplete_signup(t: TFix) -> None:
     user = await t.f.user_not_signed_up()
     resp = await t.rpc.execute(
@@ -172,7 +162,6 @@ async def test_auth_login_incomplete_signup(t: TFix) -> None:
     await t.rpc.assert_error(resp, InvalidCredentialsError)
 
 
-@pytest.mark.asyncio
 async def test_auth_login_wrong_password(t: TFix) -> None:
     user = await t.f.user()
     resp = await t.rpc.execute(
@@ -187,7 +176,6 @@ async def test_auth_login_wrong_password(t: TFix) -> None:
     await t.rpc.assert_error(resp, InvalidCredentialsError)
 
 
-@pytest.mark.asyncio
 async def test_auth_logout(t: TFix) -> None:
     user = await t.f.user()
     await t.rpc.login_as(user)

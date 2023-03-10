@@ -1,14 +1,11 @@
 import re
 from dataclasses import dataclass
 
-import pytest
-
 from foundation.test.fixture import TFix
 
 nl = "\n"  # can't put backslash in f-string expression
 
 
-@pytest.mark.asyncio
 async def test_valid_autoincrementing_pkeys(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -43,7 +40,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_tables_have_external_ids(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -77,7 +73,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_external_ids_have_not_null_unique(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -114,7 +109,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_external_id_validation(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -144,7 +138,6 @@ Table {table} has a duplicate external_id prefix. Please choose a new one.
         seen_prefixes.add(prefix)
 
 
-@pytest.mark.asyncio
 async def test_all_timestamptz(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -175,7 +168,6 @@ Failing columns:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_tables_have_created_at_and_updated_at(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -215,7 +207,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_created_and_updated_at_definition(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -242,7 +233,6 @@ Failing columns:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_updated_at_columns_have_trigger(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -280,7 +270,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_integers_should_be_bigints(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -315,7 +304,6 @@ class MissingFK:
     columns: list[str]
 
 
-@pytest.mark.asyncio
 async def test_foreign_key_indexes(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -379,7 +367,6 @@ Fixes:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_tables_have_row_security_policy(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -414,7 +401,6 @@ Failing tables:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_views_have_security_invoker_true(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -446,7 +432,6 @@ Failing views:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
 async def test_all_user_and_tenants_cascade(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(

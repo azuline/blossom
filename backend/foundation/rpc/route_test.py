@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Any
 
-import pytest
 from quart import Blueprint, Quart, json
 
 from foundation.rpc.error import APIError
@@ -59,7 +58,6 @@ async def make_test_route(
     app.register_blueprint(bp)
 
 
-@pytest.mark.asyncio
 async def test_route_auth_public(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
 
@@ -71,7 +69,6 @@ async def test_route_auth_public(t: TFix) -> None:
     assert out.tenant_id is None
 
 
-@pytest.mark.asyncio
 async def test_route_auth_tenant(t: TFix) -> None:
     user, tenant = await t.f.customer()
     await make_test_route(await t.rpc.app(), "tenant")
@@ -85,7 +82,6 @@ async def test_route_auth_tenant(t: TFix) -> None:
     assert out.tenant_id == tenant.id
 
 
-@pytest.mark.asyncio
 async def test_route_auth_user(t: TFix) -> None:
     user = await t.f.user()
     await make_test_route(await t.rpc.app(), "user")
@@ -99,21 +95,18 @@ async def test_route_auth_user(t: TFix) -> None:
     assert out.tenant_id is None
 
 
-@pytest.mark.asyncio
 async def test_route_auth_user_fail(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "user")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-@pytest.mark.asyncio
 async def test_route_auth_tenant_fail(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "tenant")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-@pytest.mark.asyncio
 async def test_route_invalid_session(t: TFix) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = "1234"
@@ -123,7 +116,6 @@ async def test_route_invalid_session(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-@pytest.mark.asyncio
 async def test_route_expired_session_expired_at(t: TFix) -> None:
     user = await t.f.user()
     session = await t.f.session(user_id=user.id, expired_at=datetime.now())
@@ -136,7 +128,6 @@ async def test_route_expired_session_expired_at(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-@pytest.mark.asyncio
 async def test_route_expired_session_last_seen_at(t: TFix) -> None:
     user = await t.f.user()
     session = await t.f.session(user_id=user.id, last_seen_at=datetime.now() - timedelta(days=20))
@@ -149,21 +140,18 @@ async def test_route_expired_session_last_seen_at(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-@pytest.mark.asyncio
 async def test_route_invalid_json_data(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", data="aaoejfawpokl")
     await t.rpc.assert_error(resp, ServerJSONDeserializeError)
 
 
-@pytest.mark.asyncio
 async def test_route_different_input_schema(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", json={"strawberry": "blossoms"})
     await t.rpc.assert_error(resp, DataMismatchError)
 
 
-@pytest.mark.asyncio
 async def test_route_data_wrong_type(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", json={"cherry": {"a": "b"}})
@@ -172,7 +160,6 @@ async def test_route_data_wrong_type(t: TFix) -> None:
     assert out.fields["cherry"] == "str type expected"
 
 
-@pytest.mark.asyncio
 async def test_route_no_data(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public", in_=None)
     resp = await t.rpc.execute("Test")

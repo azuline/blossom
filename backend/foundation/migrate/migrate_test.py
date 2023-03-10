@@ -1,6 +1,5 @@
 import logging
 
-import pytest
 from yoyo import get_backend, read_migrations
 
 from foundation.config import confvars
@@ -9,7 +8,6 @@ from foundation.migrate import MIGRATIONS_PATH
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.asyncio
 async def test_migration_steps(isolated_db: str) -> None:
     """
     Test that, for each migration, the up -> down -> up path doesn't

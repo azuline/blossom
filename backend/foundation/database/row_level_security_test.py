@@ -2,7 +2,6 @@ import asyncio
 from dataclasses import dataclass
 
 import psycopg
-import pytest
 
 from foundation.config import confvars
 from foundation.database import Conn, create_pg_pool, set_row_level_security
@@ -14,7 +13,6 @@ class FakeUser:
     id: int  # noqa: A003
 
 
-@pytest.mark.asyncio
 async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     """
     This test checks whether the Connection Pool is correctly scrubbing app.current_user_id and

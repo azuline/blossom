@@ -1,10 +1,7 @@
-import pytest
-
 from foundation.test.fixture import TFix
 from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoTenant
 
 
-@pytest.mark.asyncio
 async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
     user, tenant = await t.f.customer()
     # Make a second tenant that the user belongs to..
@@ -38,7 +35,6 @@ async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
     user = await t.f.user()
     await t.rpc.login_as(user)
@@ -55,7 +51,6 @@ async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
     )
 
 
-@pytest.mark.asyncio
 async def test_page_load_info_not_logged_in(t: TFix) -> None:
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
