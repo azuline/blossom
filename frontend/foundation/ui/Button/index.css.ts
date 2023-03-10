@@ -92,7 +92,7 @@ export const sButton = recipe({
         fontSize: t.font.size.xs,
       },
       md: {
-        padding: "8px 24px",
+        padding: "8px 20px",
       },
       lg: {
         padding: "12px 32px",
