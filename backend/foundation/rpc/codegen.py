@@ -136,8 +136,8 @@ def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
         for e in r.errors:
             add_error_to_schema(e)
         schema.rpcs[r.name] = RPCSchema(
-            in_=dataclass_to_str(r.in_) if r.in_ else "null",
-            out=dataclass_to_str(r.out) if r.out else "null",
+            in_=dataclass_to_str(r.in_) if r.in_.__name__ != "NoneType" else "null",
+            out=dataclass_to_str(r.out) if r.out.__name__ != "NoneType" else "null",
             method=r.method,
             error_names=[e.__name__ for e in r.errors],
         )

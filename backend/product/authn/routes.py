@@ -27,13 +27,7 @@ class AuthTenantNotFoundError(APIError):
     pass
 
 
-@route(
-    name="Login",
-    authorization="public",
-    in_=LoginIn,
-    out=None,
-    errors=[InvalidCredentialsError, AuthTenantNotFoundError],
-)
+@route(authorization="public", errors=[InvalidCredentialsError, AuthTenantNotFoundError])
 async def login(req: Req[LoginIn]) -> None:
     """
     Log a user in if their credentials are correct.
@@ -80,7 +74,7 @@ async def login(req: Req[LoginIn]) -> None:
     return None
 
 
-@route(name="Logout", in_=None, out=None, errors=[], authorization="user")
+@route(authorization="user", errors=[])
 async def logout(req: Req[None]) -> None:
     """
     Expire the session cookie of the requesting user.

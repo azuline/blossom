@@ -8,7 +8,7 @@ import json
 import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar, get_args, get_type_hints
 
 import pydantic.dataclasses
 import quart
@@ -26,12 +26,17 @@ from foundation.rpc.catalog import (
 from foundation.rpc.error import (
     APIError,
 )
+from foundation.std.str import snake_case_to_pascal_case
 
 logger = logging.getLogger(__name__)
 
 SESSION_ID_KEY = "session_external_id"
 
 Authorization = Literal["public", "user", "tenant"]
+
+
+class InvalidRPCDefinitionError(Exception):
+    pass
 
 
 D = TypeVar("D")
@@ -82,9 +87,6 @@ catalog_global_error(InputValidationError)
 
 def route(
     *,
-    name: str,
-    in_: type[Any] | None,
-    out: type[Any] | None,
     authorization: Authorization,
     errors: list[type[APIError]],
     method: Method = "POST",
@@ -118,6 +120,24 @@ def route(
     def decorator(
         func: Callable[[Req[Any]], Awaitable[Any]]
     ) -> Callable[[], Awaitable[ResponseReturnValue]]:
+        type_hints = get_type_hints(func)
+
+        # Infer the RPC name, input dataclass, and output dataclass from the type parameters.
+        name = snake_case_to_pascal_case(func.__name__)
+        out = type_hints.get("return", type(None))
+
+        in_: type[Any] = type(None)
+        try:
+            args = get_args(type_hints["req"])
+            if args:
+                in_ = args[0]
+        except KeyError as e:
+            # We look for the request type by examining the function parameter named `req`. If the
+            # function takes a parameter of a different name, we cannot pull its types.
+            raise InvalidRPCDefinitionError(
+                f"RPC handlers must take in a parameter named `req`. Failed to wrap {name}"
+            ) from e
+
         @functools.wraps(func)
         async def handler() -> ResponseReturnValue:
             # TODO: 1. OpenTelemetry trace
@@ -231,13 +251,13 @@ async def _check_authorization(
 T = TypeVar("T")
 
 
-async def _validate_data(spec: type[T] | None, method: Method) -> T | None:
+async def _validate_data(spec: type[T], method: Method) -> T | None:
     """
     This decorates a quart endpoint. Taking a pydantic input dataclass as an argument,
     this decorator parses the request data with that dataclass. If parsing fails, this
     decorator returns an error to the requester.
     """
-    if spec is None:
+    if spec.__name__ == "NoneType":
         return None
 
     if method == "GET":
