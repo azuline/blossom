@@ -11,8 +11,8 @@ Method = Literal["GET", "POST"]
 @dataclass
 class RPCRoute:
     name: str
-    in_: type[Any] | None
-    out: type[Any] | None
+    in_: type[Any]
+    out: type[Any]
     errors: list[type[APIError]]
     method: Method
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]]
@@ -51,8 +51,8 @@ def get_catalog() -> Catalog:
 def catalog_rpc(
     *,
     name: str,
-    in_: type[Any] | None,
-    out: type[Any] | None,
+    in_: type[Any],
+    out: type[Any],
     errors: list[type[APIError]],
     method: Method,
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]],

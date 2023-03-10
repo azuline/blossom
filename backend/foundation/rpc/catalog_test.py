@@ -39,9 +39,9 @@ def test_no_invalid_id_attribute_exposed() -> None:
     invalid = []
 
     for route in catalog.rpcs:
-        if route.in_ and check_dataclass_has_id_field(route.in_):
+        if route.in_.__name__ != "NoneType" and check_dataclass_has_id_field(route.in_):
             invalid.append(f"{route.name} Input")  # pragma: no cover
-        if route.out and check_dataclass_has_id_field(route.out):
+        if route.out.__name__ != "NoneType" and check_dataclass_has_id_field(route.out):
             invalid.append(f"{route.name} Output")  # pragma: no cover
         for err in route.errors:
             if check_dataclass_has_id_field(err):
