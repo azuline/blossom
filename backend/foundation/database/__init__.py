@@ -57,12 +57,7 @@ async def conn_cust(
 ) -> AsyncIterator[ConnQuerier]:
     async with pg_pool.connection() as conn:
         await set_row_level_security(conn, user, tenant)
-        try:
-            yield ConnQuerier(c=conn, q=AsyncQuerier(conn))
-        finally:
-            # We try to clean up the row level security here, and we also clean it up in
-            # the `reset` function of ConnPool.
-            await clean_up_row_level_security(conn)
+        yield ConnQuerier(c=conn, q=AsyncQuerier(conn))
 
 
 async def set_row_level_security(
