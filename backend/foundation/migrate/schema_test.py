@@ -444,3 +444,34 @@ To enable Security Invoker, please define the view as:
 Failing views:
 {nl.join(f"- {t}" for t in failing)}
 """  # pragma: no cover
+
+
+@pytest.mark.asyncio
+async def test_all_user_and_tenants_cascade(t: TFix) -> None:
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
+        """
+        SELECT
+			kcu.table_name,
+			c.column_name
+		FROM information_schema.constraint_column_usage ccu
+		JOIN information_schema.referential_constraints rc
+			ON ccu.constraint_name = rc.unique_constraint_name
+		JOIN information_schema.key_column_usage kcu
+			ON kcu.constraint_name = rc.constraint_name
+		JOIN information_schema.columns c
+			ON kcu.table_name = c.table_name AND kcu.column_name = c.column_name
+		WHERE ccu.table_name IN ('users', 'tenants')
+			AND rc.delete_rule NOT IN ('CASCADE', 'SET NULL')
+        """
+    )
+    failing = [f"{x[0]}.{x[1]}" for x in await cursor.fetchall()]
+    assert not failing, f"""\
+Please add ON DELETE CASCADE or ON DELETE SET NULL to the following columns: {", ".join(failing)}.
+
+Upon user or vendor deletion, all rows related to them must either be nulled or deleted. This allow
+us to easily delete users and tenants in response to GDPR requests.
+
+Failing columns:
+{nl.join(f"- {c}" for c in failing)}
+"""  # pragma: no cover

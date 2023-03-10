@@ -38,7 +38,7 @@ CREATE TABLE tenants_users (
     -- If this is not null, it means the user was removed from the tenant at
     -- this time.
     removed_at timestamptz,
-    removed_by_user bigint REFERENCES users (id)
+    removed_by_user bigint REFERENCES users (id) ON DELETE SET NULL
 );
 CREATE TRIGGER updated_at BEFORE UPDATE ON tenants_users
 FOR EACH ROW EXECUTE PROCEDURE updated_at ();

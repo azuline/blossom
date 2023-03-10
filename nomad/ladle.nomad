@@ -41,10 +41,10 @@ job "blossom-ladle" {
       template {
         data          = <<EOF
 server {
-	listen 80;
-	listen [::]:80;
-	root /www;
-	index index.html;
+  listen 80;
+  listen [::]:80;
+  root /www;
+  index index.html;
 
   location /health {
     return 200 'ok';
