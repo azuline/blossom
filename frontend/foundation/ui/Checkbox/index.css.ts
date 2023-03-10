@@ -19,7 +19,7 @@ export const sCheckboxBox = recipe({
     transition: t.transition.easeOut.fast,
     width: t.size[20],
     height: t.size[20],
-    padding: "1px 1px 0px 1px",
+    padding: "2px 2px 0px 2px",
     borderRadius: t.radius[6],
   },
   variants: {

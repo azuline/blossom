@@ -22,6 +22,8 @@ fs.readdirSync(storyDir).forEach(file => {
   }
 });
 
+test.use({ viewport: { width: 1920, height: 1080 } });
+
 // iterate through stories
 Object.keys(stories).forEach(storyKey => {
   // create a test for each story

@@ -1,5 +1,15 @@
+import { flattenRecord } from "@foundation/lib/flattenRecord";
 import { CSSProperties } from "react";
 import { rawTheme as theme } from "./theme.css";
+
+const borderColors = flattenRecord(theme.color.border);
+
+/**
+ * This function takes in border variables and creates a border CSS value.
+ */
+const border = (size: keyof typeof theme.border, color: keyof typeof borderColors): string => {
+  return `${t.border[size]} solid ${borderColors[color]}`;
+};
 
 const bodyVariants = ["lg", "md", "sm", "xs"] as const;
 const displayVariants = ["disp-xxl", "disp-xl", "disp-lg", "disp-md", "disp-sm"] as const;
@@ -80,6 +90,7 @@ const space = (a: Space, b?: Space, c?: Space, d?: Space): string => {
 export const t = {
   ...theme,
   fn: {
+    border,
     font,
     space,
   },

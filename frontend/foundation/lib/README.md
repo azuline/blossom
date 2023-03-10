@@ -10,3 +10,7 @@ The functions are:
   Similar to Array.filter, but for objects.
 - `flattenRecord`: Flatten a nested record into a record of maxdepth=1.
   Concatenate keys such that `flattenRecord({a: {b: 1}}) -> {"a.b": 1}`.
+
+The hooks are:
+
+- `useScrollObserver`: An observer for a container's scroll events.

@@ -14,8 +14,3 @@ export const sLayoutPaddingVariables = style({
     [breakpoints.xs]: { vars: { [layoutPadding]: t.space[4] } },
   },
 });
-
-export const sLayoutPaddingUse = style({
-  height: "100%",
-  padding: layoutPadding,
-});

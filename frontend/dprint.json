@@ -22,7 +22,7 @@
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
-    "**/.mypy-cache",
+    "**/.mypy_cache",
     "coverage",
     "dist",
     "build",

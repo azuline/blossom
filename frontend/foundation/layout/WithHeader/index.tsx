@@ -1,5 +1,6 @@
 import { useCurrentTenant } from "@foundation/auth/state";
 import { sHeaderLayout, sLogoFont } from "@foundation/layout/WithHeader/index.css";
+import { HeaderExistsContextProvider } from "@foundation/layout/WithHeader/state";
 import { TypeLoader } from "@foundation/loaders/TypeLoader";
 import { Avatar } from "@foundation/ui/Avatar";
 import { Flex } from "@foundation/ui/Flex";
@@ -10,21 +11,27 @@ type Props = {
   children: React.ReactNode;
 };
 
+/**
+ * Apply the application header. Wrap the page with this component if the page should
+ * have a header.
+ */
 export const WithHeader: React.FC<Props> = props => {
   const tenant = useCurrentTenant();
 
   return (
-    <Flex sx={{ direction: "column", h: "full" }}>
-      <View className={sHeaderLayout}>
-        <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
-          <Type className={sLogoFont}>blossom</Type>
-          <Flex sx={{ gap: "16", align: "center" }}>
-            {tenant !== undefined ? <Type>{tenant.name}</Type> : <TypeLoader w="96" />}
-            <Avatar size="36" />
+    <HeaderExistsContextProvider value>
+      <Flex sx={{ direction: "column", h: "full" }}>
+        <View className={sHeaderLayout}>
+          <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
+            <Type className={sLogoFont}>blossom</Type>
+            <Flex sx={{ gap: "16", align: "center" }}>
+              {tenant !== undefined ? <Type>{tenant.name}</Type> : <TypeLoader w="96" />}
+              <Avatar size="28" />
+            </Flex>
           </Flex>
-        </Flex>
-      </View>
-      <View sx={{ minh: "0", h: "full" }}>{props.children}</View>
-    </Flex>
+        </View>
+        <View style={{ flex: "1 1" }} sx={{ minh: "0" }}>{props.children}</View>
+      </Flex>
+    </HeaderExistsContextProvider>
   );
 };

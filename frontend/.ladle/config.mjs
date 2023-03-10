@@ -9,6 +9,8 @@ export default {
     <style>
       #ladle-root {
         --ladle-bg-color-secondary: #E7E6F0;
+        background: #F1F1F6;
+        height: 100%;
       }
       .ladle-main {
         background: #F1F1F6;

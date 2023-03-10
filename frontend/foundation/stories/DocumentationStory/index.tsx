@@ -1,4 +1,5 @@
 import { Flex } from "@foundation/ui/Flex";
+import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";
 
 type Props = {
@@ -10,9 +11,14 @@ type Props = {
 // because that would prevent Playwright from taking a screenshot of the full
 // container in our visual tests.
 export const DocumentationStory: React.FC<Props> = props => (
-  <Flex sx={{ p: "36", w: "fit-content", h: "fit-content" }}>
-    <Flex sx={{ direction: "column", gap: "44", w: "fit-content", h: "fit-content" }}>
-      {props.children}
+  // The height is split from the width so that the background can fill more width than
+  // just `fit-content`. This lets the background expand to the full screen even if the
+  // content is half-width. Solves a background issue in Ladle preview mode.
+  <View sx={{ h: "fit-content", background: "neutral.base" }}>
+    <Flex sx={{ p: "36", w: "fit-content" }}>
+      <Flex sx={{ direction: "column", gap: "44", w: "fit-content", h: "fit-content" }}>
+        {props.children}
+      </Flex>
     </Flex>
-  </Flex>
+  </View>
 );

@@ -6,8 +6,8 @@ architecture it desires.
 
 The primitives are:
 
-- `LayoutPadding`: Apply the global layout padding. Wrap the page with this
-  component if the page should have padding. Abstracting the padding into
-  LayoutPadding ensures that all pages have consistent paddings.
+- `PageContent`: A component to conveniently configure the page's content. This
+  component applies standardized configurations for content padding, scrolling,
+  and centering.
 - `WithHeader`: Apply the application header. Wrap the page with this component
   if the page should have a header.

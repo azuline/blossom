@@ -1,7 +1,7 @@
 import { RPCs } from "@codegen/rpc";
 import { atomForm } from "@foundation/forms/state";
 import { Icon } from "@foundation/icons/Icon";
-import { LayoutPadding } from "@foundation/layout/LayoutPadding";
+import { PageContent } from "@foundation/layout/PageContent";
 import { useRedirect } from "@foundation/routing/state/redirect";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
 import { RPCError } from "@foundation/rpc/error";
@@ -43,35 +43,33 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <LayoutPadding>
-      <Center>
-        <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
-          <Center axis="vertical">
-            <Icon icon="logo" sx={{ w: "64", h: "64" }} />
-          </Center>
-          <Type variant="disp-xl">Welcome back!</Type>
-          <Flex sx={{ direction: "column", gap: "20" }}>
-            <TextField
-              label="Email"
-              value={form.email}
-              onChange={email => setForm({ email })}
-            />
-            <TextField
-              label="Password"
-              value={form.password}
-              onChange={password => setForm({ password })}
-            />
-            <Checkbox
-              checked={form.permanent}
-              label="Remember me"
-              onChange={permanent => setForm({ permanent })}
-            />
-            {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
-          </Flex>
-          <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
+    <PageContent center>
+      <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
+        <Center axis="vertical">
+          <Icon icon="logo" sx={{ w: "64", h: "64" }} />
+        </Center>
+        <Type variant="disp-xl">Welcome back!</Type>
+        <Flex sx={{ direction: "column", gap: "20" }}>
+          <TextField
+            label="Email"
+            value={form.email}
+            onChange={email => setForm({ email })}
+          />
+          <TextField
+            label="Password"
+            value={form.password}
+            onChange={password => setForm({ password })}
+          />
+          <Checkbox
+            checked={form.permanent}
+            label="Remember me"
+            onChange={permanent => setForm({ permanent })}
+          />
+          {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
         </Flex>
-      </Center>
-    </LayoutPadding>
+        <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
+      </Flex>
+    </PageContent>
   );
 };
 
