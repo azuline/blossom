@@ -154,7 +154,7 @@ def route(
                 logger.info("Request passed user authorization check.")
 
                 # 5. Parse input data.
-                data = await _validate_data(in_, method)  # type: ignore
+                data = await _validate_data(in_, method)
                 logger.info("Validated request data.")
 
                 # 6. Configure the customer's database connection with
