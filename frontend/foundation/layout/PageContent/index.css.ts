@@ -15,42 +15,57 @@ export const sPageContentScroll = recipe({
         overflow: "auto",
       },
     },
-    // When the content has been scrolled, add a border to the top of the container.
-    scrolled: {
-      true: {
+    // If there is a header: when the content has been scrolled, add a border to the top
+    // of the container.
+    scrolled: { true: {} },
+    headerExists: { true: {} },
+  },
+  compoundVariants: [
+    {
+      variants: {
+        scrolled: true,
+        headerExists: true,
+      },
+      style: {
         borderTop: t.fn.border("1", "neutral.weak"),
       },
     },
-  },
+  ],
 });
 
 const bottomPaddingVar = createVar();
+const topPaddingVar = createVar();
 
 export const sPageContentPadding = recipe({
   base: {
     height: "100%",
     width: "100%",
-    paddingLeft: layoutPadding,
-    paddingRight: layoutPadding,
     vars: { [bottomPaddingVar]: "0px" },
   },
 
   variants: {
-    topPadding: {
-      true: {
-        paddingTop: t.space[16],
+    padding: {
+      full: {
+        paddingTop: topPaddingVar,
+        paddingBottom: `calc(${layoutPadding} + ${bottomPaddingVar})`,
+        paddingLeft: layoutPadding,
+        paddingRight: layoutPadding,
+      },
+      x: {
+        paddingLeft: layoutPadding,
+        paddingRight: layoutPadding,
+        paddingBottom: bottomPaddingVar,
+      },
+      none: {
+        paddingBottom: bottomPaddingVar,
       },
     },
     scroll: {
       true: {
-        paddingBottom: `calc(${layoutPadding} + ${bottomPaddingVar})`,
         width: "fit-content",
         height: "fit-content",
         minWidth: "100%",
         minHeight: "100%",
-      },
-      false: {
-        paddingBottom: bottomPaddingVar,
       },
     },
     center: {
@@ -61,7 +76,18 @@ export const sPageContentPadding = recipe({
         alignItems: "center",
       },
     },
-    headerExists: { true: {} },
+    headerExists: {
+      true: {
+        vars: {
+          [topPaddingVar]: t.space[16],
+        },
+      },
+      false: {
+        vars: {
+          [topPaddingVar]: layoutPadding,
+        },
+      },
+    },
   },
   compoundVariants: [
     {
