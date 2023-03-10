@@ -44,6 +44,107 @@ Failing tables:
 
 
 @pytest.mark.asyncio
+async def test_all_tables_have_external_ids(t: TFix) -> None:
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
+        """
+        SELECT t.table_name
+        FROM information_schema.tables t
+        WHERE t.table_type = 'BASE TABLE'
+            AND t.table_schema = 'public'
+            AND NOT EXISTS (
+                SELECT *
+                FROM information_schema.columns c
+                WHERE c.table_name = t.table_name
+                    AND c.column_name = 'external_id'
+            )
+            AND t.table_name NOT IN (
+                'yoyo_lock',
+                '_yoyo_log',
+                '_yoyo_version',
+                '_yoyo_migration'
+            )
+        """
+    )
+    failing = [x[0] for x in await cursor.fetchall()]
+    assert not failing, f"""\
+Please update tables {", ".join(failing)} to have an `external_id` column.
+
+External IDs are used externally to avoid leaking information.
+
+Failing tables:
+{nl.join(f"- {t}" for t in failing)}
+"""  # pragma: no cover
+
+
+@pytest.mark.asyncio
+async def test_all_external_ids_have_not_null_unique(t: TFix) -> None:
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
+        """
+        SELECT t.table_name
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name = 'external_id'
+            AND t.table_type = 'BASE TABLE'
+            AND t.table_schema = 'public'
+            AND (
+                NOT EXISTS (
+                    SELECT *
+                    FROM information_schema.table_constraints AS tc
+                    JOIN information_schema.constraint_column_usage AS ccu
+                    ON ccu.constraint_name = tc.constraint_name
+                        AND ccu.table_schema = tc.table_schema
+                    WHERE ccu.column_name = c.column_name
+                        AND ccu.table_name = t.table_name
+                )
+                OR c.is_nullable = 'YES'
+            )
+        """
+    )
+    failing = [x[0] for x in await cursor.fetchall()]
+    assert not failing, f"""\
+Please update tables {", ".join(failing)} to have a NOT NULL UNIQUE `external_id`.
+
+All rows require a unique external IDs for us to reference them externally.
+
+Failing tables:
+{nl.join(f"- {t}" for t in failing)}
+"""  # pragma: no cover
+
+
+@pytest.mark.asyncio
+async def test_external_id_validation(t: TFix) -> None:
+    cq = await t.db.conn_admin()
+    cursor = await cq.c.execute(
+        """
+        SELECT c.table_name, c.column_default
+        FROM information_schema.columns c
+        JOIN information_schema.tables t
+            ON c.table_name = t.table_name
+        WHERE c.column_name = 'external_id'
+        AND t.table_schema = 'public'
+        AND t.table_type = 'BASE TABLE';
+        """
+    )
+    prefix_regex = re.compile(r"^[a-z]{3}$")
+
+    seen_prefixes = set()
+    for table, default in await cursor.fetchall():
+        prefix = default.split("'")[1]
+        ok = prefix_regex.match(prefix) is not None
+        assert ok, f"""\
+Table {table} has an invalid external_id prefix. Prefixes must be 3 lowercase characters.
+"""
+        ok = prefix not in seen_prefixes
+        assert ok, f"""\
+Table {table} has a duplicate external_id prefix. Please choose a new one.
+"""
+        seen_prefixes.add(prefix)
+
+
+@pytest.mark.asyncio
 async def test_all_timestamptz(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
@@ -208,107 +309,6 @@ Failing columns:
 """  # pragma: no cover
 
 
-@pytest.mark.asyncio
-async def test_all_tables_have_external_ids(t: TFix) -> None:
-    cq = await t.db.conn_admin()
-    cursor = await cq.c.execute(
-        """
-        SELECT t.table_name
-        FROM information_schema.tables t
-        WHERE t.table_type = 'BASE TABLE'
-            AND t.table_schema = 'public'
-            AND NOT EXISTS (
-                SELECT *
-                FROM information_schema.columns c
-                WHERE c.table_name = t.table_name
-                    AND c.column_name = 'external_id'
-            )
-            AND t.table_name NOT IN (
-                'yoyo_lock',
-                '_yoyo_log',
-                '_yoyo_version',
-                '_yoyo_migration'
-            )
-        """
-    )
-    failing = [x[0] for x in await cursor.fetchall()]
-    assert not failing, f"""\
-Please update tables {", ".join(failing)} to have an `external_id` column.
-
-External IDs are used externally to avoid leaking information.
-
-Failing tables:
-{nl.join(f"- {t}" for t in failing)}
-"""  # pragma: no cover
-
-
-@pytest.mark.asyncio
-async def test_all_external_ids_have_not_null_unique(t: TFix) -> None:
-    cq = await t.db.conn_admin()
-    cursor = await cq.c.execute(
-        """
-        SELECT t.table_name
-        FROM information_schema.columns c
-        JOIN information_schema.tables t
-            ON c.table_name = t.table_name
-        WHERE c.column_name = 'external_id'
-            AND t.table_type = 'BASE TABLE'
-            AND t.table_schema = 'public'
-            AND (
-                NOT EXISTS (
-                    SELECT *
-                    FROM information_schema.table_constraints AS tc
-                    JOIN information_schema.constraint_column_usage AS ccu
-                    ON ccu.constraint_name = tc.constraint_name
-                        AND ccu.table_schema = tc.table_schema
-                    WHERE ccu.column_name = c.column_name
-                        AND ccu.table_name = t.table_name
-                )
-                OR c.is_nullable = 'YES'
-            )
-        """
-    )
-    failing = [x[0] for x in await cursor.fetchall()]
-    assert not failing, f"""\
-Please update tables {", ".join(failing)} to have a NOT NULL UNIQUE `external_id`.
-
-All rows require a unique external IDs for us to reference them externally.
-
-Failing tables:
-{nl.join(f"- {t}" for t in failing)}
-"""  # pragma: no cover
-
-
-@pytest.mark.asyncio
-async def test_external_id_validation(t: TFix) -> None:
-    cq = await t.db.conn_admin()
-    cursor = await cq.c.execute(
-        """
-        SELECT c.table_name, c.column_default
-        FROM information_schema.columns c
-        JOIN information_schema.tables t
-            ON c.table_name = t.table_name
-        WHERE c.column_name = 'external_id'
-        AND t.table_schema = 'public'
-        AND t.table_type = 'BASE TABLE';
-        """
-    )
-    prefix_regex = re.compile(r"^[a-z]{3}$")
-
-    seen_prefixes = set()
-    for table, default in await cursor.fetchall():
-        prefix = default.split("'")[1]
-        ok = prefix_regex.match(prefix) is not None
-        assert ok, f"""\
-Table {table} has an invalid external_id prefix. Prefixes must be 3 lowercase characters.
-"""
-        ok = prefix not in seen_prefixes
-        assert ok, f"""\
-Table {table} has a duplicate external_id prefix. Please choose a new one.
-"""
-        seen_prefixes.add(prefix)
-
-
 @dataclass
 class MissingFK:
     table: str
@@ -380,7 +380,7 @@ Fixes:
 
 
 @pytest.mark.asyncio
-async def test_all_tables_have_customer_security_policy(t: TFix) -> None:
+async def test_all_tables_have_row_security_policy(t: TFix) -> None:
     cq = await t.db.conn_admin()
     cursor = await cq.c.execute(
         """
