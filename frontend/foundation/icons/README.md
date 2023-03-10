@@ -10,31 +10,25 @@ as the entrypoint for all icons: a superior developer experience.
 Visit the [story](https://celestial.sunsetglow.net/?story=components--atoms--icon-)
 for additional documentation on the icon component.
 
-Currently, icons are vendored from [Radix Icons](https://icons.radix-ui.com/).
-This will likely change.
+## Icon Choice
 
-### Radix Icons License
+The base icon set is vendored from the [Feather](https://feathericons.com/)
+icon set. A few custom icon additions have been added.
 
-```
-MIT License
+We did not vendor the complete set of Feather icons. A subset of icons from
+Feather v4.29.0 have been vendored.
 
-Copyright (c) 2022 WorkOS
+## Development
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+The icons system is codegen-driven development. The development flow looks
+like:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Raw icon SVGs are vendored into `svgs/`, arranged into subdirectories based
+   on icon source.
+2. The `scripts/svgs-to-react.py` script transforms the source SVGs into
+   React components. These components are outputted into `codegen/icons`.
+3. The `scripts/generate-imports.py` script generates a map of dynamic imports
+   for the icon components. This is outputted to `codegen/import.ts`.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+The `Icon` component consumes the import map for type-safe icon selection and
+dynamic lazy imports.
