@@ -82,9 +82,6 @@ catalog_global_error(InputValidationError)
 
 def route(
     *,
-    name: str,
-    in_: type[Any] | None,
-    out: type[Any] | None,
     authorization: Authorization,
     errors: list[type[APIError]],
     method: Method = "POST",
@@ -114,6 +111,10 @@ def route(
     5. If `in_` is not None, parses the input data into it.
     6. Sets up the database connection and configures Postgres row-level-security.
     """
+    # TODO: Infer these from the types in this scope
+    in_ = None
+    out = None
+    name = ""
 
     def decorator(
         func: Callable[[Req[Any]], Awaitable[Any]]

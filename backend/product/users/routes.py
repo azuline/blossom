@@ -30,14 +30,11 @@ class GetPageLoadInfoOut:
 
 
 @route(
-    name="GetPageLoadInfo",
     authorization="public",
-    in_=None,
-    out=GetPageLoadInfoOut,
     method="GET",
     errors=[],
 )
-async def page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
+async def get_page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
     """
     Fetch the information needed at time of page load to identify the logged in user and
     display the application-wide page architecture.

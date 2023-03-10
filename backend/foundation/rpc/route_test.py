@@ -4,7 +4,6 @@ from typing import Any
 
 from quart import Blueprint, Quart, json
 
-from foundation.rpc.error import APIError
 from foundation.rpc.route import (
     SESSION_ID_KEY,
     Authorization,
@@ -33,20 +32,13 @@ class SpecTestOut:
 async def make_test_route(
     app: Quart,
     authorization: Authorization,
-    *,
-    in_: Any = SpecTestIn,
-    out: Any = SpecTestOut,
-    errors: list[type[APIError]] | None = None,
 ) -> None:
     @route(
-        name="Test",
-        in_=in_,
-        out=out,
-        errors=errors or [],
+        errors=[],
         authorization=authorization,
         mount=False,
     )
-    async def handler(req: Req[Any]) -> SpecTestOut:
+    async def test(req: Req[Any]) -> SpecTestOut:
         return SpecTestOut(
             data=req.data,
             user_id=req.user.id if req.user else None,
@@ -54,7 +46,7 @@ async def make_test_route(
         )
 
     bp = Blueprint("test_route_e2e", __name__, url_prefix="/api")
-    bp.route("/Test", methods=["POST"])(handler)
+    bp.route("/Test", methods=["POST"])(test)
     app.register_blueprint(bp)
 
 
@@ -161,7 +153,7 @@ async def test_route_data_wrong_type(t: TFix) -> None:
 
 
 async def test_route_no_data(t: TFix) -> None:
-    await make_test_route(await t.rpc.app(), "public", in_=None)
+    await make_test_route(await t.rpc.app(), "public")
     resp = await t.rpc.execute("Test")
     t.rpc.assert_success(resp)
 
