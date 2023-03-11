@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 export const moonlightPalette = {
   neutral: {
     "6": "#08051B",
@@ -57,14 +58,8 @@ export const moonlightPalette = {
 
 export const moonlightLight = {
   background: {
-    neutral: {
-      base: moonlightPalette["neutral"]["95"],
-      raised: moonlightPalette["neutral"]["98"],
-    },
-    inverse: {
-      base: moonlightPalette["neutral"]["14"],
-      raised: moonlightPalette["neutral"]["21"],
-    },
+    neutral: { base: moonlightPalette["neutral"]["95"], raised: moonlightPalette["neutral"]["98"] },
+    inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
       active: moonlightPalette["overlay"]["38"],
@@ -151,14 +146,8 @@ export const moonlightLight = {
 
 export const moonlightDark = {
   background: {
-    neutral: {
-      base: moonlightPalette["neutral"]["14"],
-      raised: moonlightPalette["neutral"]["21"],
-    },
-    inverse: {
-      base: moonlightPalette["neutral"]["92"],
-      raised: moonlightPalette["neutral"]["95"],
-    },
+    neutral: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
+    inverse: { base: moonlightPalette["neutral"]["92"], raised: moonlightPalette["neutral"]["95"] },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
       active: moonlightPalette["overlay"]["38"],
