@@ -9,7 +9,7 @@ import { Type } from "@foundation/ui/Type";
 import { FC, ReactNode, useEffect, useRef } from "react";
 
 export default {
-  title: "Layout",
+  title: "Page Layout",
 };
 
 // dprint-ignore

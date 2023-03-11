@@ -5,7 +5,7 @@ import { Card } from "@foundation/ui/Card";
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Layout",
+  title: "Page Layout",
 };
 
 export const WithHeader_: React.FC = () => (

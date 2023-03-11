@@ -5,7 +5,7 @@ export default {
     "theme*",
     "components*",
     "loaders*",
-    "layout*",
+    "page-layout*",
     "pages*",
     "*",
   ],
