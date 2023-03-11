@@ -1,11 +1,13 @@
 export default {
   stories: ["foundation/**/*.stories.tsx", "product/**/*stories.tsx"],
   storyOrder: [
-    "Theme*",
-    "Components*",
-    "Loaders*",
-    "Layout*",
-    "Pages*",
+    "hello--introduction",
+    "theme*",
+    "components*",
+    "loaders*",
+    "layout*",
+    "pages*",
+    "*",
   ],
   addons: {
     theme: {
