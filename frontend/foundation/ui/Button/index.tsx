@@ -7,7 +7,7 @@ import { Center } from "@foundation/ui/Center";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import { AriaButtonProps, useButton } from "react-aria";
 
-type Props =
+export type ButtonProps =
   & Exclude<RecipeVariants<typeof sButton>, "disabled">
   & {
     children: ReactNode;
@@ -27,7 +27,7 @@ type Props =
     open?: "here" | "new-tab";
   });
 
-export const Button: React.FC<Props> = props => {
+export const Button: React.FC<ButtonProps> = props => {
   usePrefetchPath(props.href);
 
   const ref = useRef(null);
