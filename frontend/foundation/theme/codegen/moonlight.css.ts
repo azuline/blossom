@@ -62,7 +62,7 @@ export const moonlightLight = {
     inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
-      active: moonlightPalette["overlay"]["38"],
+      active: moonlightPalette["overlay"]["48"],
     },
     brand: {
       default: moonlightPalette["brand"]["54"],
@@ -106,9 +106,9 @@ export const moonlightLight = {
       default: moonlightPalette["neutral"]["92"],
       weak: moonlightPalette["neutral"]["77"],
       loader: "linear-gradient(91.22deg, "
-        + moonlightPalette["neutral"]["38"]
+        + moonlightPalette["neutral"]["21"]
         + " 0%, "
-        + moonlightPalette["neutral"]["62"]
+        + moonlightPalette["neutral"]["38"]
         + " 80%)",
     },
     brand: {
@@ -188,9 +188,9 @@ export const moonlightDark = {
       default: moonlightPalette["neutral"]["85"],
       weak: moonlightPalette["neutral"]["62"],
       loader: "linear-gradient(91.22deg, "
-        + moonlightPalette["neutral"]["38"]
+        + moonlightPalette["neutral"]["21"]
         + " 0%, "
-        + moonlightPalette["neutral"]["62"]
+        + moonlightPalette["neutral"]["38"]
         + " 80%)",
     },
     inverse: {
