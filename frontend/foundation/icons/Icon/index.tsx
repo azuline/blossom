@@ -2,6 +2,7 @@ import { ICONS_MAP } from "@foundation/icons/codegen/imports";
 import { t } from "@foundation/style";
 import { SX } from "@foundation/style/sprinkles.css";
 import { View } from "@foundation/ui/View";
+import { Suspense } from "react";
 
 type Props = {
   icon: keyof typeof ICONS_MAP;
@@ -27,7 +28,9 @@ export const Icon: React.FC<Props> = props => {
         ...props.sx,
       }}
     >
-      <Component />
+      <Suspense fallback={<View sx={{ h: "full", w: "full" }} />}>
+        <Component />
+      </Suspense>
     </View>
   );
 };
