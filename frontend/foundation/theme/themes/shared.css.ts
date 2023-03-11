@@ -1,4 +1,4 @@
-import { createTheme } from "@vanilla-extract/css";
+import { createGlobalTheme } from "@vanilla-extract/css";
 
 export const breakpoints = {
   // The screen sizes are:
@@ -19,7 +19,7 @@ export const breakpoints = {
   xs: "(max-width: 508px)",
 } as const;
 
-export const [themeSharedClass, themeShared] = createTheme({
+export const themeSharedVars = createGlobalTheme(":root", {
   size: {
     "0": "0px",
     "2": "2px",

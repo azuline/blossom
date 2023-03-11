@@ -1,11 +1,11 @@
-import { createTheme } from "@vanilla-extract/css";
+import { createGlobalTheme } from "@vanilla-extract/css";
 
 export const fontFaces = {
   display: "Cormorant Garamond",
   body: "Alegreya Sans",
 } as const;
 
-export const [themeTypeClass, themeType] = createTheme({
+export const themeTypeVars = createGlobalTheme(":root", {
   font: {
     face: fontFaces,
     weight: {
