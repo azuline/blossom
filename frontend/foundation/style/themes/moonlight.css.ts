@@ -112,24 +112,24 @@ export const moonlightLight = {
     },
     brand: {
       tint: moonlightPalette["brand"]["94"],
-      disabled: moonlightPalette["brand"]["64"],
       default: moonlightPalette["brand"]["54"],
       hover: moonlightPalette["brand"]["40"],
+      disabled: moonlightPalette["brand"]["64"],
     },
     positive: {
       tint: moonlightPalette["green"]["94"],
-      disabled: moonlightPalette["green"]["49"],
       default: moonlightPalette["green"]["38"],
+      disabled: moonlightPalette["green"]["49"],
     },
     caution: {
       tint: moonlightPalette["orange"]["89"],
-      disabled: moonlightPalette["orange"]["57"],
       default: moonlightPalette["orange"]["43"],
+      disabled: moonlightPalette["orange"]["57"],
     },
     negative: {
       tint: moonlightPalette["red"]["91"],
-      disabled: moonlightPalette["red"]["57"],
       default: moonlightPalette["red"]["44"],
+      disabled: moonlightPalette["red"]["57"],
     },
   },
   border: {
