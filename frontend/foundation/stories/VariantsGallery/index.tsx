@@ -6,6 +6,8 @@ import { sVariantsGallery, sVariantsGalleryColumns } from "./index.css";
 
 type Props = {
   columns: number;
+  alignItems?: "center" | "start" | "end";
+  justifyItems?: "center" | "start" | "end";
   children: ReactNode;
 };
 
@@ -13,7 +15,11 @@ export const VariantsGallery: React.FC<Props> = props => (
   <StorySection title="Variants">
     <View
       className={sVariantsGallery}
-      style={assignInlineVars({ [sVariantsGalleryColumns]: props.columns.toString() })}
+      style={{
+        alignItems: props.alignItems ?? "center",
+        justifyItems: props.justifyItems ?? "center",
+        ...assignInlineVars({ [sVariantsGalleryColumns]: props.columns.toString() }),
+      }}
     >
       {props.children}
     </View>
