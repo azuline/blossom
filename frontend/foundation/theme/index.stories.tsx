@@ -2,8 +2,8 @@ import { ColorPalette } from "@foundation/stories/ColorPalette";
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
-import { t } from "@foundation/style";
-import { moonlightPalette } from "@foundation/style/themes/moonlight.css";
+import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
+import { t } from "@foundation/theme/styles/theme";
 import { Flex } from "@foundation/ui/Flex";
 
 export default {

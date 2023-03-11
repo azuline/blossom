@@ -1,4 +1,4 @@
-import { moonlightLight, moonlightPalette } from "@foundation/style/themes/moonlight.css";
+import { moonlightLight, moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { createGlobalTheme } from "@vanilla-extract/css";
 
 export const breakpoints = {

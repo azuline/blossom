@@ -1,4 +1,4 @@
-import { t } from "@foundation/style";
+import { t } from "@foundation/theme/styles/theme";
 import { Flex } from "@foundation/ui/Flex";
 import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";

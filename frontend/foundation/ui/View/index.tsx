@@ -1,4 +1,4 @@
-import { SX, sx } from "@foundation/style/sprinkles.css";
+import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import clsx from "clsx";
 import { CSSProperties, forwardRef } from "react";

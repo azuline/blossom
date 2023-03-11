@@ -1,5 +1,5 @@
-import { SX } from "@foundation/style/sprinkles.css";
-import { setSXVars } from "@foundation/style/utils";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { setSXVars } from "@foundation/theme/utils";
 import {
   bleedBottomVar,
   bleedLeftVar,

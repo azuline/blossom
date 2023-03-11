@@ -1,6 +1,6 @@
 import { flattenRecord } from "@foundation/lib/flattenRecord";
-import { t } from "@foundation/style";
-import { breakpoints } from "@foundation/style/theme.css";
+import { t } from "@foundation/theme/styles/theme";
+import { breakpoints } from "@foundation/theme/styles/theme.css";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 
 const conditions = {

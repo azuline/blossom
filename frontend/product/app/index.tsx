@@ -1,5 +1,5 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
-import "@foundation/style/global.css";
+import "@foundation/theme/styles/global.css";
 import { View } from "@foundation/ui/View";
 import { Contexts } from "@product/app/Contexts";
 import { Router } from "@product/app/Router";

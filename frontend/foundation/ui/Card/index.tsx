@@ -1,4 +1,4 @@
-import { SX } from "@foundation/style/sprinkles.css";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sCard } from "@foundation/ui/Card/index.css";
 import { View } from "@foundation/ui/View";
 import { RecipeVariants } from "@vanilla-extract/recipes";

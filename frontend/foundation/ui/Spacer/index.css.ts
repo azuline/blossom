@@ -1,5 +1,5 @@
-import { t } from "@foundation/style";
-import { mapTokenScale } from "@foundation/style/utils";
+import { t } from "@foundation/theme/styles/theme";
+import { mapTokenScale } from "@foundation/theme/utils";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 

@@ -1,5 +1,5 @@
-import { t } from "@foundation/style";
-import { fontFaces } from "@foundation/style/theme.css";
+import { t } from "@foundation/theme/styles/theme";
+import { fontFaces } from "@foundation/theme/styles/theme.css";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
 
 // Reset
