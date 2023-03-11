@@ -13,6 +13,6 @@ export const sTypeLoader = recipe({
     })),
   },
   defaultVariants: {
-    size: "md",
+    size: "sm",
   },
 });

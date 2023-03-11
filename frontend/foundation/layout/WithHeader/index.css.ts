@@ -15,7 +15,11 @@ export const sHeaderLayout = style({
 
 export const sLogoFont = style({
   fontFamily: t.font.face.display,
-  fontWeight: "Light",
-  fontSize: t.font.size.lg,
+  fontWeight: t.font.weight.logo,
+  fontSize: t.font.size.md,
+  lineHeight: t.font.lineHeight.label,
   fontStyle: "italic",
+  // So that the baselines match up:
+  //   size.md - size.sm = 20 - 16 = 4
+  marginBottom: "4px",
 });

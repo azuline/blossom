@@ -29,6 +29,7 @@ export const rawTheme = createGlobalTheme("html", {
   font: {
     face: fontFaces,
     weight: {
+      logo: "300",
       display: {
         default: "500",
         strong: "700",
@@ -96,6 +97,7 @@ export const rawTheme = createGlobalTheme("html", {
     "704": "704px",
     "960": "960px",
     "1216": "1216px",
+    "1440": "1440px",
     "1/5": "20%",
     "1/4": "25%",
     "2/5": "40%",

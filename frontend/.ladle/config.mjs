@@ -1,5 +1,12 @@
 export default {
   stories: ["foundation/**/*.stories.tsx", "product/**/*stories.tsx"],
+  storyOrder: [
+    "Theme*",
+    "Components*",
+    "Loaders*",
+    "Layout*",
+    "Pages*",
+  ],
   addons: {
     theme: {
       enabled: false,

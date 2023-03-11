@@ -24,8 +24,10 @@ export const WithHeader: React.FC<Props> = props => {
         <View className={sHeaderLayout}>
           <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
             <Type className={sLogoFont}>blossom</Type>
-            <Flex sx={{ gap: "16", align: "center" }}>
-              {tenant !== undefined ? <Type>{tenant.name}</Type> : <TypeLoader w="96" />}
+            <Flex sx={{ gap: { initial: "16", md: "8" }, align: "center" }}>
+              {tenant !== undefined
+                ? <Type sx={{ whiteSpace: "nowrap" }}>{tenant.name}</Type>
+                : <TypeLoader w="96" />}
               <Avatar size="28" />
             </Flex>
           </Flex>

@@ -10,7 +10,9 @@ import {
 } from "./error";
 
 // Vitest only works with absolute URLs. But the browser supports relative URLs.
-export const baseURL = process.env.VITEST !== undefined ? "http://localhost:40851" : "";
+export const baseURL = typeof process !== "undefined" && process.env.VITEST !== undefined
+  ? "http://localhost:40851"
+  : "";
 
 /**
  * rpc executes an RPC request to the backend handler of the provided RPC name with the

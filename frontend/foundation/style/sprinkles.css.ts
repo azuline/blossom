@@ -67,6 +67,7 @@ export const sxsets = {
   typography: defineProperties({
     properties: {
       whiteSpace: ["normal", "nowrap", "pre", "pre-line", "pre-wrap"],
+      textTransform: ["none", "capitalize", "uppercase", "lowercase"],
       truncate: {
         true: {
           overflow: "hidden",
