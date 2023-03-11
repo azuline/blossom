@@ -1,33 +1,40 @@
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { StorySection } from "@foundation/stories/StorySection";
 import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { TextField } from "@foundation/ui/TextField";
-import { atom, useAtom } from "jotai";
+import { useState } from "react";
 
 export default {
   title: "Components/Atoms",
 };
 
-const valueAtom = atom("I like sunset glow");
-
 export const TextField_: React.FC = () => {
-  const [value, setValue] = useAtom(valueAtom);
+  const [value, setValue] = useState<string>("");
 
   return (
     <DocumentationStory>
+      <StorySection title="Playground">
+        <TextField label="What's your favorite color?" value={value} onChange={setValue} />
+      </StorySection>
       <VariantsGallery columns={2}>
         <Variant label="state" value="default" />
-        <TextField label="What's your favorite color?" value={value} onChange={setValue} />
+        <TextField label="What's your favorite color?" value="Orange" onChange={() => {}} />
 
         <Variant label="state" value="disabled" />
-        <TextField disabled label="What's your favorite color?" value={value} onChange={setValue} />
+        <TextField
+          disabled
+          label="What's your favorite color?"
+          value="Orange"
+          onChange={() => {}}
+        />
 
         <Variant label="state" value="error" />
         <TextField
-          errorMessage="Value is not cool enough."
+          errorMessage="Pick a better color"
           label="What's your favorite color?"
-          value={value}
-          onChange={setValue}
+          value="Orange"
+          onChange={() => {}}
         />
       </VariantsGallery>
     </DocumentationStory>
