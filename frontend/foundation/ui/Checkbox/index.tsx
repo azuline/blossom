@@ -1,5 +1,5 @@
 import { Icon } from "@foundation/icons/Icon";
-import { SX, sx } from "@foundation/style/sprinkles.css";
+import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import {
   sCheckboxBox,
   sCheckboxLayout,

@@ -1,5 +1,5 @@
 import { HeadlessLink, HeadlessLinkProps } from "@foundation/routing/components/HeadlessLink";
-import { SX } from "@foundation/style/sprinkles.css";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sLink } from "@foundation/ui/Link/index.css";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";

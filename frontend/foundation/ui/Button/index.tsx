@@ -1,7 +1,7 @@
 import { JSXElementConstructor, ReactNode, useRef } from "react";
 
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { SX } from "@foundation/style/sprinkles.css";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sButton } from "@foundation/ui/Button/index.css";
 import { Center } from "@foundation/ui/Center";
 import { RecipeVariants } from "@vanilla-extract/recipes";

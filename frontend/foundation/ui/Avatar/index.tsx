@@ -1,4 +1,4 @@
-import { SX } from "@foundation/style/sprinkles.css";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sAvatar } from "@foundation/ui/Avatar/index.css";
 import { View } from "@foundation/ui/View";
 

@@ -1,4 +1,4 @@
-import { sx } from "@foundation/style/sprinkles.css";
+import { sx } from "@foundation/theme/styles/sprinkles.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCenter = recipe({

@@ -1,5 +1,5 @@
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { SX, sx } from "@foundation/style/sprinkles.css";
+import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { clsx } from "clsx";
 import { ReactNode, useRef } from "react";
 

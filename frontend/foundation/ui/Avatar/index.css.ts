@@ -1,4 +1,4 @@
-import { t } from "@foundation/style";
+import { t } from "@foundation/theme/styles/theme";
 import { style } from "@vanilla-extract/css";
 
 export const sAvatar = style({

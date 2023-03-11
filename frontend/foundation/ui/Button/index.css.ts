@@ -1,4 +1,4 @@
-import { t } from "@foundation/style";
+import { t } from "@foundation/theme/styles/theme";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 

@@ -1,5 +1,5 @@
-import { SX } from "@foundation/style/sprinkles.css";
-import { setSXVars } from "@foundation/style/utils";
+import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { setSXVars } from "@foundation/theme/utils";
 import { spacerXVar, spacerYVar, sSpacer } from "@foundation/ui/Spacer/index.css";
 import { View } from "@foundation/ui/View";
 import { RecipeVariants } from "@vanilla-extract/recipes";

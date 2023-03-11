@@ -1,5 +1,5 @@
-import { t } from "@foundation/style";
-import { sx } from "@foundation/style/sprinkles.css";
+import { sx } from "@foundation/theme/styles/sprinkles.css";
+import { t } from "@foundation/theme/styles/theme";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sTextField = recipe({
