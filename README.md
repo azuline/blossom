@@ -78,7 +78,7 @@ _blossom's_ frontend is a React SPA written in TypeScript. An SPA was chosen
 purely for cheap cost of deployment (CDNs :money_with_wings:).
 
 - [Design System](./frontend/foundation/ui) built with React Aria and vanilla-extract.
-- [Light and dark theme support](./frontend/foundation/style).
+- [Light and dark theme support](./frontend/foundation/theme).
 - [RPC framework](./frontend/foundation/rpc) with imperative, Jotai, and Tanstack Query bindings.
 - Jotai state management.
 - [Error handling](./frontend/foundation/errors) with rich metadata and stacktraces.
@@ -101,11 +101,17 @@ purely for cheap cost of deployment (CDNs :money_with_wings:).
 Designs are built in Figma. The Figma files are still private; might publish
 them later if I'm feeling cute idk~
 
-- Figma Tokens file for the Design System.
-- Figma component library for the Design System components.
-- Figma libraries for the palette and themes.
+- [Figma Tokens file](./frontend/foundation/theme).
+- Figma component library.
+- Figma color palette & theme libraries.
 
 # Getting Started
+
+## Using the Codebase
+
+_TODO_
+
+## Developer Environment
 
 We use Nix to manage developer environments. All tools we use are declaratively
 defined in `nix/`. To bootstrap the developer environment and get started:
