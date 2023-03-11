@@ -45,6 +45,7 @@ globalStyle("*:focus-visible", {
 globalStyle("input", {
   background: "none",
   boxShadow: "none",
+  color: "inherit",
 });
 globalStyle("button", {
   background: "none",
