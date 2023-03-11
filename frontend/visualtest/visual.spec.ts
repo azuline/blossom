@@ -24,17 +24,27 @@ fs.readdirSync(storyDir).forEach(file => {
 
 test.use({ viewport: { width: 1920, height: 1080 } });
 
+// Options for the screenshot.
+const scrotOpts = {
+  // This is a parameter for the underlying pixelmatch library. Extremely sensitive
+  // to visual changes.
+  threshold: 0,
+  // Take a picture of the full scrolling page; do not cut off at screen size.
+  fullPage: true,
+};
+
 Object.keys(stories).forEach(storyKey => {
-  test(`${storyKey} - compare snapshots`, async ({ page }) => {
+  // Take a picture of both light and dark modes.
+  test(`${storyKey} - light - compare snapshots`, async ({ page }) => {
     await page.goto(`${url}/?story=${storyKey}&mode=preview`);
     // Stories are code-splitted; wait for them to load.
     await page.waitForSelector("[data-storyloaded]");
-    await expect(page).toHaveScreenshot(`${storyKey}.png`, {
-      // This is a parameter for the underlying pixelmatch library. Extremely sensitive
-      // to visual changes.
-      threshold: 0,
-      // Take a picture of the full scrolling page; do not cut off at screen size.
-      fullPage: true,
-    });
+    await expect(page).toHaveScreenshot(`${storyKey}--light.png`, scrotOpts);
+  });
+  test(`${storyKey} - dark - compare snapshots`, async ({ page }) => {
+    await page.goto(`${url}/?story=${storyKey}&mode=preview&theme=dark`);
+    // Stories are code-splitted; wait for them to load.
+    await page.waitForSelector("[data-storyloaded]");
+    await expect(page).toHaveScreenshot(`${storyKey}--dark.png`, scrotOpts);
   });
 });
