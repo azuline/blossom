@@ -17,7 +17,7 @@ export const Provider: GlobalProvider = ({ children }) => {
   return (
     <Flex
       className={themeMoonlightLightClass}
-      sx={{ h: "full", w: "full", direction: "column", overflow: "auto" }}
+      sx={{ h: "full", w: "full", direction: "column" }}
     >
       <QueryClientProvider client={queryClient}>
         {children}
