@@ -3,7 +3,7 @@ import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
-import { t } from "@foundation/theme/styles/theme";
+import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
 
 export default {

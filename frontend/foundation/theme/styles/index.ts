@@ -1,13 +1,18 @@
 import { flattenRecord } from "@foundation/lib/flattenRecord";
+import { themeMoonlightLight } from "@foundation/theme/styles/themeColor.css";
+import { themeType } from "@foundation/theme/styles/themeType.css";
 import { CSSProperties } from "react";
-import { rawTheme as theme } from "./theme.css";
+import { themeShared } from "./themeShared.css";
 
-const borderColors = flattenRecord(theme.color.border);
+const borderColors = flattenRecord(themeMoonlightLight.color.border);
 
 /**
  * This function takes in border variables and creates a border CSS value.
  */
-const border = (size: keyof typeof theme.border, color: keyof typeof borderColors): string => {
+const border = (
+  size: keyof typeof themeShared.border,
+  color: keyof typeof borderColors,
+): string => {
   return `${t.border[size]} solid ${borderColors[color]}`;
 };
 
@@ -33,29 +38,29 @@ export type FontVariantOptions = {
  */
 const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProperties => {
   const face = displayVariants.includes(variant) ? "display" : "body";
-  const weights = theme.font.weight[face];
+  const weights = themeType.font.weight[face];
 
-  const fontFamily = theme.font.face[face];
+  const fontFamily = themeType.font.face[face];
   const fontWeight = options.strong === true ? weights.strong : weights.default;
   const lineHeight = options.paragraph === true && bodyVariants.includes(variant)
-    ? t.font.lineHeight.paragraph[variant]
-    : t.font.lineHeight.label;
+    ? themeType.font.lineHeight.paragraph[variant]
+    : themeType.font.lineHeight.label;
   const fontSize = {
-    sm: theme.font.size.sm,
-    xs: theme.font.size.xs,
-    md: theme.font.size.md,
-    lg: theme.font.size.lg,
-    "disp-sm": theme.font.size.sm,
-    "disp-xs": theme.font.size.xs,
-    "disp-md": theme.font.size.md,
-    "disp-lg": theme.font.size.lg,
-    "disp-xl": theme.font.size.xl,
-    "disp-xxl": theme.font.size.xxl,
+    sm: themeType.font.size.sm,
+    xs: themeType.font.size.xs,
+    md: themeType.font.size.md,
+    lg: themeType.font.size.lg,
+    "disp-sm": themeType.font.size.sm,
+    "disp-xs": themeType.font.size.xs,
+    "disp-md": themeType.font.size.md,
+    "disp-lg": themeType.font.size.lg,
+    "disp-xl": themeType.font.size.xl,
+    "disp-xxl": themeType.font.size.xxl,
   }[variant];
   const fontStyle = options.italic === true ? "italic" : undefined;
   const textDecoration = options.underline === true ? "underline" : undefined;
   const textDecorationColor = options.underline === true
-    ? theme.color.content.neutral.weak
+    ? themeMoonlightLight.color.content.neutral.weak
     : undefined;
 
   return {
@@ -69,7 +74,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   };
 };
 
-type Space = keyof typeof theme.space;
+type Space = keyof typeof themeShared.space;
 
 /**
  * This function takes in a sequence of space values and produces a single output CSS value.
@@ -88,7 +93,9 @@ const space = (a: Space, b?: Space, c?: Space, d?: Space): string => {
 };
 
 export const t = {
-  ...theme,
+  ...themeShared,
+  ...themeType,
+  ...themeMoonlightLight,
   fn: {
     border,
     font,

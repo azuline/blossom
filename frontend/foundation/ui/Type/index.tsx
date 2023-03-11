@@ -1,5 +1,5 @@
+import { FontVariant, t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { FontVariant, t } from "@foundation/theme/styles/theme";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
 

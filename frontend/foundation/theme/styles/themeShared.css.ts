@@ -1,5 +1,4 @@
-import { moonlightLight, moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
-import { createGlobalTheme } from "@vanilla-extract/css";
+import { createTheme } from "@vanilla-extract/css";
 
 export const breakpoints = {
   // The screen sizes are:
@@ -20,57 +19,7 @@ export const breakpoints = {
   xs: "(max-width: 508px)",
 } as const;
 
-export const fontFaces = {
-  display: "Cormorant Garamond",
-  body: "Alegreya Sans",
-} as const;
-
-export const rawTheme = createGlobalTheme("html", {
-  font: {
-    face: fontFaces,
-    weight: {
-      logo: "300",
-      display: {
-        default: "500",
-        strong: "700",
-      },
-      body: {
-        default: "400",
-        strong: "600",
-      },
-    },
-    size: {
-      xs: "14px",
-      sm: "16px",
-      md: "20px",
-      lg: "26px",
-      xl: "36px",
-      xxl: "48px",
-    },
-    lineHeight: {
-      label: "1",
-      paragraph: {
-        xs: "20px",
-        sm: "24px",
-        md: "30px",
-        lg: "34px",
-      },
-    },
-  },
-  color: moonlightLight,
-  outline: {
-    focus: {
-      value: `2px solid ${moonlightPalette.brand["74"]}`,
-      offset: "2px",
-    },
-    error: {
-      value: `2px solid ${moonlightPalette.red["57"]}`,
-      offset: "2px",
-    },
-  },
-  shadows: {
-    weak: "0px 4px 4px rgba(220, 220, 220, 0.25), 0px 12px 14px rgba(198, 198, 198, 0.05)",
-  },
+export const [themeSharedClass, themeShared] = createTheme({
   size: {
     "0": "0px",
     "2": "2px",

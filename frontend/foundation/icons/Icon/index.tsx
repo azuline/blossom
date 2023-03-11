@@ -1,6 +1,6 @@
 import { ICONS_MAP } from "@foundation/icons/codegen/imports";
+import { t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { t } from "@foundation/theme/styles/theme";
 import { View } from "@foundation/ui/View";
 import { Suspense } from "react";
 
