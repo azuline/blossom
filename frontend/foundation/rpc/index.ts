@@ -9,6 +9,9 @@ import {
   RPCError,
 } from "./error";
 
+// Vitest only works with absolute URLs. But the browser supports relative URLs.
+export const baseURL = process.env.VITEST !== undefined ? "http://localhost:40851" : "";
+
 /**
  * rpc executes an RPC request to the backend handler of the provided RPC name with the
  * given arguments.
@@ -132,7 +135,7 @@ const baseRPCExecutor = async <
 ): Promise<RPCs[T]["out"]> => {
   const method = RPCMethods[name];
 
-  let url = `/api/${name}`;
+  let url = `${baseURL}/api/${name}`;
   let body: string | undefined;
   if (args != null) {
     if (method === "GET") {
