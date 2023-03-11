@@ -3,6 +3,7 @@ import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
+import { ThemeProvider } from "@foundation/theme/provider";
 import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
 
@@ -112,4 +113,80 @@ export const MoonlightThemeLight: React.FC = () => (
       </Flex>
     </StorySection>
   </DocumentationStory>
+);
+
+export const MoonlightThemeDark: React.FC = () => (
+  <ThemeProvider force="dark">
+    <DocumentationStory gap="80">
+      <StorySection title="Moonlight Theme - Dark">
+        <StoryParagraph>
+          The moonlight light theme defines a semantic palette based on the moonlight base color
+          palette. This semantic palette arranges colors based on intent in usage.
+        </StoryParagraph>
+      </StorySection>
+      <StorySection title="Background">
+        <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
+          <StorySection subtitle="Neutral">
+            <ColorPalette palette={t.color.background.neutral} />
+          </StorySection>
+          <StorySection subtitle="Inverse">
+            <ColorPalette palette={t.color.background.inverse} />
+          </StorySection>
+          <StorySection subtitle="Overlay">
+            <ColorPalette palette={t.color.background.overlay} />
+          </StorySection>
+          <StorySection subtitle="Brand">
+            <ColorPalette palette={t.color.background.brand} />
+          </StorySection>
+          <StorySection subtitle="Positive">
+            <ColorPalette palette={t.color.background.positive} />
+          </StorySection>
+          <StorySection subtitle="Caution">
+            <ColorPalette palette={t.color.background.caution} />
+          </StorySection>
+          <StorySection subtitle="Negative">
+            <ColorPalette palette={t.color.background.negative} />
+          </StorySection>
+          <StorySection subtitle="Decoration">
+            <ColorPalette palette={t.color.background.decoration} />
+          </StorySection>
+        </Flex>
+      </StorySection>
+      <StorySection title="Content">
+        <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
+          <StorySection subtitle="Neutral">
+            <ColorPalette palette={t.color.content.neutral} />
+          </StorySection>
+          <StorySection subtitle="Inverse">
+            <ColorPalette palette={t.color.content.inverse} />
+          </StorySection>
+          <StorySection subtitle="Brand">
+            <ColorPalette palette={t.color.content.brand} />
+          </StorySection>
+          <StorySection subtitle="Positive">
+            <ColorPalette palette={t.color.content.positive} />
+          </StorySection>
+          <StorySection subtitle="Caution">
+            <ColorPalette palette={t.color.content.caution} />
+          </StorySection>
+          <StorySection subtitle="Negative">
+            <ColorPalette palette={t.color.content.negative} />
+          </StorySection>
+        </Flex>
+      </StorySection>
+      <StorySection title="Border">
+        <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
+          <StorySection subtitle="Neutral">
+            <ColorPalette palette={t.color.border.neutral} />
+          </StorySection>
+          <StorySection subtitle="Inverse">
+            <ColorPalette palette={t.color.border.inverse} />
+          </StorySection>
+          <StorySection subtitle="Negative">
+            <ColorPalette palette={t.color.border.negative} />
+          </StorySection>
+        </Flex>
+      </StorySection>
+    </DocumentationStory>
+  </ThemeProvider>
 );

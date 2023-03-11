@@ -58,13 +58,6 @@ globalStyle("a", {
 
 // Custom global styles.
 
-// Default all typography to the standard text.
-globalStyle("html, .ladle-main", {
-  fontFamily: `${t.font.face.body}, sans-serif`,
-  fontWeight: t.font.weight.body.default,
-  lineHeight: t.font.lineHeight.label,
-  fontSize: t.font.size.sm,
-});
 // Default all borders to solid style. This way, we do not need to specify `bstyle`
 // everywhere.
 globalStyle("*", {
