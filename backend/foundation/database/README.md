@@ -10,4 +10,9 @@ based on the passed in User and Tenant, which means that only rows with a
 matching `user_id` or `tenant_id` can be accessed, and should be used for all
 queries originating from a customer request.
 
-See the database migrations for the schema that enables Row Level Security.
+To learn more about the schema that enables Row Level Security, please read the
+database migrations.
+
+## Schema Conventions
+
+Database schema conventions are documented in [migrate](../migrate).

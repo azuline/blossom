@@ -114,8 +114,8 @@ defined in `nix/`. To bootstrap the developer environment and get started:
    or [MacOS nix-darwin](https://github.com/LnL7/nix-darwin) guide to install
    Nix.
 2. [Enable Nix Flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes).
-3. [Install `direnv`](https://nixos.wiki/wiki/Development_environment_with_nix-shell#direnv).
-   (Or run `nix develop` to start a dev shell).
+3. [Install `direnv`](https://nixos.wiki/wiki/Development_environment_with_nix-shell#direnv)
+   and run `direnv allow` in the root of the monorepo.
 
 After installing Nix and activating the developer environment, all tools and
 commands should work.
@@ -132,7 +132,8 @@ The application services (the backend and frontend services) are organized as
 packages. Each package solves one class of problems or feature and contains a
 README that document its purpose, context, and usage.
 
-Packages are sorted into _package groups_. The package groups are:
+Packages are sorted into _package groups_. While every application service will
+have its own set of package groups, mainstays are:
 
 - `foundation/` contains platform packages.
 - `product/` contains the product packages.
@@ -156,6 +157,9 @@ infrastructure.
 - `.github/workflows/` contains the CI/CD pipeline configurations.
 
 # Developer Port Space
+
+We try to avoid having multiple local services occupy the same port. The
+current allocations of services -> ports are:
 
 - 40851: Backend
 - 40852: Postgres
