@@ -7,7 +7,6 @@ export const sVariantsGallery = style({
   display: "grid",
   grid: `auto-flow max-content / repeat(${sVariantsGalleryColumns}, max-content)`,
   gap: t.fn.space("28", "36"),
-  alignItems: "center",
-  justifyItems: "center",
+  // alignItems and justifyItems are set in the component style prop.
   width: "fit-content",
 });

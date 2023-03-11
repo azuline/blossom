@@ -5,6 +5,7 @@ import { StorySection } from "@foundation/stories/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
+import { Type } from "@foundation/ui/Type";
 
 export default {
   title: "Theme",
@@ -110,5 +111,46 @@ export const Theme: React.FC = () => (
         </StorySection>
       </Flex>
     </StorySection>
+  </DocumentationStory>
+);
+
+export const Typography: React.FC = () => (
+  <DocumentationStory>
+    <StorySection title="Introduction">
+      <StoryParagraph>
+        The typography scale has three kinds of type: Display, Label, and Paragraph. Display is
+        intended for titles and branding, Label for single-line application labels, and Paragraph
+        for multi-line body text.
+      </StoryParagraph>
+    </StorySection>
+    <Flex sx={{ gap: "80", wrap: "wrap" }}>
+      <Flex sx={{ direction: "column", gap: "20" }}>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxl">Display / XXL</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xl">Display / XL</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-lg">Display / LG</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-md">Display / MD</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-sm">Display / SM</Type>
+      </Flex>
+      <Flex sx={{ direction: "column", gap: "20" }}>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="lg">Label / LG</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="md">Label / MD</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="sm">Label / SM</Type>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="xs">Label / XS</Type>
+      </Flex>
+      <Flex sx={{ direction: "column", gap: "20" }}>
+        <Type paragraph sx={{ whiteSpace: "nowrap" }} variant="lg">
+          Paragraph / LG<br />Paragraph / LG
+        </Type>
+        <Type paragraph sx={{ whiteSpace: "nowrap" }} variant="md">
+          Paragraph / MD<br />Paragraph / MD
+        </Type>
+        <Type paragraph sx={{ whiteSpace: "nowrap" }} variant="sm">
+          Paragraph / SM<br />Paragraph / SM
+        </Type>
+        <Type paragraph sx={{ whiteSpace: "nowrap" }} variant="xs">
+          Paragraph / XS<br />Paragraph / XS
+        </Type>
+      </Flex>
+    </Flex>
   </DocumentationStory>
 );
