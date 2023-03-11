@@ -6,8 +6,7 @@ on:
       - flake.*
       - nix/**
       - backend/**
-    paths-ignore:
-      - README.md
+      - !**/*.md
 defaults:
   run:
     working-directory: backend/
