@@ -10,13 +10,12 @@ export default {
   title: "Theme",
 };
 
-export const MoonlightPalette: React.FC = () => (
+export const Palette: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Moonlight Palette">
+    <StorySection title="Palette">
       <StoryParagraph>
-        The moonlight color palette defines the set of visual colors and steps for the moonlight
-        themes. The light and dark themes select from this palette to create their semantic
-        palettes.
+        The color palette defines the set of visual colors and steps for the themes. The light and
+        dark themes select from this palette to create their semantic palettes.
       </StoryParagraph>
     </StorySection>
     <StorySection subtitle="Neutral">
@@ -40,12 +39,12 @@ export const MoonlightPalette: React.FC = () => (
   </DocumentationStory>
 );
 
-export const MoonlightTheme: React.FC = () => (
+export const Theme: React.FC = () => (
   <DocumentationStory gap="80">
-    <StorySection title="Moonlight Theme">
+    <StorySection title="Theme">
       <StoryParagraph>
-        The moonlight theme defines a semantic palette based on the moonlight base color palette.
-        This semantic palette arranges colors based on intent in usage.
+        The theme defines a semantic palette based on the base color palette. This semantic palette
+        arranges colors based on intent in usage.
       </StoryParagraph>
     </StorySection>
     <StorySection title="Background">

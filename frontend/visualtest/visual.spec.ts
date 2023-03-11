@@ -17,8 +17,8 @@ fs.readdirSync(storyDir).forEach(file => {
   const fetchedStoryKeys = Object.keys(stories);
   if (!fetchedStoryKeys.includes(storyName)) {
     // eslint-disable-next-line no-console
-    console.log(`Removed dangling visual snapshot: ${storyName}.`);
-    fs.rmSync(`${storyDir}/${storyName}-linux.png`);
+    console.log(`Removed dangling visual snapshot: ${file}.`);
+    fs.rmSync(`${storyDir}/${file}`);
   }
 });
 
