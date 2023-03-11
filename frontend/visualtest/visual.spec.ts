@@ -24,15 +24,17 @@ fs.readdirSync(storyDir).forEach(file => {
 
 test.use({ viewport: { width: 1920, height: 1080 } });
 
-// iterate through stories
 Object.keys(stories).forEach(storyKey => {
-  // create a test for each story
   test(`${storyKey} - compare snapshots`, async ({ page }) => {
-    // navigate to the story
     await page.goto(`${url}/?story=${storyKey}&mode=preview`);
-    // stories are code-splitted, wait for them to be loaded
+    // Stories are code-splitted; wait for them to load.
     await page.waitForSelector("[data-storyloaded]");
-    // take a screenshot and compare it with the baseline
-    await expect(page).toHaveScreenshot(`${storyKey}.png`, { fullPage: true });
+    await expect(page).toHaveScreenshot(`${storyKey}.png`, {
+      // This is a parameter for the underlying pixelmatch library. Extremely sensitive
+      // to visual changes.
+      threshold: 0,
+      // Take a picture of the full scrolling page; do not cut off at screen size.
+      fullPage: true,
+    });
   });
 });
