@@ -2,7 +2,7 @@ import { filterObject } from "@foundation/lib/filterObject";
 import { AppLoader } from "@foundation/loaders/AppLoader";
 import { availablePathsAtom } from "@foundation/routing/state/paths";
 import { useAtom } from "jotai";
-import { FC, lazy, ReactNode, Suspense, useEffect, useMemo } from "react";
+import { FC, lazy, Suspense, useEffect, useMemo } from "react";
 import { Route as WouterRoute, useRoute } from "wouter";
 
 type RouteProps = {
@@ -29,22 +29,6 @@ export const Route: FC<RouteProps> = props => {
           <Page {...params} />
         </Suspense>
       )}
-    </WouterRoute>
-  );
-};
-
-type InlineRouteProps = {
-  path: string;
-  page: ReactNode;
-};
-
-/**
- * Primarily meant for testing; supports loading routes inline without code splitting.
- */
-export const InlineRoute: FC<InlineRouteProps> = props => {
-  return (
-    <WouterRoute path={props.path}>
-      {props.page}
     </WouterRoute>
   );
 };

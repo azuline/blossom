@@ -1,4 +1,3 @@
-import { InlineRoute } from "@foundation/routing/components/Route";
 import { mockRPCsForTest } from "@foundation/testing/msw.server";
 import LoginPage from "@product/login/page";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -6,8 +5,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, ReactNode } from "react";
 
-import { describe, it } from "vitest";
-import { Switch } from "wouter";
+import { describe, it, vi } from "vitest";
 
 const queryClient = new QueryClient();
 
@@ -24,18 +22,16 @@ describe("@product/login", () => {
       async () => {
         render(
           <PageTestWrap>
-            <InlineRoute page={<LoginPage />} path="/:any*" />
-            {/* Hacky way to test that the redirect succeeded. */}
-            <Switch>
-              <InlineRoute page={<>Logged in!</>} path="/" />
-            </Switch>
+            <LoginPage />
           </PageTestWrap>,
         );
+        const redirectSpy = vi.spyOn(window.history, "pushState");
         await screen.findByText("Welcome back!");
         await userEvent.type(screen.getByLabelText("Email"), "blissful@sunsetglow.net");
         await userEvent.type(screen.getByLabelText("Password"), "i love react");
+        expect(redirectSpy).not.toHaveBeenCalled();
         await userEvent.click(screen.getByText("Sign in"));
-        await screen.findByText(/Logged in!/);
+        expect(redirectSpy).toHaveBeenCalled();
       },
     ));
 
