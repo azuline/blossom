@@ -46,8 +46,8 @@ NixOS+Nomad+Consul configurations are located [here](https://github.com/azuline/
 
 - [Nix](./nix) for package management & developer environments.
 - [Nomad](./nomad) for service orchestration.
-- [Github Actions CI](./github/workflows) pipeline.
-- [Github Actions CD](./github/workflows) pipeline with Nomad and Tailscale.
+- [Github Actions CI](./github/.workflows) pipeline.
+- [Github Actions CD](./github/.workflows) pipeline with Nomad and Tailscale.
 
 ## Backend
 
