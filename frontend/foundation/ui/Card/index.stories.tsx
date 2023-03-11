@@ -19,22 +19,22 @@ export const Card_: React.FC = () => (
       <Variant label="padding" value="lg" />
 
       <Variant label="variant" value="strong" />
-      <Card padding="none" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-      <Card padding="sm" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-      <Card padding="md" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
-      <Card padding="lg" sx={{ maxw: "356" }} variant="strong"><Text1 /></Card>
+      <Card padding="none" sx={{ maxw: "272" }} variant="strong"><Text1 /></Card>
+      <Card padding="sm" sx={{ maxw: "272" }} variant="strong"><Text1 /></Card>
+      <Card padding="md" sx={{ maxw: "272" }} variant="strong"><Text1 /></Card>
+      <Card padding="lg" sx={{ maxw: "272" }} variant="strong"><Text1 /></Card>
 
       <Variant label="variant" value="default" />
-      <Card padding="none" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-      <Card padding="sm" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-      <Card padding="md" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
-      <Card padding="lg" sx={{ maxw: "356" }} variant="default"><Text2 /></Card>
+      <Card padding="none" sx={{ maxw: "272" }} variant="default"><Text2 /></Card>
+      <Card padding="sm" sx={{ maxw: "272" }} variant="default"><Text2 /></Card>
+      <Card padding="md" sx={{ maxw: "272" }} variant="default"><Text2 /></Card>
+      <Card padding="lg" sx={{ maxw: "272" }} variant="default"><Text2 /></Card>
 
       <Variant label="variant" value="inverse" />
-      <Card padding="none" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-      <Card padding="sm" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-      <Card padding="md" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
-      <Card padding="lg" sx={{ maxw: "356" }} variant="inverse"><Text3 /></Card>
+      <Card padding="none" sx={{ maxw: "272" }} variant="inverse"><Text3 /></Card>
+      <Card padding="sm" sx={{ maxw: "272" }} variant="inverse"><Text3 /></Card>
+      <Card padding="md" sx={{ maxw: "272" }} variant="inverse"><Text3 /></Card>
+      <Card padding="lg" sx={{ maxw: "272" }} variant="inverse"><Text3 /></Card>
     </VariantsGallery>
   </DocumentationStory>
 );
