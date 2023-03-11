@@ -9,9 +9,9 @@ import { atomWithStorage } from "jotai/utils";
 import { FC, ReactNode } from "react";
 import { sThemeProvider } from "./index.css";
 
-type Theme = "moonlight-light" | "moonlight-dark";
+type Theme = "light" | "dark";
 
-const themeAtom = atomWithStorage<Theme>("theme", "moonlight-light");
+const themeAtom = atomWithStorage<Theme>("theme", "light");
 
 type Props = {
   force?: "dark" | "light";
@@ -19,14 +19,10 @@ type Props = {
 };
 
 export const ThemeProvider: FC<Props> = props => {
-  let colorClass: string;
+  const [_theme] = useAtom(themeAtom);
+  const theme: Theme = props.force ?? _theme;
 
-  [colorClass] = useAtom(themeAtom);
-  if (props.force === "dark") {
-    colorClass = themeMoonlightDarkClass;
-  } else if (props.force === "light") {
-    colorClass = themeMoonlightLightClass;
-  }
+  const colorClass = theme === "dark" ? themeMoonlightDarkClass : themeMoonlightLightClass;
 
   return (
     <View className={clsx(colorClass, sThemeProvider)} sx={{ h: "full", w: "full" }}>
