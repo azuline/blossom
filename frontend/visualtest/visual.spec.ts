@@ -13,7 +13,7 @@ const { stories } = fetch(`${url}/meta.json`).json() as { stories: string[] };
 // remove snapshots that no longer correspond to a story
 const storyDir = `${__dirname}/visual.spec.ts-snapshots`;
 fs.readdirSync(storyDir).forEach(file => {
-  const storyName = file.replace(/-linux.png$/, "");
+  const storyName = file.replace(/--(light|dark)-linux.png$/, "");
   const fetchedStoryKeys = Object.keys(stories);
   if (!fetchedStoryKeys.includes(storyName)) {
     // eslint-disable-next-line no-console
