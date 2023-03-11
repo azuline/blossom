@@ -3,20 +3,19 @@ import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
-import { t } from "@foundation/theme/styles/theme";
+import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
 
 export default {
   title: "Theme",
 };
 
-export const MoonlightPalette: React.FC = () => (
+export const Palette: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Moonlight Palette">
+    <StorySection title="Palette">
       <StoryParagraph>
-        The moonlight color palette defines the set of visual colors and steps for the moonlight
-        themes. The light and dark themes select from this palette to create their semantic
-        palettes.
+        The color palette defines the set of visual colors and steps for the themes. The light and
+        dark themes select from this palette to create their semantic palettes.
       </StoryParagraph>
     </StorySection>
     <StorySection subtitle="Neutral">
@@ -40,12 +39,12 @@ export const MoonlightPalette: React.FC = () => (
   </DocumentationStory>
 );
 
-export const MoonlightThemeLight: React.FC = () => (
+export const Theme: React.FC = () => (
   <DocumentationStory gap="80">
-    <StorySection title="Moonlight Theme - Light">
+    <StorySection title="Theme">
       <StoryParagraph>
-        The moonlight light theme defines a semantic palette based on the moonlight base color
-        palette. This semantic palette arranges colors based on intent in usage.
+        The theme defines a semantic palette based on the base color palette. This semantic palette
+        arranges colors based on intent in usage.
       </StoryParagraph>
     </StorySection>
     <StorySection title="Background">

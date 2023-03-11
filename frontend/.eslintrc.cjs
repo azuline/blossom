@@ -7,7 +7,7 @@ const importAliases =
     .filter(x => x.isDirectory())
     .map(x => x.name)
     .filter(x => !excludedAliases.includes(x))
-    .map(x => ({ alias: `@${x}`, matcher: `^${x}/` }));
+    .map(x => ({ alias: `@${x}/`, matcher: `^${x}/` }));
 
 module.exports = {
   parser: "@typescript-eslint/parser",
@@ -30,7 +30,7 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint", "unused-imports", "import-alias"],
   env: { es6: true, browser: true, jest: true },
-  ignorePatterns: ["coverage", ".eslintrc.cjs", "public"],
+  ignorePatterns: ["coverage", ".eslintrc.cjs", "public", "!.ladle"],
   rules: {
     // This goes off when we have useEffects that return either nothing or a cleanup
     // function.

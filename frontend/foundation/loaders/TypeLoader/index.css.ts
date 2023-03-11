@@ -1,4 +1,4 @@
-import { t } from "@foundation/theme/styles/theme";
+import { t } from "@foundation/theme/styles";
 import { mapTokenScale } from "@foundation/theme/utils";
 import { recipe } from "@vanilla-extract/recipes";
 

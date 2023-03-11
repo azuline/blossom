@@ -1,6 +1,6 @@
-import { t } from "@foundation/theme/styles/theme";
-import { fontFaces } from "@foundation/theme/styles/theme.css";
+import { fontFaces } from "@foundation/theme/themes/type.css";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
+import { t } from ".";
 
 // Reset
 // https://www.joshwcomeau.com/css/custom-css-reset/
@@ -45,6 +45,7 @@ globalStyle("*:focus-visible", {
 globalStyle("input", {
   background: "none",
   boxShadow: "none",
+  color: "inherit",
 });
 globalStyle("button", {
   background: "none",
@@ -58,13 +59,6 @@ globalStyle("a", {
 
 // Custom global styles.
 
-// Default all typography to the standard text.
-globalStyle("html, .ladle-main", {
-  fontFamily: `${t.font.face.body}, sans-serif`,
-  fontWeight: t.font.weight.body.default,
-  lineHeight: t.font.lineHeight.label,
-  fontSize: t.font.size.sm,
-});
 // Default all borders to solid style. This way, we do not need to specify `bstyle`
 // everywhere.
 globalStyle("*", {

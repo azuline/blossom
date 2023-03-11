@@ -1,15 +1,15 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
+import { ThemeProvider } from "@foundation/theme/provider";
 import "@foundation/theme/styles/global.css";
-import { View } from "@foundation/ui/View";
 import { Contexts } from "@product/app/Contexts";
 import { Router } from "@product/app/Router";
 
 export const App: React.FC = () => (
-  <View sx={{ h: "full", background: "neutral.base", color: "neutral.default" }}>
+  <ThemeProvider>
     <Contexts>
       <LayoutPaddingVariableSetter>
         <Router />
       </LayoutPaddingVariableSetter>
     </Contexts>
-  </View>
+  </ThemeProvider>
 );

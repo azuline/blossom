@@ -1,18 +1,17 @@
 import { flattenRecord } from "@foundation/lib/flattenRecord";
-import { t } from "@foundation/theme/styles/theme";
-import { breakpoints } from "@foundation/theme/styles/theme.css";
+import { t } from "@foundation/theme/styles";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 
 const conditions = {
   conditions: {
     // responsive
     initial: {},
-    xxl: { "@media": breakpoints.xxl },
-    xl: { "@media": breakpoints.xl },
-    lg: { "@media": breakpoints.lg },
-    md: { "@media": breakpoints.md },
-    sm: { "@media": breakpoints.sm },
-    xs: { "@media": breakpoints.xs },
+    xxl: { "@media": t.breakpoints.xxl },
+    xl: { "@media": t.breakpoints.xl },
+    lg: { "@media": t.breakpoints.lg },
+    md: { "@media": t.breakpoints.md },
+    sm: { "@media": t.breakpoints.sm },
+    xs: { "@media": t.breakpoints.xs },
   },
   defaultCondition: "initial",
 } as const;

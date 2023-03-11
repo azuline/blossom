@@ -1,4 +1,4 @@
-import { t } from "@foundation/theme/styles/theme";
+import { t } from "@foundation/theme/styles";
 import { style } from "@vanilla-extract/css";
 
 export const sIconGallery = style({
