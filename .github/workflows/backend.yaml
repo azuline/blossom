@@ -6,7 +6,7 @@ on:
       - flake.*
       - nix/**
       - backend/**
-      - !**/*.md
+      - '!**/*.md'
 defaults:
   run:
     working-directory: backend/
