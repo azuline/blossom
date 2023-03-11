@@ -12,7 +12,7 @@ import { useId, useRef } from "react";
 import { AriaCheckboxProps, useCheckbox, useFocusRing, VisuallyHidden } from "react-aria";
 import { useToggleState } from "react-stately";
 
-type Props = LabellableProps & {
+export type CheckboxProps = LabellableProps & {
   checked: boolean;
   onChange?: (checked: boolean) => void;
   error?: boolean;
@@ -21,7 +21,7 @@ type Props = LabellableProps & {
   sx?: SX;
 };
 
-export const Checkbox: React.FC<Props> = _props => {
+export const Checkbox: React.FC<CheckboxProps> = _props => {
   const props = {
     ..._props,
     disabled: _props.disabled ?? false,

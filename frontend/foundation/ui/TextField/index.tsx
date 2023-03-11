@@ -6,7 +6,7 @@ import { Type } from "@foundation/ui/Type";
 import { LabellableProps } from "@foundation/ui/types";
 import { FocusEvent, useRef } from "react";
 
-type Props = LabellableProps & {
+export type TextFieldProps = LabellableProps & {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
@@ -18,7 +18,7 @@ type Props = LabellableProps & {
   className?: string;
 };
 
-export const TextField: React.FC<Props> = props => {
+export const TextField: React.FC<TextFieldProps> = props => {
   const ref = useRef(null);
 
   const ariaProps: AriaTextFieldProps = { ...props, isDisabled: props.disabled };

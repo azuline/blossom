@@ -29,7 +29,7 @@ The frontend stories are hosted with Ladle at https://celestial.sunsetglow.net.
 - Router: Wouter
 - Requests: Tanstack Query
 - Linters/Formatters: ESLint+dprint+Semgrep
-- Test Runner: Vitest
+- Test Runner: Vitest+Testing Library
 - Component Stories: Ladle
 - Visual Test Runner: Ladle+Playwright
 - E2E Test Runner: Playwright [TODO]

@@ -15,11 +15,15 @@ def indent(s: str, i: int) -> str:
 
 
 icons = [
-    (i.stem, str(i.resolve().with_suffix("")).removeprefix(str(icons_dir) + "/"))
+    (
+        i.stem.removeprefix("_x-icon-"),
+        str(i.resolve().with_suffix("")).removeprefix(str(icons_dir) + "/"),
+    )
     for i in icons_dir.glob("**/*.tsx")
 ]
 record_lines = [
-    indent(f'"{stem}": lazy(() => import("./icons/{path}")),', 1) for stem, path in icons
+    indent(f'"{stem}": lazy(() => import("./icons/{path}")),', 1)
+    for stem, path in icons
 ]
 
 nl = "\n"
