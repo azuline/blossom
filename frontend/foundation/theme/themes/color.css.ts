@@ -35,6 +35,6 @@ export const themeMoonlightDarkClass = createTheme(themeMoonlightLightVars, {
     },
   },
   shadows: {
-    weak: "0px 4px 4px rgba(220, 220, 220, 0.10), 0px 12px 14px rgba(198, 198, 198, 0.05)",
+    weak: "0px 4px 4px rgba(220, 220, 220, 0.04), 0px 12px 14px rgba(198, 198, 198, 0.02)",
   },
 });
