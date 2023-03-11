@@ -7,6 +7,8 @@ on:
       - nix/**
       - frontend/**
       - nomad/ladle.nomad
+    paths-ignore:
+      - README.md
 defaults:
   run:
     working-directory: frontend/
