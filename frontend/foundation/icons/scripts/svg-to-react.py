@@ -29,6 +29,11 @@ for f in icons_dir.glob("**/*.svg"):
     with f.open("r") as fp:
         contents = fp.read()
 
+    # Changing common DOM properties.
+    contents = re.sub(r"stroke-linejoin", "strokeLinejoin", contents)
+    contents = re.sub(r"stroke-width", "strokeWidth", contents)
+    contents = re.sub(r"stroke-linecap", "strokeLinecap", contents)
+
     # Per-set changes.
     if iset == "feather":
         # Replace width+heights.
@@ -50,7 +55,11 @@ const IconComponent: FC = () => (
 export default IconComponent
 """
 
-    fnew = output_dir / f.with_suffix(".tsx").name
+    icon_name = f.with_suffix("").name
+    # Give them some shitty file name so that we don't accidentally auto-import them. An example is
+    # the `Type` icon--it can be accidentally autoimported when attempting to import the Type
+    # component.
+    fnew = output_dir / f"_x-icon-{icon_name}.tsx"
     print(f"Writing to {fnew}")
     with fnew.open("w") as fp:
         fp.write(contents)
