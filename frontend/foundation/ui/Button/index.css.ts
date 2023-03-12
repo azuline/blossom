@@ -1,4 +1,3 @@
-import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
@@ -58,7 +57,7 @@ export const sButton = recipe({
           [activeColor]: t.color.background.brand.active,
           [color]: t.color.content.brand.tint,
           [colorDisabled]: t.color.content.brand.disabled,
-          [borderColorDisabled]: moonlightPalette.brand[74],
+          [borderColorDisabled]: t.color.border.brand.disabled,
         },
       },
       secondary: {
@@ -77,7 +76,7 @@ export const sButton = recipe({
           [activeColor]: t.color.background.negative.active,
           [color]: t.color.content.negative.tint,
           [colorDisabled]: t.color.content.negative.disabled,
-          [borderColorDisabled]: moonlightPalette.red[86],
+          [borderColorDisabled]: t.color.border.negative.disabled,
         },
       },
     },

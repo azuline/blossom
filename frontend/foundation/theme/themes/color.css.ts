@@ -59,7 +59,7 @@ export const [themeMoonlightLightClass, themeMoonlightLightVars] = createTheme({
   color: moonlightLight,
   outline: {
     focus: {
-      value: `2px solid ${moonlightPalette.brand["74"]}`,
+      value: `2px solid ${moonlightLight.border.brand.default}`,
       offset: "2px",
     },
     error: {
@@ -74,7 +74,7 @@ export const themeMoonlightDarkClass = createTheme(themeMoonlightLightVars, {
   color: moonlightDark,
   outline: {
     focus: {
-      value: `2px solid ${moonlightPalette.brand["74"]}`,
+      value: `2px solid ${moonlightDark.border.brand.default}`,
       offset: "2px",
     },
     error: {

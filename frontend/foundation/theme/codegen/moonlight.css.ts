@@ -21,7 +21,6 @@ export const moonlightPalette = {
     "54": "#5B4BC7",
     "59": "#6B5BD2",
     "64": "#7D6EDA",
-    "74": "#A298E3",
     "82": "#BDB6ED",
     "90": "#D8D4F5",
     "94": "#EAE8F9",
@@ -143,9 +142,16 @@ export const moonlightLight = {
       default: moonlightPalette["neutral"]["38"],
       weak: moonlightPalette["neutral"]["21"],
     },
-    negative: { default: moonlightPalette["red"]["49"] },
-    positive: { default: moonlightPalette["green"]["45"] },
-    caution: { default: moonlightPalette["orange"]["43"] },
+    brand: { default: moonlightPalette["brand"]["48"], disabled: moonlightPalette["brand"]["82"] },
+    positive: {
+      default: moonlightPalette["green"]["45"],
+      disabled: moonlightPalette["green"]["84"],
+    },
+    caution: {
+      default: moonlightPalette["orange"]["43"],
+      disabled: moonlightPalette["orange"]["76"],
+    },
+    negative: { default: moonlightPalette["red"]["49"], disabled: moonlightPalette["red"]["86"] },
   },
 } as const;
 
@@ -233,8 +239,15 @@ export const moonlightDark = {
       default: moonlightPalette["neutral"]["77"],
       weak: moonlightPalette["neutral"]["85"],
     },
-    positive: { default: moonlightPalette["green"]["28"] },
-    caution: { default: moonlightPalette["orange"]["28"] },
-    negative: { default: moonlightPalette["red"]["35"] },
+    brand: { default: moonlightPalette["brand"]["40"], disabled: moonlightPalette["brand"]["54"] },
+    positive: {
+      default: moonlightPalette["green"]["28"],
+      disabled: moonlightPalette["green"]["49"],
+    },
+    caution: {
+      default: moonlightPalette["orange"]["28"],
+      disabled: moonlightPalette["orange"]["57"],
+    },
+    negative: { default: moonlightPalette["red"]["35"], disabled: moonlightPalette["red"]["57"] },
   },
 } as const;

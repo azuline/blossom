@@ -282,4 +282,5 @@ with (out_dir / "moonlight.css.ts").open("w") as fp:
     fp.write(dict_to_ts("moonlightLight", moonlight_light))
     fp.write(dict_to_ts("moonlightDark", moonlight_dark))
 
-subprocess.run(["dprint", "fmt", "--config", "../../dprint.json"])
+DPRINT_CONFIG = Path(__file__).parent.parent.parent.parent / "dprint.json"
+subprocess.run(["dprint", "fmt", "--config", str(DPRINT_CONFIG)])
