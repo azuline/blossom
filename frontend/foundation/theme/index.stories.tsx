@@ -2,10 +2,13 @@ import { ColorPalette } from "@foundation/stories/ColorPalette";
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
+import { Variant } from "@foundation/stories/Variant";
+import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
+import { View } from "@foundation/ui/View";
 
 export default {
   title: "Theme",
@@ -155,6 +158,7 @@ export const Typography: React.FC = () => (
   </DocumentationStory>
 );
 
+// dprint-ignore
 export const Elevation: React.FC = () => (
   <DocumentationStory>
     <StorySection title="Elevation">
@@ -178,8 +182,54 @@ export const Elevation: React.FC = () => (
         inset element.
       </StoryParagraph>
     </StorySection>
-    <Flex sx={{ gap: "80", wrap: "wrap" }}>
-      TODO tomorrow
-    </Flex>
+    <VariantsGallery columns={7}>
+      <Type />
+      <Variant label="color" value="neutral.base" />
+      <Variant label="color" value="neutral.raised" />
+      <Variant label="color" value="brand.default" />
+      <Variant label="color" value="positive.default" />
+      <Variant label="color" value="caution.default" />
+      <Variant label="color" value="negative.default" />
+
+      <Variant label="shadow" value="none" />
+      <View sx={{ w: "44", h: "44", background: "neutral.base", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "neutral.raised", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "brand.default" }} />
+      <View sx={{ w: "44", h: "44", background: "positive.default" }} />
+      <View sx={{ w: "44", h: "44", background: "caution.default" }} />
+      <View sx={{ w: "44", h: "44", background: "negative.default" }} />
+
+      <Variant label="shadow" value="raise.sm" />
+      <View sx={{ w: "44", h: "44", background: "neutral.base", shadow: "raise.sm", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "neutral.raised", shadow: "raise.sm", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "brand.default", shadow: "raise.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "positive.default", shadow: "raise.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "caution.default", shadow: "raise.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "negative.default", shadow: "raise.sm" }} />
+
+      <Variant label="shadow" value="raise.md" />
+      <View sx={{ w: "64", h: "64", background: "neutral.base", shadow: "raise.md", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "64", h: "64", background: "neutral.raised", shadow: "raise.md", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "64", h: "64", background: "brand.default", shadow: "raise.md" }} />
+      <View sx={{ w: "64", h: "64", background: "positive.default", shadow: "raise.md" }} />
+      <View sx={{ w: "64", h: "64", background: "caution.default", shadow: "raise.md" }} />
+      <View sx={{ w: "64", h: "64", background: "negative.default", shadow: "raise.md" }} />
+
+      <Variant label="shadow" value="inset.sm" />
+      <View sx={{ w: "44", h: "44", background: "neutral.base", shadow: "inset.sm", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "neutral.raised", shadow: "inset.sm", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "44", h: "44", background: "brand.default", shadow: "inset.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "positive.default", shadow: "inset.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "caution.default", shadow: "inset.sm" }} />
+      <View sx={{ w: "44", h: "44", background: "negative.default", shadow: "inset.sm" }} />
+
+      <Variant label="shadow" value="inset.md" />
+      <View sx={{ w: "64", h: "64", background: "neutral.base", shadow: "inset.md", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "64", h: "64", background: "neutral.raised", shadow: "inset.md", bwidth: "1", bcol: "neutral.weak" }} />
+      <View sx={{ w: "64", h: "64", background: "brand.default", shadow: "inset.md" }} />
+      <View sx={{ w: "64", h: "64", background: "positive.default", shadow: "inset.md" }} />
+      <View sx={{ w: "64", h: "64", background: "caution.default", shadow: "inset.md" }} />
+      <View sx={{ w: "64", h: "64", background: "negative.default", shadow: "inset.md" }} />
+    </VariantsGallery>
   </DocumentationStory>
 );
