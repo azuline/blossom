@@ -26,19 +26,19 @@ export const sCheckboxBox = recipe({
       true: {
         background: checkedBackgroundColor,
         color: checkedColor,
-        boxShadow: t.shadows.elevate.sm,
+        boxShadow: t.shadows.raise.low,
         selectors: {
           [`${sCheckboxLayout}:hover &`]: {
             background: checkedBackgroundHoverColor,
           },
           [`${sCheckboxLayout}:active &`]: {
-            boxShadow: t.shadows.inset.sm,
+            boxShadow: t.shadows.inset.low,
             background: checkedBackgroundActiveColor,
           },
         },
       },
       false: {
-        boxShadow: t.shadows.inset.sm,
+        boxShadow: t.shadows.inset.low,
         border: t.fn.border("1", "neutral.weak"),
         selectors: {
           [`${sCheckboxLayout}:hover &`]: {
