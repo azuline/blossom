@@ -24,9 +24,9 @@ const shadows = {
       // Cut element out of the background.
       `0 0 0 0.5px ${moonlightPalette.neutral[6]}0D`
       // Light source outer shadow.
-      + `, 0.5px 0.5px 2px 0 ${moonlightPalette.neutral[28]}1A`
+      + `, 0.5px 0.5px 1.5px 0 ${moonlightPalette.neutral[48]}16`
       // Ambient outer shadow.
-      + `, 1.5px 3px 6px 0 ${moonlightPalette.neutral[6]}0D`
+      + `, 1.5px 3px 6px 0 ${moonlightPalette.neutral[62]}09`
       // Light source inner light.
       + `, inset 0.5px 0.5px 1px 0.5px ${moonlightPalette.neutral[98]}26`
       // Ambient reflective inner light.
@@ -35,11 +35,11 @@ const shadows = {
       // Cut element out of the background.
       `0 0 0 0.5px ${moonlightPalette.neutral[6]}0D`
       // Light source shadow.
-      + `, 1px 2px 2px 0 ${moonlightPalette.neutral[28]}26`
+      + `, 1px 2px 2px 0 ${moonlightPalette.neutral[48]}16`
       // Ambient shadow.
-      + `, 2px 4px 8px 0 ${moonlightPalette.neutral[6]}0D`
+      + `, 2px 4px 8px 0 ${moonlightPalette.neutral[62]}09`
       // Light source inner light.
-      + `, inset 1px 1px 2px 0 ${moonlightPalette.neutral[98]}26`
+      + `, inset 1px 1px 2px 1px ${moonlightPalette.neutral[98]}26`
       // Ambient reflective inner light.
       + `, inset 0 0 1px 1px ${moonlightPalette.neutral[98]}0D`,
   },
