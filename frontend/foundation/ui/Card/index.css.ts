@@ -3,11 +3,17 @@ import { sx } from "@foundation/theme/styles/sprinkles.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCard = recipe({
-  base: sx({ bwidth: "1", bcol: "neutral.default", radius: "8", shadow: "weak" }),
+  base: sx({ radius: "8" }),
   variants: {
     variant: {
-      strong: { background: t.color.background.neutral.raised },
-      default: { background: t.color.background.neutral.base },
+      strong: {
+        background: t.color.background.neutral.raised,
+        border: t.fn.border("1", "neutral.weak"),
+      },
+      default: {
+        background: t.color.background.neutral.base,
+        border: t.fn.border("1", "neutral.default"),
+      },
       inverse: {
         background: t.color.background.inverse.base,
         color: t.color.content.inverse.default,

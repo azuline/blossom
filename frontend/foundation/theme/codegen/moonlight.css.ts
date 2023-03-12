@@ -62,7 +62,7 @@ export const moonlightLight = {
     inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
-      active: moonlightPalette["overlay"]["38"],
+      active: moonlightPalette["overlay"]["48"],
     },
     brand: {
       default: moonlightPalette["brand"]["54"],
@@ -105,7 +105,11 @@ export const moonlightLight = {
       strong: moonlightPalette["neutral"]["98"],
       default: moonlightPalette["neutral"]["92"],
       weak: moonlightPalette["neutral"]["77"],
-      loader: moonlightPalette["neutral"]["38"],
+      loader: "linear-gradient(91.22deg, "
+        + moonlightPalette["neutral"]["21"]
+        + " 0%, "
+        + moonlightPalette["neutral"]["38"]
+        + " 80%)",
     },
     brand: {
       tint: moonlightPalette["brand"]["94"],
@@ -183,13 +187,21 @@ export const moonlightDark = {
       strong: moonlightPalette["neutral"]["98"],
       default: moonlightPalette["neutral"]["85"],
       weak: moonlightPalette["neutral"]["62"],
-      loader: moonlightPalette["neutral"]["38"],
+      loader: "linear-gradient(91.22deg, "
+        + moonlightPalette["neutral"]["21"]
+        + " 0%, "
+        + moonlightPalette["neutral"]["38"]
+        + " 80%)",
     },
     inverse: {
       strong: moonlightPalette["neutral"]["6"],
       default: moonlightPalette["neutral"]["21"],
       weak: moonlightPalette["neutral"]["48"],
-      loader: moonlightPalette["neutral"]["85"],
+      loader: "linear-gradient(91.22deg, "
+        + moonlightPalette["neutral"]["92"]
+        + " 0%, "
+        + moonlightPalette["neutral"]["85"]
+        + " 80%)",
     },
     brand: {
       tint: moonlightPalette["brand"]["94"],

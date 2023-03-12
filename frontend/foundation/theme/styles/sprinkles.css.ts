@@ -163,7 +163,7 @@ export const sxsets = {
   }),
   shadow: defineProperties({
     properties: {
-      boxShadow: t.shadows,
+      boxShadow: flattenRecord(t.shadows),
     },
     shorthands: {
       shadow: ["boxShadow"],
@@ -172,6 +172,14 @@ export const sxsets = {
   isolation: defineProperties({
     properties: {
       isolation: ["isolate"],
+    },
+  }),
+  zindex: defineProperties({
+    properties: {
+      zIndex: ["10", "20", "30", "40", "50"],
+    },
+    shorthands: {
+      zindex: ["zIndex"],
     },
   }),
 } as const;
@@ -190,6 +198,7 @@ const _sx = createSprinkles(
   sxsets.cursor,
   sxsets.shadow,
   sxsets.isolation,
+  sxsets.zindex,
 );
 
 // From the sprinkles type, omit all the long-form styles.
@@ -216,6 +225,7 @@ export type SX = Omit<
   | "borderColor"
   | "borderStyle"
   | "boxShadow"
+  | "zIndex"
 >;
 
 // Instead of exporting `sx` directly from createSprinkles, we first massage the type

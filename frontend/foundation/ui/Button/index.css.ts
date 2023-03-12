@@ -5,7 +5,6 @@ import { recipe } from "@vanilla-extract/recipes";
 export const background = createVar();
 export const backgroundDisabled = createVar();
 export const borderWidth = createVar();
-export const borderColor = createVar();
 export const borderColorDisabled = createVar();
 export const color = createVar();
 export const colorDisabled = createVar();
@@ -20,9 +19,11 @@ export const sButton = recipe({
     borderRadius: t.radius.circle,
     cursor: "pointer",
     position: "relative",
+    boxShadow: t.shadows.elevate.md,
     selectors: {
       "&::before": {
         position: "absolute",
+        display: "none",
         top: "0",
         left: "0",
         content: "\" \"",
@@ -32,6 +33,7 @@ export const sButton = recipe({
         pointerEvents: "none",
         userSelect: "none",
         background: backgroundOverlayColor,
+        boxShadow: t.shadows.elevate.md,
       },
     },
   },
@@ -39,8 +41,6 @@ export const sButton = recipe({
     disabled: {
       false: {
         background,
-        borderColor,
-        borderWidth,
         color,
       },
       true: {
@@ -49,6 +49,7 @@ export const sButton = recipe({
         color: colorDisabled,
         borderWidth,
         borderColor: borderColorDisabled,
+        boxShadow: "none",
       },
     },
     variant: {
@@ -70,7 +71,6 @@ export const sButton = recipe({
           [color]: t.color.content.neutral.default,
           [colorDisabled]: t.color.content.neutral.weak,
           [borderWidth]: t.border[1],
-          [borderColor]: t.color.border.neutral.strong,
           [borderColorDisabled]: t.color.border.neutral.default,
         },
       },
@@ -126,7 +126,11 @@ export const sButton = recipe({
         disabled: false,
       },
       style: {
+        boxShadow: "none",
         vars: { [backgroundOverlayColor]: activeColor },
+        selectors: {
+          "&::before": { display: "block" },
+        },
       },
     },
     {
@@ -137,8 +141,10 @@ export const sButton = recipe({
       style: {
         selectors: {
           "&:hover": {
+            boxShadow: "none",
             vars: { [backgroundOverlayColor]: hoverColor },
           },
+          "&:hover::before": { display: "block" },
         },
       },
     },
