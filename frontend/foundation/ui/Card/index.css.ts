@@ -3,7 +3,7 @@ import { sx } from "@foundation/theme/styles/sprinkles.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sCard = recipe({
-  base: sx({ radius: "8", shadow: "weak" }),
+  base: sx({ radius: "8" }),
   variants: {
     variant: {
       strong: {

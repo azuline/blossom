@@ -163,10 +163,10 @@ export const sxsets = {
   }),
   shadow: defineProperties({
     properties: {
-      boxShadow: t.shadows,
+      // boxShadow: t.shadows,
     },
     shorthands: {
-      shadow: ["boxShadow"],
+      // shadow: ["boxShadow"],
     },
   }),
   isolation: defineProperties({

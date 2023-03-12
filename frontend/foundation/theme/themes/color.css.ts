@@ -17,8 +17,25 @@ export const [themeMoonlightLightClass, themeMoonlightLightVars] = createTheme({
       offset: "2px",
     },
   },
+  // dprint-ignore
   shadows: {
-    weak: "0px 4px 4px rgba(220, 220, 220, 0.25), 0px 12px 14px rgba(198, 198, 198, 0.05)",
+    // "Cut" the content out of the background with a small ring.
+    outerCut: {
+      weak: `0 0 0 0.5px ${moonlightPalette.neutral[6]}0D`,
+      strong: `0 0 0 0.5px ${moonlightPalette.neutral[6]}26`,
+    },
+    // Inner light on the element to "pop" it up.
+    innerLight: `inset 0 0 1px 1px ${moonlightPalette.neutral[98]}0D, inset 1px 1px 2px 0 ${moonlightPalette.neutral[98]}26`,
+    // Inner shadow on the element to "push" it in.
+    innerShadow: {
+      weak: `inset 0 0 1px 1px ${moonlightPalette.neutral[6]}05, inset 1px 1px 2px 0 ${moonlightPalette.neutral[6]}14`,
+      strong: `inset 0 0 1px 1px ${moonlightPalette.neutral[6]}0D, inset 1px 1px 2px 0 ${moonlightPalette.neutral[6]}33`,
+    },
+    // Outer shadow on the element to create depth.
+    outerShadow: {
+      sm: `0.5px 0.5px 1.5px 0 ${moonlightPalette.neutral[6]}33, 1.5px 1.5px 5px 0 ${moonlightPalette.neutral[6]}0D`,
+      md: `1px 1px 2px 0 ${moonlightPalette.neutral[6]}33, 2px 2px 8px 0 ${moonlightPalette.neutral[6]}1A`,
+    },
   },
 });
 
@@ -34,7 +51,25 @@ export const themeMoonlightDarkClass = createTheme(themeMoonlightLightVars, {
       offset: "2px",
     },
   },
+  // TODO: Copied from light mode; tweak for dark mode later.
+  // dprint-ignore
   shadows: {
-    weak: "0px 4px 4px rgba(220, 220, 220, 0.04), 0px 12px 14px rgba(198, 198, 198, 0.02)",
+    // "Cut" the content out of the background with a small ring.
+    outerCut: {
+      weak: `0 0 0 0.5px ${moonlightPalette.neutral[6]}0D`,
+      strong: `0 0 0 0.5px ${moonlightPalette.neutral[6]}26`,
+    },
+    // Inner light on the element to "pop" it up.
+    innerLight: `inset 0 0 1px 1px ${moonlightPalette.neutral[98]}0D, inset 1px 1px 2px 0 ${moonlightPalette.neutral[98]}26`,
+    // Inner shadow on the element to "push" it in.
+    innerShadow: {
+      weak: `inset 0 0 1px 1px ${moonlightPalette.neutral[6]}05, inset 1px 1px 2px 0 ${moonlightPalette.neutral[6]}14`,
+      strong: `inset 0 0 1px 1px ${moonlightPalette.neutral[6]}0D, inset 1px 1px 2px 0 ${moonlightPalette.neutral[6]}33`,
+    },
+    // Outer shadow on the element to create depth.
+    outerShadow: {
+      sm: `0.5px 0.5px 1.5px 0 ${moonlightPalette.neutral[6]}33, 1.5px 1.5px 5px 0 ${moonlightPalette.neutral[6]}0D`,
+      md: `1px 1px 2px 0 ${moonlightPalette.neutral[6]}33, 2px 2px 8px 0 ${moonlightPalette.neutral[6]}1A`,
+    },
   },
 });
