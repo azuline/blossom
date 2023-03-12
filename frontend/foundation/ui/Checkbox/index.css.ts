@@ -32,7 +32,6 @@ export const sCheckboxBox = recipe({
             background: checkedBackgroundHoverColor,
           },
           [`${sCheckboxLayout}:active &`]: {
-            boxShadow: t.shadows.inset.sm,
             background: checkedBackgroundActiveColor,
           },
         },
