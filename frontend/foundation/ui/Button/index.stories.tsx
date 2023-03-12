@@ -7,7 +7,7 @@ import { Type } from "@foundation/ui/Type";
 import { useState } from "react";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 const onPress = (): void => {};

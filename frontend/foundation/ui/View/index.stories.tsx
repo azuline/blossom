@@ -3,7 +3,7 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Primitives",
+  title: "Primitives",
 };
 
 export const View_: React.FC = () => (

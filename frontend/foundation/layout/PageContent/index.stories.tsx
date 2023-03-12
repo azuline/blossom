@@ -2,6 +2,8 @@ import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVar
 import { PageContent } from "@foundation/layout/PageContent";
 import { WithHeader } from "@foundation/layout/WithHeader";
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { StoryParagraph } from "@foundation/stories/StoryParagraph";
+import { StorySection } from "@foundation/stories/StorySection";
 import { Variant, VariantGroup } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
@@ -9,7 +11,7 @@ import { Type } from "@foundation/ui/Type";
 import { FC, ReactNode, useEffect, useRef } from "react";
 
 export default {
-  title: "Page Layout",
+  title: "Layout",
 };
 
 // dprint-ignore
@@ -28,6 +30,12 @@ export const PageContent_: React.FC = () => {
 
   return (
     <DocumentationStory>
+      <StorySection title="Description">
+        <StoryParagraph>
+          The PageContent component configures the layout of a new page. It configures
+          the padding, scrolling, and optional centering of the page content.
+        </StoryParagraph>
+      </StorySection>
       <VariantsGallery columns={3}>
         <Type />
         <Variant label="header" value="none" />

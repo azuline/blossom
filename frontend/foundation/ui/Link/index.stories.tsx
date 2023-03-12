@@ -7,7 +7,7 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 export const Link_: React.FC = () => (

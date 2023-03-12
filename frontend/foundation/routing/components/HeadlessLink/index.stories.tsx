@@ -2,7 +2,7 @@ import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { HeadlessLink } from ".";
 
 export default {
-  title: "Components/Primitives",
+  title: "Primitives",
 };
 
 export const HeadlessLink_: React.FC = () => (
