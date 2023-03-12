@@ -111,8 +111,8 @@ export const moonlightLight = {
     },
     brand: {
       tint: moonlightPalette["brand"]["94"],
-      default: moonlightPalette["brand"]["54"],
-      hover: moonlightPalette["brand"]["40"],
+      default: moonlightPalette["brand"]["48"],
+      hover: moonlightPalette["brand"]["64"],
       disabled: moonlightPalette["brand"]["64"],
     },
     positive: {
@@ -210,7 +210,7 @@ export const moonlightDark = {
       tint: moonlightPalette["brand"]["94"],
       disabled: moonlightPalette["brand"]["64"],
       default: moonlightPalette["brand"]["82"],
-      hover: moonlightPalette["brand"]["64"],
+      hover: moonlightPalette["brand"]["94"],
     },
     negative: {
       tint: moonlightPalette["red"]["91"],
