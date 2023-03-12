@@ -1,4 +1,4 @@
-import { flattenRecord } from "@foundation/lib/flattenRecord";
+import { flattenRecord } from "@foundation/std/flattenRecord";
 import { t } from "@foundation/theme/styles";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 

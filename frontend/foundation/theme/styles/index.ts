@@ -1,4 +1,4 @@
-import { flattenRecord } from "@foundation/lib/flattenRecord";
+import { flattenRecord } from "@foundation/std/flattenRecord";
 import { themeMoonlightLightVars } from "@foundation/theme/themes/color.css";
 import { breakpoints, themeSharedVars } from "@foundation/theme/themes/shared.css";
 import { themeTypeVars } from "@foundation/theme/themes/type.css";

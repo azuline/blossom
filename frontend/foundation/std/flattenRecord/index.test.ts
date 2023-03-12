@@ -1,7 +1,7 @@
-import { flattenRecord } from "@foundation/lib/flattenRecord";
+import { flattenRecord } from "@foundation/std/flattenRecord";
 import { describe, expect, expectTypeOf, it } from "vitest";
 
-describe.concurrent("@foundation/lib/flattenRecord", () => {
+describe.concurrent("@foundation/std/flattenRecord", () => {
   it("basic", () => {
     const result = flattenRecord({ a: "hi", b: { c: "bye", d: { "1": "hi" } } });
     expect(result).toEqual({ a: "hi", "b.c": "bye", "b.d.1": "hi" });

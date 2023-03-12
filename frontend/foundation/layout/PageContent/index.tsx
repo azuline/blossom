@@ -1,6 +1,6 @@
 import { useHeaderExists } from "@foundation/layout/WithHeader/state";
-import { mergeRefs } from "@foundation/lib/mergeRefs";
-import { useScrollObserver } from "@foundation/lib/useScrollObserver";
+import { mergeRefs } from "@foundation/std/mergeRefs";
+import { useScrollObserver } from "@foundation/std/useScrollObserver";
 import { View } from "@foundation/ui/View";
 import { clsx } from "clsx";
 import { MutableRefObject, useRef, useState } from "react";

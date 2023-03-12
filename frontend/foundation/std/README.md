@@ -1,8 +1,7 @@
-# lib
+# std
 
-The `lib` package contains functions that essentially consist an extended standard
-library. Since JS' standard library is quite poor, we augment it with functions
-of our choice.
+The `std` package extends the standard library with functions that operate on
+primitive data structures and/or provide basic functionality.
 
 The functions are:
 
@@ -12,6 +11,6 @@ The functions are:
   Concatenate keys such that `flattenRecord({a: {b: 1}}) -> {"a.b": 1}`.
 - `mergeRefs`: Merge multiple React refs into a single ref.
 
-The hooks are:
+And the hooks are:
 
 - `useScrollObserver`: An observer for a container's scroll events.

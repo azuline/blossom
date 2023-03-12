@@ -1,6 +1,6 @@
-import { filterObject } from "@foundation/lib/filterObject";
 import { AppLoader } from "@foundation/loaders/AppLoader";
 import { availablePathsAtom } from "@foundation/routing/state/paths";
+import { filterObject } from "@foundation/std/filterObject";
 import { useAtom } from "jotai";
 import { FC, lazy, Suspense, useEffect, useMemo } from "react";
 import { Route as WouterRoute, useRoute } from "wouter";
