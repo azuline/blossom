@@ -26,8 +26,14 @@ Theme = dict[str, Any]
 REFERENCE_REGEX = re.compile(r"\{([^}]+)\}")
 
 
-def lower_first(s: str) -> str:
-    return s[0].lower() + s[1:]
+def camel_case(s: str) -> str:
+    def lower_first(i: str) -> str:
+        return i[0].lower() + i[1:]
+
+    def title(i: str) -> str:
+        return i[0].upper() + i[1:].lower()
+
+    return lower_first("".join(title(i) for i in s.split(" ")))
 
 
 class UnknownJSONValueError(Exception):
@@ -95,7 +101,7 @@ def convert_token_to_ts(
             # Assemble the accessor to the palette name.
             out = palette_name
             for k in keys:
-                out += f'["{lower_first(k)}"]'
+                out += f'["{camel_case(k)}"]'
 
             # And do some massaging for a prettier output here by not including leading/trailing
             # empty strings.
@@ -158,7 +164,7 @@ def convert_palette(inp: FigmaTokensInput) -> Palette:
         out = {}
         for k, v in item.items():
             logger.debug(f"Converting recursive item {k=}.")
-            out[lower_first(k)] = convert_item(v)
+            out[camel_case(k)] = convert_item(v)
         return out
 
     return convert_item(inp)  # type: ignore
@@ -202,7 +208,7 @@ def convert_color_theme(palette_name: str, inp: FigmaTokensInput) -> Theme:
         out = {}
         for k, v in item.items():
             logger.debug(f"Converting recursive item {k=}.")
-            out[lower_first(k)] = convert_item(v)
+            out[camel_case(k)] = convert_item(v)
         return out
 
     return convert_item(inp)  # type: ignore
@@ -262,7 +268,7 @@ def convert_elevation(inp: FigmaTokensInput, color_palette: FigmaTokensInput) ->
         out = {}
         for k, v in item.items():
             logger.debug(f"Converting recursive item {k=}.")
-            out[lower_first(k)] = convert_item(v)
+            out[camel_case(k)] = convert_item(v)
         return out
 
     return convert_item(inp)  # type: ignore

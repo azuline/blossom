@@ -154,3 +154,32 @@ export const Typography: React.FC = () => (
     </Flex>
   </DocumentationStory>
 );
+
+export const Elevation: React.FC = () => (
+  <DocumentationStory>
+    <StorySection title="Elevation">
+      <StoryParagraph>
+        The elevation scale is still rudimentary. We primarily leverage elevation to create subtle
+        visual cues for lighting and naturalness. We do not rely on elevation for hierarchy.
+        Therefore, the elevation tokens are arranged around element size instead of visual
+        hierarchy.
+      </StoryParagraph>
+      <StoryParagraph>
+        The elevation tokens are composed of a set of box shadows. There are two main types of
+        elevation tokens: Raised and Inset.
+      </StoryParagraph>
+      <StoryParagraph>
+        Raised tokens contain: (1) a thin dark outer shadow wrapper to &ldquo;cut out&rdquo; the
+        element from the background, (2) several drop shadows to mimic shadows, and (3) inner
+        lighting to mimic ambient and source lights.
+      </StoryParagraph>
+      <StoryParagraph>
+        Inset tokens contain: (1) A top shadow and (2) bottom lighting to mimic light shining on an
+        inset element.
+      </StoryParagraph>
+    </StorySection>
+    <Flex sx={{ gap: "80", wrap: "wrap" }}>
+      TODO tomorrow
+    </Flex>
+  </DocumentationStory>
+);

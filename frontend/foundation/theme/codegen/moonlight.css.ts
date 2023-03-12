@@ -254,13 +254,13 @@ export const moonlightDark = {
 
 export const elevationLight = {
   raise: {
-    low:
+    sm:
       "0px 0px 0px 0.5px #08051B0D, 0.5px 0.5px 1.5px 0px #75728516, 1.5px 3px 6px 0px #9896A809, inset 0.5px 0.5px 1px 0.5px #F9F9FB26, inset 0px 0px 1px 1px #F9F9FB12",
-    medium:
+    md:
       "0px 0px 0px 0.5px #08051B0D, 1px 2px 2px 0px #75728514, 2px 4px 8px 0px #9896A814, inset 1px 1px 2px 1px #F9F9FB1F, inset 0px 0px 1px 1px #F9F9FB12",
   },
   inset: {
-    low: "inset 0.5px 0.5px 2px 0.5px #08051B14, inset -1px -1px 2px 1px #F9F9FB14",
-    medium: "inset 1px 1px 3px 1px #08051B14, inset -1px -1px 4px 1.5px #F9F9FB14",
+    sm: "inset 0.5px 0.5px 2px 0.5px #08051B14, inset -1px -1px 2px 1px #F9F9FB14",
+    md: "inset 1px 1px 3px 1px #08051B14, inset -1px -1px 4px 1.5px #F9F9FB14",
   },
 } as const;
