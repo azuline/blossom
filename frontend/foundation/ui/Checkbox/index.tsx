@@ -51,6 +51,8 @@ export const Checkbox: React.FC<CheckboxProps> = _props => {
     >
       <VisuallyHidden>
         <input id={id} {...inputProps} {...focusProps} ref={ref} />
+        {/* Eager load the checkbox icon so that we have it available on interaction. */}
+        <Icon icon="check" size="sm" />
       </VisuallyHidden>
       <View
         aria-hidden="true"
