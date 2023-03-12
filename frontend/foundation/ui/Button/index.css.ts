@@ -2,14 +2,16 @@ import { t } from "@foundation/theme/styles";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
-export const background = createVar();
-export const borderColorDisabled = createVar();
-export const color = createVar();
-export const colorDisabled = createVar();
-export const hoverColor = createVar();
-export const activeColor = createVar();
+const background = createVar();
+const borderWidth = createVar();
+const borderColor = createVar();
+const borderColorDisabled = createVar();
+const color = createVar();
+const colorDisabled = createVar();
+const hoverColor = createVar();
+const activeColor = createVar();
 
-export const backgroundOverlayColor = createVar();
+const backgroundOverlayColor = createVar();
 
 export const sButton = recipe({
   base: {
@@ -40,6 +42,8 @@ export const sButton = recipe({
       false: {
         background,
         color,
+        borderWidth,
+        borderColor,
       },
       true: {
         cursor: "not-allowed",
@@ -58,6 +62,7 @@ export const sButton = recipe({
           [color]: t.color.content.brand.tint,
           [colorDisabled]: t.color.content.brand.disabled,
           [borderColorDisabled]: t.color.border.brand.disabled,
+          [borderWidth]: t.border[0],
         },
       },
       secondary: {
@@ -67,6 +72,8 @@ export const sButton = recipe({
           [color]: t.color.content.neutral.default,
           [colorDisabled]: t.color.content.neutral.weak,
           [borderColorDisabled]: t.color.border.neutral.default,
+          [borderWidth]: t.border[1],
+          [borderColor]: t.color.border.neutral.weak,
         },
       },
       danger: {
@@ -77,6 +84,7 @@ export const sButton = recipe({
           [color]: t.color.content.negative.tint,
           [colorDisabled]: t.color.content.negative.disabled,
           [borderColorDisabled]: t.color.border.negative.disabled,
+          [borderWidth]: t.border[0],
         },
       },
     },
