@@ -60,7 +60,6 @@ export const moonlightPalette = {
 
 export const moonlightLight = {
   background: {
-    transparent: "transparent",
     neutral: { base: moonlightPalette["neutral"]["95"], raised: moonlightPalette["neutral"]["98"] },
     inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     overlay: {
@@ -90,7 +89,6 @@ export const moonlightLight = {
     decoration: { weak: moonlightPalette["brand"]["94"] },
   },
   content: {
-    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["6"],
       default: moonlightPalette["neutral"]["28"],
@@ -134,7 +132,6 @@ export const moonlightLight = {
     },
   },
   border: {
-    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["62"],
       default: moonlightPalette["neutral"]["77"],
@@ -160,7 +157,6 @@ export const moonlightLight = {
 
 export const moonlightDark = {
   background: {
-    transparent: "transparent",
     neutral: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     inverse: { base: moonlightPalette["neutral"]["92"], raised: moonlightPalette["neutral"]["95"] },
     overlay: {
@@ -190,7 +186,6 @@ export const moonlightDark = {
     decoration: { weak: moonlightPalette["neutral"]["21"] },
   },
   content: {
-    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["98"],
       default: moonlightPalette["neutral"]["85"],
@@ -234,7 +229,6 @@ export const moonlightDark = {
     },
   },
   border: {
-    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["62"],
       default: moonlightPalette["neutral"]["38"],
@@ -255,5 +249,24 @@ export const moonlightDark = {
       disabled: moonlightPalette["orange"]["57"],
     },
     negative: { default: moonlightPalette["red"]["35"], disabled: moonlightPalette["red"]["57"] },
+  },
+} as const;
+
+export const shadowPrimitivesLight = {
+  cutout: "0px 0px 0px 0.5px #08051B0D",
+  sourceShadow: { low: "0.5px 0.5px 1.5px 0px #75728516", middle: "1px 2px 2px 0px #75728514" },
+  ambientShadow: { low: "1.5px 3px 6px 0px #9896A809", medium: "2px 4px 8px 0px #9896A814" },
+  sourceLight: {
+    low: "inset 0.5px 0.5px 1px 0.5px #F9F9FB26",
+    medium: "inset 1px 1px 2px 1px #F9F9FB1F",
+  },
+  reflectiveLight: "inset 0px 0px 1px 1px #F9F9FB12",
+  topShadow: {
+    low: "inset 0.5px 0.5px 2px 0.5px #08051B14",
+    medium: "inset 1px 1px 3px 1px #08051B14",
+  },
+  bottomLight: {
+    low: "inset -1px -1px 2px 1px #F9F9FB14",
+    medium: "inset -1px -1px 4px 1.5px #F9F9FB14",
   },
 } as const;
