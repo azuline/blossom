@@ -1,10 +1,9 @@
+import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const background = createVar();
-export const backgroundDisabled = createVar();
-export const borderWidth = createVar();
 export const borderColorDisabled = createVar();
 export const color = createVar();
 export const colorDisabled = createVar();
@@ -45,9 +44,8 @@ export const sButton = recipe({
       },
       true: {
         cursor: "not-allowed",
-        background: backgroundDisabled,
         color: colorDisabled,
-        borderWidth,
+        borderWidth: t.border[1],
         borderColor: borderColorDisabled,
         boxShadow: "none",
       },
@@ -56,12 +54,11 @@ export const sButton = recipe({
       primary: {
         vars: {
           [background]: t.color.background.brand.default,
-          [backgroundDisabled]: t.color.background.brand.disabled,
           [hoverColor]: t.color.background.brand.hover,
           [activeColor]: t.color.background.brand.active,
           [color]: t.color.content.brand.tint,
           [colorDisabled]: t.color.content.brand.disabled,
-          [borderWidth]: t.border[0],
+          [borderColorDisabled]: moonlightPalette.brand[74],
         },
       },
       secondary: {
@@ -70,19 +67,17 @@ export const sButton = recipe({
           [activeColor]: t.color.background.overlay.active,
           [color]: t.color.content.neutral.default,
           [colorDisabled]: t.color.content.neutral.weak,
-          [borderWidth]: t.border[1],
           [borderColorDisabled]: t.color.border.neutral.default,
         },
       },
       danger: {
         vars: {
           [background]: t.color.background.negative.default,
-          [backgroundDisabled]: t.color.background.negative.disabled,
           [hoverColor]: t.color.background.negative.hover,
           [activeColor]: t.color.background.negative.active,
           [color]: t.color.content.negative.tint,
           [colorDisabled]: t.color.content.negative.disabled,
-          [borderWidth]: t.border[0],
+          [borderColorDisabled]: moonlightPalette.red[86],
         },
       },
     },
