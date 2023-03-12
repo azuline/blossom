@@ -18,7 +18,12 @@ export type TextFieldProps = LabellableProps & {
   className?: string;
 };
 
-export const TextField: React.FC<TextFieldProps> = props => {
+export const TextField: React.FC<TextFieldProps> = _props => {
+  const props = {
+    ..._props,
+    disabled: _props.disabled ?? false,
+  };
+
   const ref = useRef(null);
 
   const ariaProps: AriaTextFieldProps = { ...props, isDisabled: props.disabled };
