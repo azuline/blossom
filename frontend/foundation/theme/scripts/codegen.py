@@ -209,32 +209,29 @@ def convert_color_theme(palette_name: str, inp: FigmaTokensInput) -> Theme:
 
 
 # -------------------
-# Shadow converter functions.
+# Elevation converter functions.
 # -------------------
 
 
-def convert_shadow_primitives(inp: FigmaTokensInput, color_palette: FigmaTokensInput) -> Palette:
+def convert_elevation(inp: FigmaTokensInput, color_palette: FigmaTokensInput) -> Palette:
     """
     Input sample:
 
       {
-        "Cutout": {
-          "type": "boxShadow",
-          "value": { "x": "0", "y": "0", ... },
-        },
-        "SourceShadow": {
+        "Raised": {
           "Low": {
             "type": "boxShadow",
-            "value": { "x": "0", "y": "0", ... },
-          },
+            "value": [
+              { "x": "0", "y": "0", ... },
+            ]
+          }
         }
       }
 
     Output sample:
 
       {
-        "cutout": "0 0 ...",
-        "sourceShadow": {
+        "raised": {
           "low": "0 0 ..."
         }
       }
@@ -246,9 +243,15 @@ def convert_shadow_primitives(inp: FigmaTokensInput, color_palette: FigmaTokensI
             value = ""
 
             raw = item["value"]
-            if raw["type"] == "innerShadow":
-                value += "inset "
-            value += f'{raw["x"]}px {raw["y"]}px {raw["blur"]}px {raw["spread"]}px {raw["color"]}'
+            if not isinstance(raw, list):
+                raw = [raw]
+
+            for x in raw:
+                if value != "":
+                    value += ", "
+                if x["type"] == "innerShadow":
+                    value += "inset "
+                value += f'{x["x"]}px {x["y"]}px {x["blur"]}px {x["spread"]}px {x["color"]}'
 
             return convert_token_to_ts(
                 value,
@@ -281,11 +284,10 @@ moonlight_light = convert_color_theme("moonlightPalette", tokens_raw["Moonlight 
 logger.info("Converting moonlight dark theme.")
 moonlight_dark = convert_color_theme("moonlightPalette", tokens_raw["Moonlight Dark"]["Theme"])
 
-shadow_primitives_light = convert_shadow_primitives(
-    tokens_raw["Moonlight Light"]["Shadow Primitives"],
+elevation_light = convert_elevation(
+    tokens_raw["Moonlight Light"]["Elevation"],
     color_palette=tokens_raw["Moonlight Palette"]["Palette"],
 )
-# moonlight_shadows_light = convert_shadows()
 
 # -------------------
 # Compile the dicts into TypeScript, write to disk, and format.
@@ -323,7 +325,7 @@ with (out_dir / "moonlight.css.ts").open("w") as fp:
     fp.write(dict_to_ts("moonlightPalette", moonlight_palette))
     fp.write(dict_to_ts("moonlightLight", moonlight_light))
     fp.write(dict_to_ts("moonlightDark", moonlight_dark))
-    fp.write(dict_to_ts("shadowPrimitivesLight", shadow_primitives_light))
+    fp.write(dict_to_ts("elevationLight", elevation_light))
 
 DPRINT_CONFIG = Path(__file__).parent.parent.parent.parent / "dprint.json"
 subprocess.run(["dprint", "fmt", "--config", str(DPRINT_CONFIG)])

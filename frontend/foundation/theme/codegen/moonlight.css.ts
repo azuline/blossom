@@ -252,21 +252,15 @@ export const moonlightDark = {
   },
 } as const;
 
-export const shadowPrimitivesLight = {
-  cutout: "0px 0px 0px 0.5px #08051B0D",
-  sourceShadow: { low: "0.5px 0.5px 1.5px 0px #75728516", middle: "1px 2px 2px 0px #75728514" },
-  ambientShadow: { low: "1.5px 3px 6px 0px #9896A809", medium: "2px 4px 8px 0px #9896A814" },
-  sourceLight: {
-    low: "inset 0.5px 0.5px 1px 0.5px #F9F9FB26",
-    medium: "inset 1px 1px 2px 1px #F9F9FB1F",
+export const elevationLight = {
+  raise: {
+    low:
+      "0px 0px 0px 0.5px #08051B0D, 0.5px 0.5px 1.5px 0px #75728516, 1.5px 3px 6px 0px #9896A809, inset 0.5px 0.5px 1px 0.5px #F9F9FB26, inset 0px 0px 1px 1px #F9F9FB12",
+    medium:
+      "0px 0px 0px 0.5px #08051B0D, 1px 2px 2px 0px #75728514, 2px 4px 8px 0px #9896A814, inset 1px 1px 2px 1px #F9F9FB1F, inset 0px 0px 1px 1px #F9F9FB12",
   },
-  reflectiveLight: "inset 0px 0px 1px 1px #F9F9FB12",
-  topShadow: {
-    low: "inset 0.5px 0.5px 2px 0.5px #08051B14",
-    medium: "inset 1px 1px 3px 1px #08051B14",
-  },
-  bottomLight: {
-    low: "inset -1px -1px 2px 1px #F9F9FB14",
-    medium: "inset -1px -1px 4px 1.5px #F9F9FB14",
+  inset: {
+    low: "inset 0.5px 0.5px 2px 0.5px #08051B14, inset -1px -1px 2px 1px #F9F9FB14",
+    medium: "inset 1px 1px 3px 1px #08051B14, inset -1px -1px 4px 1.5px #F9F9FB14",
   },
 } as const;
