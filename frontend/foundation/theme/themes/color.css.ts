@@ -14,14 +14,14 @@ const shadows = {
       // Bottom ridge light reflection.
       + `, inset -1px -1px 1px 0 ${moonlightPalette.neutral[98]}14`
       // Add a 1px border with opacity.
-      + `, 0 0 0 1px ${moonlightPalette.neutral[85]}80`,
+      + `, 0 0 0 1px ${moonlightPalette.neutral[77]}99`,
     md:
       // Top ridge shadow.
       `inset 1px 1px 1px 2px ${moonlightPalette.neutral[6]}14`
       // Bottom ridge light reflection.
       + `, inset -1px -1px 2px 2px ${moonlightPalette.neutral[98]}14`
       // Add a 1px border with opacity.
-      + `, 0 0 0 1px ${moonlightPalette.neutral[85]}80`,
+      + `, 0 0 0 1px ${moonlightPalette.neutral[77]}99`,
   },
   // Elevate an element. Inspired by
   // https://twitter.com/PixelJanitor/status/1623358575904194562.
