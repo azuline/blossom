@@ -20,7 +20,7 @@ export const sTextField = recipe({
         cursor: "not-allowed",
       },
       false: {
-        boxShadow: t.shadows.elevate.sm,
+        boxShadow: t.shadows.raise.sm,
       },
     },
     error: {

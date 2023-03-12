@@ -9,10 +9,12 @@ export const sCard = recipe({
       strong: {
         background: t.color.background.neutral.raised,
         border: t.fn.border("1", "neutral.weak"),
+        boxShadow: t.shadows.raise.md,
       },
       default: {
         background: t.color.background.neutral.base,
         border: t.fn.border("1", "neutral.default"),
+        boxShadow: t.shadows.raise.md,
       },
       inverse: {
         background: t.color.background.inverse.base,

@@ -19,7 +19,7 @@ export const sButton = recipe({
     borderRadius: t.radius.circle,
     cursor: "pointer",
     position: "relative",
-    boxShadow: t.shadows.elevate.md,
+    boxShadow: t.shadows.raise.md,
     selectors: {
       "&::before": {
         position: "absolute",
@@ -33,7 +33,7 @@ export const sButton = recipe({
         pointerEvents: "none",
         userSelect: "none",
         background: backgroundOverlayColor,
-        boxShadow: t.shadows.elevate.md,
+        boxShadow: t.shadows.raise.md,
       },
     },
   },
