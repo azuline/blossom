@@ -60,6 +60,7 @@ export const moonlightPalette = {
 
 export const moonlightLight = {
   background: {
+    transparent: "transparent",
     neutral: { base: moonlightPalette["neutral"]["95"], raised: moonlightPalette["neutral"]["98"] },
     inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     overlay: {
@@ -89,6 +90,7 @@ export const moonlightLight = {
     decoration: { weak: moonlightPalette["brand"]["94"] },
   },
   content: {
+    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["6"],
       default: moonlightPalette["neutral"]["28"],
@@ -132,6 +134,7 @@ export const moonlightLight = {
     },
   },
   border: {
+    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["62"],
       default: moonlightPalette["neutral"]["77"],
@@ -157,6 +160,7 @@ export const moonlightLight = {
 
 export const moonlightDark = {
   background: {
+    transparent: "transparent",
     neutral: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
     inverse: { base: moonlightPalette["neutral"]["92"], raised: moonlightPalette["neutral"]["95"] },
     overlay: {
@@ -186,6 +190,7 @@ export const moonlightDark = {
     decoration: { weak: moonlightPalette["neutral"]["21"] },
   },
   content: {
+    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["98"],
       default: moonlightPalette["neutral"]["85"],
@@ -229,6 +234,7 @@ export const moonlightDark = {
     },
   },
   border: {
+    transparent: "transparent",
     neutral: {
       strong: moonlightPalette["neutral"]["62"],
       default: moonlightPalette["neutral"]["38"],

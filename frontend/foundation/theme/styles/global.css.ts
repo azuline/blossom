@@ -6,14 +6,6 @@ import { t } from ".";
 // https://www.joshwcomeau.com/css/custom-css-reset/
 globalStyle("*, *::before, *::after", {
   boxSizing: "border-box",
-  // The following rule is not a part of Josh Comeau's CSS reset.
-  //
-  // Since we use box-shadows as borders, which are situated outside of border-box, the
-  // visual size (but not real size!) of elements can get wonky. This rule fixes
-  // that.
-  //
-  // See https://twitter.com/PixelJanitor/status/1623358554790039552
-  backgroundClip: "padding-box",
 });
 globalStyle("*", {
   margin: 0,

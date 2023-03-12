@@ -39,6 +39,7 @@ export const sCheckboxBox = recipe({
       },
       false: {
         boxShadow: t.shadows.inset.sm,
+        border: t.fn.border("1", "neutral.weak"),
         selectors: {
           [`${sCheckboxLayout}:hover &`]: {
             background: t.color.background.overlay.hover,
@@ -70,8 +71,7 @@ export const sCheckboxBox = recipe({
     disabled: {
       true: {
         background: t.color.background.neutral.base,
-        borderWidth: t.border[1],
-        borderColor: t.color.border.neutral.weak,
+        border: t.fn.border("1", "neutral.weak"),
         color: t.color.content.neutral.weak,
         boxShadow: "none",
         selectors: {
