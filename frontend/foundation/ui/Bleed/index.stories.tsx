@@ -8,7 +8,7 @@ import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";
 
 export default {
-  title: "Components/Primitives",
+  title: "Layout",
 };
 
 export const Bleed_: React.FC = () => (

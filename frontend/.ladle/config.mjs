@@ -3,9 +3,11 @@ export default {
   storyOrder: [
     "hello--introduction",
     "theme*",
-    "components*",
+    "primitives*",
+    "layout*",
+    "atoms*",
+    "molecules*",
     "loaders*",
-    "page-layout*",
     "pages*",
     "*",
   ],

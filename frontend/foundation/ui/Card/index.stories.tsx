@@ -5,7 +5,7 @@ import { Card } from "@foundation/ui/Card";
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 // dprint-ignore

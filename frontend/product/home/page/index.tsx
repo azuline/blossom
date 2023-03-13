@@ -16,7 +16,7 @@ const HomePage: React.FC = () => (
             and flies, its wings are like clouds filling the sky.
           </Type>
         </Flex>
-        <Button onPress={() => {}}>CTA Here</Button>
+        <Button onPress={() => {}}>Take me there</Button>
       </Flex>
     </PageContent>
   </WithHeader>

@@ -6,7 +6,7 @@ import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
 export default {
-  title: "Components/Primitives",
+  title: "Layout",
 };
 
 export const Spacer_: React.FC = () => (

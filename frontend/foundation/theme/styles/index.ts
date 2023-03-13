@@ -19,7 +19,9 @@ const border = (
 const bodyVariants = ["lg", "md", "sm", "xs"] as const;
 const displayVariants = ["disp-xxl", "disp-xl", "disp-lg", "disp-md", "disp-sm"] as const;
 
-export type FontVariant = typeof bodyVariants[number] | typeof displayVariants[number];
+type BodyVariant = typeof bodyVariants[number];
+type DisplayVariant = typeof displayVariants[number];
+export type FontVariant = BodyVariant | DisplayVariant;
 
 export type FontVariantOptions = {
   strong?: boolean;
@@ -43,7 +45,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   const fontFamily = themeTypeVars.font.face[face];
   const fontWeight = options.strong === true ? weights.strong : weights.default;
   const lineHeight = options.paragraph === true && bodyVariants.includes(variant)
-    ? themeTypeVars.font.lineHeight.paragraph[variant]
+    ? themeTypeVars.font.lineHeight.paragraph[variant as BodyVariant]
     : themeTypeVars.font.lineHeight.label;
   const fontSize = {
     sm: themeTypeVars.font.size.sm,

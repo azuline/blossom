@@ -4,7 +4,7 @@ import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";
 
 export default {
-  title: "Components/Primitives",
+  title: "Layout",
 };
 
 export const Flex_: React.FC = () => (

@@ -7,7 +7,7 @@ import { Type } from "@foundation/ui/Type";
 import { atom, useAtom } from "jotai";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 const checkedAtom = atom(false);

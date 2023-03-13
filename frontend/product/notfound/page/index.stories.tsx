@@ -2,10 +2,10 @@ import { PageStory } from "@foundation/stories/PageStory";
 import NotFoundPage from ".";
 
 export default {
-  title: "Pages/NotFound",
+  title: "Pages",
 };
 
-export const Default: React.FC = () => (
+export const NotFound: React.FC = () => (
   <PageStory>
     <NotFoundPage />
   </PageStory>

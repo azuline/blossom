@@ -6,7 +6,7 @@ import { TextField } from "@foundation/ui/TextField";
 import { useState } from "react";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 export const TextField_: React.FC = () => {

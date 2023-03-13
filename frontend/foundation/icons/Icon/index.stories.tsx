@@ -11,7 +11,7 @@ import { View } from "@foundation/ui/View";
 import React from "react";
 
 export default {
-  title: "Components/Atoms",
+  title: "Atoms",
 };
 
 export const Icon_: React.FC = () => (
