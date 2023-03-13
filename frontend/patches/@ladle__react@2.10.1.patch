@@ -1,13 +1,32 @@
 diff --git a/lib/app/src/story-name.ts b/lib/app/src/story-name.ts
-index e691869b2e8ff41568d63cc098fac1378a5a637c..14057f5ed38e190e84e6f43f92a21ba790fbaedd 100644
+index e691869b2e8ff41568d63cc098fac1378a5a637c..d11155356bb520800e565120c4cb09a97f1bf3a0 100644
 --- a/lib/app/src/story-name.ts
 +++ b/lib/app/src/story-name.ts
-@@ -12,7 +12,7 @@ export const isQueryStorySet = (locationSearch: string) =>
+@@ -12,7 +12,10 @@ export const isQueryStorySet = (locationSearch: string) =>
  
  export const capitalize = (s: string) => {
    if (typeof s !== "string") return "";
 -  return s.charAt(0).toUpperCase() + s.slice(1);
-+  return s.split(" ").map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(" ");
++  return s
++    .split(" ")
++    .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
++    .join(" ");
  };
  
  export const storyIdToTitle = (s: string) => {
+diff --git a/lib/cli/vite-plugin/naming-utils.js b/lib/cli/vite-plugin/naming-utils.js
+index 254f12574bfbcca7be5f18e06c7e2c4d3020f9f9..9dd5890ae9b8bcee7d1297007d9c9a03653f4fa0 100644
+--- a/lib/cli/vite-plugin/naming-utils.js
++++ b/lib/cli/vite-plugin/naming-utils.js
+@@ -9,7 +9,10 @@ const wordSeparators =
+  * @param {string} str
+  */
+ export const capitalize = (str) => {
+-  return str.charAt(0).toUpperCase() + str.slice(1);
++  return str
++    .split(" ")
++    .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
++    .join(" ");
+ };
+ 
+ /**
