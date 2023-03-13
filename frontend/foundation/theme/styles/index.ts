@@ -1,7 +1,7 @@
 import { flattenRecord } from "@foundation/std/flattenRecord";
 import { themeMoonlightLightVars } from "@foundation/theme/themes/color.css";
 import { breakpoints, themeSharedVars } from "@foundation/theme/themes/shared.css";
-import { themeTypeVars } from "@foundation/theme/themes/type.css";
+import { fontFaces, themeTypeVars } from "@foundation/theme/themes/type.css";
 import { CSSProperties } from "react";
 
 const borderColors = flattenRecord(themeMoonlightLightVars.color.border);
@@ -18,10 +18,12 @@ const border = (
 
 const bodyVariants = ["lg", "md", "sm", "xs"] as const;
 const displayVariants = ["disp-xxl", "disp-xl", "disp-lg", "disp-md", "disp-sm"] as const;
+const codeVariants = ["code-lg", "code-md", "code-sm", "code-xs"] as const;
 
 type BodyVariant = typeof bodyVariants[number];
 type DisplayVariant = typeof displayVariants[number];
-export type FontVariant = BodyVariant | DisplayVariant;
+type CodeVariant = typeof codeVariants[number];
+export type FontVariant = BodyVariant | DisplayVariant | CodeVariant;
 
 export type FontVariantOptions = {
   strong?: boolean;
@@ -39,11 +41,19 @@ export type FontVariantOptions = {
  * This function takes in a font variant with options and expands to that variant's CSS.
  */
 const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProperties => {
-  const face = displayVariants.includes(variant) ? "display" : "body";
+  let face: keyof typeof fontFaces = "body";
+  if (displayVariants.includes(variant)) {
+    face = "display";
+  }
+  if (codeVariants.includes(variant)) {
+    face = "code";
+  }
   const weights = themeTypeVars.font.weight[face];
 
   const fontFamily = themeTypeVars.font.face[face];
-  const fontWeight = options.strong === true ? weights.strong : weights.default;
+  const fontWeight = options.strong === true && "strong" in weights
+    ? weights.strong
+    : weights.default;
   const lineHeight = options.paragraph === true && bodyVariants.includes(variant)
     ? themeTypeVars.font.lineHeight.paragraph[variant as BodyVariant]
     : themeTypeVars.font.lineHeight.label;
@@ -52,6 +62,10 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     xs: themeTypeVars.font.size.xs,
     md: themeTypeVars.font.size.md,
     lg: themeTypeVars.font.size.lg,
+    "code-sm": themeTypeVars.font.size.sm,
+    "code-xs": themeTypeVars.font.size.xs,
+    "code-md": themeTypeVars.font.size.md,
+    "code-lg": themeTypeVars.font.size.lg,
     "disp-sm": themeTypeVars.font.size.sm,
     "disp-xs": themeTypeVars.font.size.xs,
     "disp-md": themeTypeVars.font.size.md,

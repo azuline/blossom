@@ -1,4 +1,6 @@
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { StoryParagraph } from "@foundation/stories/StoryParagraph";
+import { StorySection } from "@foundation/stories/StorySection";
 import { Variant, VariantGroup } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Type } from "@foundation/ui/Type";
@@ -10,6 +12,20 @@ export default {
 // dprint-ignore
 export const Type_: React.FC = () => (
   <DocumentationStory>
+    <StorySection title="Guidelines">
+      <StoryParagraph>
+        <Type>
+          Label type is intended to be used for short single-line labels in the application. This
+          type&apos;s line height is the same as its font size, which makes precise alignment with
+          other elements easier. However, this hurts the text&apos;s readability over multiple lines.
+        </Type>
+        <Type>
+          Paragraph type is intended to be used for multi-line body text in the application. This type
+          has a comfortable line height for better readability; however, this line height makes this
+          type hard to precisely align with UI elements.
+        </Type>
+      </StoryParagraph>
+    </StorySection>
     <VariantsGallery columns={5} justifyItems="start">
       <Type />
       <Type />
