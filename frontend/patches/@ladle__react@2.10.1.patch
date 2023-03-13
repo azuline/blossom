@@ -1,0 +1,13 @@
+diff --git a/lib/app/src/story-name.ts b/lib/app/src/story-name.ts
+index e691869b2e8ff41568d63cc098fac1378a5a637c..14057f5ed38e190e84e6f43f92a21ba790fbaedd 100644
+--- a/lib/app/src/story-name.ts
++++ b/lib/app/src/story-name.ts
+@@ -12,7 +12,7 @@ export const isQueryStorySet = (locationSearch: string) =>
+ 
+ export const capitalize = (s: string) => {
+   if (typeof s !== "string") return "";
+-  return s.charAt(0).toUpperCase() + s.slice(1);
++  return s.split(" ").map(x => x.charAt(0).toUpperCase() + x.slice(1)).join(" ");
+ };
+ 
+ export const storyIdToTitle = (s: string) => {
