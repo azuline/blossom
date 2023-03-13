@@ -59,10 +59,5 @@
   },
   "msw": {
     "workerDirectory": "public"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@ladle/react@2.10.1": "patches/@ladle__react@2.10.1.patch"
-    }
   }
 }
