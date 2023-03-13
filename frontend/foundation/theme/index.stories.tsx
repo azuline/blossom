@@ -1,4 +1,3 @@
-import { ColorPalette } from "@foundation/stories/ColorPalette";
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/StoryParagraph";
 import { StorySection } from "@foundation/stories/StorySection";
@@ -9,6 +8,7 @@ import { t } from "@foundation/theme/styles";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
+import { FC } from "react";
 
 export default {
   title: "Theme",
@@ -232,4 +232,17 @@ export const Elevation: React.FC = () => (
       <View sx={{ w: "64", h: "64", background: "negative.default", shadow: "inset.md" }} />
     </VariantsGallery>
   </DocumentationStory>
+);
+
+type ColorPaletteProps = { palette: Record<string, string> };
+
+const ColorPalette: FC<ColorPaletteProps> = props => (
+  <Flex>
+    {Object.entries(props.palette).map(([name, color]) => (
+      <Flex key={name} sx={{ direction: "column", gap: "16", align: "center" }}>
+        <View style={{ background: color }} sx={{ h: "64", w: "96" }} />
+        <Type sx={{ whiteSpace: "nowrap", textTransform: "capitalize" }}>{name}</Type>
+      </Flex>
+    ))}
+  </Flex>
 );
