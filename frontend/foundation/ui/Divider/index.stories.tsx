@@ -48,7 +48,7 @@ export const Divider_: React.FC = () => (
     </VariantsGallery>
     <StorySection title="Examples">
       <StorySection subtitle="Horizontal">
-        <Card>
+        <Card sx={{ w: "128" }}>
           <Flex sx={{ direction: "column" }}>
             <View sx={{ h: "28", w: "full", background: "brand.default" }} />
             <Divider my="16" />
@@ -59,12 +59,8 @@ export const Divider_: React.FC = () => (
         </Card>
       </StorySection>
       <StorySection subtitle="Vertical">
-        <Card sx={{ h: "96" }}>
+        <Card sx={{ h: "96", w: "216" }}>
           <Flex sx={{ h: "full" }}>
-            <View sx={{ h: "full", w: "44", background: "brand.default" }} />
-            <Divider mx="16" orientation="vertical" />
-            <View sx={{ h: "full", w: "44", background: "brand.default" }} />
-            <Divider mx="16" orientation="vertical" />
             <View sx={{ h: "full", w: "44", background: "brand.default" }} />
             <Divider mx="16" orientation="vertical" />
             <View sx={{ h: "full", w: "44", background: "brand.default" }} />
