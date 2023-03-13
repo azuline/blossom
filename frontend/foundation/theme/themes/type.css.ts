@@ -3,6 +3,7 @@ import { createGlobalTheme } from "@vanilla-extract/css";
 export const fontFaces = {
   display: "Cormorant Garamond",
   body: "Alegreya Sans",
+  code: "Source Code Pro",
 } as const;
 
 export const themeTypeVars = createGlobalTheme(":root", {
