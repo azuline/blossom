@@ -2,10 +2,10 @@ import { PageStory } from "@foundation/stories/PageStory";
 import LoginPage from ".";
 
 export default {
-  title: "Pages/Login",
+  title: "Pages",
 };
 
-export const Default: React.FC = () => (
+export const Login: React.FC = () => (
   <PageStory>
     <LoginPage />
   </PageStory>
