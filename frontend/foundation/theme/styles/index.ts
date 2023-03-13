@@ -51,7 +51,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   const weights = themeTypeVars.font.weight[face];
 
   const fontFamily = themeTypeVars.font.face[face];
-  const fontWeight = options.strong === true && "strong" in weights
+  const fontWeight = options.strong === true
     ? weights.strong
     : weights.default;
   const lineHeight = options.paragraph === true && bodyVariants.includes(variant)

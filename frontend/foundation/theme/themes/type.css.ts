@@ -21,6 +21,7 @@ export const themeTypeVars = createGlobalTheme(":root", {
       },
       code: {
         default: "400",
+        strong: "600",
       },
     },
     size: {

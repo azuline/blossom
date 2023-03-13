@@ -122,6 +122,30 @@ export const Type_: React.FC = () => (
       <Type paragraph strong variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
       <Type italic paragraph variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
       <Type paragraph underline variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
+
+      <Variant label="variant" value="code-lg" />
+      <Type variant="code-lg">Code / LG</Type>
+      <Type strong variant="code-lg">Code / LG</Type>
+      <Type italic variant="code-lg">Code / LG</Type>
+      <Type underline variant="code-lg">Code / LG</Type>
+
+      <Variant label="variant" value="code-md" />
+      <Type variant="code-md">Code / MD</Type>
+      <Type strong variant="code-md">Code / MD</Type>
+      <Type italic variant="code-md">Code / MD</Type>
+      <Type underline variant="code-md">Code / MD</Type>
+
+      <Variant label="variant" value="code-sm" />
+      <Type variant="code-sm">Code / SM</Type>
+      <Type strong variant="code-sm">Code / SM</Type>
+      <Type italic variant="code-sm">Code / SM</Type>
+      <Type underline variant="code-sm">Code / SM</Type>
+
+      <Variant label="variant" value="code-xs" />
+      <Type variant="code-xs">Code / XS</Type>
+      <Type strong variant="code-xs">Code / XS</Type>
+      <Type italic variant="code-xs">Code / XS</Type>
+      <Type underline variant="code-xs">Code / XS</Type>
     </VariantsGallery>
   </DocumentationStory>
 );
