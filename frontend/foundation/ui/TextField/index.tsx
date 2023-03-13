@@ -44,7 +44,7 @@ export const TextField: React.FC<TextFieldProps> = _props => {
         {...inputProps}
       />
       {props.errorMessage !== undefined && (
-        <Type sx={{ color: "negative.default" }} variant="xs" {...errorMessageProps}>
+        <Type paragraph sx={{ color: "negative.default" }} variant="xs" {...errorMessageProps}>
           {props.errorMessage}
         </Type>
       )}

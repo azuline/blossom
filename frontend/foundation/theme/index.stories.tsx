@@ -5,6 +5,7 @@ import { Variant } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
+import { Divider } from "@foundation/ui/Divider";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
@@ -14,103 +15,114 @@ export default {
   title: "Theme",
 };
 
-export const Palette: React.FC = () => (
+export const ColorsPrimitive: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Palette">
+    <StorySection title="Primitive Color Palette">
       <StoryParagraph>
-        The color palette defines the set of visual colors and steps for the themes. The light and
-        dark themes select from this palette to create their semantic palettes.
+        The Primitive Color Palette defines the colors used in the application and lightness scales
+        for each of them. These are not consumed directly by the Design System or Application. The
+        Semantic Color Theme builds on top of the color scales by defining semantic intents with
+        associated colors taken from the primitive palette.
+      </StoryParagraph>
+      <StoryParagraph>
+        The light and dark themes share the same set of primitive colors.
       </StoryParagraph>
     </StorySection>
-    <StorySection subtitle="Neutral">
-      <ColorPalette palette={moonlightPalette.neutral} />
-    </StorySection>
-    <StorySection subtitle="Brand">
-      <ColorPalette palette={moonlightPalette.brand} />
-    </StorySection>
-    <StorySection subtitle="Red">
-      <ColorPalette palette={moonlightPalette.red} />
-    </StorySection>
-    <StorySection subtitle="Orange">
-      <ColorPalette palette={moonlightPalette.orange} />
-    </StorySection>
-    <StorySection subtitle="Green">
-      <ColorPalette palette={moonlightPalette.green} />
-    </StorySection>
-    <StorySection subtitle="Overlay">
-      <ColorPalette palette={moonlightPalette.overlay} />
+    <StorySection title="Tokens">
+      <Flex sx={{ direction: "column", gap: "28" }}>
+        <StorySection subtitle="Neutral">
+          <ColorPalette palette={moonlightPalette.neutral} />
+        </StorySection>
+        <StorySection subtitle="Brand">
+          <ColorPalette palette={moonlightPalette.brand} />
+        </StorySection>
+        <StorySection subtitle="Red">
+          <ColorPalette palette={moonlightPalette.red} />
+        </StorySection>
+        <StorySection subtitle="Orange">
+          <ColorPalette palette={moonlightPalette.orange} />
+        </StorySection>
+        <StorySection subtitle="Green">
+          <ColorPalette palette={moonlightPalette.green} />
+        </StorySection>
+        <StorySection subtitle="Overlay">
+          <ColorPalette palette={moonlightPalette.overlay} />
+        </StorySection>
+      </Flex>
     </StorySection>
   </DocumentationStory>
 );
 
-export const Theme: React.FC = () => (
-  <DocumentationStory gap="80">
-    <StorySection title="Theme">
+export const ColorSemantic: React.FC = () => (
+  <DocumentationStory>
+    <StorySection title="Semantic Color Theme">
       <StoryParagraph>
-        The theme defines a semantic palette based on the base color palette. This semantic palette
-        arranges colors based on intent in usage.
+        The Semantic Color Theme theme defines a set of <Type italic>semantic intents</Type>{" "}
+        that map to how we use color. Each theme binds a set of colors to the semantic intents.
+      </StoryParagraph>
+      <StoryParagraph>
+        This decouples our UI from the specific colors in use, allowing for painless multi-theme
+        support and color system changes across the entire system and application.
       </StoryParagraph>
     </StorySection>
-    <StorySection title="Background">
-      <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
-        <StorySection subtitle="Neutral">
-          <ColorPalette palette={t.color.background.neutral} />
+    <StorySection sx={{ gap: "44" }} title="Tokens">
+      <Flex sx={{ direction: "column", gap: "44" }}>
+        <StorySection align="row" subtitle="Background" sx={{ gap: "36" }}>
+          <StorySection subsubtitle="Neutral">
+            <ColorPalette palette={t.color.background.neutral} />
+          </StorySection>
+          <StorySection subsubtitle="Inverse">
+            <ColorPalette palette={t.color.background.inverse} />
+          </StorySection>
+          <StorySection subsubtitle="Overlay">
+            <ColorPalette palette={t.color.background.overlay} />
+          </StorySection>
+          <StorySection subsubtitle="Brand">
+            <ColorPalette palette={t.color.background.brand} />
+          </StorySection>
+          <StorySection subsubtitle="Positive">
+            <ColorPalette palette={t.color.background.positive} />
+          </StorySection>
+          <StorySection subsubtitle="Caution">
+            <ColorPalette palette={t.color.background.caution} />
+          </StorySection>
+          <StorySection subsubtitle="Negative">
+            <ColorPalette palette={t.color.background.negative} />
+          </StorySection>
+          <StorySection subsubtitle="Decoration">
+            <ColorPalette palette={t.color.background.decoration} />
+          </StorySection>
         </StorySection>
-        <StorySection subtitle="Inverse">
-          <ColorPalette palette={t.color.background.inverse} />
+        <StorySection align="row" subtitle="Content" sx={{ gap: "36" }}>
+          <StorySection subsubtitle="Neutral">
+            <ColorPalette palette={t.color.content.neutral} />
+          </StorySection>
+          <StorySection subsubtitle="Inverse">
+            <ColorPalette palette={t.color.content.inverse} />
+          </StorySection>
+          <StorySection subsubtitle="Brand">
+            <ColorPalette palette={t.color.content.brand} />
+          </StorySection>
+          <StorySection subsubtitle="Positive">
+            <ColorPalette palette={t.color.content.positive} />
+          </StorySection>
+          <StorySection subsubtitle="Caution">
+            <ColorPalette palette={t.color.content.caution} />
+          </StorySection>
+          <StorySection subsubtitle="Negative">
+            <ColorPalette palette={t.color.content.negative} />
+          </StorySection>
         </StorySection>
-        <StorySection subtitle="Overlay">
-          <ColorPalette palette={t.color.background.overlay} />
-        </StorySection>
-        <StorySection subtitle="Brand">
-          <ColorPalette palette={t.color.background.brand} />
-        </StorySection>
-        <StorySection subtitle="Positive">
-          <ColorPalette palette={t.color.background.positive} />
-        </StorySection>
-        <StorySection subtitle="Caution">
-          <ColorPalette palette={t.color.background.caution} />
-        </StorySection>
-        <StorySection subtitle="Negative">
-          <ColorPalette palette={t.color.background.negative} />
-        </StorySection>
-        <StorySection subtitle="Decoration">
-          <ColorPalette palette={t.color.background.decoration} />
-        </StorySection>
-      </Flex>
-    </StorySection>
-    <StorySection title="Content">
-      <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
-        <StorySection subtitle="Neutral">
-          <ColorPalette palette={t.color.content.neutral} />
-        </StorySection>
-        <StorySection subtitle="Inverse">
-          <ColorPalette palette={t.color.content.inverse} />
-        </StorySection>
-        <StorySection subtitle="Brand">
-          <ColorPalette palette={t.color.content.brand} />
-        </StorySection>
-        <StorySection subtitle="Positive">
-          <ColorPalette palette={t.color.content.positive} />
-        </StorySection>
-        <StorySection subtitle="Caution">
-          <ColorPalette palette={t.color.content.caution} />
-        </StorySection>
-        <StorySection subtitle="Negative">
-          <ColorPalette palette={t.color.content.negative} />
-        </StorySection>
-      </Flex>
-    </StorySection>
-    <StorySection title="Border">
-      <Flex sx={{ gap: "28", maxw: "1440", wrap: "wrap" }}>
-        <StorySection subtitle="Neutral">
-          <ColorPalette palette={t.color.border.neutral} />
-        </StorySection>
-        <StorySection subtitle="Inverse">
-          <ColorPalette palette={t.color.border.inverse} />
-        </StorySection>
-        <StorySection subtitle="Negative">
-          <ColorPalette palette={t.color.border.negative} />
+        <StorySection align="row" subtitle="Border" sx={{ gap: "36" }}>
+          <StorySection subsubtitle="Neutral">
+            <ColorPalette palette={t.color.border.neutral} />
+          </StorySection>
+          <StorySection subsubtitle="Inverse">
+            <ColorPalette palette={t.color.border.inverse} />
+          </StorySection>
+          <StorySection subsubtitle="Negative">
+            <ColorPalette palette={t.color.border.negative} />
+          </StorySection>
         </StorySection>
       </Flex>
     </StorySection>
@@ -119,14 +131,23 @@ export const Theme: React.FC = () => (
 
 export const Typography: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Introduction">
+    <StorySection title="Typography">
       <StoryParagraph>
-        The typography scale has three kinds of type: Display, Label, and Paragraph. Display is
-        intended for titles and branding, Label for single-line application labels, and Paragraph
-        for multi-line body text.
+        We use three typefaces: Cormorant Garamond, Alegreya Sans, and Source Code Pro. These are,
+        respectively, our display font, body font, and monospaced code font.
+      </StoryParagraph>
+      <StoryParagraph>
+        The typography scale has four kinds of type: Display, Label, Paragraph, and Code. Display is
+        intended for titles and branding, Label for single-line application labels, Paragraph for
+        multi-line body text, and Code for code.
       </StoryParagraph>
     </StorySection>
-    <Flex sx={{ gap: "80", wrap: "wrap" }}>
+    <StorySection title="Display">
+      <StoryParagraph>
+        Display type is intended to be used for headings and titles. It stands out from the body
+        text. Avoid using display type for body text, as it has a low x-height.
+      </StoryParagraph>
+      <Divider color="neutral.weak" />
       <Flex sx={{ direction: "column", gap: "20" }}>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxl">Display / XXL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xl">Display / XL</Type>
@@ -134,12 +155,28 @@ export const Typography: React.FC = () => (
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-md">Display / MD</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-sm">Display / SM</Type>
       </Flex>
+    </StorySection>
+    <StorySection title="Label">
+      <StoryParagraph>
+        Label type is intended to be used for short single-line labels in the application. This
+        type&apos;s line height is the same as its font size, which makes precise alignment with
+        other elements easier. However, this hurts the text&apos;s readability over multiple lines.
+      </StoryParagraph>
+      <Divider color="neutral.weak" />
       <Flex sx={{ direction: "column", gap: "20" }}>
         <Type sx={{ whiteSpace: "nowrap" }} variant="lg">Label / LG</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="md">Label / MD</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="sm">Label / SM</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="xs">Label / XS</Type>
       </Flex>
+    </StorySection>
+    <StorySection title="Paragraph">
+      <StoryParagraph>
+        Paragraph type is intended to be used for multi-line body text in the application. This type
+        has a comfortable line height for better readability; however, this line height makes this
+        type hard to precisely align with UI elements.
+      </StoryParagraph>
+      <Divider color="neutral.weak" />
       <Flex sx={{ direction: "column", gap: "20" }}>
         <Type paragraph sx={{ whiteSpace: "nowrap" }} variant="lg">
           Paragraph / LG<br />Paragraph / LG
@@ -154,35 +191,46 @@ export const Typography: React.FC = () => (
           Paragraph / XS<br />Paragraph / XS
         </Type>
       </Flex>
-    </Flex>
+    </StorySection>
+    <StorySection title="Code">
+      <StoryParagraph>
+        Code type is TODO...
+      </StoryParagraph>
+      <Divider color="neutral.weak" />
+      <Flex sx={{ direction: "column", gap: "20" }}>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="md">
+          Soon~
+        </Type>
+      </Flex>
+    </StorySection>
   </DocumentationStory>
 );
 
 // dprint-ignore
-export const Elevation: React.FC = () => (
+export const Shadows: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Elevation">
+    <StorySection title="Shadows">
       <StoryParagraph>
-        The elevation scale is still rudimentary. We primarily leverage elevation to create subtle
-        visual cues for lighting and naturalness. We do not rely on elevation for hierarchy.
-        Therefore, the elevation tokens are arranged around element size instead of visual
-        hierarchy.
+        We use shadows to create subtle visual cues for lighting and naturalness. We do
+        not rely on shadows for hierarchy. Therefore, the shadow tokens are arranged
+        around element size instead of visual hierarchy.
       </StoryParagraph>
       <StoryParagraph>
-        The elevation tokens are composed of a set of box shadows. There are two main types of
-        elevation tokens: Raised and Inset.
+        The shadow tokens are each composed of several inner shadows and drop shadows.
+        There are two sets of shadow tokens: one designed to match raised surfaces and
+        the other inset surfaces.
       </StoryParagraph>
       <StoryParagraph>
-        Raised tokens contain: (1) a thin dark outer shadow wrapper to &ldquo;cut out&rdquo; the
-        element from the background, (2) several drop shadows to mimic shadows, and (3) inner
-        lighting to mimic ambient and source lights.
+        The raised shadows contain: (1) a thin dark outer shadow wrapper to &ldquo;cut
+        out&rdquo; the element from the background, (2) several drop shadows to mimic
+        shadows, and (3) inner lightings to mimic ambient and source lights.
       </StoryParagraph>
       <StoryParagraph>
-        Inset tokens contain: (1) A top shadow and (2) bottom lighting to mimic light shining on an
-        inset element.
+        The innset tokens contain: (1) A top shadow and (2) bottom lighting to mimic
+        light shining on an inset element.
       </StoryParagraph>
     </StorySection>
-    <VariantsGallery columns={7}>
+    <VariantsGallery columns={7} title="Tokens">
       <Type />
       <Variant label="color" value="neutral.base" />
       <Variant label="color" value="neutral.raised" />

@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { sVariantsGallery, sVariantsGalleryColumns } from "./index.css";
 
 type Props = {
+  title?: string;
   columns: number;
   alignItems?: "center" | "start" | "end";
   justifyItems?: "center" | "start" | "end";
@@ -12,7 +13,7 @@ type Props = {
 };
 
 export const VariantsGallery: React.FC<Props> = props => (
-  <StorySection title="Variants">
+  <StorySection title={props.title ?? "Variants"}>
     <View
       className={sVariantsGallery}
       style={{

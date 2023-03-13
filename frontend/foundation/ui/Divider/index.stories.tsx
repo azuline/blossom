@@ -46,7 +46,7 @@ export const Divider_: React.FC = () => (
         <Divider orientation="vertical" size="2" />
       </DividerContainer>
     </VariantsGallery>
-    <StorySection title="Examples">
+    <StorySection align="row" title="Examples">
       <StorySection subtitle="Horizontal">
         <Card sx={{ w: "128" }}>
           <Flex sx={{ direction: "column" }}>
