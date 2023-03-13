@@ -17,7 +17,7 @@ export default {
 
 export const Divider_: React.FC = () => (
   <DocumentationStory>
-    <StorySection title="Guidelines">
+    <StorySection title="Divider">
       <StoryParagraph>
         A divider visually separates disjoint content with a dividing line and margin space.
       </StoryParagraph>
@@ -74,7 +74,7 @@ export const Divider_: React.FC = () => (
 );
 
 const DividerContainer: FC<{ children: ReactNode }> = props => (
-  <Card padding="sm" sx={{ h: "64", w: "64" }}>
+  <View sx={{ h: "64", w: "64" }}>
     <Center>{props.children}</Center>
-  </Card>
+  </View>
 );
