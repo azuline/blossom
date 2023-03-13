@@ -13,7 +13,7 @@ export const sCard = recipe({
       },
       default: {
         background: t.color.background.neutral.base,
-        border: t.fn.border("1", "neutral.default"),
+        border: t.fn.border("1", "neutral.weak"),
         boxShadow: t.shadows.raise.md,
       },
       inverse: {

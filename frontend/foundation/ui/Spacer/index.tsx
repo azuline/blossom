@@ -17,10 +17,7 @@ export const Spacer: React.FC<Props> = props => {
   return (
     <View
       {...passthru}
-      className={clsx(
-        className,
-        sSpacer({ x, y }),
-      )}
+      className={clsx(className, sSpacer({ x, y }))}
       style={setSXVars({
         [spacerXVar]: vars?.x,
         [spacerYVar]: vars?.y,
