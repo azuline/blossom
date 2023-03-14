@@ -1,4 +1,6 @@
 import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { StoryParagraph } from "@foundation/stories/StoryParagraph";
+import { StorySection } from "@foundation/stories/StorySection";
 import { Variant, VariantGroup } from "@foundation/stories/Variant";
 import { VariantsGallery } from "@foundation/stories/VariantsGallery";
 import { Type } from "@foundation/ui/Type";
@@ -10,6 +12,20 @@ export default {
 // dprint-ignore
 export const Type_: React.FC = () => (
   <DocumentationStory>
+    <StorySection title="Guidelines">
+      <StoryParagraph>
+        <Type>
+          Label type is intended to be used for short single-line labels in the application. This
+          type&apos;s line height is the same as its font size, which makes precise alignment with
+          other elements easier. However, this hurts the text&apos;s readability over multiple lines.
+        </Type>
+        <Type>
+          Paragraph type is intended to be used for multi-line body text in the application. This type
+          has a comfortable line height for better readability; however, this line height makes this
+          type hard to precisely align with UI elements.
+        </Type>
+      </StoryParagraph>
+    </StorySection>
     <VariantsGallery columns={5} justifyItems="start">
       <Type />
       <Type />
@@ -106,6 +122,30 @@ export const Type_: React.FC = () => (
       <Type paragraph strong variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
       <Type italic paragraph variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
       <Type paragraph underline variant="xs">Paragraph / XS<br />Paragraph / XS</Type>
+
+      <Variant label="variant" value="code-lg" />
+      <Type variant="code-lg">Code / LG</Type>
+      <Type strong variant="code-lg">Code / LG</Type>
+      <Type italic variant="code-lg">Code / LG</Type>
+      <Type underline variant="code-lg">Code / LG</Type>
+
+      <Variant label="variant" value="code-md" />
+      <Type variant="code-md">Code / MD</Type>
+      <Type strong variant="code-md">Code / MD</Type>
+      <Type italic variant="code-md">Code / MD</Type>
+      <Type underline variant="code-md">Code / MD</Type>
+
+      <Variant label="variant" value="code-sm" />
+      <Type variant="code-sm">Code / SM</Type>
+      <Type strong variant="code-sm">Code / SM</Type>
+      <Type italic variant="code-sm">Code / SM</Type>
+      <Type underline variant="code-sm">Code / SM</Type>
+
+      <Variant label="variant" value="code-xs" />
+      <Type variant="code-xs">Code / XS</Type>
+      <Type strong variant="code-xs">Code / XS</Type>
+      <Type italic variant="code-xs">Code / XS</Type>
+      <Type underline variant="code-xs">Code / XS</Type>
     </VariantsGallery>
   </DocumentationStory>
 );

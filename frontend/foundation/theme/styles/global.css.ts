@@ -121,3 +121,15 @@ globalFontFace(fontFaces.display, {
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-LightItalic.woff2') format('woff2')",
 });
+globalFontFace(fontFaces.code, {
+  fontStyle: "italic",
+  fontWeight: "200 900",
+  fontDisplay: "swap",
+  src: "url('/fonts/SourceCodePro-Italic-Variable.woff2') format('woff2')",
+});
+globalFontFace(fontFaces.code, {
+  fontStyle: "normal",
+  fontWeight: "200 900",
+  fontDisplay: "swap",
+  src: "url('/fonts/SourceCodePro-Roman-Variable.woff2') format('woff2')",
+});

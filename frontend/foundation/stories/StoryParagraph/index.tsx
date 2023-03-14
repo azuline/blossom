@@ -1,12 +1,12 @@
 import { FC, ReactNode } from "react";
 
+import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
 
 type Props = { children: ReactNode };
 
 export const StoryParagraph: FC<Props> = props => (
-  <View sx={{ maxw: "480" }}>
-    <Type paragraph>{props.children}</Type>
-  </View>
+  <Type paragraph as="div">
+    <Flex sx={{ direction: "column", gap: "8", maxw: "480" }}>{props.children}</Flex>
+  </Type>
 );
