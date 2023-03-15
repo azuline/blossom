@@ -133,9 +133,8 @@ return <div className={sx({ p: "16" })}>hi</div>;
       <StoryParagraph>
         <Type>
           For ease of use, the design system components take an <Code>sx=</Code>{" "}
-          prop that accepts arguments to the `sx` function. The design system components will call
-          {" "}
-          <Code>sx</Code> internally.
+          prop that accepts arguments to the <Code>sx</Code>{" "}
+          function. The design system components will call <Code>sx</Code> internally.
         </Type>
         <Type>
           Example <Code>sx=</Code> prop use:
