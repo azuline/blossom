@@ -168,5 +168,24 @@ return <View sx={{ p: { xs: "2", sm: "4", md: "8", lg: "12", xl: "16" }} />;
         />
       </StoryParagraph>
     </StorySection>
+    <StorySection title="Theming">
+      <StoryParagraph>
+        <Type>
+          We have support for multiple themes. The theme of a component subtree can be set with the
+          {" "}
+          <Code>{"<ThemeProvider />"}</Code> component.
+        </Type>
+        <Type>
+          The provider defaults to the active theme. It can be forcefully set to a specific theme
+          with the <Code>force</Code> prop.
+        </Type>
+        <CodeBlock
+          code={`
+import { ThemeProvider } from "@foundation/theme/provider";
+return <ThemeProvider force="dark">...</ThemeProvder>;
+`}
+        />
+      </StoryParagraph>
+    </StorySection>
   </DocumentationStory>
 );
