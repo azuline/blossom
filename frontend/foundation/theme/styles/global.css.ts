@@ -115,12 +115,6 @@ globalFontFace(fontFaces.display, {
   fontDisplay: "swap",
   src: "url('/fonts/CormorantGaramond-BoldItalic.woff2') format('woff2')",
 });
-globalFontFace(fontFaces.display, {
-  fontStyle: "italic",
-  fontWeight: "300",
-  fontDisplay: "swap",
-  src: "url('/fonts/CormorantGaramond-LightItalic.woff2') format('woff2')",
-});
 globalFontFace(fontFaces.code, {
   fontStyle: "italic",
   fontWeight: "200 900",
