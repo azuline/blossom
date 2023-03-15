@@ -1,8 +1,8 @@
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/StoryParagraph";
-import { StorySection } from "@foundation/stories/StorySection";
-import { Variant } from "@foundation/stories/Variant";
-import { VariantsGallery } from "@foundation/stories/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
+import { StorySection } from "@foundation/stories/components/StorySection";
+import { Variant } from "@foundation/stories/components/Variant";
+import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
 import { Divider } from "@foundation/ui/Divider";

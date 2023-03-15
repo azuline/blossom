@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
 import { Flex } from "@foundation/ui/Flex";

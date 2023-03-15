@@ -1,11 +1,11 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
 import { PageContent } from "@foundation/layout/PageContent";
 import { WithHeader } from "@foundation/layout/WithHeader";
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/StoryParagraph";
-import { StorySection } from "@foundation/stories/StorySection";
-import { Variant, VariantGroup } from "@foundation/stories/Variant";
-import { VariantsGallery } from "@foundation/stories/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
+import { StorySection } from "@foundation/stories/components/StorySection";
+import { Variant, VariantGroup } from "@foundation/stories/components/Variant";
+import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
 import { Type } from "@foundation/ui/Type";
 import { FC, ReactNode, useEffect, useRef } from "react";

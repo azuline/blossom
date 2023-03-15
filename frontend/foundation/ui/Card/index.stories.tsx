@@ -1,6 +1,6 @@
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
-import { Variant } from "@foundation/stories/Variant";
-import { VariantsGallery } from "@foundation/stories/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { Variant } from "@foundation/stories/components/Variant";
+import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
 import { Card } from "@foundation/ui/Card";
 import { Type } from "@foundation/ui/Type";
 

@@ -1,5 +1,5 @@
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
-import { StorySection } from "@foundation/stories/StorySection";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { StorySection } from "@foundation/stories/components/StorySection";
 import { Link } from "@foundation/ui/Link";
 import { Type } from "@foundation/ui/Type";
 import { FC } from "react";

@@ -1,10 +1,10 @@
 import { ICONS_MAP } from "@foundation/icons/codegen/imports";
 import { Icon } from "@foundation/icons/Icon";
 import { sIconGallery } from "@foundation/icons/Icon/index.css";
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
-import { StorySection } from "@foundation/stories/StorySection";
-import { Variant } from "@foundation/stories/Variant";
-import { VariantsGallery } from "@foundation/stories/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { StorySection } from "@foundation/stories/components/StorySection";
+import { Variant } from "@foundation/stories/components/Variant";
+import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
