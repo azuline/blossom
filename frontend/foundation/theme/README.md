@@ -3,6 +3,23 @@
 The `theme` package contains our application theme and global styles. We export
 a token object at `t` and a vanilla-extract sprinkles function as `sx`.
 
+Visit the [stories](https://celestial.sunsetglow.net/) for documntation on the
+themes and the styling APIs.
+
+## CSS-in-JS
+
+We use [vanilla-extract](https://vanilla-extract.style/) as our CSS-in-JS
+library. vanilla-extract provides a powerful styling API alongside static
+stylesheet extraction.
+
+In this package, we define our vanilla-extract themes, global styles, and
+[sprinkles](https://vanilla-extract.style/documentation/packages/sprinkles/)
+object.
+
+We use vanilla-extract's functions directly throughout the rest of the
+application without a facade. Please see vanilla-extract's documentation to
+learn about how we style elements.
+
 ## Figma Tokens
 
 We develop the design system's color palette and theme variables in Figma with
