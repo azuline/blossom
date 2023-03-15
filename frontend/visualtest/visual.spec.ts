@@ -31,6 +31,8 @@ const scrotOpts = {
   threshold: 0,
   // Take a picture of the full scrolling page; do not cut off at screen size.
   fullPage: true,
+  // Github Actions is a lil slow...
+  timeout: 10000,
 };
 
 Object.keys(stories).forEach(storyKey => {

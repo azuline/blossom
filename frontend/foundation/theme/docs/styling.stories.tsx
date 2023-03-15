@@ -187,7 +187,7 @@ return style({
         <CodeBlock
           code={`
 import { View } from "@foundation/ui/View";
-return <View sx={{ p: { xs: "2", sm: "4", md: "8", lg: "12", xl: "16" }} />;
+return <View sx={{ p: { initial: "0", xs: "2", sm: "4", md: "8", lg: "12", xl: "16" }} />;
 `}
         />
       </StoryParagraph>
