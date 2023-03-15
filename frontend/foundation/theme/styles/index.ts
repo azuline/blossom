@@ -20,10 +20,10 @@ const bodyVariants = ["lg", "md", "sm", "xs"] as const;
 const displayVariants = ["disp-xxl", "disp-xl", "disp-lg", "disp-md", "disp-sm"] as const;
 const codeVariants = ["code-lg", "code-md", "code-sm", "code-xs"] as const;
 
-type BodyVariant = typeof bodyVariants[number];
-type DisplayVariant = typeof displayVariants[number];
-type CodeVariant = typeof codeVariants[number];
-export type FontVariant = BodyVariant | DisplayVariant | CodeVariant;
+export type FontBodyVariant = typeof bodyVariants[number];
+export type FontDisplayVariant = typeof displayVariants[number];
+export type FontCodeVariant = typeof codeVariants[number];
+export type FontVariant = FontBodyVariant | FontDisplayVariant | FontCodeVariant;
 
 export type FontVariantOptions = {
   strong?: boolean;
@@ -55,7 +55,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     ? weights.strong
     : weights.default;
   const lineHeight = options.paragraph === true && bodyVariants.includes(variant)
-    ? themeTypeVars.font.lineHeight.paragraph[variant as BodyVariant]
+    ? themeTypeVars.font.lineHeight.paragraph[variant as FontBodyVariant]
     : themeTypeVars.font.lineHeight.label;
   const fontSize = {
     sm: themeTypeVars.font.size.sm,

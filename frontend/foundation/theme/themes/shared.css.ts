@@ -8,15 +8,13 @@ export const breakpoints = {
   //   lg   = 992px
   //   xl   = 1200px
   //   xxl  = 1440px
-  //   xxxl = 1920px.
   //
-  // We are desktop first; each breakpoint sits between the screen sizes.
-  xxl: "(max-width: 1680px)",
-  xl: "(max-width: 1320px)",
-  lg: "(max-width: 1092px)",
-  md: "(max-width: 880px)",
-  sm: "(max-width: 672px)",
-  xs: "(max-width: 508px)",
+  // We are mobile-first; each breakpoint sits between the screen sizes.
+  xs: "(min-width: 508px)",
+  sm: "(min-width: 672px)",
+  md: "(min-width: 880px)",
+  lg: "(min-width: 1092px)",
+  xl: "(min-width: 1320px)",
 } as const;
 
 export const themeSharedVars = createGlobalTheme(":root", {

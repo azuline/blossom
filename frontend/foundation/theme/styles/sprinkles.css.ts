@@ -6,12 +6,11 @@ const conditions = {
   conditions: {
     // responsive
     initial: {},
-    xxl: { "@media": t.breakpoints.xxl },
-    xl: { "@media": t.breakpoints.xl },
-    lg: { "@media": t.breakpoints.lg },
-    md: { "@media": t.breakpoints.md },
-    sm: { "@media": t.breakpoints.sm },
     xs: { "@media": t.breakpoints.xs },
+    sm: { "@media": t.breakpoints.sm },
+    md: { "@media": t.breakpoints.md },
+    lg: { "@media": t.breakpoints.lg },
+    xl: { "@media": t.breakpoints.xl },
   },
   defaultCondition: "initial",
 } as const;

@@ -2,8 +2,9 @@ import { FontVariant, t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
+import { CSSProperties } from "react";
 
-type Props = PolymorphicProp & {
+export type TypeProps = PolymorphicProp & {
   className?: string;
   sx?: SX;
   variant?: FontVariant;
@@ -17,9 +18,10 @@ type Props = PolymorphicProp & {
    * option adds additional line height for comfortable paragraph reading.
    */
   paragraph?: boolean;
+  style?: CSSProperties;
 };
 
-export const Type: React.FC<Props> = props => {
+export const Type: React.FC<TypeProps> = props => {
   const {
     as = "span",
     className,
@@ -30,10 +32,11 @@ export const Type: React.FC<Props> = props => {
     italic,
     underline,
     paragraph,
+    style,
     ...passthru
   } = props;
 
-  const style = variant === undefined
+  const type = variant === undefined
       && strong === undefined
       && italic === undefined
       && underline === undefined
@@ -46,7 +49,7 @@ export const Type: React.FC<Props> = props => {
       {...passthru}
       as={as}
       className={className}
-      style={style}
+      style={{ ...style, ...type }}
       sx={{ display: "inline", ...sx }}
     >
       {children}

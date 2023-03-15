@@ -60,8 +60,16 @@ export const moonlightPalette = {
 
 export const moonlightLight = {
   background: {
-    neutral: { base: moonlightPalette["neutral"]["95"], raised: moonlightPalette["neutral"]["98"] },
-    inverse: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
+    neutral: {
+      inset: moonlightPalette["neutral"]["92"],
+      base: moonlightPalette["neutral"]["95"],
+      raised: moonlightPalette["neutral"]["98"],
+    },
+    inverse: {
+      inset: moonlightPalette["neutral"]["6"],
+      base: moonlightPalette["neutral"]["14"],
+      raised: moonlightPalette["neutral"]["21"],
+    },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
       active: moonlightPalette["overlay"]["48"],
@@ -157,8 +165,16 @@ export const moonlightLight = {
 
 export const moonlightDark = {
   background: {
-    neutral: { base: moonlightPalette["neutral"]["14"], raised: moonlightPalette["neutral"]["21"] },
-    inverse: { base: moonlightPalette["neutral"]["92"], raised: moonlightPalette["neutral"]["95"] },
+    neutral: {
+      inset: moonlightPalette["neutral"]["6"],
+      base: moonlightPalette["neutral"]["14"],
+      raised: moonlightPalette["neutral"]["21"],
+    },
+    inverse: {
+      inset: moonlightPalette["neutral"]["85"],
+      base: moonlightPalette["neutral"]["92"],
+      raised: moonlightPalette["neutral"]["95"],
+    },
     overlay: {
       hover: moonlightPalette["overlay"]["62"],
       active: moonlightPalette["overlay"]["38"],
