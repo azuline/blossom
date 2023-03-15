@@ -43,6 +43,7 @@ export const Styling: FC = () => (
         <CodeBlock
           code={`
 import { t } from "@foundation/theme/styles";
+import { style } from "@vanilla-extract/css";
 style({ background: t.color.background.neutral.raised });
 `}
         />
@@ -62,6 +63,7 @@ style({ background: t.color.background.neutral.raised });
         <CodeBlock
           code={`
 import { t } from "@foundation/theme/styles";
+import { style } from "@vanilla-extract/css";
 style({ border: t.fn.border("1", "neutral.weak") });
 `}
         />
@@ -73,6 +75,7 @@ style({ border: t.fn.border("1", "neutral.weak") });
         <CodeBlock
           code={`
 import { t } from "@foundation/theme/styles";
+import { style } from "@vanilla-extract/css";
 style({ border: t.fn.border("1", "neutral.weak") });
 `}
         />
@@ -86,6 +89,7 @@ style({ border: t.fn.border("1", "neutral.weak") });
         <CodeBlock
           code={`
 import { t } from "@foundation/theme/styles";
+import { style } from "@vanilla-extract/css";
 style({ ...t.fn.font("lg", { paragraph: true, italic: true }) });
 `}
         />
@@ -97,6 +101,7 @@ style({ ...t.fn.font("lg", { paragraph: true, italic: true }) });
         <CodeBlock
           code={`
 import { t } from "@foundation/theme/styles";
+import { style } from "@vanilla-extract/css";
 style({ padding: t.fn.space("0", "2", "4", "8") });
 // -> becomes: style({ padding: "0px 2px 4px 8px" });
 `}
@@ -147,17 +152,37 @@ return <View sx={{ p: "16" }} />;
         />
       </StoryParagraph>
     </StorySection>
-    <StorySection subtitle="Responsiveness">
+    <StorySection title="Responsiveness">
       <StoryParagraph>
         <Type>
-          We have defined responsive breakpoints as sprinkles&apos; conditions. Visit the
-          sprinkles&apos; definition for the exact breakpoints.
+          We design for 6 screen sizes (xs@440px / sm@576px / md@768px / lg@992px / xl@1200px /
+          xxl@1440px). Our breakpoints are situated in between each screen size (sm@508px / sm@672px
+          / md@880px / lg@1092px / xl@1320px)..
         </Type>
         <Type>
-          We are mobile-first; each breakpoint applies to screen sizes larger than itself.
+          Our breakpoints are mobile-first; applying a breakpoint targets screens larger than it.
         </Type>
         <Type>
           The breakpoints can be used like so:
+        </Type>
+        <CodeBlock
+          code={`
+import { style } from "@vanilla-extract/css";
+import { t } from "@foundation/theme/styles";
+return style({
+  "@media": {
+    [t.breakpoints.lg]: { display: "none" },
+  },
+});
+`}
+        />
+      </StoryParagraph>
+    </StorySection>
+    <StorySection subtitle="Sprinkles">
+      <StoryParagraph>
+        <Type>
+          We have defined sprinkles&apos; conditions at the responsive breakpoints. The breakpoints
+          can be used like so:
         </Type>
         <CodeBlock
           code={`
