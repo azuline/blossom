@@ -25,6 +25,7 @@
     "foundation/routing/components/HeadlessLink/index.tsx",
     "foundation/routing/state/prefetch.ts",
     "foundation/routing/state/redirect.ts",
+    "foundation/theme/docs/size.css.ts",
     "playwright.config.ts",
     "public/mockServiceWorker.js"
   ],
