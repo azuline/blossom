@@ -148,7 +148,7 @@ export const Typography: React.FC = () => (
           text. Avoid using display type for body text, as it has a low x-height.
         </Type>
         <Type>
-          Our display typeface is <Type italic>Cormorant Garamond</Type>. TODO.
+          Our display typeface is <Type italic>Cormorant Garamond</Type>.
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
@@ -166,7 +166,7 @@ export const Typography: React.FC = () => (
           Body type is intended to be used for general content.
         </Type>
         <Type>
-          Our body typeface is <Type italic>Alegreya Sans</Type>. TODO.
+          Our body typeface is <Type italic>Alegreya Sans</Type>.
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
@@ -183,7 +183,7 @@ export const Typography: React.FC = () => (
           Code type is intended to be used for code snippets.
         </Type>
         <Type>
-          Our code typeface is <Type italic>Source Code Pro</Type>. TODO.
+          Our code typeface is <Type italic>Source Code Pro</Type>.
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
