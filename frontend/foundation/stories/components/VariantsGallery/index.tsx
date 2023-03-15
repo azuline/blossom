@@ -1,4 +1,4 @@
-import { StorySection } from "@foundation/stories/StorySection";
+import { StorySection } from "@foundation/stories/components/StorySection";
 import { View } from "@foundation/ui/View";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { ReactNode } from "react";

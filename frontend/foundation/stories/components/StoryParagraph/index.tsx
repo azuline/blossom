@@ -7,6 +7,6 @@ type Props = { children: ReactNode };
 
 export const StoryParagraph: FC<Props> = props => (
   <Type paragraph as="div">
-    <Flex sx={{ direction: "column", gap: "8", maxw: "480" }}>{props.children}</Flex>
+    <Flex sx={{ direction: "column", gap: "8", maxw: "576" }}>{props.children}</Flex>
   </Type>
 );

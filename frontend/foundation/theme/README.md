@@ -3,7 +3,7 @@
 The `theme` package contains our application theme and global styles. We export
 a token object at `t` and a vanilla-extract sprinkles function as `sx`.
 
-Visit the [stories](https://celestial.sunsetglow.net/) for documntation on the
+Visit the [stories](https://celestial.sunsetglow.net/) for documentation on the
 themes and the styling APIs.
 
 ## CSS-in-JS

@@ -1,5 +1,5 @@
 import { WithHeader } from "@foundation/layout/WithHeader";
-import { DocumentationStory } from "@foundation/stories/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
 import { View } from "@foundation/ui/View";
 
