@@ -101,7 +101,7 @@ globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "400",
   fontDisplay: "swap",
-  src: "url('/fonts/EBGaramond-RegularItalic.woff2') format('woff2')",
+  src: "url('/fonts/EBGaramond-Italic.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "normal",

@@ -16,9 +16,26 @@ const border = (
   return `${t.border[size]} solid ${borderColors[color]}`;
 };
 
-const bodyVariants = ["lg", "md", "sm", "xs"] as const;
-const displayVariants = ["disp-xxl", "disp-xl", "disp-lg", "disp-md", "disp-sm"] as const;
-const codeVariants = ["code-lg", "code-md", "code-sm", "code-xs"] as const;
+const bodyVariants = [
+  "lg",
+  "md",
+  "sm",
+  "xs",
+] as const;
+const displayVariants = [
+  "disp-xxxl",
+  "disp-xxl",
+  "disp-xl",
+  "disp-lg",
+  "disp-md",
+  "disp-sm",
+] as const;
+const codeVariants = [
+  "code-lg",
+  "code-md",
+  "code-sm",
+  "code-xs",
+] as const;
 
 export type FontBodyVariant = typeof bodyVariants[number];
 export type FontDisplayVariant = typeof displayVariants[number];
@@ -72,6 +89,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     "disp-lg": themeTypeVars.font.size.lg,
     "disp-xl": themeTypeVars.font.size.xl,
     "disp-xxl": themeTypeVars.font.size.xxl,
+    "disp-xxxl": themeTypeVars.font.size.xxxl,
   }[variant];
   const fontStyle = options.italic === true ? "italic" : undefined;
   const textDecoration = options.underline === true ? "underline" : undefined;
