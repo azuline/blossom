@@ -6,7 +6,7 @@ import { VariantsGallery } from "@foundation/stories/components/VariantsGallery"
 import { Type } from "@foundation/ui/Type";
 
 export default {
-  title: "Primitives",
+  title: "Atoms",
 };
 
 // dprint-ignore

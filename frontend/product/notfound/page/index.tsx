@@ -7,7 +7,7 @@ const NotFoundPage: React.FC = () => (
   <PageContent center>
     <Flex sx={{ direction: "column", gap: "28" }}>
       <Type variant="disp-xl">404 Page Not Found</Type>
-      <Button href="/">Return home</Button>
+      <Button as="a" href="/">Return home</Button>
     </Flex>
   </PageContent>
 );

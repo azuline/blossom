@@ -51,6 +51,11 @@ globalStyle("button", {
   background: "none",
   borderColor: "none",
   borderWidth: "none",
+  fontSize: "inherit",
+  fontWeight: "inherit",
+  lineHeight: "inherit",
+  textAlign: "inherit",
+  color: "inherit",
 });
 globalStyle("a", {
   textDecoration: "none",

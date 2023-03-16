@@ -3,15 +3,16 @@ import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { clsx } from "clsx";
 import { ReactNode, useRef } from "react";
 
-export type HeadlessLinkProps = {
+export type RedirectProps = {
   href: string;
   open?: "here" | "new-tab";
   children: ReactNode;
   className?: string;
+  id?: string;
   sx?: SX;
 };
 
-export const HeadlessLink: React.FC<HeadlessLinkProps> = props => {
+export const Redirect: React.FC<RedirectProps> = props => {
   usePrefetchPath(props.href);
   const ref = useRef(null);
   return (
@@ -19,6 +20,7 @@ export const HeadlessLink: React.FC<HeadlessLinkProps> = props => {
       ref={ref}
       className={clsx(props.className, sx({ cursor: "pointer", ...props.sx }))}
       href={props.href}
+      id={props.id}
       rel="noreferrer"
       target={props.open === "new-tab" ? "_blank" : undefined}
     >

@@ -26,9 +26,9 @@ type Props =
 
 export const StorySection: React.FC<Props> = props => (
   <Flex sx={{ direction: "column", gap: "20", ...props.sx }}>
-    {props.title && <Type variant="disp-xxl">{props.title}</Type>}
-    {props.subtitle && <Type variant="disp-xl">{props.subtitle}</Type>}
-    {props.subsubtitle && <Type variant="disp-lg">{props.subsubtitle}</Type>}
+    {props.title && <Type variant="disp-xl">{props.title}</Type>}
+    {props.subtitle && <Type variant="disp-lg">{props.subtitle}</Type>}
+    {props.subsubtitle && <Type variant="disp-md">{props.subsubtitle}</Type>}
     <Flex sx={{ direction: props.align ?? "column", gap: "20", wrap: "wrap" }}>
       {props.children}
     </Flex>

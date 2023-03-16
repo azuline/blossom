@@ -44,6 +44,18 @@ export const sButton = recipe({
         color,
         borderWidth,
         borderColor,
+        selectors: {
+          "&:hover:not(&.pressed)": {
+            boxShadow: "none",
+            vars: { [backgroundOverlayColor]: hoverColor },
+          },
+          "&.pressed": {
+            boxShadow: "none",
+            vars: { [backgroundOverlayColor]: activeColor },
+          },
+          "&:hover::before": { display: "block" },
+          "&.pressed::before": { display: "block" },
+        },
       },
       true: {
         cursor: "not-allowed",
@@ -116,41 +128,7 @@ export const sButton = recipe({
         height: "fit-content",
       },
     },
-    active: {
-      true: {},
-      false: {},
-    },
   },
-  compoundVariants: [
-    {
-      variants: {
-        active: true,
-        disabled: false,
-      },
-      style: {
-        boxShadow: "none",
-        vars: { [backgroundOverlayColor]: activeColor },
-        selectors: {
-          "&::before": { display: "block" },
-        },
-      },
-    },
-    {
-      variants: {
-        active: false,
-        disabled: false,
-      },
-      style: {
-        selectors: {
-          "&:hover": {
-            boxShadow: "none",
-            vars: { [backgroundOverlayColor]: hoverColor },
-          },
-          "&:hover::before": { display: "block" },
-        },
-      },
-    },
-  ],
   defaultVariants: {
     variant: "primary",
     size: "md",

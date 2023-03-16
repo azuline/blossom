@@ -1,73 +1,43 @@
-import { JSXElementConstructor, ReactNode, useRef } from "react";
-
-import { usePrefetchPath } from "@foundation/routing/state/prefetch";
-import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sButton } from "@foundation/ui/Button/index.css";
 import { Center } from "@foundation/ui/Center";
+import { Redirect, RedirectProps } from "@foundation/ui/Redirect";
+import { Touchable, TouchableProps } from "@foundation/ui/Touchable";
 import { RecipeVariants } from "@vanilla-extract/recipes";
-import { AriaButtonProps, useButton } from "react-aria";
+import clsx from "clsx";
 
 export type ButtonProps =
-  & Exclude<RecipeVariants<typeof sButton>, "disabled">
-  & {
-    children: ReactNode;
-    disabled?: boolean;
-    type?: AriaButtonProps["type"];
-    "aria-haspopup"?: AriaButtonProps["aria-haspopup"];
-    id?: string;
-    sx?: SX;
-  }
-  & ({
-    onPress: (() => void) | (() => Promise<void>);
-    href?: undefined;
-    open?: undefined;
-  } | {
-    onPress?: undefined;
-    href: string;
-    open?: "here" | "new-tab";
-  });
+  & RecipeVariants<typeof sButton>
+  & (
+    | ({ as: "a" } & RedirectProps)
+    | ({ as?: undefined } & TouchableProps)
+  );
 
 export const Button: React.FC<ButtonProps> = props => {
-  usePrefetchPath(props.href);
+  const sty = sButton({
+    variant: props.variant,
+    disabled: props.disabled,
+    size: props.size,
+    fullWidth: props.fullWidth,
+    // active: isPressed,
+  });
 
-  const ref = useRef(null);
-
-  const ariaProps: AriaButtonProps = {
-    ...props,
-    isDisabled: props.disabled,
-    elementType: (props.href !== undefined ? "a" : "button") as unknown as JSXElementConstructor<
-      unknown
-    >,
-    // This is an undocumented property.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    preventFocusOnPress: true,
-  };
-  const { buttonProps, isPressed } = useButton(ariaProps, ref);
-
-  const Element = props.href !== undefined ? "a" : "button";
+  if ("as" in props && props.as === "a") {
+    return (
+      <Redirect {...props} className={clsx(sty, props.className)}>
+        {/* Open a stacking context so the content is always on top of the hover overlay. */}
+        <Center sx={{ w: "full", h: "full", isolation: "isolate" }}>
+          {props.children}
+        </Center>
+      </Redirect>
+    );
+  }
 
   return (
-    // The button type is a part of buttonProps.
-    // eslint-disable-next-line react/button-has-type
-    <Element
-      ref={ref}
-      className={sButton({
-        variant: props.variant,
-        disabled: props.disabled,
-        size: props.size,
-        fullWidth: props.fullWidth,
-        active: isPressed,
-      })}
-      href={props.href}
-      rel={props.href !== undefined ? "noreferrer" : undefined}
-      target={props.open === "new-tab" ? "_blank" : undefined}
-      {...(buttonProps as Record<string, unknown>)}
-    >
+    <Touchable {...(props as TouchableProps)} className={clsx(sty, props.className)}>
       {/* Open a stacking context so the content is always on top of the hover overlay. */}
       <Center sx={{ w: "full", h: "full", isolation: "isolate" }}>
         {props.children}
       </Center>
-    </Element>
+    </Touchable>
   );
 };
