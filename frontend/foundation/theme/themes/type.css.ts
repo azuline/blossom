@@ -1,7 +1,7 @@
 import { createGlobalTheme } from "@vanilla-extract/css";
 
 export const fontFaces = {
-  display: "Cormorant Garamond",
+  display: "Alegreya",
   body: "Alegreya Sans",
   code: "Source Code Pro",
 } as const;
@@ -12,8 +12,8 @@ export const themeTypeVars = createGlobalTheme(":root", {
     weight: {
       logo: "300",
       display: {
-        default: "500",
-        strong: "700",
+        default: "400",
+        strong: "600",
       },
       body: {
         default: "400",

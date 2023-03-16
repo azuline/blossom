@@ -23,7 +23,7 @@ export const Typography: React.FC = () => (
           text. Avoid using display type for body text, as it has a low x-height.
         </Type>
         <Type>
-          Our display typeface is <Type italic>Cormorant Garamond</Type>.
+          Our display typeface is <Type italic>Alegreya</Type>.
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />

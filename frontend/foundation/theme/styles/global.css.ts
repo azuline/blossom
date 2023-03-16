@@ -93,27 +93,27 @@ globalFontFace(fontFaces.body, {
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "normal",
-  fontWeight: "500",
+  fontWeight: "400",
   fontDisplay: "swap",
-  src: "url('/fonts/CormorantGaramond-Medium.woff2') format('woff2')",
+  src: "url('/fonts/Alegreya-Regular.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "italic",
-  fontWeight: "500",
+  fontWeight: "400",
   fontDisplay: "swap",
-  src: "url('/fonts/CormorantGaramond-MediumItalic.woff2') format('woff2')",
+  src: "url('/fonts/Alegreya-Italic.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "normal",
   fontWeight: "700",
   fontDisplay: "swap",
-  src: "url('/fonts/CormorantGaramond-Bold.woff2') format('woff2')",
+  src: "url('/fonts/Alegreya-Bold.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "700",
   fontDisplay: "swap",
-  src: "url('/fonts/CormorantGaramond-BoldItalic.woff2') format('woff2')",
+  src: "url('/fonts/Alegreya-BoldItalic.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.code, {
   fontStyle: "italic",
