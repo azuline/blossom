@@ -9,7 +9,7 @@ export type ButtonProps =
   & RecipeVariants<typeof sButton>
   & (
     | ({ as: "a" } & RedirectProps)
-    | TouchableProps
+    | ({ as?: undefined } & TouchableProps)
   );
 
 export const Button: React.FC<ButtonProps> = props => {
