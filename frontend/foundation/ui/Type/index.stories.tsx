@@ -33,35 +33,41 @@ export const Type_: React.FC = () => (
       <Variant label="italic" value="true" />
       <Variant label="underline" value="true" />
 
+      <Variant label="variant" value="disp-xxxl" />
+      <Type variant="disp-xxxl">Display / XXXL</Type>
+      <Type strong variant="disp-xxxl">Display / XXXL</Type>
+      <Type italic variant="disp-xxxl">Display / XXXL</Type>
+      <Type underline variant="disp-xxxl">Display / XXXL</Type>
+
       <Variant label="variant" value="disp-xxl" />
-      <Type variant="disp-xxl">Disp / XXL</Type>
-      <Type strong variant="disp-xxl">Disp / XXL</Type>
-      <Type italic variant="disp-xxl">Disp / XXL</Type>
-      <Type underline variant="disp-xxl">Disp / XXL</Type>
+      <Type variant="disp-xxl">Display / XXL</Type>
+      <Type strong variant="disp-xxl">Display / XXL</Type>
+      <Type italic variant="disp-xxl">Display / XXL</Type>
+      <Type underline variant="disp-xxl">Display / XXL</Type>
 
       <Variant label="variant" value="disp-xl" />
-      <Type variant="disp-xl">Disp / XL</Type>
-      <Type strong variant="disp-xl">Disp / XL</Type>
-      <Type italic variant="disp-xl">Disp / XL</Type>
-      <Type underline variant="disp-xl">Disp / XL</Type>
+      <Type variant="disp-xl">Display / XL</Type>
+      <Type strong variant="disp-xl">Display / XL</Type>
+      <Type italic variant="disp-xl">Display / XL</Type>
+      <Type underline variant="disp-xl">Display / XL</Type>
 
       <Variant label="variant" value="disp-lg" />
-      <Type variant="disp-lg">Disp / LG</Type>
-      <Type strong variant="disp-lg">Disp / LG</Type>
-      <Type italic variant="disp-lg">Disp / LG</Type>
-      <Type underline variant="disp-lg">Disp / LG</Type>
+      <Type variant="disp-lg">Display / LG</Type>
+      <Type strong variant="disp-lg">Display / LG</Type>
+      <Type italic variant="disp-lg">Display / LG</Type>
+      <Type underline variant="disp-lg">Display / LG</Type>
 
       <Variant label="variant" value="disp-md" />
-      <Type variant="disp-md">Disp / MD</Type>
-      <Type strong variant="disp-md">Disp / MD</Type>
-      <Type italic variant="disp-md">Disp / MD</Type>
-      <Type underline variant="disp-md">Disp / MD</Type>
+      <Type variant="disp-md">Display / MD</Type>
+      <Type strong variant="disp-md">Display / MD</Type>
+      <Type italic variant="disp-md">Display / MD</Type>
+      <Type underline variant="disp-md">Display / MD</Type>
 
       <Variant label="variant" value="disp-sm" />
-      <Type variant="disp-sm">Disp / SM</Type>
-      <Type strong variant="disp-sm">Disp / SM</Type>
-      <Type italic variant="disp-sm">Disp / SM</Type>
-      <Type underline variant="disp-sm">Disp / SM</Type>
+      <Type variant="disp-sm">Display / SM</Type>
+      <Type strong variant="disp-sm">Display / SM</Type>
+      <Type italic variant="disp-sm">Display / SM</Type>
+      <Type underline variant="disp-sm">Display / SM</Type>
 
       <Variant label="variant" value="lg" />
       <Type variant="lg">Label / LG</Type>
