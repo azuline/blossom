@@ -22,13 +22,8 @@ export const sPageContentScroll = recipe({
   },
   compoundVariants: [
     {
-      variants: {
-        scrolled: true,
-        headerExists: true,
-      },
-      style: {
-        borderTop: t.fn.border("1", "neutral.weak"),
-      },
+      variants: { scrolled: true, headerExists: true },
+      style: { borderTop: t.fn.border("1", "neutral.weak") },
     },
   ],
 });
