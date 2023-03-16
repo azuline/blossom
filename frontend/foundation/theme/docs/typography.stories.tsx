@@ -20,14 +20,15 @@ export const Typography: React.FC = () => (
       <StoryParagraph>
         <Type>
           Display type is intended to be used for headings and titles. It stands out from the body
-          text. Avoid using display type for body text, as it has a low x-height.
+          text. Avoid using display type for body text.
         </Type>
         <Type>
-          Our display typeface is <Type italic>Cormorant Garamond</Type>.
+          Our display typeface is <Type italic>EB Garamond</Type>.
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
       <Flex sx={{ direction: "column", gap: "20" }}>
+        <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxxl">Display / XXXL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxl">Display / XXL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xl">Display / XL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-lg">Display / LG</Type>
@@ -38,7 +39,7 @@ export const Typography: React.FC = () => (
     <StorySection title="Body">
       <StoryParagraph>
         <Type>
-          Body type is intended to be used for general content.
+          Body type is intended to be used for general content. Default to this type.
         </Type>
         <Type>
           Our body typeface is <Type italic>Alegreya Sans</Type>.
