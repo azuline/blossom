@@ -1,6 +1,7 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
+import { Code } from "@foundation/ui/Code";
 import { Divider } from "@foundation/ui/Divider";
 import { Flex } from "@foundation/ui/Flex";
 import { Type } from "@foundation/ui/Type";
@@ -13,7 +14,12 @@ export const Typography: React.FC = () => (
   <DocumentationStory>
     <StorySection title="Typography">
       <StoryParagraph>
-        We have three typefaces: a display font, a body font, and a code font.
+        <Type>
+          We have three typefaces: a display font, a body font, and a code font.
+        </Type>
+        <Type>
+          Use the <Code>Type</Code> atom component to create text elements.
+        </Type>
       </StoryParagraph>
     </StorySection>
     <StorySection title="Display">

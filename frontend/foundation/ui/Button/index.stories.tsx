@@ -62,6 +62,11 @@ export const Button_: React.FC = () => {
         <Button disabled size="md" variant="danger" onPress={onPress}>Sign up</Button>
         <Button disabled size="lg" variant="danger" onPress={onPress}>Sign up</Button>
       </VariantsGallery>
+      <StorySection title="Tests">
+        <StorySection subsubtitle="Link Button">
+          <Button as="a" href="/" size="sm">Go home</Button>
+        </StorySection>
+      </StorySection>
     </DocumentationStory>
   );
 };
