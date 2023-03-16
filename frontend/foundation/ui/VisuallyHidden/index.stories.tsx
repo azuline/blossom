@@ -3,6 +3,7 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { CodeBlock } from "@foundation/ui/CodeBlock";
 import { Type } from "@foundation/ui/Type";
+import { VisuallyHidden } from "react-aria";
 
 export default {
   title: "Primitives",
@@ -24,6 +25,11 @@ export const VisuallyHidden_: React.FC = () => (
         <Type>Example:</Type>
         <CodeBlock code="<VisuallyHidden>Something</VisuallyHidden>" />
       </StoryParagraph>
+    </StorySection>
+    <StorySection title="Test">
+      <StorySection subsubtitle="Should Not Appear">
+        <VisuallyHidden>hello</VisuallyHidden>
+      </StorySection>
     </StorySection>
   </DocumentationStory>
 );
