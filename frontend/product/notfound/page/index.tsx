@@ -5,7 +5,7 @@ import { Type } from "@foundation/ui/Type";
 
 const NotFoundPage: React.FC = () => (
   <PageContent center>
-    <Flex sx={{ direction: "column", gap: "44" }}>
+    <Flex sx={{ direction: "column", gap: "28" }}>
       <Type variant="disp-xl">404 Page Not Found</Type>
       <Button href="/">Return home</Button>
     </Flex>

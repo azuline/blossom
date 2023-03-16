@@ -95,25 +95,25 @@ globalFontFace(fontFaces.display, {
   fontStyle: "normal",
   fontWeight: "400",
   fontDisplay: "swap",
-  src: "url('/fonts/EBGaramond-Medium.woff2') format('woff2')",
+  src: "url('/fonts/EBGaramond-Regular.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "400",
   fontDisplay: "swap",
-  src: "url('/fonts/EBGaramond-MediumItalic.woff2') format('woff2')",
+  src: "url('/fonts/EBGaramond-RegularItalic.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "normal",
   fontWeight: "600",
   fontDisplay: "swap",
-  src: "url('/fonts/EBGaramond-Bold.woff2') format('woff2')",
+  src: "url('/fonts/EBGaramond-SemiBold.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.display, {
   fontStyle: "italic",
   fontWeight: "600",
   fontDisplay: "swap",
-  src: "url('/fonts/EBGaramond-BoldItalic.woff2') format('woff2')",
+  src: "url('/fonts/EBGaramond-SemiBoldItalic.woff2') format('woff2')",
 });
 globalFontFace(fontFaces.code, {
   fontStyle: "italic",
