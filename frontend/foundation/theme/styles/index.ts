@@ -79,14 +79,26 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     ? themeMoonlightLightVars.color.content.neutral.weak
     : undefined;
 
+  const letterSpacing = displayVariants.includes(variant)
+    ? themeTypeVars.font.letterSpacing.display
+    : undefined;
+
+  const interExtras = {
+    fontKerning: "normal",
+    fontVariantLigatures: "contextual common-ligatures",
+    fontFeatureSettings: "'kern' 1, 'liga' 1, 'calt' 1",
+  } as const;
+
   return {
     fontFamily,
     fontWeight,
     lineHeight,
     fontSize,
     fontStyle,
+    letterSpacing,
     textDecoration,
     textDecorationColor,
+    ...(displayVariants.includes(variant) ? interExtras : {}),
   };
 };
 
