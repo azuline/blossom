@@ -45,11 +45,13 @@ typecheck:
 lint:
 	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 --fix .
 	dprint fmt
+	semgrep --autofix .
 	pnpm unimported
 
 lintcheck:
 	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 .
 	dprint check
+	semgrep .
 	pnpm unimported
 
 .PHONY: check install start build build-analyze preview stories prop-types build-stories test test-visual update-visual typecheck lint lintcheck

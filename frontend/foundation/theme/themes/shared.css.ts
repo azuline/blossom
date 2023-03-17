@@ -93,5 +93,10 @@ export const themeSharedVars = createGlobalTheme(":root", {
       fast: "all 0.2s easeOut",
     },
   },
+  flex: {
+    grow: "1 0 auto",
+    shrink: "0 1 0px",
+    static: "0 0 auto",
+  },
   media: breakpoints,
 });
