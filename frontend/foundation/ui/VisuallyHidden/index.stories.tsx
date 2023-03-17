@@ -23,8 +23,6 @@ export const VisuallyHidden_: React.FC = () => (
           eager-load lazy-loaded elements by rendering the lazy-loaded element inside
           VisuallyHidden.
         </Type>
-        <Type>Example:</Type>
-        <CodeBlock code="<VisuallyHidden>Something</VisuallyHidden>" />
       </StoryParagraph>
     </StorySection>
     <PropsTable
@@ -33,6 +31,9 @@ export const VisuallyHidden_: React.FC = () => (
         propDocChildren,
       ]}
     />
+    <StorySection title="Example">
+      <CodeBlock code="<VisuallyHidden>Something</VisuallyHidden>" />
+    </StorySection>
     <StorySection title="Test">
       <StorySection subsubtitle="Should Not Appear">
         <VisuallyHidden>hello</VisuallyHidden>

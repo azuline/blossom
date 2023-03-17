@@ -1,19 +1,13 @@
 import { t } from "@foundation/theme/styles";
-import { sx } from "@foundation/theme/styles/sprinkles.css";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sTextField = recipe({
-  base: [
-    sx({
-      w: "full",
-      px: "12",
-      py: "8",
-      radius: "8",
-    }),
-    {
-      border: t.fn.border("1", "neutral.weak"),
-    },
-  ],
+  base: {
+    width: t.size.full,
+    padding: t.fn.space("8", "12"),
+    borderRadius: t.radius[8],
+    border: t.fn.border("1", "neutral.weak"),
+  },
   variants: {
     disabled: {
       true: {

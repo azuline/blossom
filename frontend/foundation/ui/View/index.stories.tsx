@@ -1,5 +1,6 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import {
+  propDocAs,
   propDocChildren,
   propDocClassName,
   propDocID,
@@ -32,6 +33,7 @@ export const View_: React.FC = () => (
       args={[
         propDocChildren,
         propDocSX,
+        propDocAs,
         propDocClassName,
         propDocStyle,
         propDocID,

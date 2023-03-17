@@ -5,11 +5,12 @@ rules:
     patterns:
       - pattern: sx(...)
       - pattern-inside: |
-          variants: {
+          recipe({
             ...
-          },
+          })
     message: |
-      Do not use `sx` sprinkles inside of recipe's `variants`. Because
-      sprinkles specificity is determined by the sprinkles definition order,
-      the classes set by variants may be overridden by the base.
+      Do not use `sx` sprinkles inside of recipes. Because sprinkles specificity is
+      determined by the sprinkles definition order, the classes set by variants may be
+      overridden by the base. Similarly, `sx` overrides set by the consumer may be
+      overridden by the recipe's sprinkles.
     severity: WARNING

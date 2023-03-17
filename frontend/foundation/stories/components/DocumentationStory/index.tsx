@@ -1,11 +1,11 @@
-import { t } from "@foundation/theme/styles";
+import { Space } from "@foundation/theme/styles/sprinkles.css";
 import { Flex } from "@foundation/ui/Flex";
 import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
-  gap?: keyof typeof t.space;
+  gap?: Space;
 };
 
 // Forces a right padding, whereas the right padding would typically be collapsed

@@ -31,6 +31,7 @@ lintcheck:
 lint:
 	black .
 	ruff --fix .
+	semgrep --autofix .
 
 new-migration:
 	yoyo new --sql

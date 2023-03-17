@@ -2,6 +2,19 @@ import { flattenRecord } from "@foundation/std/flattenRecord";
 import { t } from "@foundation/theme/styles";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
 
+const colorContent = flattenRecord(t.color.content);
+const colorBackground = flattenRecord(t.color.background);
+const colorBorder = flattenRecord(t.color.border);
+const shadow = flattenRecord(t.shadows);
+
+export type ColorContent = keyof typeof colorContent;
+export type ColorBackground = keyof typeof colorBackground;
+export type ColorBorder = keyof typeof colorBorder;
+export type Shadow = keyof typeof shadow;
+export type Space = keyof typeof t.space;
+export type Size = keyof typeof t.size;
+export type Radius = keyof typeof t.radius;
+
 const conditions = {
   conditions: {
     // responsive
@@ -114,6 +127,12 @@ export const sxsets = {
       align: ["alignItems"],
     },
   }),
+  flexChild: defineProperties({
+    ...conditions,
+    properties: {
+      flex: t.flex,
+    },
+  }),
   position: defineProperties({
     ...conditions,
     properties: {
@@ -139,15 +158,15 @@ export const sxsets = {
   }),
   color: defineProperties({
     properties: {
-      color: flattenRecord(t.color.content),
-      background: flattenRecord(t.color.background),
+      color: colorContent,
+      background: colorBackground,
     },
   }),
   border: defineProperties({
     properties: {
       borderStyle: ["solid", "dashed", "dotted", "hidden", "none"],
       borderWidth: t.border,
-      borderColor: flattenRecord(t.color.border),
+      borderColor: colorBorder,
     },
     shorthands: {
       bwidth: ["borderWidth"],
@@ -162,7 +181,7 @@ export const sxsets = {
   }),
   shadow: defineProperties({
     properties: {
-      boxShadow: flattenRecord(t.shadows),
+      boxShadow: shadow,
     },
     shorthands: {
       shadow: ["boxShadow"],
@@ -190,6 +209,7 @@ const _sx = createSprinkles(
   sxsets.typography,
   sxsets.radius,
   sxsets.flex,
+  sxsets.flexChild,
   sxsets.position,
   sxsets.display,
   sxsets.color,

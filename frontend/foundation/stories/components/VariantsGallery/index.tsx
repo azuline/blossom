@@ -6,6 +6,7 @@ import { sVariantsGallery, sVariantsGalleryColumns } from "./index.css";
 
 type Props = {
   title?: string;
+  subtitle?: string;
   columns: number;
   alignItems?: "center" | "start" | "end";
   justifyItems?: "center" | "start" | "end";
@@ -13,7 +14,11 @@ type Props = {
 };
 
 export const VariantsGallery: React.FC<Props> = props => (
-  <StorySection title={props.title ?? "Variants"}>
+  <StorySection
+    subsubtitle={undefined}
+    subtitle={props.subtitle as undefined}
+    title={props.subtitle === undefined ? (props.title ?? "Variants") : undefined}
+  >
     <View
       className={sVariantsGallery}
       style={{

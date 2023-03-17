@@ -1,4 +1,4 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { sCenter } from "@foundation/ui/Center/index.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
@@ -13,13 +13,23 @@ type Props = RecipeVariants<typeof sCenter> & PolymorphicProp & {
 };
 
 export const Center: React.FC<Props> = props => {
-  const { className, axis, as, sx, children, ...passthru } = props;
+  const { className, axis, as, sx: sxArgs, children, ...passthru } = props;
   return (
     <View
       {...passthru}
       as={as}
-      className={clsx(className, sCenter({ axis }))}
-      sx={sx}
+      className={clsx(
+        className,
+        sCenter({ axis }),
+        sx({
+          display: "flex",
+          justify: "center",
+          align: "center",
+          w: "full",
+          h: "full",
+          ...sxArgs,
+        }),
+      )}
     >
       {children}
     </View>

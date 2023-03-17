@@ -92,6 +92,13 @@ export const propDocSX = {
   description: "Additional styles to apply to the element.",
   required: false,
 };
+export const propDocAs = {
+  name: "as",
+  type: "string",
+  default: null,
+  description: "The semantic HTML tag to render as.",
+  required: false,
+};
 export const propDocClassName = {
   name: "className",
   type: "string",
