@@ -71,26 +71,25 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   const fontWeight = options.strong === true
     ? weights.strong
     : weights.default;
-  const lineHeight = options.paragraph === true && bodyVariants.includes(variant)
-    ? themeTypeVars.font.lineHeight.paragraph[variant as FontBodyVariant]
-    : themeTypeVars.font.lineHeight.label;
-  const fontSize = {
-    sm: themeTypeVars.font.size.sm,
-    xs: themeTypeVars.font.size.xs,
-    md: themeTypeVars.font.size.md,
-    lg: themeTypeVars.font.size.lg,
-    "code-sm": themeTypeVars.font.size.sm,
-    "code-xs": themeTypeVars.font.size.xs,
-    "code-md": themeTypeVars.font.size.md,
-    "code-lg": themeTypeVars.font.size.lg,
-    "disp-sm": themeTypeVars.font.size.sm,
-    "disp-xs": themeTypeVars.font.size.xs,
-    "disp-md": themeTypeVars.font.size.md,
-    "disp-lg": themeTypeVars.font.size.lg,
-    "disp-xl": themeTypeVars.font.size.xl,
-    "disp-xxl": themeTypeVars.font.size.xxl,
-    "disp-xxxl": themeTypeVars.font.size.xxxl,
-  }[variant];
+  const size = ({
+    sm: "sm",
+    xs: "xs",
+    md: "md",
+    lg: "lg",
+    "code-sm": "sm",
+    "code-xs": "xs",
+    "code-md": "md",
+    "code-lg": "lg",
+    "disp-sm": "sm",
+    "disp-xs": "xs",
+    "disp-md": "md",
+    "disp-lg": "lg",
+    "disp-xl": "xl",
+    "disp-xxl": "xxl",
+    "disp-xxxl": "xxxl",
+  } as const)[variant];
+  const fontSize = themeTypeVars.font.size[size];
+  const lineHeight = themeTypeVars.font.lineHeight.paragraph[size];
   const fontStyle = options.italic === true ? "italic" : undefined;
   const textDecoration = options.underline === true ? "underline" : undefined;
   const textDecorationColor = options.underline === true

@@ -1,4 +1,11 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import {
+  propDocChildren,
+  propDocClassName,
+  propDocID,
+  propDocSX,
+  PropsTable,
+} from "@foundation/stories/components/PropsTable";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
@@ -28,6 +35,17 @@ export const Redirect_: React.FC = () => (
         </Type>
       </StoryParagraph>
     </StorySection>
+    <PropsTable
+      // dprint-ignore
+      args={[
+        { name: "href", type: "string", default: null, description: "The redirect destination." },
+        { name: "open", type: "\"here\" | \"new-tab\"", default: '"here"', description: "Open in current tab or new tab." },
+        propDocChildren,
+        propDocSX,
+        propDocClassName,
+        propDocID,
+      ]}
+    />
     <StorySection title="Examples">
       <Flex sx={{ direction: "column", gap: "16", align: "start" }}>
         <Redirect href="/">
