@@ -22,7 +22,6 @@
   ],
   "ignoreUnimported": [
     "foundation/icons/Icon/index.css.ts",
-    "foundation/routing/components/HeadlessLink/index.tsx",
     "foundation/routing/state/prefetch.ts",
     "foundation/routing/state/redirect.ts",
     "foundation/theme/docs/size.css.ts",
