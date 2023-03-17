@@ -12,7 +12,7 @@ export type TouchableProps = {
   disabled?: boolean;
   type?: AriaButtonProps["type"];
   "aria-haspopup"?: AriaButtonProps["aria-haspopup"];
-  onPress: (() => void) | (() => Promise<void>);
+  onPress?: (() => void) | (() => Promise<void>);
 };
 
 export const Touchable: React.FC<TouchableProps> = props => {

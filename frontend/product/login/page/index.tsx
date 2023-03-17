@@ -1,4 +1,5 @@
 import { RPCs } from "@codegen/rpc";
+import { Form } from "@foundation/forms/components/Form";
 import { atomForm } from "@foundation/forms/state";
 import { Icon } from "@foundation/icons/Icon";
 import { PageContent } from "@foundation/layout/PageContent";
@@ -44,31 +45,33 @@ const LoginPage: React.FC = () => {
 
   return (
     <PageContent center>
-      <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
-        <Center axis="vertical">
-          <Icon icon="logo" sx={{ w: "64", h: "64" }} />
-        </Center>
-        <Type variant="disp-xl">Welcome back!</Type>
-        <Flex sx={{ direction: "column", gap: "20" }}>
-          <TextField
-            label="Email"
-            value={form.email}
-            onChange={email => setForm({ email })}
-          />
-          <TextField
-            label="Password"
-            value={form.password}
-            onChange={password => setForm({ password })}
-          />
-          <Checkbox
-            checked={form.permanent}
-            label="Remember me"
-            onChange={permanent => setForm({ permanent })}
-          />
-          {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
+      <Form onSubmit={submit}>
+        <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
+          <Center axis="vertical">
+            <Icon icon="logo" sx={{ w: "64", h: "64" }} />
+          </Center>
+          <Type variant="disp-xl">Welcome back!</Type>
+          <Flex sx={{ direction: "column", gap: "20" }}>
+            <TextField
+              label="Email"
+              value={form.email}
+              onChange={email => setForm({ email })}
+            />
+            <TextField
+              label="Password"
+              value={form.password}
+              onChange={password => setForm({ password })}
+            />
+            <Checkbox
+              checked={form.permanent}
+              label="Remember me"
+              onChange={permanent => setForm({ permanent })}
+            />
+            {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
+          </Flex>
+          <Button fullWidth size="lg" type="submit">Sign in</Button>
         </Flex>
-        <Button fullWidth size="lg" onPress={submit}>Sign in</Button>
-      </Flex>
+      </Form>
     </PageContent>
   );
 };
