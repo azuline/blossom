@@ -24,9 +24,7 @@ export const Touchable: React.FC<TouchableProps> = props => {
   const ariaProps: AriaButtonProps = {
     ...props,
     isDisabled: props.disabled,
-    // This is an undocumented property.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error This is an undocumented property.
     preventFocusOnPress: true,
   };
   const { buttonProps, isPressed } = useButton(ariaProps, ref);

@@ -44,8 +44,7 @@ export class BaseError extends Error {
       }
       if (options.cause !== undefined) {
         this.cause = options.cause;
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error The cause error might not be a BaseError.
         if (this.cause.transient === true) {
           this.transient = true;
         }

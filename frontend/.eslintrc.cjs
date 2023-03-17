@@ -115,7 +115,6 @@ module.exports = {
     }],
 
     // Overrides for @typescript-eslint.
-    "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/explicit-function-return-type": ["warn", { allowExpressions: true }],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-floating-promises": ["error", { ignoreIIFE: true }],
