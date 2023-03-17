@@ -103,7 +103,7 @@ export const sButton = recipe({
     size: {
       sm: {
         padding: "6px 16px",
-        fontSize: t.font.size.xs,
+        fontSize: t.font.size.body.xs,
       },
       md: {
         padding: "8px 20px",
