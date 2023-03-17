@@ -39,8 +39,8 @@ export const Redirect_: React.FC = () => (
     <PropsTable
       // dprint-ignore
       args={[
-        { name: "href", type: "string", default: null, description: "The redirect destination." },
-        { name: "open", type: "\"here\" | \"new-tab\"", default: '"here"', description: "Open in current tab or new tab." },
+        { name: "href", type: "string", default: null, description: "The redirect destination.", required: true },
+        { name: "open", type: "\"here\" | \"new-tab\"", default: '"here"', description: "Open in current tab or new tab.", required: false },
         propDocChildren,
         propDocSX,
         propDocClassName,

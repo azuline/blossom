@@ -1,4 +1,5 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { propDocChildren, PropsTable } from "@foundation/stories/components/PropsTable";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { CodeBlock } from "@foundation/ui/CodeBlock";
@@ -26,6 +27,12 @@ export const VisuallyHidden_: React.FC = () => (
         <CodeBlock code="<VisuallyHidden>Something</VisuallyHidden>" />
       </StoryParagraph>
     </StorySection>
+    <PropsTable
+      // dprint-ignore
+      args={[
+        propDocChildren,
+      ]}
+    />
     <StorySection title="Test">
       <StorySection subsubtitle="Should Not Appear">
         <VisuallyHidden>hello</VisuallyHidden>

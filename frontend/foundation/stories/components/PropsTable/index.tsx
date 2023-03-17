@@ -11,6 +11,7 @@ type Arg =
     name: string;
     default: string | null;
     description: string;
+    required: boolean;
   }
   & ({
     type: string;
@@ -53,6 +54,7 @@ export const PropsTable: React.FC<Props> = props => (
           <PTChild>
             <Type paragraph sx={{ color: "neutral.strong" }} variant="xs">
               {arg.name}
+              {arg.required && <Type sx={{ color: "brand.default" }}>{" *"}</Type>}
             </Type>
           </PTChild>
           <PTChild sx={{ pt: "2" }}>
@@ -81,28 +83,33 @@ export const propDocChildren = {
   type: "ReactNode",
   default: null,
   description: "The child elements to render.",
+  required: false,
 };
 export const propDocSX = {
   name: "sx",
-  type: "SX | undefined",
+  type: "SX",
   default: null,
   description: "Additional styles to apply to the element.",
+  required: false,
 };
 export const propDocClassName = {
   name: "className",
-  type: "string | undefined",
+  type: "string",
   default: null,
   description: "A class to add to the element.",
+  required: false,
 };
 export const propDocID = {
   name: "id",
-  type: "string | undefined",
+  type: "string",
   default: null,
   description: "An id to add to the element.",
+  required: false,
 };
 export const propDocStyle = {
   name: "style",
   type: "CSSProperties",
   default: null,
   description: "Inline styles to add to the element.",
+  required: false,
 };
