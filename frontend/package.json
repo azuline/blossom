@@ -18,7 +18,6 @@
     "react-aria": "^3.23.1",
     "react-dom": "^18.2.0",
     "react-stately": "^3.21.0",
-    "vitest": "^0.29.2",
     "wouter": "^2.10.0"
   },
   "devDependencies": {
@@ -55,7 +54,8 @@
     "sync-fetch": "^0.4.2",
     "typescript": "^4.9.5",
     "unimported": "^1.26.0",
-    "vite": "^4.1.4"
+    "vite": "^4.1.4",
+    "vitest": "^0.29.2"
   },
   "msw": {
     "workerDirectory": "public"
