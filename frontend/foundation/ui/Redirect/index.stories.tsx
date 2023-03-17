@@ -3,6 +3,7 @@ import {
   propDocChildren,
   propDocClassName,
   propDocID,
+  propDocStyle,
   propDocSX,
   PropsTable,
 } from "@foundation/stories/components/PropsTable";
@@ -44,6 +45,7 @@ export const Redirect_: React.FC = () => (
         propDocSX,
         propDocClassName,
         propDocID,
+        propDocStyle,
       ]}
     />
     <StorySection title="Examples">

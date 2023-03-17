@@ -15,6 +15,7 @@ export const sPropsTableChild = style({
   padding: t.fn.space("4", "12"),
   borderTop: t.fn.border("1", "neutral.default"),
   borderRight: t.fn.border("1", "neutral.default"),
+  maxWidth: t.size[356],
 
   selectors: {
     "&:nth-child(4n+4)": { borderRight: "none" },

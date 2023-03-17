@@ -1,4 +1,12 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import {
+  propDocChildren,
+  propDocClassName,
+  propDocID,
+  propDocStyle,
+  propDocSX,
+  PropsTable,
+} from "@foundation/stories/components/PropsTable";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
@@ -28,6 +36,19 @@ export const Touchable_: React.FC = () => (
         </Type>
       </StoryParagraph>
     </StorySection>
+    <PropsTable
+      // dprint-ignore
+      args={[
+        { name: "onPress", typePlain: "Callback", default: null, description: "Callback on press." },
+        { name: "disabled", type: "boolean", default: "false", description: "Disable pressing." },
+        { name: "type", type: '"button" | "submit" | "reset"', default: "button", description: "Semantic type of button." },
+        propDocChildren,
+        propDocSX,
+        propDocClassName,
+        propDocID,
+        propDocStyle,
+      ]}
+    />
     <StorySection title="Examples">
       <Flex sx={{ direction: "column", gap: "16", align: "start" }}>
         <Touchable onPress={alertOnPress}>

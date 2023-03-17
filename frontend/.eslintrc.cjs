@@ -30,7 +30,15 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint", "unused-imports", "import-alias"],
   env: { es6: true, browser: true, jest: true },
-  ignorePatterns: ["coverage", ".eslintrc.cjs", "public", "!.ladle"],
+  ignorePatterns: [
+    "coverage",
+    ".eslintrc.cjs",
+    "public",
+    "!.ladle",
+    "build",
+    "dist",
+    "node_modules",
+  ],
   rules: {
     // This goes off when we have useEffects that return either nothing or a cleanup
     // function.
@@ -121,7 +129,6 @@ module.exports = {
     "import/prefer-default-export": "off",
     "import/order": "off",
     "import/extensions": "off",
-    // Adding *.config.ts to the defaults.
     "import/no-extraneous-dependencies": ["error", {
       devDependencies: [
         "**/*.test.ts",
@@ -129,6 +136,7 @@ module.exports = {
         "**/*.stories.tsx",
         "**/*.spec.ts",
         "**/*.spec.tsx",
+        // Adding the below to the defaults.
         "**/*.config.ts",
         "**/foundation/testing/**",
       ],

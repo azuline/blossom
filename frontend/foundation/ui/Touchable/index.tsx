@@ -1,18 +1,21 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { sTouchable } from "@foundation/ui/Touchable/index.css";
 import { clsx } from "clsx";
-import { ReactNode, useRef } from "react";
+import { CSSProperties, ReactNode, useRef } from "react";
 import { AriaButtonProps, useButton } from "react-aria";
 
 export type TouchableProps = {
-  children: ReactNode;
-  className?: string;
-  sx?: SX;
-  id?: string;
   disabled?: boolean;
   type?: AriaButtonProps["type"];
   "aria-haspopup"?: AriaButtonProps["aria-haspopup"];
   onPress?: (() => void) | (() => Promise<void>);
+
+  /* Standard props. */
+  children: ReactNode;
+  className?: string;
+  sx?: SX;
+  id?: string;
+  style?: CSSProperties;
 };
 
 export const Touchable: React.FC<TouchableProps> = props => {
@@ -33,8 +36,9 @@ export const Touchable: React.FC<TouchableProps> = props => {
     // eslint-disable-next-line react/button-has-type
     <button
       ref={ref}
-      className={clsx(sTouchable, props.className, isPressed && "pressed")}
+      className={clsx(sTouchable, props.className, isPressed && "pressed", sx(props.sx ?? {}))}
       id={props.id}
+      style={props.style}
       {...(buttonProps as Record<string, unknown>)}
     >
       {props.children}

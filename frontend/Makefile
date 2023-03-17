@@ -43,16 +43,16 @@ typecheck:
 	pnpm tsc
 
 lint:
-	pnpm eslint --ext .ts,.tsx --cache --max-warnings=0 --fix .
+	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 --fix .
 	dprint fmt
 	pnpm unimported
 
 lintcheck:
-	pnpm eslint --ext .ts,.tsx --cache --max-warnings=0 .
+	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 .
 	dprint check
 	pnpm unimported
 
-.PHONY: check install start build build-analyze preview test test-visual update-visual typecheck lint lintcheck
+.PHONY: check install start build build-analyze preview stories prop-types build-stories test test-visual update-visual typecheck lint lintcheck
 
 # Below here are not commands.
 

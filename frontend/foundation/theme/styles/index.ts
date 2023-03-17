@@ -71,6 +71,7 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
   const fontWeight = options.strong === true
     ? weights.strong
     : weights.default;
+
   const size = ({
     sm: "sm",
     xs: "xs",
@@ -81,14 +82,15 @@ const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProper
     "code-md": "md",
     "code-lg": "lg",
     "disp-sm": "sm",
-    "disp-xs": "xs",
     "disp-md": "md",
     "disp-lg": "lg",
     "disp-xl": "xl",
     "disp-xxl": "xxl",
     "disp-xxxl": "xxxl",
   } as const)[variant];
-  const fontSize = themeTypeVars.font.size[size];
+
+  // Ok this type is a lie, but it is correct in practice :)
+  const fontSize = themeTypeVars.font.size[face][size as "md"];
   const lineHeight = themeTypeVars.font.lineHeight.paragraph[size];
   const fontStyle = options.italic === true ? "italic" : undefined;
   const textDecoration = options.underline === true ? "underline" : undefined;
