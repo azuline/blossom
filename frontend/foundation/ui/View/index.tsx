@@ -8,6 +8,7 @@ type Props = PolymorphicProp & {
   sx?: SX;
   children?: React.ReactNode;
   style?: CSSProperties;
+  id?: string;
 };
 
 export const View = forwardRef(function ViewWithRef(props: Props, ref) {
@@ -18,6 +19,7 @@ export const View = forwardRef(function ViewWithRef(props: Props, ref) {
       {...passthru}
       ref={ref}
       className={clsx(className, sx(sxArgs))}
+      id={props.id}
       style={style}
     >
       {children}

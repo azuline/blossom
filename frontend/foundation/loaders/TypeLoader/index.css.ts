@@ -8,8 +8,8 @@ export const sTypeLoader = recipe({
     background: t.color.content.neutral.loader,
   },
   variants: {
-    size: mapTokenScale(t.font.size, tok => ({
-      height: t.font.size[tok],
+    size: mapTokenScale(t.font.size.body, tok => ({
+      height: t.font.size.body[tok],
     })),
   },
   defaultVariants: {

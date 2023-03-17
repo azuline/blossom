@@ -4,7 +4,7 @@ import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { View } from "@foundation/ui/View";
 
 type Props = {
-  size?: keyof typeof t.font.size;
+  size?: keyof typeof t.font.size.body;
   w: SX["w"];
 };
 

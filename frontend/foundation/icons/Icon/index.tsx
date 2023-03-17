@@ -7,7 +7,7 @@ import { Suspense } from "react";
 type Props = {
   icon: keyof typeof ICONS_MAP;
   color?: SX["color"];
-  size?: keyof typeof t.font.size | "full";
+  size?: keyof typeof t.font.size.body | "full";
   sx?: SX;
 };
 
@@ -18,8 +18,8 @@ export const Icon: React.FC<Props> = props => {
       style={{
         display: "inline-block",
         lineHeight: 0,
-        width: props.size && props.size !== "full" ? t.font.size[props.size] : undefined,
-        height: props.size && props.size !== "full" ? t.font.size[props.size] : undefined,
+        width: props.size && props.size !== "full" ? t.font.size.body[props.size] : undefined,
+        height: props.size && props.size !== "full" ? t.font.size.body[props.size] : undefined,
       }}
       sx={{
         color: props.color,

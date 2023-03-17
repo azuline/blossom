@@ -1,15 +1,18 @@
 import { usePrefetchPath } from "@foundation/routing/state/prefetch";
 import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { clsx } from "clsx";
-import { ReactNode, useRef } from "react";
+import { CSSProperties, ReactNode, useRef } from "react";
 
 export type RedirectProps = {
   href: string;
   open?: "here" | "new-tab";
+
+  /** Standard props. */
   children: ReactNode;
   className?: string;
   id?: string;
   sx?: SX;
+  style?: CSSProperties;
 };
 
 export const Redirect: React.FC<RedirectProps> = props => {
@@ -22,6 +25,7 @@ export const Redirect: React.FC<RedirectProps> = props => {
       href={props.href}
       id={props.id}
       rel="noreferrer"
+      style={props.style}
       target={props.open === "new-tab" ? "_blank" : undefined}
       // We don't need this in normal operation; however, in tests, a normal redirect
       // doesn't really work.

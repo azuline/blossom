@@ -1,4 +1,12 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import {
+  propDocChildren,
+  propDocClassName,
+  propDocID,
+  propDocStyle,
+  propDocSX,
+  PropsTable,
+} from "@foundation/stories/components/PropsTable";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
@@ -19,6 +27,16 @@ export const View_: React.FC = () => (
         </Type>
       </StoryParagraph>
     </StorySection>
+    <PropsTable
+      // dprint-ignore
+      args={[
+        propDocChildren,
+        propDocSX,
+        propDocClassName,
+        propDocStyle,
+        propDocID,
+      ]}
+    />
     <StorySection title="Example">
       <View sx={{ bwidth: "1", maxw: "452", p: "36" }}>
         I&apos;m {"<View sx={{ bwidth: \"1\", maxw: \"452\", p: \"36\" }} />"}

@@ -16,7 +16,7 @@ export type RPCMocks = { [RPC in keyof RPCs]?: RPCMockOut<RPC> };
 
 export const mockRPCsWorker = (mocks: RPCMocks): void => {
   const worker = setupWorker(...mockRPCHandlers(mocks));
-  void worker.start();
+  void worker.start({ onUnhandledRequest: "bypass" });
 };
 
 export const mockRPCHandlers = (mocks: RPCMocks): RestHandler[] => {
