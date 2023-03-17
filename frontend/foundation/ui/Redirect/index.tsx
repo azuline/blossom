@@ -23,6 +23,11 @@ export const Redirect: React.FC<RedirectProps> = props => {
       id={props.id}
       rel="noreferrer"
       target={props.open === "new-tab" ? "_blank" : undefined}
+      // We don't need this in normal operation; however, in tests, a normal redirect
+      // doesn't really work.
+      onClick={() => {
+        window.history.pushState(null, "", props.href);
+      }}
     >
       {props.children}
     </a>
