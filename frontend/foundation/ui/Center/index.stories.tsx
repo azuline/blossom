@@ -1,7 +1,7 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { View } from "@foundation/ui/View";
 
 export default {
@@ -10,7 +10,7 @@ export default {
 
 export const Center_: React.FC = () => (
   <DocumentationStory>
-    <Flex sx={{ gap: "16", wrap: "wrap" }}>
+    <Stack wrap axis="x" gap="16">
       <Card sx={{ w: "272", h: "272" }}>
         <Center>
           <View sx={{ h: "128", w: "128", background: "brand.default", color: "brand.tint" }}>
@@ -32,6 +32,6 @@ export const Center_: React.FC = () => (
           </View>
         </Center>
       </Card>
-    </Flex>
+    </Stack>
   </DocumentationStory>
 );

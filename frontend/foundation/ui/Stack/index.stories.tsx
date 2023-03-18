@@ -45,8 +45,8 @@ export const Stack_: React.FC = () => (
       // dprint-ignore
       args={[
         { name: "axis", type: '"x" | "y"', default: null, description: "Stack direction/axis: horizontal or vertical.", required: true },
-        { name: "x", type: '"left" | "center" | "right" | "space"', default: "center", description: "How to horizonally align elements.", },
-        { name: "y", type: '"top" | "center" | "bottom" | "space"', default: "center", description: "How to vertically align elements.", },
+        { name: "x", type: '"left" | "center" | "right" | "space" | "stretch"', default: null, description: "How to align elements from left to right.", },
+        { name: "y", type: '"top" | "center" | "bottom" | "space" | "stretch"', default: null, description: "How to align elements from top to bottom.", },
         { name: "gap", typePlain: "Space Token", default: null, description: "Add space between each child element.", },
         { name: "divider", typePlain: "Border Color Token", default: null, description: "Add a divider of the specified color between children.", },
         { name: "wrap", typePlain: "boolean", default: "false", description: "Wrap children onto multiple rows/columns.", },

@@ -1,6 +1,6 @@
-import { Flex } from "@foundation/ui/Flex";
 import { AriaTextFieldProps, useTextField } from "react-aria";
 
+import { Stack } from "@foundation/ui/Stack";
 import { sTextField } from "@foundation/ui/TextField/index.css";
 import { Type } from "@foundation/ui/Type";
 import { LabellableProps } from "@foundation/ui/types";
@@ -30,7 +30,7 @@ export const TextField: React.FC<TextFieldProps> = _props => {
   const { labelProps, inputProps, errorMessageProps } = useTextField(ariaProps, ref);
 
   return (
-    <Flex sx={{ direction: "column", gap: "8" }}>
+    <Stack axis="y" gap="8">
       {props.label !== undefined && (
         <Type as="label" sx={{ color: "neutral.default" }} variant="xs" {...labelProps}>
           {props.label}
@@ -48,6 +48,6 @@ export const TextField: React.FC<TextFieldProps> = _props => {
           {props.errorMessage}
         </Type>
       )}
-    </Flex>
+    </Stack>
   );
 };

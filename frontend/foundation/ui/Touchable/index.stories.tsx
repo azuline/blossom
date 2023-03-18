@@ -10,7 +10,7 @@ import {
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 import { Touchable } from ".";
@@ -50,7 +50,7 @@ export const Touchable_: React.FC = () => (
       ]}
     />
     <StorySection title="Examples">
-      <Flex sx={{ direction: "column", gap: "16", align: "start" }}>
+      <Stack axis="y" gap="16" x="left">
         <Touchable onPress={alertOnPress}>
           Touch me
         </Touchable>
@@ -68,7 +68,7 @@ export const Touchable_: React.FC = () => (
             Touch me
           </View>
         </Touchable>
-      </Flex>
+      </Stack>
     </StorySection>
   </DocumentationStory>
 );

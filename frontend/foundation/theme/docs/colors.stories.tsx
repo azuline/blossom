@@ -3,7 +3,7 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 import { FC } from "react";
@@ -32,7 +32,7 @@ export const ColorsPrimitive: React.FC = () => (
         </Type>
       </StoryParagraph>
     </StorySection>
-    <Flex sx={{ direction: "column", gap: "28" }}>
+    <Stack axis="y" gap="28">
       <StorySection subtitle="Neutral">
         <ColorPalette palette={moonlightPalette.neutral} />
       </StorySection>
@@ -51,7 +51,7 @@ export const ColorsPrimitive: React.FC = () => (
       <StorySection subtitle="Overlay">
         <ColorPalette palette={moonlightPalette.overlay} />
       </StorySection>
-    </Flex>
+    </Stack>
   </DocumentationStory>
 );
 
@@ -69,8 +69,8 @@ export const ColorSemantic: React.FC = () => (
         </Type>
       </StoryParagraph>
     </StorySection>
-    <Flex sx={{ direction: "column", gap: "44" }}>
-      <StorySection align="row" subtitle="Background" sx={{ gap: "36" }}>
+    <Stack axis="y" gap="44">
+      <StorySection axis="x" subtitle="Background" sx={{ gap: "36" }}>
         <StorySection subsubtitle="Neutral">
           <ColorPalette palette={t.color.background.neutral} />
         </StorySection>
@@ -96,7 +96,7 @@ export const ColorSemantic: React.FC = () => (
           <ColorPalette palette={t.color.background.decoration} />
         </StorySection>
       </StorySection>
-      <StorySection align="row" subtitle="Content" sx={{ gap: "36" }}>
+      <StorySection axis="x" subtitle="Content" sx={{ gap: "36" }}>
         <StorySection subsubtitle="Neutral">
           <ColorPalette palette={t.color.content.neutral} />
         </StorySection>
@@ -116,7 +116,7 @@ export const ColorSemantic: React.FC = () => (
           <ColorPalette palette={t.color.content.negative} />
         </StorySection>
       </StorySection>
-      <StorySection align="row" subtitle="Border" sx={{ gap: "36" }}>
+      <StorySection axis="x" subtitle="Border" sx={{ gap: "36" }}>
         <StorySection subsubtitle="Neutral">
           <ColorPalette palette={t.color.border.neutral} />
         </StorySection>
@@ -127,19 +127,19 @@ export const ColorSemantic: React.FC = () => (
           <ColorPalette palette={t.color.border.negative} />
         </StorySection>
       </StorySection>
-    </Flex>
+    </Stack>
   </DocumentationStory>
 );
 
 type ColorPaletteProps = { palette: Record<string, string> };
 
 const ColorPalette: FC<ColorPaletteProps> = props => (
-  <Flex>
+  <Stack axis="x">
     {Object.entries(props.palette).map(([name, color]) => (
-      <Flex key={name} sx={{ direction: "column", gap: "16", align: "center" }}>
+      <Stack key={name} axis="y" gap="16" x="center">
         <View style={{ background: color }} sx={{ h: "64", w: "96" }} />
         <Type sx={{ whiteSpace: "nowrap", textTransform: "capitalize" }}>{name}</Type>
-      </Flex>
+      </Stack>
     ))}
-  </Flex>
+  </Stack>
 );

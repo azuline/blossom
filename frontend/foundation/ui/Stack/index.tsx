@@ -27,8 +27,8 @@ export type StackProps = PolymorphicProp & Omit<RV, "axis"> & {
 export const Stack: React.FC<StackProps> = props => {
   const {
     axis,
-    x = "center",
-    y = "center",
+    x,
+    y,
     divider,
     wrap = false,
     gap,
@@ -41,14 +41,21 @@ export const Stack: React.FC<StackProps> = props => {
     ...passthru
   } = props;
 
+  // The cross-axis should default to stretch, a la Flexbox.
+  const defaultX = axis === "x" ? "left" : "stretch";
+  const defaultY = axis === "y" ? "top" : "stretch";
+
   return (
     <View
       {...passthru}
       as={as}
-      className={clsx(sStack({ axis, x, y, wrap }), gap && sx({ gap }), className)}
+      className={clsx(
+        sStack({ axis, x: x ?? defaultX, y: y ?? defaultY, wrap }),
+        sx({ gap, ...sxArgs }),
+        className,
+      )}
       id={id}
       style={style}
-      sx={sxArgs}
     >
       {Children.map(children, (c, idx) => (
         <>

@@ -6,7 +6,7 @@ import { VariantsGallery } from "@foundation/stories/components/VariantsGallery"
 import { Card } from "@foundation/ui/Card";
 import { Center } from "@foundation/ui/Center";
 import { Divider } from "@foundation/ui/Divider";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 import { FC, ReactNode } from "react";
@@ -46,27 +46,27 @@ export const Divider_: React.FC = () => (
         <Divider orientation="vertical" size="2" />
       </DividerContainer>
     </VariantsGallery>
-    <StorySection align="row" title="Examples">
+    <StorySection axis="x" title="Examples">
       <StorySection subtitle="Horizontal">
         <Card sx={{ w: "128" }}>
-          <Flex sx={{ direction: "column" }}>
+          <Stack axis="y">
             <View sx={{ h: "28", w: "full", background: "brand.default" }} />
             <Divider my="16" />
             <View sx={{ h: "28", w: "full", background: "brand.default" }} />
             <Divider my="16" />
             <View sx={{ h: "28", w: "full", background: "brand.default" }} />
-          </Flex>
+          </Stack>
         </Card>
       </StorySection>
       <StorySection subtitle="Vertical">
         <Card sx={{ h: "96", w: "216" }}>
-          <Flex sx={{ h: "full" }}>
+          <Stack axis="x" sx={{ h: "full" }}>
             <View sx={{ h: "full", w: "44", background: "brand.default" }} />
             <Divider mx="16" orientation="vertical" />
             <View sx={{ h: "full", w: "44", background: "brand.default" }} />
             <Divider mx="16" orientation="vertical" />
             <View sx={{ h: "full", w: "44", background: "brand.default" }} />
-          </Flex>
+          </Stack>
         </Card>
       </StorySection>
     </StorySection>

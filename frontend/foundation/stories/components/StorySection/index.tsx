@@ -1,13 +1,13 @@
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack, StackProps } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { ReactNode } from "react";
 
 type Props =
   & {
     children: ReactNode;
-    /** @default column */
-    align?: "column" | "row";
+    /** @default y */
+    axis?: StackProps["axis"];
     sx?: SX;
   }
   & ({
@@ -25,12 +25,12 @@ type Props =
   });
 
 export const StorySection: React.FC<Props> = props => (
-  <Flex sx={{ direction: "column", gap: "20", ...props.sx }}>
+  <Stack axis="y" gap="20" sx={props.sx}>
     {props.title && <Type variant="disp-xl">{props.title}</Type>}
     {props.subtitle && <Type variant="disp-lg">{props.subtitle}</Type>}
     {props.subsubtitle && <Type variant="disp-md">{props.subsubtitle}</Type>}
-    <Flex sx={{ direction: props.align ?? "column", gap: "20", wrap: "wrap" }}>
+    <Stack wrap axis={props.axis ?? "y"} gap="20">
       {props.children}
-    </Flex>
-  </Flex>
+    </Stack>
+  </Stack>
 );
