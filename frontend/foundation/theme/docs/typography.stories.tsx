@@ -3,7 +3,7 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
 import { Divider } from "@foundation/ui/Divider";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 
 export default {
@@ -33,14 +33,14 @@ export const Typography: React.FC = () => (
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
-      <Flex sx={{ direction: "column", gap: "20" }}>
+      <Stack axis="y" gap="20">
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxxl">Display / XXXL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xxl">Display / XXL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-xl">Display / XL</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-lg">Display / LG</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-md">Display / MD</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="disp-sm">Display / SM</Type>
-      </Flex>
+      </Stack>
     </StorySection>
     <StorySection title="Body">
       <StoryParagraph>
@@ -52,12 +52,12 @@ export const Typography: React.FC = () => (
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
-      <Flex sx={{ direction: "column", gap: "20" }}>
+      <Stack axis="y" gap="20">
         <Type sx={{ whiteSpace: "nowrap" }} variant="lg">Body / LG</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="md">Body / MD</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="sm">Body / SM</Type>
         <Type sx={{ whiteSpace: "nowrap" }} variant="xs">Body / XS</Type>
-      </Flex>
+      </Stack>
     </StorySection>
     <StorySection title="Code">
       <StoryParagraph>
@@ -69,7 +69,7 @@ export const Typography: React.FC = () => (
         </Type>
       </StoryParagraph>
       <Divider color="neutral.weak" />
-      <Flex sx={{ direction: "column", gap: "20" }}>
+      <Stack axis="y" gap="20">
         <Type sx={{ whiteSpace: "nowrap" }} variant="code-lg">
           Code / LG
         </Type>
@@ -82,7 +82,7 @@ export const Typography: React.FC = () => (
         <Type sx={{ whiteSpace: "nowrap" }} variant="code-xs">
           Code / XS
         </Type>
-      </Flex>
+      </Stack>
     </StorySection>
   </DocumentationStory>
 );

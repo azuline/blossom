@@ -10,7 +10,7 @@ import {
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Code } from "@foundation/ui/Code";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 import { Redirect } from ".";
@@ -40,7 +40,7 @@ export const Redirect_: React.FC = () => (
       // dprint-ignore
       args={[
         { name: "href", type: "string", default: null, description: "The redirect destination.", required: true },
-        { name: "open", type: "\"here\" | \"new-tab\"", default: '"here"', description: "Open in current tab or new tab.",  },
+        { name: "open", type: "\"here\" | \"new-tab\"", default: '"here"', description: "Open in current tab or new tab.", },
         propDocChildren,
         propDocSX,
         propDocClassName,
@@ -49,7 +49,7 @@ export const Redirect_: React.FC = () => (
       ]}
     />
     <StorySection title="Examples">
-      <Flex sx={{ direction: "column", gap: "16", align: "start" }}>
+      <Stack axis="y" gap="16">
         <Redirect href="/">
           Take me home
         </Redirect>
@@ -67,7 +67,7 @@ export const Redirect_: React.FC = () => (
             Take me home
           </View>
         </Redirect>
-      </Flex>
+      </Stack>
     </StorySection>
   </DocumentationStory>
 );

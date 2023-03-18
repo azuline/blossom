@@ -27,8 +27,8 @@ export type StackProps = PolymorphicProp & Omit<RV, "axis"> & {
 export const Stack: React.FC<StackProps> = props => {
   const {
     axis,
-    x = "center",
-    y = "center",
+    x = "left",
+    y = "top",
     divider,
     wrap = false,
     gap,
@@ -45,10 +45,9 @@ export const Stack: React.FC<StackProps> = props => {
     <View
       {...passthru}
       as={as}
-      className={clsx(sStack({ axis, x, y, wrap }), gap && sx({ gap }), className)}
+      className={clsx(sStack({ axis, x, y, wrap }), sx({ gap, ...sxArgs }), className)}
       id={id}
       style={style}
-      sx={sxArgs}
     >
       {Children.map(children, (c, idx) => (
         <>

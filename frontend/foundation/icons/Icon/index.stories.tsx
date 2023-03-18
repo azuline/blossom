@@ -5,7 +5,7 @@ import { DocumentationStory } from "@foundation/stories/components/Documentation
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 import React from "react";
@@ -45,10 +45,10 @@ export const Icon_: React.FC = () => (
     <StorySection title="Available Icons">
       <View className={sIconGallery}>
         {Object.keys(ICONS_MAP).sort().map(name => (
-          <Flex key={name} sx={{ direction: "column", gap: "4", align: "center" }}>
+          <Stack key={name} axis="y" gap="4" y="center">
             <Icon color="neutral.strong" icon={name as keyof typeof ICONS_MAP} size="sm" />
             <Type sx={{ color: "neutral.weak" }} variant="xs">{name}</Type>
-          </Flex>
+          </Stack>
         ))}
       </View>
     </StorySection>

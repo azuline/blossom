@@ -9,7 +9,7 @@ import { RPCError } from "@foundation/rpc/error";
 import { Button } from "@foundation/ui/Button";
 import { Center } from "@foundation/ui/Center";
 import { Checkbox } from "@foundation/ui/Checkbox";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { TextField } from "@foundation/ui/TextField";
 import { Type } from "@foundation/ui/Type";
 import { useAtom } from "jotai";
@@ -46,12 +46,12 @@ const LoginPage: React.FC = () => {
   return (
     <PageContent center>
       <Form onSubmit={submit}>
-        <Flex sx={{ direction: "column", gap: "36", w: "356" }}>
-          <Center axis="vertical">
+        <Stack axis="y" gap="36" sx={{ maxw: "356" }}>
+          <Center>
             <Icon icon="logo" sx={{ w: "64", h: "64" }} />
           </Center>
           <Type variant="disp-xl">Welcome back!</Type>
-          <Flex sx={{ direction: "column", gap: "20" }}>
+          <Stack axis="y" gap="20">
             <TextField
               label="Email"
               value={form.email}
@@ -68,9 +68,9 @@ const LoginPage: React.FC = () => {
               onChange={permanent => setForm({ permanent })}
             />
             {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
-          </Flex>
+          </Stack>
           <Button fullWidth size="lg" type="submit">Sign in</Button>
-        </Flex>
+        </Stack>
       </Form>
     </PageContent>
   );

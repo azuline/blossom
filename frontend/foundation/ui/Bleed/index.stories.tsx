@@ -48,7 +48,7 @@ export const Bleed_: React.FC = () => (
       ]}
     />
     <StorySection title="Examples">
-      <Stack wrap axis="x" gap="44" sx={{ pt: "20" }} x="left">
+      <Stack wrap axis="x" gap="44" sx={{ pt: "20" }}>
         <CardWrapper>
           <Bleed m="28">
             <Content>m=28</Content>

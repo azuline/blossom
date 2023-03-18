@@ -3,7 +3,7 @@ import { sHeaderLayout, sLogoFont } from "@foundation/layout/WithHeader/index.cs
 import { HeaderExistsContextProvider } from "@foundation/layout/WithHeader/state";
 import { TypeLoader } from "@foundation/loaders/TypeLoader";
 import { Avatar } from "@foundation/ui/Avatar";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
@@ -20,20 +20,21 @@ export const WithHeader: React.FC<Props> = props => {
 
   return (
     <HeaderExistsContextProvider value>
-      <Flex sx={{ direction: "column", h: "full" }}>
+      <Stack axis="y" sx={{ h: "full" }}>
         <View className={sHeaderLayout}>
-          <Flex sx={{ h: "full", justify: "space-between", align: "center" }}>
+          <Stack axis="x" x="center" y="space">
             <Type className={sLogoFont}>blossom</Type>
-            <Flex sx={{ gap: { initial: "10", md: "16" }, align: "center" }}>
+            {/* TODO: Responsive gap prop. */}
+            <Stack axis="x" sx={{ gap: { initial: "10", md: "16" } }} x="center">
               {tenant !== undefined
                 ? <Type sx={{ whiteSpace: "nowrap" }}>{tenant.name}</Type>
                 : <TypeLoader w="96" />}
               <Avatar size="28" />
-            </Flex>
-          </Flex>
+            </Stack>
+          </Stack>
         </View>
         <View style={{ flex: "1 1" }} sx={{ minh: "0" }}>{props.children}</View>
-      </Flex>
+      </Stack>
     </HeaderExistsContextProvider>
   );
 };
