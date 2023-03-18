@@ -45,7 +45,7 @@ export const Icon_: React.FC = () => (
     <StorySection title="Available Icons">
       <View className={sIconGallery}>
         {Object.keys(ICONS_MAP).sort().map(name => (
-          <Stack key={name} axis="y" gap="4" y="center">
+          <Stack key={name} axis="y" gap="4" x="center">
             <Icon color="neutral.strong" icon={name as keyof typeof ICONS_MAP} size="sm" />
             <Type sx={{ color: "neutral.weak" }} variant="xs">{name}</Type>
           </Stack>

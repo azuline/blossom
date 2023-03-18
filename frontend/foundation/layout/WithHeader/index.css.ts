@@ -10,6 +10,7 @@ export const sHeaderLayout = style({
   paddingTop: t.size[28],
   paddingBottom: t.size[12],
   height: HEADER_HEIGHT,
+  width: t.size.full,
   background: t.color.background.neutral.base,
 });
 

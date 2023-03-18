@@ -22,10 +22,10 @@ export const WithHeader: React.FC<Props> = props => {
     <HeaderExistsContextProvider value>
       <Stack axis="y" sx={{ h: "full" }}>
         <View className={sHeaderLayout}>
-          <Stack axis="x" x="center" y="space">
+          <Stack axis="x" sx={{ w: "full" }} x="space" y="center">
             <Type className={sLogoFont}>blossom</Type>
             {/* TODO: Responsive gap prop. */}
-            <Stack axis="x" sx={{ gap: { initial: "10", md: "16" } }} x="center">
+            <Stack axis="x" sx={{ gap: { initial: "10", md: "16" } }} y="center">
               {tenant !== undefined
                 ? <Type sx={{ whiteSpace: "nowrap" }}>{tenant.name}</Type>
                 : <TypeLoader w="96" />}
