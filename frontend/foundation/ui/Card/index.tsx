@@ -16,7 +16,7 @@ export const Card: React.FC<Props> = props => {
   return (
     <View
       {...passthru}
-      className={clsx(className, sCard({ variant, padding }), sx({ radius: "8", ...sxArgs }))}
+      className={clsx(className, sCard({ variant, padding }), sx({ radius: "10", ...sxArgs }))}
     >
       {children}
     </View>

@@ -70,6 +70,7 @@ export const themeSharedVars = createGlobalTheme(":root", {
     "4": "4px",
     "6": "6px",
     "8": "8px",
+    "10": "10px",
     "12": "12px",
     "16": "16px",
     "32": "32px",

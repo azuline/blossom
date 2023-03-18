@@ -3,15 +3,12 @@ import { Divider } from "@foundation/ui/Divider";
 import { sStack } from "@foundation/ui/Stack/index.css";
 import { PolymorphicProp } from "@foundation/ui/types";
 import { View } from "@foundation/ui/View";
+import { RecipeVariants } from "@vanilla-extract/recipes";
 import { clsx } from "clsx";
 import { Children, CSSProperties } from "react";
 
-export type StackProps = PolymorphicProp & {
-  axis: "x" | "y";
-  x?: "left" | "center" | "right" | "space";
-  y?: "top" | "center" | "bottom" | "space";
+export type StackProps = PolymorphicProp & RecipeVariants<typeof sStack> & {
   divider?: ColorBorder;
-  wrap?: boolean;
   gap?: Space;
 
   /** Standard props. */

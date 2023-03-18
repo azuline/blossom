@@ -11,7 +11,7 @@ type Arg =
     name: string;
     default: string | null;
     description: string;
-    required: boolean;
+    required?: boolean;
   }
   & ({
     type: string;
@@ -83,40 +83,34 @@ export const propDocChildren = {
   type: "ReactNode",
   default: null,
   description: "The child elements to render.",
-  required: false,
 };
 export const propDocSX = {
   name: "sx",
   type: "SX",
   default: null,
   description: "Additional styles to apply to the element.",
-  required: false,
 };
 export const propDocAs = {
   name: "as",
   type: "string",
   default: null,
   description: "The semantic HTML tag to render as.",
-  required: false,
 };
 export const propDocClassName = {
   name: "className",
   type: "string",
   default: null,
   description: "A class to add to the element.",
-  required: false,
 };
 export const propDocID = {
   name: "id",
   type: "string",
   default: null,
   description: "An id to add to the element.",
-  required: false,
 };
 export const propDocStyle = {
   name: "style",
   type: "CSSProperties",
   default: null,
   description: "Inline styles to add to the element.",
-  required: false,
 };

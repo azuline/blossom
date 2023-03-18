@@ -39,9 +39,9 @@ export const Touchable_: React.FC = () => (
     <PropsTable
       // dprint-ignore
       args={[
-        { name: "onPress", typePlain: "Callback", default: null, description: "Callback on press.", required: false, },
-        { name: "disabled", type: "boolean", default: "false", description: "Disable pressing.", required: false, },
-        { name: "type", type: '"button" | "submit" | "reset"', default: "button", description: "Semantic type of button.", required: false, },
+        { name: "onPress", typePlain: "Callback", default: null, description: "Callback on press." },
+        { name: "disabled", type: "boolean", default: "false", description: "Disable pressing." },
+        { name: "type", type: '"button" | "submit" | "reset"', default: "button", description: "Semantic type of button." },
         propDocChildren,
         propDocSX,
         propDocClassName,
