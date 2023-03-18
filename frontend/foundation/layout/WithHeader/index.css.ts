@@ -17,6 +17,7 @@ export const sHeaderLayout = style({
 export const sLogoFont = style({
   ...t.fn.font("disp-md", { italic: true }),
   color: t.color.content.brand.default,
+  lineHeight: t.font.size.body.sm,
   // So that the baselines match up:
   //   size.md - size.sm = 20 - 16 = 4
   marginBottom: "4px",
