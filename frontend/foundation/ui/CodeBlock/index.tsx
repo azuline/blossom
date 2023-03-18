@@ -12,16 +12,14 @@ export const CodeBlock: FC<Props> = props => (
   <View
     style={{ borderLeft: t.fn.border("4", "neutral.weak") }}
     sx={{
-      w: "full",
+      w: "fit-content",
+      p: "16",
       h: "fit-content",
       background: "neutral.inset",
-      overflowX: "auto",
     }}
   >
-    <View sx={{ w: "fit-content", p: "16" }}>
-      <Type paragraph style={{ whiteSpace: "pre" }} variant={props.variant ?? "code-xs"}>
-        {props.code.trim()}
-      </Type>
-    </View>
+    <Type paragraph style={{ whiteSpace: "pre" }} variant={props.variant ?? "code-xs"}>
+      {props.code.trim()}
+    </Type>
   </View>
 );

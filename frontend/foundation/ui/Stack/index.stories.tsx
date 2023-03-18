@@ -45,11 +45,11 @@ export const Stack_: React.FC = () => (
       // dprint-ignore
       args={[
         { name: "axis", type: '"x" | "y"', default: null, description: "Stack direction/axis: horizontal or vertical.", required: true },
-        { name: "x", type: '"left" | "center" | "right" | "space"', default: "center", description: "How to horizonally align elements.", required: false },
-        { name: "y", type: '"top" | "center" | "bottom" | "space"', default: "center", description: "How to vertically align elements.", required: false },
-        { name: "gap", typePlain: "Space Token", default: null, description: "Add space between each child element.", required: false },
-        { name: "divider", typePlain: "Border Color Token", default: null, description: "Add a divider of the specified color between children.", required: false },
-        { name: "wrap", typePlain: "boolean", default: "false", description: "Wrap children onto multiple rows/columns.", required: false },
+        { name: "x", type: '"left" | "center" | "right" | "space"', default: "center", description: "How to horizonally align elements.", },
+        { name: "y", type: '"top" | "center" | "bottom" | "space"', default: "center", description: "How to vertically align elements.", },
+        { name: "gap", typePlain: "Space Token", default: null, description: "Add space between each child element.", },
+        { name: "divider", typePlain: "Border Color Token", default: null, description: "Add a divider of the specified color between children.", },
+        { name: "wrap", typePlain: "boolean", default: "false", description: "Wrap children onto multiple rows/columns.", },
         propDocChildren,
         propDocSX,
         propDocAs,
