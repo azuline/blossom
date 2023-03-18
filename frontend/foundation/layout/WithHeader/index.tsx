@@ -20,7 +20,7 @@ export const WithHeader: React.FC<Props> = props => {
 
   return (
     <HeaderExistsContextProvider value>
-      <Stack axis="y" sx={{ h: "full" }}>
+      <Stack axis="y" sx={{ w: "full", h: "full" }}>
         <View className={sHeaderLayout}>
           <Stack axis="x" sx={{ w: "full" }} x="space" y="center">
             <Type className={sLogoFont}>blossom</Type>
@@ -33,7 +33,7 @@ export const WithHeader: React.FC<Props> = props => {
             </Stack>
           </Stack>
         </View>
-        <View style={{ flex: "1 1" }} sx={{ minh: "0" }}>{props.children}</View>
+        <View style={{ flex: "1 1" }} sx={{ w: "full", minh: "0" }}>{props.children}</View>
       </Stack>
     </HeaderExistsContextProvider>
   );
