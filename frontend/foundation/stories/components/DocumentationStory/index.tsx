@@ -1,5 +1,5 @@
 import { Space } from "@foundation/theme/styles/sprinkles.css";
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { View } from "@foundation/ui/View";
 import { ReactNode } from "react";
 
@@ -18,12 +18,10 @@ export const DocumentationStory: React.FC<Props> = props => (
   // content is half-width. Solves a background issue in Ladle preview mode.
   <View sx={{ h: "fit-content", background: "neutral.base" }}>
     {/* Extra padding-bottom so that no content is covered up by the Ladle hover overlay. */}
-    <Flex sx={{ px: "36", pt: "36", pb: "96", w: "fit-content" }}>
-      <Flex
-        sx={{ direction: "column", gap: props.gap ?? "44", w: "fit-content", h: "fit-content" }}
-      >
+    <View sx={{ px: "36", pt: "36", pb: "96", w: "fit-content" }}>
+      <Stack axis="y" gap={props.gap ?? "44"} sx={{ w: "fit-content", h: "fit-content" }}>
         {props.children}
-      </Flex>
-    </Flex>
+      </Stack>
+    </View>
   </View>
 );

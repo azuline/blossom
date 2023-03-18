@@ -4,9 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { mockRPCsWorker } from "@foundation/testing/msw.client";
 import { DEFAULT_MOCK_RPC_OUTPUT } from "@foundation/testing/rpc";
 
-import "@foundation/theme/styles/global.css";
 import { ThemeProvider } from "@foundation/theme/provider";
-import { Flex } from "@foundation/ui/Flex";
+import "@foundation/theme/styles/global.css";
+import { View } from "@foundation/ui/View";
 
 const queryClient = new QueryClient();
 
@@ -21,11 +21,11 @@ export const Provider: GlobalProvider = ({ children }) => {
 
   return (
     <ThemeProvider force={theme}>
-      <Flex sx={{ h: "full", w: "full", direction: "column" }}>
+      <View sx={{ display: "flex", h: "full", w: "full", direction: "column" }}>
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>
-      </Flex>
+      </View>
     </ThemeProvider>
   );
 };

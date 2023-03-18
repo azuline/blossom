@@ -1,4 +1,4 @@
-import { Flex } from "@foundation/ui/Flex";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { ReactNode } from "react";
 
@@ -15,7 +15,7 @@ export const Variant: React.FC<Props> = props => (
 );
 
 export const VariantGroup: React.FC<{ children: ReactNode }> = props => (
-  <Flex sx={{ direction: "column", gap: "4" }}>
+  <Stack axis="y" gap="4">
     {props.children}
-  </Flex>
+  </Stack>
 );

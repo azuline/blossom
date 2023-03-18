@@ -1,7 +1,7 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
-import { Flex } from "@foundation/ui/Flex";
 import { Spacer } from "@foundation/ui/Spacer";
+import { Stack } from "@foundation/ui/Stack";
 import { Type } from "@foundation/ui/Type";
 import { View } from "@foundation/ui/View";
 
@@ -12,28 +12,28 @@ export default {
 export const Spacer_: React.FC = () => (
   <DocumentationStory>
     <Card sx={{ w: "356", h: "128" }}>
-      <Flex sx={{ direction: "column", h: "full", gap: "8" }}>
+      <Stack axis="y" gap="8" sx={{ h: "full" }}>
         <Type>Horizontal</Type>
-        <Flex sx={{ w: "full", h: "full" }}>
+        <Stack axis="x" sx={{ w: "full", h: "full" }}>
           <View sx={{ h: "full", w: "64", background: "brand.default" }} />
           <Spacer x="64" />
           <View sx={{ h: "full", w: "64", background: "brand.default" }} />
           <Spacer x="20" />
           <View sx={{ h: "full", w: "64", background: "brand.default" }} />
-        </Flex>
-      </Flex>
+        </Stack>
+      </Stack>
     </Card>
     <Card sx={{ w: "128", h: "356" }}>
-      <Flex sx={{ direction: "column", h: "full", gap: "8" }}>
+      <Stack axis="y" gap="8" sx={{ h: "full" }}>
         <Type>Vertical</Type>
-        <Flex sx={{ direction: "column", w: "full", h: "full" }}>
+        <Stack axis="y" sx={{ w: "full", h: "full" }}>
           <View sx={{ h: "64", w: "full", background: "brand.default" }} />
           <Spacer y="64" />
           <View sx={{ h: "64", w: "full", background: "brand.default" }} />
           <Spacer y="20" />
           <View sx={{ h: "64", w: "full", background: "brand.default" }} />
-        </Flex>
-      </Flex>
+        </Stack>
+      </Stack>
     </Card>
   </DocumentationStory>
 );
