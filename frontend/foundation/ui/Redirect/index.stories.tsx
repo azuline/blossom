@@ -49,7 +49,7 @@ export const Redirect_: React.FC = () => (
       ]}
     />
     <StorySection title="Examples">
-      <Stack axis="y" gap="16">
+      <Stack axis="y" gap="16" x="left">
         <Redirect href="/">
           Take me home
         </Redirect>

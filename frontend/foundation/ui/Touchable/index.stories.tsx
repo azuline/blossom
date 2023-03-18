@@ -50,7 +50,7 @@ export const Touchable_: React.FC = () => (
       ]}
     />
     <StorySection title="Examples">
-      <Stack axis="y" gap="16">
+      <Stack axis="y" gap="16" x="left">
         <Touchable onPress={alertOnPress}>
           Touch me
         </Touchable>

@@ -1,3 +1,4 @@
+import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
 import { WithHeader } from "@foundation/layout/WithHeader";
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { Card } from "@foundation/ui/Card";
@@ -9,10 +10,12 @@ export default {
 
 export const Header_: React.FC = () => (
   <DocumentationStory>
-    <Card sx={{ w: "704", h: "356" }}>
-      <WithHeader>
-        <View />
-      </WithHeader>
+    <Card padding="none" sx={{ w: "704" }}>
+      <LayoutPaddingVariableSetter>
+        <WithHeader>
+          <View />
+        </WithHeader>
+      </LayoutPaddingVariableSetter>
     </Card>
   </DocumentationStory>
 );

@@ -7,8 +7,8 @@ export const HEADER_HEIGHT = t.size[64];
 export const sHeaderLayout = style({
   paddingLeft: layoutPadding,
   paddingRight: layoutPadding,
-  paddingTop: t.size[28],
-  paddingBottom: t.size[12],
+  paddingTop: "22px",
+  paddingBottom: "14px",
   height: HEADER_HEIGHT,
   width: t.size.full,
   background: t.color.background.neutral.base,
