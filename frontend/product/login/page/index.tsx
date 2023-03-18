@@ -12,6 +12,7 @@ import { Checkbox } from "@foundation/ui/Checkbox";
 import { Stack } from "@foundation/ui/Stack";
 import { TextField } from "@foundation/ui/TextField";
 import { Type } from "@foundation/ui/Type";
+import { View } from "@foundation/ui/View";
 import { useAtom } from "jotai";
 import { useState } from "react";
 
@@ -45,33 +46,37 @@ const LoginPage: React.FC = () => {
 
   return (
     <PageContent center>
-      <Form onSubmit={submit}>
-        <Stack axis="y" gap="36" sx={{ maxw: "356" }}>
-          <Center>
-            <Icon icon="logo" sx={{ w: "64", h: "64" }} />
-          </Center>
-          <Type variant="disp-xl">Welcome back!</Type>
-          <Stack axis="y" gap="20">
-            <TextField
-              label="Email"
-              value={form.email}
-              onChange={email => setForm({ email })}
-            />
-            <TextField
-              label="Password"
-              value={form.password}
-              onChange={password => setForm({ password })}
-            />
-            <Checkbox
-              checked={form.permanent}
-              label="Remember me"
-              onChange={permanent => setForm({ permanent })}
-            />
-            {error !== null && <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>}
+      <View sx={{ w: "full", maxw: "356" }}>
+        <Form onSubmit={submit}>
+          <Stack axis="y" gap="36">
+            <Center>
+              <Icon icon="logo" sx={{ w: "64", h: "64" }} />
+            </Center>
+            <Type variant="disp-xl">Welcome back!</Type>
+            <Stack axis="y" gap="20">
+              <TextField
+                label="Email"
+                value={form.email}
+                onChange={email => setForm({ email })}
+              />
+              <TextField
+                label="Password"
+                value={form.password}
+                onChange={password => setForm({ password })}
+              />
+              <Checkbox
+                checked={form.permanent}
+                label="Remember me"
+                onChange={permanent => setForm({ permanent })}
+              />
+              {error !== null && (
+                <Type sx={{ color: "negative.default" }} variant="sm">{error}</Type>
+              )}
+            </Stack>
+            <Button fullWidth size="lg" type="submit">Sign in</Button>
           </Stack>
-          <Button fullWidth size="lg" type="submit">Sign in</Button>
-        </Stack>
-      </Form>
+        </Form>
+      </View>
     </PageContent>
   );
 };
