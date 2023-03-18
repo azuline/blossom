@@ -7,7 +7,12 @@ import { RecipeVariants } from "@vanilla-extract/recipes";
 import { clsx } from "clsx";
 import { Children, CSSProperties } from "react";
 
-export type StackProps = PolymorphicProp & RecipeVariants<typeof sStack> & {
+type RV = Exclude<RecipeVariants<typeof sStack>, undefined>;
+
+export type StackProps = PolymorphicProp & Omit<RV, "axis"> & {
+  // Make this prop mandatory.
+  axis: Exclude<RV["axis"], undefined>;
+
   divider?: ColorBorder;
   gap?: Space;
 
