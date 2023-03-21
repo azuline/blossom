@@ -1,15 +1,15 @@
 # Allow multiple functions to be defined with the same name.
 # mypy: disable-error-code=no-redef
 # ruff: noqa: F811
+import asyncio
+import functools
 from typing import Any
 
 import click
-import asyncio
-import functools
 
 from codegen.sqlc.models import TenantsInboundSource
-from foundation.database import ConnQuerier, conn_admin, create_pg_pool
 from foundation.config import confvars
+from foundation.database import ConnQuerier, conn_admin, create_pg_pool
 from foundation.log import option_log_level
 from foundation.migrate import run_database_migrations
 from foundation.rpc.codegen import codegen_typescript
