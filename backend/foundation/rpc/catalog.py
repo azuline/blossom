@@ -1,5 +1,6 @@
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
-from typing import Any, Callable, Coroutine, Literal
+from typing import Any, Literal
 
 from quart import Blueprint, ResponseReturnValue
 

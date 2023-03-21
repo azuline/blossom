@@ -89,6 +89,7 @@ async def t(pg_pool: ConnPool) -> AsyncIterator[TFix]:
 resolve_pkg_path_orig = _pytest.pathlib.resolve_package_path
 namespace_pkg_dirs = [str(d) for d in pathlib.Path(__file__).parent.iterdir() if d.is_dir()]
 
+
 # patched method
 def resolve_package_path(path: pathlib.Path) -> pathlib.Path | None:
     # call original lookup
