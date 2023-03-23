@@ -45,8 +45,6 @@ server {
   listen [::]:80;
   root /www;
   index index.html;
-  # Disable keepalive; we're behind a proxy.
-  keepalive_timeout 0;
 
   location /health {
     return 200 'ok';
