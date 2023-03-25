@@ -161,6 +161,8 @@ importers:
 
   codegen/rpc: {}
 
+  foundation/auth: {}
+
 packages:
 
   /@adobe/css-tools@4.2.0:

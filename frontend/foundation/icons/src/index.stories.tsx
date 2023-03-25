@@ -1,6 +1,6 @@
-import { ICONS_MAP } from "@foundation/icons/codegen/imports";
-import { Icon } from "@foundation/icons/Icon";
-import { sIconGallery } from "@foundation/icons/Icon/index.css";
+import { ICONS_MAP } from "./codegen/imports";
+import { Icon } from ".";
+import { sIconGallery } from "./index.css";
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
