@@ -43,6 +43,6 @@ export default defineConfig({
     exclude: [".ladle", "visualtest", "node_modules", "dist"],
     globals: true,
     environment: "jsdom",
-    setupFiles: "./foundation/testing/vitest.global.ts",
+    setupFiles: "./vitest.global.ts",
   },
 });

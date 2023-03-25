@@ -1,4 +1,4 @@
-import { filterObject } from "@foundation/std/filterObject";
+import { filterObject } from ".";
 import { describe, expect, it } from "vitest";
 
 describe.concurrent("@foundation/std/filterObject", () => {

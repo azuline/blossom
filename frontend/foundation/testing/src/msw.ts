@@ -1,6 +1,7 @@
 import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
 import { baseURL } from "@foundation/rpc";
 import { rest, RestHandler, setupWorker } from "msw";
+import { afterAll, afterEach, beforeAll } from "vitest";
 
 type RPCErrorOut<RPC extends keyof RPCs, E extends RPCs[RPC]["errors"] = RPCs[RPC]["errors"]> = {
   error: E;
@@ -27,4 +28,27 @@ export const mockRPCHandlers = (mocks: RPCMocks): RestHandler[] => {
       (_, res, ctx) => res(ctx.status(out.status), ctx.json(out.out)),
     );
   });
+};
+
+
+/** This function allows for RPC mocking in a describe test suite. */
+export const mockRPCsForSuite = (mocks: RPCMocks): void => {
+  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
+    const { setupServer } = require('msw/node');
+    const server = setupServer(...mockRPCHandlers(mocks));
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+  }
+};
+
+/** This function allows for RPC mocking in a single test case. */
+export const mockRPCsForTest = async (mocks: RPCMocks, fn: () => Promise<void>): Promise<void> => {
+  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
+    const { setupServer } = require('msw/node');
+    const server = setupServer(...mockRPCHandlers(mocks));
+    server.listen();
+    await fn();
+    server.close();
+  }
 };
