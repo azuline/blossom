@@ -1,0 +1,19 @@
+{
+  "name": "@foundation/rpc",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@codegen/rpc": "workspace:*",
+    "@foundation/errors": "workspace:*",
+    "jotai": "*",
+    "jotai-tanstack-query": "*",
+    "react": "*",
+    "@tanstack/react-query": "*"
+  }
+}
