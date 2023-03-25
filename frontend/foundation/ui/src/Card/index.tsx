@@ -1,6 +1,5 @@
 import { SX, sx } from "@foundation/theme";
-import { sCard } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { sCard, View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { ReactNode } from "react";

@@ -1,7 +1,5 @@
-import { FontVariant, t } from "@foundation/theme";
-import { SX } from "@foundation/theme";
-import { PolymorphicProp } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { FontVariant, SX, t } from "@foundation/theme";
+import { PolymorphicProp, View } from "@foundation/ui";
 import { CSSProperties } from "react";
 
 export type TypeProps = PolymorphicProp & {

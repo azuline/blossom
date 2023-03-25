@@ -1,6 +1,5 @@
 import { SX } from "@foundation/theme";
-import { Stack, StackProps } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { Stack, StackProps, Type } from "@foundation/ui";
 import { ReactNode } from "react";
 
 type Props =

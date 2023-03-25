@@ -1,11 +1,7 @@
 import { useCurrentTenant } from "@foundation/auth";
-import { sHeaderLayout, sLogoFont } from "@foundation/layout";
-import { HeaderExistsContextProvider } from "@foundation/layout";
+import { HeaderExistsContextProvider, sHeaderLayout, sLogoFont } from "@foundation/layout";
 import { TypeLoader } from "@foundation/loaders";
-import { Avatar } from "@foundation/ui";
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { Avatar, Stack, Type, View } from "@foundation/ui";
 
 type Props = {
   children: React.ReactNode;

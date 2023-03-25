@@ -1,5 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
 import {
+  DocumentationStory,
   propDocAs,
   propDocChildren,
   propDocClassName,
@@ -7,12 +7,9 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
+  StoryParagraph, StorySection
 } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Code } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { Code, Type, View } from "@foundation/ui";
 
 export default {
   title: "Primitives",

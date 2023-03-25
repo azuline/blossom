@@ -1,5 +1,4 @@
-import { FontCodeVariant } from "@foundation/theme";
-import { SX } from "@foundation/theme";
+import { FontCodeVariant, SX } from "@foundation/theme";
 import { Type, TypeProps } from "@foundation/ui";
 import { CSSProperties, FC } from "react";
 

@@ -1,6 +1,5 @@
 import { sTypeLoader } from "@foundation/loaders";
-import { t } from "@foundation/theme";
-import { SX } from "@foundation/theme";
+import { SX, t } from "@foundation/theme";
 import { View } from "@foundation/ui";
 
 type Props = {

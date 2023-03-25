@@ -1,21 +1,16 @@
-import { DocumentationStory } from "@foundation/stories";
 import {
+  DocumentationStory,
   propDocChildren,
   propDocClassName,
   propDocID,
   propDocStyle,
   propDocSX,
   PropsTable,
+  StoryParagraph,
+  StorySection,
 } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
 import { t } from "@foundation/theme";
-import { Bleed } from "@foundation/ui";
-import { Card } from "@foundation/ui";
-import { Center } from "@foundation/ui";
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { Bleed, Card, Center, Stack, Type, View } from "@foundation/ui";
 import { ReactNode } from "react";
 
 export default {

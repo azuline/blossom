@@ -1,5 +1,4 @@
-import { mockRPCsForTest } from "@foundation/testing";
-import { PageTestWrap } from "@foundation/testing";
+import { mockRPCsForTest, PageTestWrap } from "@foundation/testing";
 import LoginPage from "@product/login/page";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

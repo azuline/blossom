@@ -1,7 +1,4 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
+import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
 import { TextField } from "@foundation/ui";
 import { useState } from "react";
 

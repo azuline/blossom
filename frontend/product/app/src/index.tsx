@@ -1,6 +1,5 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout";
 import { ThemeProvider } from "@foundation/theme";
-import "@foundation/theme";
 import { Contexts } from "@product/app/Contexts";
 import { Router } from "@product/app/Router";
 

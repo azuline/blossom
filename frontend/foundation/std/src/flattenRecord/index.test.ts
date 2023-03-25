@@ -1,5 +1,5 @@
-import { flattenRecord } from ".";
 import { describe, expect, expectTypeOf, it } from "vitest";
+import { flattenRecord } from ".";
 
 describe.concurrent("@foundation/std", () => {
   it("basic", () => {

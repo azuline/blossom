@@ -1,13 +1,13 @@
-import { LayoutPaddingVariableSetter } from "@foundation/layout";
-import { PageContent } from "@foundation/layout";
-import { WithHeader } from "@foundation/layout";
-import { DocumentationStory } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant, VariantGroup } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Card } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { LayoutPaddingVariableSetter, PageContent, WithHeader } from "@foundation/layout";
+import {
+  DocumentationStory,
+  StoryParagraph,
+  StorySection,
+  Variant,
+  VariantGroup,
+  VariantsGallery,
+} from "@foundation/stories";
+import { Card, Type } from "@foundation/ui";
 import { FC, ReactNode, useEffect, useRef } from "react";
 
 export default {

@@ -1,9 +1,6 @@
 import { AriaTextFieldProps, useTextField } from "react-aria";
 
-import { Stack } from "@foundation/ui";
-import { sTextField } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { LabellableProps } from "@foundation/ui";
+import { LabellableProps, Stack, sTextField, Type } from "@foundation/ui";
 import { FocusEvent, useRef } from "react";
 
 export type TextFieldProps = LabellableProps & {

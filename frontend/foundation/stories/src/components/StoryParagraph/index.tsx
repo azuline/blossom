@@ -1,7 +1,6 @@
 import { FC, ReactNode } from "react";
 
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { Stack, Type } from "@foundation/ui";
 
 type Props = { children: ReactNode };
 

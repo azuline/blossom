@@ -1,6 +1,6 @@
-import { ICONS_MAP } from "./codegen/imports";
-import { t, sx, SX } from "@foundation/theme";
+import { SX, sx, t } from "@foundation/theme";
 import { Suspense } from "react";
+import { ICONS_MAP } from "./codegen/imports";
 
 type Props = {
   icon: keyof typeof ICONS_MAP;

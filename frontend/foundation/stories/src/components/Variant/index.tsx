@@ -1,5 +1,4 @@
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { Stack, Type } from "@foundation/ui";
 import { ReactNode } from "react";
 
 type Props = {

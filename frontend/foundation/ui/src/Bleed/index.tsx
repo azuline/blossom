@@ -1,13 +1,12 @@
-import { SX } from "@foundation/theme";
-import { setSXVars } from "@foundation/theme";
+import { setSXVars, SX } from "@foundation/theme";
 import {
   bleedBottomVar,
   bleedLeftVar,
   bleedRightVar,
   bleedTopVar,
   sBleed,
+  View,
 } from "@foundation/ui";
-import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { CSSProperties, FC } from "react";

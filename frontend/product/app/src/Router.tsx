@@ -2,8 +2,7 @@
 // ^ Disable because I really don't want to type the output of lazy imports.
 
 import { useCurrentTenant, useCurrentUser } from "@foundation/auth";
-import { Route } from "@foundation/routing";
-import { Switch } from "@foundation/routing";
+import { Route, Switch } from "@foundation/routing";
 
 export const Router: React.FC = () => {
   const auths = useUserAuthorizations();

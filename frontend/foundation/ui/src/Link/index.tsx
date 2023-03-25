@@ -1,6 +1,5 @@
 import { SX } from "@foundation/theme";
-import { sLink } from "@foundation/ui";
-import { Redirect, RedirectProps } from "@foundation/ui";
+import { Redirect, RedirectProps, sLink } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

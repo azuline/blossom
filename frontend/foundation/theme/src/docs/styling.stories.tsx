@@ -1,10 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Code } from "@foundation/ui";
-import { CodeBlock } from "@foundation/ui";
-import { Link } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { DocumentationStory, StoryParagraph, StorySection } from "@foundation/stories";
+import { Code, CodeBlock, Link, Type } from "@foundation/ui";
 import { FC } from "react";
 
 export default {

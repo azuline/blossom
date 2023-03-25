@@ -1,6 +1,5 @@
 import { Space } from "@foundation/theme";
-import { Stack } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { Stack, View } from "@foundation/ui";
 import { ReactNode } from "react";
 
 type Props = {

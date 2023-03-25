@@ -1,8 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Card } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { DocumentationStory, Variant, VariantsGallery } from "@foundation/stories";
+import { Card, Type } from "@foundation/ui";
 
 export default {
   title: "Atoms",

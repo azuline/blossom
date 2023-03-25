@@ -1,9 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Button } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
+import { Button, Type } from "@foundation/ui";
 import { useState } from "react";
 
 export default {

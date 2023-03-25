@@ -30,11 +30,10 @@ export const mockRPCHandlers = (mocks: RPCMocks): RestHandler[] => {
   });
 };
 
-
 /** This function allows for RPC mocking in a describe test suite. */
 export const mockRPCsForSuite = (mocks: RPCMocks): void => {
-  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
-    const { setupServer } = require('msw/node');
+  if (typeof process !== "undefined" && process.env.NODE_ENV === "development") {
+    const { setupServer } = require("msw/node");
     const server = setupServer(...mockRPCHandlers(mocks));
     beforeAll(() => server.listen());
     afterEach(() => server.resetHandlers());
@@ -44,8 +43,8 @@ export const mockRPCsForSuite = (mocks: RPCMocks): void => {
 
 /** This function allows for RPC mocking in a single test case. */
 export const mockRPCsForTest = async (mocks: RPCMocks, fn: () => Promise<void>): Promise<void> => {
-  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
-    const { setupServer } = require('msw/node');
+  if (typeof process !== "undefined" && process.env.NODE_ENV === "development") {
+    const { setupServer } = require("msw/node");
     const server = setupServer(...mockRPCHandlers(mocks));
     server.listen();
     await fn();

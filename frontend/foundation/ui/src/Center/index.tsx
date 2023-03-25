@@ -1,7 +1,5 @@
 import { SX, sx } from "@foundation/theme";
-import { sCenter } from "@foundation/ui";
-import { PolymorphicProp } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { PolymorphicProp, sCenter, View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { ReactNode } from "react";

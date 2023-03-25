@@ -1,14 +1,9 @@
-import { ICONS_MAP } from "./codegen/imports";
-import { Icon } from ".";
-import { sIconGallery } from "./index.css";
-import { DocumentationStory } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
+import { Stack, Type, View } from "@foundation/ui";
 import React from "react";
+import { Icon } from ".";
+import { ICONS_MAP } from "./codegen/imports";
+import { sIconGallery } from "./index.css";
 
 export default {
   title: "Atoms",

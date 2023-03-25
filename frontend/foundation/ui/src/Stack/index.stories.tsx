@@ -1,5 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
 import {
+  DocumentationStory,
   propDocAs,
   propDocChildren,
   propDocClassName,
@@ -7,17 +7,14 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
+  StoryParagraph,
+  StorySection,
+  Variant,
+  VariantGroup,
+  VariantsGallery,
 } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant, VariantGroup } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { t } from "@foundation/theme";
-import { SX } from "@foundation/theme";
-import { Center } from "@foundation/ui";
-import { Code } from "@foundation/ui";
-import { Stack, StackProps } from "@foundation/ui";
-import { Type } from "@foundation/ui";
+import { SX, t } from "@foundation/theme";
+import { Center, Code, Stack, StackProps, Type } from "@foundation/ui";
 import { FC, ReactNode } from "react";
 
 export default {

@@ -1,7 +1,5 @@
-import { SX } from "@foundation/theme";
-import { setSXVars } from "@foundation/theme";
-import { spacerXVar, spacerYVar, sSpacer } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { setSXVars, SX } from "@foundation/theme";
+import { spacerXVar, spacerYVar, sSpacer, View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

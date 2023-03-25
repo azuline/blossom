@@ -1,10 +1,11 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import {
+  DocumentationStory,
+  StoryParagraph,
+  StorySection,
+  Variant,
+  VariantsGallery,
+} from "@foundation/stories";
+import { Type, View } from "@foundation/ui";
 
 export default {
   title: "Theme",

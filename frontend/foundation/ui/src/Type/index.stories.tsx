@@ -1,8 +1,11 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant, VariantGroup } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
+import {
+  DocumentationStory,
+  StoryParagraph,
+  StorySection,
+  Variant,
+  VariantGroup,
+  VariantsGallery,
+} from "@foundation/stories";
 import { Type } from "@foundation/ui";
 
 export default {

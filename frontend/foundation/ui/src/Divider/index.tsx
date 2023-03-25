@@ -1,6 +1,5 @@
 import { SX } from "@foundation/theme";
-import { sDivider } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { sDivider, View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

@@ -1,14 +1,11 @@
-import { DocumentationStory } from "@foundation/stories";
-import { StoryParagraph } from "@foundation/stories";
-import { StorySection } from "@foundation/stories";
-import { Variant } from "@foundation/stories";
-import { VariantsGallery } from "@foundation/stories";
-import { Card } from "@foundation/ui";
-import { Center } from "@foundation/ui";
-import { Divider } from "@foundation/ui";
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import {
+  DocumentationStory,
+  StoryParagraph,
+  StorySection,
+  Variant,
+  VariantsGallery,
+} from "@foundation/stories";
+import { Card, Center, Divider, Stack, Type, View } from "@foundation/ui";
 import { FC, ReactNode } from "react";
 
 export default {

@@ -1,18 +1,10 @@
 import { RPCs } from "@codegen/rpc";
-import { Form } from "@foundation/forms";
-import { atomForm } from "@foundation/forms";
+import { atomForm, Form } from "@foundation/forms";
 import { Icon } from "@foundation/icons";
 import { PageContent } from "@foundation/layout";
 import { useRedirect } from "@foundation/routing";
-import { rpc, useRefetchRPC } from "@foundation/rpc";
-import { RPCError } from "@foundation/rpc";
-import { Button } from "@foundation/ui";
-import { Center } from "@foundation/ui";
-import { Checkbox } from "@foundation/ui";
-import { Stack } from "@foundation/ui";
-import { TextField } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { rpc, RPCError, useRefetchRPC } from "@foundation/rpc";
+import { Button, Center, Checkbox, Stack, TextField, Type, View } from "@foundation/ui";
 import { useAtom } from "jotai";
 import { useState } from "react";
 
