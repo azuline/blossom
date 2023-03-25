@@ -1,15 +1,10 @@
-import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
-import { ThemeProvider } from "@foundation/theme/provider";
-import "@foundation/theme/styles/global.css";
-import { Contexts } from "@product/app/Contexts";
-import { Router } from "@product/app/Router";
+import { App } from "@product/app";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "@total-typescript/ts-reset";
 
-export const App: React.FC = () => (
-  <ThemeProvider>
-    <Contexts>
-      <LayoutPaddingVariableSetter>
-        <Router />
-      </LayoutPaddingVariableSetter>
-    </Contexts>
-  </ThemeProvider>
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 );

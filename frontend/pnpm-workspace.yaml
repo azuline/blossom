@@ -1,0 +1,5 @@
+packages:
+  - "."
+  - "codegen/*"
+  # - "foundation/*"
+  # - "product/*"

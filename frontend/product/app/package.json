@@ -1,0 +1,9 @@
+{
+  "name": "@product/name",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "vite build"
+  }
+}
