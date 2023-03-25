@@ -1,0 +1,19 @@
+{
+  "name": "@foundation/layout",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@foundation/ui": "workspace:*",
+    "@foundation/auth": "workspace:*",
+    "@foundation/layout": "workspace:*",
+    "@foundation/loaders": "workspace:*",
+    "@foundation/stories": "workspace:*",
+    "@foundation/std": "workspace:*"
+  }
+}
