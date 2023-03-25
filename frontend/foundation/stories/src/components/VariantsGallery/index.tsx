@@ -1,5 +1,5 @@
 import { StorySection } from "@foundation/stories/components/StorySection";
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import { ReactNode } from "react";
 import { sVariantsGallery, sVariantsGalleryColumns } from "./index.css";

@@ -2,7 +2,7 @@ import { DocumentationStory } from "@foundation/stories/components/Documentation
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { TextField } from "@foundation/ui/TextField";
+import { TextField } from "@foundation/ui";
 import { useState } from "react";
 
 export default {

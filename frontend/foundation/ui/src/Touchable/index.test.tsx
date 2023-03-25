@@ -1,4 +1,4 @@
-import { Touchable, TouchableProps } from "@foundation/ui/Touchable";
+import { Touchable, TouchableProps } from "@foundation/ui";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
@@ -10,7 +10,7 @@ const TestTouchable: FC<Pick<TouchableProps, "disabled">> = props => {
   return <Touchable {...props} onPress={() => setCount(c => c + 1)}>{count}</Touchable>;
 };
 
-describe("@foundation/ui/Touchable", () => {
+describe("@foundation/ui", () => {
   it("onPress triggers callback", async () => {
     render(<TestTouchable />);
     await screen.findByRole("button");

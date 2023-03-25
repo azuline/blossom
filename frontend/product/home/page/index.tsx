@@ -1,8 +1,8 @@
 import { PageContent } from "@foundation/layout/PageContent";
 import { WithHeader } from "@foundation/layout/WithHeader";
-import { Button } from "@foundation/ui/Button";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
+import { Button } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
 
 const HomePage: React.FC = () => (
   <WithHeader>

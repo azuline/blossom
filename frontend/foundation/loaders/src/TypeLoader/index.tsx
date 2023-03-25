@@ -1,7 +1,7 @@
 import { sTypeLoader } from "@foundation/loaders/TypeLoader/index.css";
 import { t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 
 type Props = {
   size?: keyof typeof t.font.size.body;

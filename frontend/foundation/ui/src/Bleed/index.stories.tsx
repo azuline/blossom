@@ -10,12 +10,12 @@ import {
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { t } from "@foundation/theme/styles";
-import { Bleed } from "@foundation/ui/Bleed";
-import { Card } from "@foundation/ui/Card";
-import { Center } from "@foundation/ui/Center";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Bleed } from "@foundation/ui";
+import { Card } from "@foundation/ui";
+import { Center } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { ReactNode } from "react";
 
 export default {

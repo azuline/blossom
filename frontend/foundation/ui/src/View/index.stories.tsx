@@ -10,9 +10,9 @@ import {
 } from "@foundation/stories/components/PropsTable";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
-import { Code } from "@foundation/ui/Code";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Code } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 
 export default {
   title: "Primitives",

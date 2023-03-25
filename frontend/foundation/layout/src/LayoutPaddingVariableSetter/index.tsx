@@ -1,4 +1,4 @@
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 import clsx from "clsx";
 import { sLayoutPaddingVariables } from "./index.css";
 

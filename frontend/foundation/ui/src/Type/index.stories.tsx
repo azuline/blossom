@@ -3,7 +3,7 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant, VariantGroup } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Type } from "@foundation/ui/Type";
+import { Type } from "@foundation/ui";
 
 export default {
   title: "Atoms",

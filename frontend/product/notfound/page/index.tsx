@@ -1,7 +1,7 @@
 import { PageContent } from "@foundation/layout/PageContent";
-import { Button } from "@foundation/ui/Button";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
+import { Button } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
 
 const NotFoundPage: React.FC = () => (
   <PageContent center>

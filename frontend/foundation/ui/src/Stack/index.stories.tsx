@@ -14,10 +14,10 @@ import { Variant, VariantGroup } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
 import { t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { Center } from "@foundation/ui/Center";
-import { Code } from "@foundation/ui/Code";
-import { Stack, StackProps } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
+import { Center } from "@foundation/ui";
+import { Code } from "@foundation/ui";
+import { Stack, StackProps } from "@foundation/ui";
+import { Type } from "@foundation/ui";
 import { FC, ReactNode } from "react";
 
 export default {

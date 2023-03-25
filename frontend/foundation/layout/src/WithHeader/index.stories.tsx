@@ -1,8 +1,8 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
 import { WithHeader } from "@foundation/layout/WithHeader";
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { Card } from "@foundation/ui/Card";
-import { View } from "@foundation/ui/View";
+import { Card } from "@foundation/ui";
+import { View } from "@foundation/ui";
 
 export default {
   title: "Molecules",

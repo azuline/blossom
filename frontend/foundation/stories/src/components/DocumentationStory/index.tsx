@@ -1,6 +1,6 @@
 import { Space } from "@foundation/theme/styles/sprinkles.css";
-import { Stack } from "@foundation/ui/Stack";
-import { View } from "@foundation/ui/View";
+import { Stack } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { ReactNode } from "react";
 
 type Props = {

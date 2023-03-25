@@ -3,9 +3,9 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
 import { t } from "@foundation/theme/styles";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { FC } from "react";
 
 export default {

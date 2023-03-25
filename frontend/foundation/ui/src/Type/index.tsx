@@ -1,7 +1,7 @@
 import { FontVariant, t } from "@foundation/theme/styles";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { PolymorphicProp } from "@foundation/ui/types";
-import { View } from "@foundation/ui/View";
+import { PolymorphicProp } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { CSSProperties } from "react";
 
 export type TypeProps = PolymorphicProp & {

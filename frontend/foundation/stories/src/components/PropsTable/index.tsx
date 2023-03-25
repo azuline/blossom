@@ -1,8 +1,8 @@
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { Code } from "@foundation/ui/Code";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Code } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { FC, Fragment, ReactNode } from "react";
 import { sPropsTable, sPropsTableChild } from "./index.css";
 

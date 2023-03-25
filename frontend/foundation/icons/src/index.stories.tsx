@@ -5,9 +5,9 @@ import { DocumentationStory } from "@foundation/stories/components/Documentation
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import React from "react";
 
 export default {

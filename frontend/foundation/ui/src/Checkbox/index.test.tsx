@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxProps } from "@foundation/ui/Checkbox";
+import { Checkbox, CheckboxProps } from "@foundation/ui";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
@@ -10,7 +10,7 @@ const TestCheckbox: FC<Pick<CheckboxProps, "disabled">> = props => {
   return <Checkbox {...props} checked={checked} label="Remember me" onChange={setChecked} />;
 };
 
-describe("@foundation/ui/Checkbox", () => {
+describe("@foundation/ui", () => {
   const check = (): Promise<void> => userEvent.click(screen.getByRole("checkbox"));
 
   it("click toggles state", async () => {

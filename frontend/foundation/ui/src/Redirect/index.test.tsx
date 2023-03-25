@@ -1,10 +1,10 @@
-import { Redirect } from "@foundation/ui/Redirect";
+import { Redirect } from "@foundation/ui";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { describe, expect, it, vi } from "vitest";
 
-describe("@foundation/ui/Redirect", () => {
+describe("@foundation/ui", () => {
   it("click triggers redirect", async () => {
     render(<Redirect href="/hi">hi</Redirect>);
     const redirectSpy = vi.spyOn(window.history, "pushState");

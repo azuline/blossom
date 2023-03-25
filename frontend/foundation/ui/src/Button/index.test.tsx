@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@foundation/ui/Button";
+import { Button, ButtonProps } from "@foundation/ui";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
@@ -10,7 +10,7 @@ const TestButton: FC<Pick<ButtonProps, "disabled">> = props => {
   return <Button {...props} onPress={() => setCount(c => c + 1)}>{count}</Button>;
 };
 
-describe("@foundation/ui/Button", () => {
+describe("@foundation/ui", () => {
   it("onPress triggers callback", async () => {
     render(<TestButton />);
     await screen.findByRole("button");

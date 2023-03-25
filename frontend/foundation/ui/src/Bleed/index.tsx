@@ -7,7 +7,7 @@ import {
   bleedTopVar,
   sBleed,
 } from "@foundation/ui/Bleed/index.css";
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { CSSProperties, FC } from "react";

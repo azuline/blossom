@@ -3,12 +3,12 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Card } from "@foundation/ui/Card";
-import { Center } from "@foundation/ui/Center";
-import { Divider } from "@foundation/ui/Divider";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Card } from "@foundation/ui";
+import { Center } from "@foundation/ui";
+import { Divider } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { FC, ReactNode } from "react";
 
 export default {

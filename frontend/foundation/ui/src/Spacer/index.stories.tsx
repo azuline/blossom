@@ -1,9 +1,9 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { Card } from "@foundation/ui/Card";
-import { Spacer } from "@foundation/ui/Spacer";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Card } from "@foundation/ui";
+import { Spacer } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 
 export default {
   title: "Layout",

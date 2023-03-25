@@ -1,4 +1,4 @@
-import { TextField, TextFieldProps } from "@foundation/ui/TextField";
+import { TextField, TextFieldProps } from "@foundation/ui";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
@@ -10,7 +10,7 @@ const TestTextField: FC<Pick<TextFieldProps, "disabled">> = props => {
   return <TextField {...props} label="Label" value={value} onChange={setValue} />;
 };
 
-describe("@foundation/ui/TextField", () => {
+describe("@foundation/ui", () => {
   it("typing changes value", async () => {
     render(<TestTextField />);
     await screen.findByText("Label");

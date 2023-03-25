@@ -3,8 +3,8 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { sSizeScale } from "@foundation/theme/docs/size.css";
 import { t } from "@foundation/theme/styles";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { FC, Fragment } from "react";
 
 export default {

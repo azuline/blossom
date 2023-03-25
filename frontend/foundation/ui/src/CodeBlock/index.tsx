@@ -1,6 +1,6 @@
 import { FontCodeVariant, t } from "@foundation/theme/styles";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { FC } from "react";
 
 type Props = {

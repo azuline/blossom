@@ -1,10 +1,10 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
-import { Code } from "@foundation/ui/Code";
-import { Divider } from "@foundation/ui/Divider";
-import { Stack } from "@foundation/ui/Stack";
-import { Type } from "@foundation/ui/Type";
+import { Code } from "@foundation/ui";
+import { Divider } from "@foundation/ui";
+import { Stack } from "@foundation/ui";
+import { Type } from "@foundation/ui";
 
 export default {
   title: "Theme",

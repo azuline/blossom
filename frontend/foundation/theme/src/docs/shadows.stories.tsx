@@ -3,8 +3,8 @@ import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 
 export default {
   title: "Theme",

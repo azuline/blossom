@@ -1,10 +1,10 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
-import { Code } from "@foundation/ui/Code";
-import { CodeBlock } from "@foundation/ui/CodeBlock";
-import { Link } from "@foundation/ui/Link";
-import { Type } from "@foundation/ui/Type";
+import { Code } from "@foundation/ui";
+import { CodeBlock } from "@foundation/ui";
+import { Link } from "@foundation/ui";
+import { Type } from "@foundation/ui";
 import { FC } from "react";
 
 export default {
@@ -146,7 +146,7 @@ return <div className={sx({ p: "16" })}>hi</div>;
         </Type>
         <CodeBlock
           code={`
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 return <View sx={{ p: "16" }} />;
 `}
         />
@@ -186,7 +186,7 @@ return style({
         </Type>
         <CodeBlock
           code={`
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 return <View sx={{ p: { initial: "0", xs: "2", sm: "4", md: "8", lg: "12", xl: "16" }} />;
 `}
         />

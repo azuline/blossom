@@ -1,6 +1,6 @@
 import { SX } from "@foundation/theme/styles/sprinkles.css";
 import { sLink } from "@foundation/ui/Link/index.css";
-import { Redirect, RedirectProps } from "@foundation/ui/Redirect";
+import { Redirect, RedirectProps } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

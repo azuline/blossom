@@ -1,7 +1,7 @@
 import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
 import { sCenter } from "@foundation/ui/Center/index.css";
-import { PolymorphicProp } from "@foundation/ui/types";
-import { View } from "@foundation/ui/View";
+import { PolymorphicProp } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { ReactNode } from "react";

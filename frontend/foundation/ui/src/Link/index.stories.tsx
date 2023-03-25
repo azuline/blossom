@@ -2,9 +2,9 @@ import { DocumentationStory } from "@foundation/stories/components/Documentation
 import { StorySection } from "@foundation/stories/components/StorySection";
 import { Variant } from "@foundation/stories/components/Variant";
 import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { Link } from "@foundation/ui/Link";
-import { Type } from "@foundation/ui/Type";
-import { View } from "@foundation/ui/View";
+import { Link } from "@foundation/ui";
+import { Type } from "@foundation/ui";
+import { View } from "@foundation/ui";
 
 export default {
   title: "Atoms",

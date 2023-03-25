@@ -1,5 +1,5 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout/LayoutPaddingVariableSetter";
-import { View } from "@foundation/ui/View";
+import { View } from "@foundation/ui";
 import { ReactNode } from "react";
 
 type Props = {

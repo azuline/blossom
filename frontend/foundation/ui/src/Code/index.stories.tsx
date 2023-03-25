@@ -1,5 +1,5 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { Code } from "@foundation/ui/Code";
+import { Code } from "@foundation/ui";
 import { FC } from "react";
 
 export default {

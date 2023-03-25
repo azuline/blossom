@@ -1,5 +1,5 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { CodeBlock } from "@foundation/ui/CodeBlock";
+import { CodeBlock } from "@foundation/ui";
 import { FC } from "react";
 
 export default {

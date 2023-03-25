@@ -1,7 +1,7 @@
 import { sButton } from "@foundation/ui/Button/index.css";
-import { Center } from "@foundation/ui/Center";
-import { Redirect, RedirectProps } from "@foundation/ui/Redirect";
-import { Touchable, TouchableProps } from "@foundation/ui/Touchable";
+import { Center } from "@foundation/ui";
+import { Redirect, RedirectProps } from "@foundation/ui";
+import { Touchable, TouchableProps } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

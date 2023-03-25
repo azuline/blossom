@@ -4,9 +4,9 @@ import {
   sCheckboxBox,
   sCheckboxLayout,
 } from "@foundation/ui/Checkbox/index.css";
-import { Type } from "@foundation/ui/Type";
-import { LabellableProps } from "@foundation/ui/types";
-import { View } from "@foundation/ui/View";
+import { Type } from "@foundation/ui";
+import { LabellableProps } from "@foundation/ui";
+import { View } from "@foundation/ui";
 import clsx from "clsx";
 import { useId, useRef } from "react";
 import { AriaCheckboxProps, useCheckbox, useFocusRing, VisuallyHidden } from "react-aria";
