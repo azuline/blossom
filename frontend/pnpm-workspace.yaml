@@ -1,5 +1,4 @@
 packages:
-  - "."
   - "codegen/*"
-  # - "foundation/*"
+  - "foundation/*"
   # - "product/*"
