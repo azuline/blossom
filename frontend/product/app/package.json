@@ -1,5 +1,5 @@
 {
-  "name": "@product/name",
+  "name": "@product/app",
   "version": "0.0.0",
   "type": "commonjs",
   "files": ["dist", "src"],

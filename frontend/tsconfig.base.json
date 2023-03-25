@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // Target esnext; other build tools will handle downleveling syntax.
+    "target": "esnext",
+    // The default set of type definitions.
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    // Don't allow JS imports; all code must be TS.
+    "allowJs": false,
+    // Skip type checking of .d.ts declaration files.
+    "skipLibCheck": true,
+    // Strict mode!
+    "strict": true,
+    // Force case-sensitivity, even on case-insensitive filesystems.
+    "forceConsistentCasingInFileNames": true,
+    // Use ESNext's module system.
+    "module": "ESNext",
+    // Resolve modules similarly to how bundlers reslve modules.
+    "moduleResolution": "bundler",
+    // Allow importing .JSON files.
+    "resolveJsonModule": true,
+    // Generate .d.ts files.
+    "declaration": true,
+    // Transpile JSX to `_jsx` calls.
+    "jsx": "react-jsx",
+    // TODO: Remove this.
+    "paths": { "@*": ["./*"] },
+    // Magical stuff, IDK.
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
+  }
+}

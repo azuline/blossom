@@ -18,7 +18,8 @@
     "react-aria": "^3.23.1",
     "react-dom": "^18.2.0",
     "react-stately": "^3.21.0",
-    "wouter": "^2.10.0"
+    "wouter": "^2.10.0",
+    "@codegen/rpc": "workspace:*"
   },
   "devDependencies": {
     "@ladle/react": "^2.10.1",
