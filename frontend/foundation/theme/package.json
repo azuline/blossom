@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@foundation/std": "workspace:*",
-    "react": "*"
-  },
-  "devDependencies": {
+    "react": "*",
+    "clsx": "*",
+    "jotai": "*",
+    "@vanilla-extract/css": "*",
+    "@vanilla-extract/sprinkles": "*",
     "@foundation/ui": "workspace:*",
     "@foundation/stories": "workspace:*"
   }

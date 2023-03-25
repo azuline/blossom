@@ -275,16 +275,27 @@ importers:
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
-      react:
-        specifier: '*'
-        version: 18.2.0
-    devDependencies:
       '@foundation/stories':
         specifier: workspace:*
         version: link:../stories
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.10.0
+      '@vanilla-extract/sprinkles':
+        specifier: '*'
+        version: 1.5.2(@vanilla-extract/css@1.10.0)
+      clsx:
+        specifier: '*'
+        version: 1.2.1
+      jotai:
+        specifier: '*'
+        version: 2.0.3(react@18.2.0)
+      react:
+        specifier: '*'
+        version: 18.2.0
 
   foundation/ui:
     dependencies:

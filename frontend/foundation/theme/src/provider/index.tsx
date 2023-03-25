@@ -1,8 +1,8 @@
 import {
   themeMoonlightDarkClass,
   themeMoonlightLightClass,
-} from "@foundation/theme";
-import { View } from "@foundation/ui";
+} from "../themes/color.css";
+import { sx } from "../styles/sprinkles.css";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
@@ -25,8 +25,8 @@ export const ThemeProvider: FC<Props> = props => {
   const colorClass = theme === "dark" ? themeMoonlightDarkClass : themeMoonlightLightClass;
 
   return (
-    <View className={clsx(colorClass, sThemeProvider)} sx={{ h: "full", w: "full" }}>
+    <div className={clsx(colorClass, sThemeProvider, sx({ h: "full", w: "full" }))}>
       {props.children}
-    </View>
+    </div>
   );
 };
