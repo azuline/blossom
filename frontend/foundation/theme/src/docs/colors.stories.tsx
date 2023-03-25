@@ -1,11 +1,9 @@
 import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
 import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
 import { StorySection } from "@foundation/stories/components/StorySection";
-import { moonlightPalette } from "@foundation/theme/codegen/moonlight.css";
-import { t } from "@foundation/theme/styles";
-import { Stack } from "@foundation/ui";
-import { Type } from "@foundation/ui";
-import { View } from "@foundation/ui";
+import { moonlightPalette } from "../codegen/moonlight.css";
+import { t } from "../styles";
+import { Stack, Type, View } from "@foundation/ui";
 import { FC } from "react";
 
 export default {

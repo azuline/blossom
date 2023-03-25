@@ -116,9 +116,6 @@ importers:
       eslint-plugin-import:
         specifier: ^2.27.5
         version: 2.27.5(@typescript-eslint/parser@5.56.0)(eslint@8.36.0)
-      eslint-plugin-import-alias:
-        specifier: ^1.2.0
-        version: 1.2.0
       eslint-plugin-jsx-a11y:
         specifier: ^6.7.1
         version: 6.7.1(eslint@8.36.0)
@@ -161,7 +158,143 @@ importers:
 
   codegen/rpc: {}
 
-  foundation/auth: {}
+  foundation/auth:
+    dependencies:
+      '@foundation/loaders':
+        specifier: workspace:*
+        version: link:../loaders
+      '@foundation/rpc':
+        specifier: workspace:*
+        version: link:../rpc
+
+  foundation/errors: {}
+
+  foundation/forms: {}
+
+  foundation/icons:
+    dependencies:
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  foundation/layout:
+    dependencies:
+      '@foundation/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@foundation/loaders':
+        specifier: workspace:*
+        version: link:../loaders
+      '@foundation/std':
+        specifier: workspace:*
+        version: link:../std
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+
+  foundation/loaders:
+    dependencies:
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+
+  foundation/routing:
+    dependencies:
+      '@foundation/loaders':
+        specifier: workspace:*
+        version: link:../loaders
+      '@foundation/std':
+        specifier: workspace:*
+        version: link:../std
+
+  foundation/rpc:
+    dependencies:
+      '@codegen/rpc':
+        specifier: workspace:*
+        version: link:../../codegen/rpc
+      '@foundation/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 4.28.0(react-dom@18.2.0)(react@18.2.0)
+      jotai:
+        specifier: '*'
+        version: 2.0.3(react@18.2.0)
+      jotai-tanstack-query:
+        specifier: '*'
+        version: 0.6.0(@tanstack/query-core@4.27.0)(jotai@2.0.3)
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  foundation/std:
+    dependencies:
+      '@foundation/loaders':
+        specifier: workspace:*
+        version: link:../loaders
+      '@foundation/rpc':
+        specifier: workspace:*
+        version: link:../rpc
+
+  foundation/stories:
+    dependencies:
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+
+  foundation/testing:
+    dependencies:
+      '@codegen/rpc':
+        specifier: workspace:*
+        version: link:../../codegen/rpc
+      '@foundation/rpc':
+        specifier: workspace:*
+        version: link:../rpc
+
+  foundation/theme:
+    dependencies:
+      '@foundation/std':
+        specifier: workspace:*
+        version: link:../std
+      react:
+        specifier: '*'
+        version: 18.2.0
+    devDependencies:
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+
+  foundation/ui:
+    dependencies:
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+    devDependencies:
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
 
 packages:
 
@@ -4259,10 +4392,6 @@ packages:
       eslint-import-resolver-node: 0.3.7
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /eslint-plugin-import-alias@1.2.0:
-    resolution: {integrity: sha512-hxhpWtaXgBTeCUmQa6EzjKI8vnrk7uej9e+ln2etTMPFAM7Q8xNPdBywSGrWf2mSB018D66sR1ZfdThonXCplg==}
     dev: true
 
   /eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.56.0)(eslint@8.36.0):

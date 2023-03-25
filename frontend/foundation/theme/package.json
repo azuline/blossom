@@ -9,7 +9,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@foundation/std": "workspace:*"
+    "@foundation/std": "workspace:*",
+    "react": "*"
   },
   "devDependencies": {
     "@foundation/ui": "workspace:*",

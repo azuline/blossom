@@ -28,7 +28,7 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
   ],
-  plugins: ["@typescript-eslint", "unused-imports", "import-alias"],
+  plugins: ["@typescript-eslint", "unused-imports"],
   env: { es6: true, browser: true, jest: true },
   ignorePatterns: [
     "coverage",
@@ -83,14 +83,6 @@ module.exports = {
 
     // Imports
     "no-duplicate-imports": "warn",
-
-    // This enforces that we use `@alias` imports and that we don't use `../`
-    // parent imports.
-    "import-alias/import-alias": ["warn", {
-      relativeDepth: 0,
-      rootDir: __dirname,
-      aliases: importAliases,
-    }],
 
     // Overrides for React.
     // There is a time and place for each...

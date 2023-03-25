@@ -1,7 +1,7 @@
-import { flattenRecord } from "@foundation/std/flattenRecord";
-import { themeMoonlightLightVars } from "@foundation/theme/themes/color.css";
-import { breakpoints, themeSharedVars } from "@foundation/theme/themes/shared.css";
-import { fontFaces, themeTypeVars } from "@foundation/theme/themes/type.css";
+import { flattenRecord } from "@foundation/std";
+import { themeMoonlightLightVars } from "../themes/color.css";
+import { breakpoints, themeSharedVars } from "../themes/shared.css";
+import { fontFaces, themeTypeVars } from "../themes/type.css";
 import { CSSProperties } from "react";
 
 const borderColors = flattenRecord(themeMoonlightLightVars.color.border);
