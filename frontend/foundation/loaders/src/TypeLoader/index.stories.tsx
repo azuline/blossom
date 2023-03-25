@@ -1,7 +1,7 @@
-import { TypeLoader } from "@foundation/loaders/TypeLoader";
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { Variant } from "@foundation/stories/components/Variant";
-import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
+import { TypeLoader } from "@foundation/loaders";
+import { DocumentationStory } from "@foundation/stories";
+import { Variant } from "@foundation/stories";
+import { VariantsGallery } from "@foundation/stories";
 import { Type } from "@foundation/ui";
 
 export default {

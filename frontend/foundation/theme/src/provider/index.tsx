@@ -1,7 +1,7 @@
 import {
   themeMoonlightDarkClass,
   themeMoonlightLightClass,
-} from "@foundation/theme/themes/color.css";
+} from "@foundation/theme";
 import { View } from "@foundation/ui";
 import clsx from "clsx";
 import { useAtom } from "jotai";

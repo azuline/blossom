@@ -2,7 +2,7 @@ import {
   elevationLight,
   moonlightDark,
   moonlightLight,
-} from "@foundation/theme/codegen/moonlight.css";
+} from "@foundation/theme";
 import { createTheme } from "@vanilla-extract/css";
 
 export const [themeMoonlightLightClass, themeMoonlightLightVars] = createTheme({

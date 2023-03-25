@@ -1,5 +1,5 @@
-import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
-import { sCenter } from "@foundation/ui/Center/index.css";
+import { SX, sx } from "@foundation/theme";
+import { sCenter } from "@foundation/ui";
 import { PolymorphicProp } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";

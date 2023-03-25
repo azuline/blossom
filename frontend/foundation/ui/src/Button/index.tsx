@@ -1,4 +1,4 @@
-import { sButton } from "@foundation/ui/Button/index.css";
+import { sButton } from "@foundation/ui";
 import { Center } from "@foundation/ui";
 import { Redirect, RedirectProps } from "@foundation/ui";
 import { Touchable, TouchableProps } from "@foundation/ui";

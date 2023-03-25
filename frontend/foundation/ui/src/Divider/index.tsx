@@ -1,5 +1,5 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { sDivider } from "@foundation/ui/Divider/index.css";
+import { SX } from "@foundation/theme";
+import { sDivider } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";

@@ -1,6 +1,6 @@
-import { ColorBorder, Space, SX, sx } from "@foundation/theme/styles/sprinkles.css";
+import { ColorBorder, Space, SX, sx } from "@foundation/theme";
 import { Divider } from "@foundation/ui";
-import { sStack } from "@foundation/ui/Stack/index.css";
+import { sStack } from "@foundation/ui";
 import { PolymorphicProp } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";

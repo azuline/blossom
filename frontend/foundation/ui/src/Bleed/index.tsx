@@ -1,12 +1,12 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { setSXVars } from "@foundation/theme/utils";
+import { SX } from "@foundation/theme";
+import { setSXVars } from "@foundation/theme";
 import {
   bleedBottomVar,
   bleedLeftVar,
   bleedRightVar,
   bleedTopVar,
   sBleed,
-} from "@foundation/ui/Bleed/index.css";
+} from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";

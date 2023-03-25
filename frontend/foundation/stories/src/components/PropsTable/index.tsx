@@ -1,5 +1,5 @@
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { StorySection } from "@foundation/stories";
+import { SX } from "@foundation/theme";
 import { Code } from "@foundation/ui";
 import { Type } from "@foundation/ui";
 import { View } from "@foundation/ui";

@@ -1,4 +1,4 @@
-import { PageContent } from "@foundation/layout/PageContent";
+import { PageContent } from "@foundation/layout";
 import { Button } from "@foundation/ui";
 import { Stack } from "@foundation/ui";
 import { Type } from "@foundation/ui";

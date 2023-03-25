@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories";
 import { Code } from "@foundation/ui";
 import { FC } from "react";
 

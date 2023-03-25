@@ -1,4 +1,4 @@
-import { AppLoader } from "@foundation/loaders/AppLoader";
+import { AppLoader } from "@foundation/loaders";
 import { useRPC } from "@foundation/rpc";
 import { ReactNode } from "react";
 

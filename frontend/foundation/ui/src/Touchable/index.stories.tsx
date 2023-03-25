@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories";
 import {
   propDocChildren,
   propDocClassName,
@@ -6,9 +6,9 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
-} from "@foundation/stories/components/PropsTable";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
+} from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
 import { Code } from "@foundation/ui";
 import { Stack } from "@foundation/ui";
 import { Type } from "@foundation/ui";

@@ -1,6 +1,6 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
+import { DocumentationStory } from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
 import { Code } from "@foundation/ui";
 import { CodeBlock } from "@foundation/ui";
 import { Link } from "@foundation/ui";
@@ -42,7 +42,7 @@ export const Styling: FC = () => (
         </Type>
         <CodeBlock
           code={`
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 style({ background: t.color.background.neutral.raised });
 `}
@@ -62,7 +62,7 @@ style({ background: t.color.background.neutral.raised });
         </Type>
         <CodeBlock
           code={`
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 style({ border: t.fn.border("1", "neutral.weak") });
 `}
@@ -74,7 +74,7 @@ style({ border: t.fn.border("1", "neutral.weak") });
         </Type>
         <CodeBlock
           code={`
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 style({ border: t.fn.border("1", "neutral.weak") });
 `}
@@ -88,7 +88,7 @@ style({ border: t.fn.border("1", "neutral.weak") });
         </Type>
         <CodeBlock
           code={`
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 style({ ...t.fn.font("lg", { paragraph: true, italic: true }) });
 `}
@@ -100,7 +100,7 @@ style({ ...t.fn.font("lg", { paragraph: true, italic: true }) });
         </Type>
         <CodeBlock
           code={`
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 style({ padding: t.fn.space("0", "2", "4", "8") });
 // -> becomes: style({ padding: "0px 2px 4px 8px" });
@@ -128,7 +128,7 @@ style({ padding: t.fn.space("0", "2", "4", "8") });
         </Type>
         <CodeBlock
           code={`
-import { sx } from "@foundation/theme/styles/sprinkles.css";
+import { sx } from "@foundation/theme";
 return <div className={sx({ p: "16" })}>hi</div>;
 `}
         />
@@ -168,7 +168,7 @@ return <View sx={{ p: "16" }} />;
         <CodeBlock
           code={`
 import { style } from "@vanilla-extract/css";
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 return style({
   "@media": {
     [t.breakpoints.lg]: { display: "none" },
@@ -205,7 +205,7 @@ return <View sx={{ p: { initial: "0", xs: "2", sm: "4", md: "8", lg: "12", xl: "
         </Type>
         <CodeBlock
           code={`
-import { ThemeProvider } from "@foundation/theme/provider";
+import { ThemeProvider } from "@foundation/theme";
 return <ThemeProvider force="dark">...</ThemeProvder>;
 `}
         />

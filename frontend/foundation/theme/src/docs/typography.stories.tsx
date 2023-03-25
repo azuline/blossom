@@ -1,6 +1,6 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
+import { DocumentationStory } from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
 import { Code } from "@foundation/ui";
 import { Divider } from "@foundation/ui";
 import { Stack } from "@foundation/ui";

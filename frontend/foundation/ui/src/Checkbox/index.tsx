@@ -1,9 +1,9 @@
-import { Icon } from "@foundation/icons/Icon";
-import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
+import { Icon } from "@foundation/icons";
+import { SX, sx } from "@foundation/theme";
 import {
   sCheckboxBox,
   sCheckboxLayout,
-} from "@foundation/ui/Checkbox/index.css";
+} from "@foundation/ui";
 import { Type } from "@foundation/ui";
 import { LabellableProps } from "@foundation/ui";
 import { View } from "@foundation/ui";

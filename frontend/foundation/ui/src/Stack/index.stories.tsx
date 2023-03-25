@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories";
 import {
   propDocAs,
   propDocChildren,
@@ -7,13 +7,13 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
-} from "@foundation/stories/components/PropsTable";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { Variant, VariantGroup } from "@foundation/stories/components/Variant";
-import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
-import { t } from "@foundation/theme/styles";
-import { SX } from "@foundation/theme/styles/sprinkles.css";
+} from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
+import { Variant, VariantGroup } from "@foundation/stories";
+import { VariantsGallery } from "@foundation/stories";
+import { t } from "@foundation/theme";
+import { SX } from "@foundation/theme";
 import { Center } from "@foundation/ui";
 import { Code } from "@foundation/ui";
 import { Stack, StackProps } from "@foundation/ui";

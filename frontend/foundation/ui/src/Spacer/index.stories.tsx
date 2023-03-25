@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories";
 import { Card } from "@foundation/ui";
 import { Spacer } from "@foundation/ui";
 import { Stack } from "@foundation/ui";

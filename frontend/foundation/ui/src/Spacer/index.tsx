@@ -1,6 +1,6 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { setSXVars } from "@foundation/theme/utils";
-import { spacerXVar, spacerYVar, sSpacer } from "@foundation/ui/Spacer/index.css";
+import { SX } from "@foundation/theme";
+import { setSXVars } from "@foundation/theme";
+import { spacerXVar, spacerYVar, sSpacer } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";

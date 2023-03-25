@@ -1,4 +1,4 @@
-import { BlockOnAuth } from "@foundation/auth/components/BlockOnAuth";
+import { BlockOnAuth } from "@foundation/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactNode } from "react";
 

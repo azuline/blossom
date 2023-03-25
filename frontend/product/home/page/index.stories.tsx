@@ -1,4 +1,4 @@
-import { PageStory } from "@foundation/stories/components/PageStory";
+import { PageStory } from "@foundation/stories";
 import HomePage from ".";
 
 export default {

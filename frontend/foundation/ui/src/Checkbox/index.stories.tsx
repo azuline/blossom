@@ -1,7 +1,7 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { Variant } from "@foundation/stories/components/Variant";
-import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
+import { Variant } from "@foundation/stories";
+import { VariantsGallery } from "@foundation/stories";
 import { Checkbox } from "@foundation/ui";
 import { Type } from "@foundation/ui";
 import { atom, useAtom } from "jotai";

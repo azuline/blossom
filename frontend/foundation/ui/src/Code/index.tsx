@@ -1,5 +1,5 @@
-import { FontCodeVariant } from "@foundation/theme/styles";
-import { SX } from "@foundation/theme/styles/sprinkles.css";
+import { FontCodeVariant } from "@foundation/theme";
+import { SX } from "@foundation/theme";
 import { Type, TypeProps } from "@foundation/ui";
 import { CSSProperties, FC } from "react";
 

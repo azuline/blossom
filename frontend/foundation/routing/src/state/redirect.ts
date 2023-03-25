@@ -1,4 +1,4 @@
-import { usePrefetchPath } from "@foundation/routing/state/prefetch";
+import { usePrefetchPath } from "@foundation/routing";
 import { startTransition, useCallback } from "react";
 import { useLocation } from "wouter";
 

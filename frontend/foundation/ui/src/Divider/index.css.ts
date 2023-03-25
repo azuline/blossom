@@ -1,6 +1,6 @@
-import { flattenRecord } from "@foundation/std/flattenRecord";
-import { t } from "@foundation/theme/styles";
-import { mapTokenScale } from "@foundation/theme/utils";
+import { flattenRecord } from "@foundation/std";
+import { t } from "@foundation/theme";
+import { mapTokenScale } from "@foundation/theme";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 

@@ -1,8 +1,8 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { Variant } from "@foundation/stories/components/Variant";
-import { VariantsGallery } from "@foundation/stories/components/VariantsGallery";
+import { DocumentationStory } from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
+import { Variant } from "@foundation/stories";
+import { VariantsGallery } from "@foundation/stories";
 import { Type } from "@foundation/ui";
 import { View } from "@foundation/ui";
 

@@ -1,5 +1,5 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { sAvatar } from "@foundation/ui/Avatar/index.css";
+import { SX } from "@foundation/theme";
+import { sAvatar } from "@foundation/ui";
 import { View } from "@foundation/ui";
 
 type Props = {

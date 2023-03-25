@@ -1,7 +1,7 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { propDocChildren, PropsTable } from "@foundation/stories/components/PropsTable";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
+import { DocumentationStory } from "@foundation/stories";
+import { propDocChildren, PropsTable } from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
 import { CodeBlock } from "@foundation/ui";
 import { Type } from "@foundation/ui";
 import { VisuallyHidden } from "react-aria";

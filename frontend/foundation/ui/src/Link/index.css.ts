@@ -1,4 +1,4 @@
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { recipe } from "@vanilla-extract/recipes";
 
 export const sLink = recipe({

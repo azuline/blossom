@@ -1,4 +1,4 @@
-import { FontCodeVariant, t } from "@foundation/theme/styles";
+import { FontCodeVariant, t } from "@foundation/theme";
 import { Type } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { FC } from "react";

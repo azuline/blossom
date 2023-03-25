@@ -1,4 +1,4 @@
-import { fontFaces } from "@foundation/theme/themes/type.css";
+import { fontFaces } from "@foundation/theme";
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
 import { t } from ".";
 

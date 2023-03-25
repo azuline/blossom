@@ -1,4 +1,4 @@
-import { t } from "@foundation/theme/styles";
+import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 
 export const sSizeScale = style({

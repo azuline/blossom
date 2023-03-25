@@ -1,5 +1,5 @@
-import { PageContent } from "@foundation/layout/PageContent";
-import { WithHeader } from "@foundation/layout/WithHeader";
+import { PageContent } from "@foundation/layout";
+import { WithHeader } from "@foundation/layout";
 import { Button } from "@foundation/ui";
 import { Stack } from "@foundation/ui";
 import { Type } from "@foundation/ui";

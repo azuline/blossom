@@ -1,4 +1,4 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
+import { DocumentationStory } from "@foundation/stories";
 import {
   propDocChildren,
   propDocClassName,
@@ -6,10 +6,10 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
-} from "@foundation/stories/components/PropsTable";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { t } from "@foundation/theme/styles";
+} from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
+import { t } from "@foundation/theme";
 import { Bleed } from "@foundation/ui";
 import { Card } from "@foundation/ui";
 import { Center } from "@foundation/ui";

@@ -1,5 +1,5 @@
-import { SX } from "@foundation/theme/styles/sprinkles.css";
-import { sLink } from "@foundation/ui/Link/index.css";
+import { SX } from "@foundation/theme";
+import { sLink } from "@foundation/ui";
 import { Redirect, RedirectProps } from "@foundation/ui";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";

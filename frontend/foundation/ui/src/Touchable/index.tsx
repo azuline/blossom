@@ -1,5 +1,5 @@
-import { SX, sx } from "@foundation/theme/styles/sprinkles.css";
-import { sTouchable } from "@foundation/ui/Touchable/index.css";
+import { SX, sx } from "@foundation/theme";
+import { sTouchable } from "@foundation/ui";
 import { clsx } from "clsx";
 import { CSSProperties, ReactNode, useRef } from "react";
 import { AriaButtonProps, useButton } from "react-aria";

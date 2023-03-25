@@ -1,11 +1,11 @@
 import { RPCs } from "@codegen/rpc";
-import { Form } from "@foundation/forms/components/Form";
-import { atomForm } from "@foundation/forms/state";
-import { Icon } from "@foundation/icons/Icon";
-import { PageContent } from "@foundation/layout/PageContent";
-import { useRedirect } from "@foundation/routing/state/redirect";
+import { Form } from "@foundation/forms";
+import { atomForm } from "@foundation/forms";
+import { Icon } from "@foundation/icons";
+import { PageContent } from "@foundation/layout";
+import { useRedirect } from "@foundation/routing";
 import { rpc, useRefetchRPC } from "@foundation/rpc";
-import { RPCError } from "@foundation/rpc/error";
+import { RPCError } from "@foundation/rpc";
 import { Button } from "@foundation/ui";
 import { Center } from "@foundation/ui";
 import { Checkbox } from "@foundation/ui";

@@ -1,8 +1,8 @@
-import { DocumentationStory } from "@foundation/stories/components/DocumentationStory";
-import { StoryParagraph } from "@foundation/stories/components/StoryParagraph";
-import { StorySection } from "@foundation/stories/components/StorySection";
-import { sSizeScale } from "@foundation/theme/docs/size.css";
-import { t } from "@foundation/theme/styles";
+import { DocumentationStory } from "@foundation/stories";
+import { StoryParagraph } from "@foundation/stories";
+import { StorySection } from "@foundation/stories";
+import { sSizeScale } from "@foundation/theme";
+import { t } from "@foundation/theme";
 import { Type } from "@foundation/ui";
 import { View } from "@foundation/ui";
 import { FC, Fragment } from "react";

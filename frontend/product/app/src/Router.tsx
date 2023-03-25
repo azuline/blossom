@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 // ^ Disable because I really don't want to type the output of lazy imports.
 
-import { useCurrentTenant, useCurrentUser } from "@foundation/auth/state";
-import { Route } from "@foundation/routing/components/Route";
-import { Switch } from "@foundation/routing/components/Switch";
+import { useCurrentTenant, useCurrentUser } from "@foundation/auth";
+import { Route } from "@foundation/routing";
+import { Switch } from "@foundation/routing";
 
 export const Router: React.FC = () => {
   const auths = useUserAuthorizations();
