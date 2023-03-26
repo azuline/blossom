@@ -8,6 +8,15 @@
   },
   "dependencies": {
     "react": "*",
-    "@tanstack/react-query": "*"
+    "react-dom": "*",
+    "@total-typescript/ts-reset": "*",
+    "@tanstack/react-query": "*",
+    "@foundation/layout": "workspace:*",
+    "@foundation/auth": "workspace:*",
+    "@foundation/routing": "workspace:*",
+    "@foundation/theme": "workspace:*",
+    "@product/home": "workspace:*",
+    "@product/login": "workspace:*",
+    "@product/notfound": "workspace:*"
   }
 }

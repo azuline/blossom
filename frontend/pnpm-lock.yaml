@@ -173,15 +173,27 @@ importers:
 
   foundation/icons:
     dependencies:
-      '@foundation/stories':
-        specifier: workspace:*
-        version: link:../stories
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  foundation/icons-stories:
+    dependencies:
+      '@foundation/icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.10.0
       react:
         specifier: '*'
         version: 18.2.0
@@ -203,6 +215,18 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.10.0
+      '@vanilla-extract/recipes':
+        specifier: '*'
+        version: 0.4.0(@vanilla-extract/css@1.10.0)
+      clsx:
+        specifier: '*'
+        version: 1.2.1
+      react:
+        specifier: '*'
+        version: 18.2.0
 
   foundation/loaders:
     dependencies:
@@ -366,6 +390,60 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  product/app:
+    dependencies:
+      '@foundation/auth':
+        specifier: workspace:*
+        version: link:../../foundation/auth
+      '@foundation/layout':
+        specifier: workspace:*
+        version: link:../../foundation/layout
+      '@foundation/routing':
+        specifier: workspace:*
+        version: link:../../foundation/routing
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../../foundation/theme
+      '@product/home':
+        specifier: workspace:*
+        version: link:../home
+      '@product/login':
+        specifier: workspace:*
+        version: link:../login
+      '@product/notfound':
+        specifier: workspace:*
+        version: link:../notfound
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 4.28.0(react-dom@18.2.0)(react@18.2.0)
+      '@total-typescript/ts-reset':
+        specifier: '*'
+        version: 0.4.2
+      react:
+        specifier: '*'
+        version: 18.2.0
+      react-dom:
+        specifier: '*'
+        version: 18.2.0(react@18.2.0)
+
+  product/home:
+    dependencies:
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  product/login:
+    dependencies:
+      react:
+        specifier: '*'
+        version: 18.2.0
+
+  product/notfound:
+    dependencies:
       react:
         specifier: '*'
         version: 18.2.0

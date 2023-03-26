@@ -6,19 +6,8 @@ import path from "path";
 import analyze from "rollup-plugin-analyzer";
 import { defineConfig } from "vite";
 
-const excludedAliases = ["node_modules", "coverage", "public", "dist", "patches"];
-// dprint-ignore
-const alias = Object.fromEntries(
-  fs.readdirSync(".", { withFileTypes: true })
-    .filter(x => x.isDirectory())
-    .map(x => x.name)
-    .filter(x => !excludedAliases.includes(x))
-    .map(x => [`@${x}`, path.resolve(__dirname, `./${x}`)]),
-);
-
 // https://vitejs.dev/config/
 export default defineConfig({
-  resolve: { alias },
   plugins: [react(), vanillaExtractPlugin()],
   build: {
     rollupOptions: {
