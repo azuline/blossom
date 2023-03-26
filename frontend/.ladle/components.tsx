@@ -1,12 +1,11 @@
 import { GlobalProvider, useLadleContext } from "@ladle/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { mockRPCsWorker } from "@foundation/testing/msw.client";
-import { DEFAULT_MOCK_RPC_OUTPUT } from "@foundation/testing/rpc";
+import { DEFAULT_MOCK_RPC_OUTPUT, mockRPCsWorker } from "@foundation/testing";
 
-import { ThemeProvider } from "@foundation/theme/provider";
-import "@foundation/theme/styles/global.css";
-import { View } from "@foundation/ui/View";
+import { LayoutPaddingVariableSetter } from "@foundation/layout";
+import { ThemeProvider } from "@foundation/theme";
+import { View } from "@foundation/ui";
 
 const queryClient = new QueryClient();
 
@@ -21,11 +20,13 @@ export const Provider: GlobalProvider = ({ children }) => {
 
   return (
     <ThemeProvider force={theme}>
-      <View sx={{ display: "flex", h: "full", w: "full", direction: "column" }}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </View>
+      <LayoutPaddingVariableSetter>
+        <View sx={{ display: "flex", h: "full", w: "full", direction: "column" }}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </View>
+      </LayoutPaddingVariableSetter>
     </ThemeProvider>
   );
 };

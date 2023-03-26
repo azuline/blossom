@@ -9,6 +9,10 @@
     "build": "tsc"
   },
   "dependencies": {
-    "react": "*"
+    "react": "*",
+    "@foundation/stories": "*",
+    "@foundation/theme": "*",
+    "@foundation/ui": "*",
+    "@foundation/layout": "*"
   }
 }

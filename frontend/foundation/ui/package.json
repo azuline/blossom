@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@foundation/theme": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "@foundation/routing": "workspace:*",
+    "@foundation/std": "workspace:*",
     "react": "*",
     "react-aria": "*",
     "react-stately": "*",

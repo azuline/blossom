@@ -1,4 +1,3 @@
-import { AppLoader } from "@foundation/loaders";
 import { availablePathsAtom } from "../../state/paths";
 import { filterObject } from "@foundation/std";
 import { useAtom } from "jotai";
@@ -25,7 +24,7 @@ export const Route: FC<RouteProps> = props => {
   return (
     <WouterRoute path={props.path}>
       {matches && (
-        <Suspense fallback={<AppLoader />}>
+        <Suspense fallback={null}>
           <Page {...params} />
         </Suspense>
       )}

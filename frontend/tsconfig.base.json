@@ -14,7 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     // Use ESNext's module system.
     "module": "ESNext",
-    // Resolve modules similarly to how bundlers reslve modules.
+    // Resolve modules similarly to how bundlers resolve modules.
     "moduleResolution": "bundler",
     // Allow importing .JSON files.
     "resolveJsonModule": true,
@@ -22,8 +22,6 @@
     "declaration": true,
     // Transpile JSX to `_jsx` calls.
     "jsx": "react-jsx",
-    // TODO: Remove this.
-    "paths": { "@*": ["./*"] },
     // Magical stuff, IDK.
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,

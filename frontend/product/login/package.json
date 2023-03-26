@@ -9,6 +9,14 @@
     "build": "tsc"
   },
   "dependencies": {
-    "react": "*"
+    "react": "*",
+    "@foundation/stories": "*",
+    "@foundation/ui": "*",
+    "@foundation/testing": "*",
+    "@foundation/rpc": "*",
+    "@foundation/icons": "*",
+    "@foundation/forms": "*",
+    "@foundation/layout": "*",
+    "@foundation/routing": "*"
   }
 }

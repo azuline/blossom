@@ -9,5 +9,7 @@
     "build": "tsc"
   },
   "dependencies": {
+    "jotai": "*",
+    "react": "*"
   }
 }

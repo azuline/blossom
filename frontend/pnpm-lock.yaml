@@ -169,7 +169,14 @@ importers:
 
   foundation/errors: {}
 
-  foundation/forms: {}
+  foundation/forms:
+    dependencies:
+      jotai:
+        specifier: '*'
+        version: 2.0.3(react@18.2.0)
+      react:
+        specifier: '*'
+        version: 18.2.0
 
   foundation/icons:
     dependencies:
@@ -212,6 +219,9 @@ importers:
       '@foundation/stories':
         specifier: workspace:*
         version: link:../stories
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
@@ -242,9 +252,6 @@ importers:
 
   foundation/routing:
     dependencies:
-      '@foundation/loaders':
-        specifier: workspace:*
-        version: link:../loaders
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
@@ -343,6 +350,15 @@ importers:
 
   foundation/ui:
     dependencies:
+      '@foundation/icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@foundation/routing':
+        specifier: workspace:*
+        version: link:../routing
+      '@foundation/std':
+        specifier: workspace:*
+        version: link:../std
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
@@ -425,18 +441,63 @@ importers:
 
   product/home:
     dependencies:
+      '@foundation/layout':
+        specifier: '*'
+        version: link:../../foundation/layout
+      '@foundation/stories':
+        specifier: '*'
+        version: link:../../foundation/stories
+      '@foundation/ui':
+        specifier: '*'
+        version: link:../../foundation/ui
       react:
         specifier: '*'
         version: 18.2.0
 
   product/login:
     dependencies:
+      '@foundation/forms':
+        specifier: '*'
+        version: link:../../foundation/forms
+      '@foundation/icons':
+        specifier: '*'
+        version: link:../../foundation/icons
+      '@foundation/layout':
+        specifier: '*'
+        version: link:../../foundation/layout
+      '@foundation/routing':
+        specifier: '*'
+        version: link:../../foundation/routing
+      '@foundation/rpc':
+        specifier: '*'
+        version: link:../../foundation/rpc
+      '@foundation/stories':
+        specifier: '*'
+        version: link:../../foundation/stories
+      '@foundation/testing':
+        specifier: '*'
+        version: link:../../foundation/testing
+      '@foundation/ui':
+        specifier: '*'
+        version: link:../../foundation/ui
       react:
         specifier: '*'
         version: 18.2.0
 
   product/notfound:
     dependencies:
+      '@foundation/layout':
+        specifier: '*'
+        version: link:../../foundation/layout
+      '@foundation/stories':
+        specifier: '*'
+        version: link:../../foundation/stories
+      '@foundation/theme':
+        specifier: '*'
+        version: link:../../foundation/theme
+      '@foundation/ui':
+        specifier: '*'
+        version: link:../../foundation/ui
       react:
         specifier: '*'
         version: 18.2.0
