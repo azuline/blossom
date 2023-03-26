@@ -1,1 +1,10 @@
-../../configs/typescript/tsconfig.package.json
+{
+  "extends": "@configs/typescript/base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src", ".eslintrc.cjs"],
+  "exclude": ["node_modules", "dist"]
+}

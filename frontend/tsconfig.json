@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.base.json",
-  "include": ["playwright.config.ts", "vite.config.ts", "vitest.global.ts", ".ladle/**/*"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "extends": "@configs/typescript/base.json",
+  "include": ["playwright.config.ts", "vite.config.ts", "vitest.global.ts", ".ladle/**/*"]
 }
