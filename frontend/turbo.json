@@ -13,7 +13,7 @@
     },
     "test": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
-      "dependsOn": ["@configs/vitest#build"]
+      "dependsOn": ["@configs/vitest#typecheck"]
     },
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],

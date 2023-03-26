@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-pnpm vitest 
+pnpm vitest run
 exit $?
