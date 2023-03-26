@@ -203,6 +203,9 @@ importers:
 
   foundation/auth:
     dependencies:
+      '@codegen/rpc':
+        specifier: workspace:*
+        version: link:../../codegen/rpc
       '@foundation/loaders':
         specifier: workspace:*
         version: link:../loaders
