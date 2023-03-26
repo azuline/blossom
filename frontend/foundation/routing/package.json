@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@foundation/std": "workspace:*",
-    "@foundation/loaders": "workspace:*"
+    "@foundation/loaders": "workspace:*",
+    "jotai": "*",
+    "react": "*",
+    "wouter": "*"
   }
 }

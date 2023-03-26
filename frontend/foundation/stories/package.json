@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@foundation/theme": "workspace:*",
-    "@foundation/ui": "workspace:*"
+    "@foundation/ui": "workspace:*",
+    "@vanilla-extract/dynamic": "*",
+    "react": "*"
   }
 }

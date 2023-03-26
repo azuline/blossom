@@ -179,6 +179,9 @@ importers:
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
       react:
         specifier: '*'
         version: 18.2.0
@@ -221,6 +224,15 @@ importers:
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
+      jotai:
+        specifier: '*'
+        version: 2.0.3(react@18.2.0)
+      react:
+        specifier: '*'
+        version: 18.2.0
+      wouter:
+        specifier: '*'
+        version: 2.10.0(react@18.2.0)
 
   foundation/rpc:
     dependencies:
@@ -260,6 +272,12 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/dynamic':
+        specifier: '*'
+        version: 2.0.3
+      react:
+        specifier: '*'
+        version: 18.2.0
 
   foundation/testing:
     dependencies:

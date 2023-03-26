@@ -1,4 +1,4 @@
-import { StorySection } from "@foundation/stories";
+import { StorySection } from "../StorySection";
 import { SX } from "@foundation/theme";
 import { Code, Type, View } from "@foundation/ui";
 import { FC, Fragment, ReactNode } from "react";

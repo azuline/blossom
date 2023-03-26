@@ -1,5 +1,5 @@
-import { availablePathsAtom } from "@foundation/routing";
 import { useAtom } from "jotai";
+import { availablePathsAtom } from "./paths";
 import { useCallback, useEffect } from "react";
 import { useRouter } from "wouter";
 

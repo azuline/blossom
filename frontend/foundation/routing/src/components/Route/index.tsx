@@ -1,5 +1,5 @@
 import { AppLoader } from "@foundation/loaders";
-import { availablePathsAtom } from "@foundation/routing";
+import { availablePathsAtom } from "../../state/paths";
 import { filterObject } from "@foundation/std";
 import { useAtom } from "jotai";
 import { FC, lazy, Suspense, useEffect, useMemo } from "react";
