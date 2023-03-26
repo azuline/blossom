@@ -1,4 +1,4 @@
 {
   "extends": "./configs/typescript/base.json",
-  "include": ["playwright.config.ts", "vite.config.ts", "vitest.global.ts", ".ladle/**/*"]
+  "include": ["playwright.config.ts", ".ladle/**/*"]
 }

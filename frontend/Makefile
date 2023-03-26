@@ -7,28 +7,28 @@ install:
 	pnpm install
 
 test:
-	pnpm turbo test
+	+pnpm turbo test --concurrency "$(nproc)"
 
 build:
-	pnpm turbo build
+	pnpm turbo build --concurrency "$(nproc)"
 
 build-analyze:
-	ANALYZE=1 pnpm turbo build
+	ANALYZE=1 pnpm turbo build --concurrency "$(nproc)"
 
 typecheck:
-	pnpm turbo typecheck
+	pnpm turbo typecheck --concurrency "$(nproc)"
 
 lint:
-	pnpm turbo lint
+	pnpm turbo lint --concurrency "$(nproc)"
 
 lintcheck:
-	pnpm turbo lintcheck
+	pnpm turbo lintcheck --concurrency "$(nproc)"
 
 typewatch:
 	pnpm turbo typewatch --concurrency 999
 
 start:
-	pnpm turbo start
+	pnpm turbo start --concurrency 999
 
 stories:
 	pnpm ladle serve --port 40854
