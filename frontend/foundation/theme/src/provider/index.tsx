@@ -1,12 +1,12 @@
-import {
-  themeMoonlightDarkClass,
-  themeMoonlightLightClass,
-} from "../themes/color.css";
-import { sx } from "../styles/sprinkles.css";
 import clsx from "clsx";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { FC, ReactNode } from "react";
+import { sx } from "../styles/sprinkles.css";
+import {
+  themeMoonlightDarkClass,
+  themeMoonlightLightClass,
+} from "../themes/color.css";
 import { sThemeProvider } from "./index.css";
 
 type Theme = "light" | "dark";

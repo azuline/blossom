@@ -1,8 +1,8 @@
 import { setSXVars, SX } from "@foundation/theme";
-import { spacerXVar, spacerYVar, sSpacer } from "./index.css";
-import { View } from "../View";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
+import { View } from "../View";
+import { spacerXVar, spacerYVar, sSpacer } from "./index.css";
 
 type Props = RecipeVariants<typeof sSpacer> & {
   className?: string;

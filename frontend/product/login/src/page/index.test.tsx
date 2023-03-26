@@ -1,8 +1,8 @@
 import { mockRPCsForTest, PageTestWrap } from "@foundation/testing";
-import LoginPage from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, vi } from "vitest";
+import LoginPage from ".";
 
 describe("@product/login", () => {
   it("login success", () =>

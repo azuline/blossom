@@ -1,5 +1,5 @@
-import { t } from "../styles";
 import { style } from "@vanilla-extract/css";
+import { t } from "../styles";
 
 export const sSizeScale = style({
   width: "100%",

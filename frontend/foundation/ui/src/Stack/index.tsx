@@ -1,11 +1,11 @@
 import { ColorBorder, Space, SX, sx } from "@foundation/theme";
+import { RecipeVariants } from "@vanilla-extract/recipes";
+import { clsx } from "clsx";
+import { Children, CSSProperties } from "react";
 import { Divider } from "../Divider";
 import { PolymorphicProp } from "../types";
 import { View } from "../View";
 import { sStack } from "./index.css";
-import { RecipeVariants } from "@vanilla-extract/recipes";
-import { clsx } from "clsx";
-import { Children, CSSProperties } from "react";
 
 type RV = Exclude<RecipeVariants<typeof sStack>, undefined>;
 

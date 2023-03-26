@@ -1,7 +1,7 @@
-import { layoutPadding } from "../LayoutPaddingVariableSetter/index.css";
 import { t } from "@foundation/theme";
 import { createVar } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
+import { layoutPadding } from "../LayoutPaddingVariableSetter/index.css";
 
 export const sPageContentScroll = recipe({
   base: {

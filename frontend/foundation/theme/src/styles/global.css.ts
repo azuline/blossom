@@ -1,6 +1,6 @@
 import { globalFontFace, globalStyle } from "@vanilla-extract/css";
-import { t } from ".";
 import { fontFaces } from "../themes/type.css";
+import { t } from ".";
 
 // Reset
 // https://www.joshwcomeau.com/css/custom-css-reset/

@@ -1,8 +1,8 @@
 import { SX } from "@foundation/theme";
-import { View } from "../View";
-import { sDivider } from "./index.css";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
+import { View } from "../View";
+import { sDivider } from "./index.css";
 
 type Props = RecipeVariants<typeof sDivider> & {
   className?: string;

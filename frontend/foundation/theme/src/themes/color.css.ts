@@ -1,9 +1,9 @@
+import { createTheme } from "@vanilla-extract/css";
 import {
   elevationLight,
   moonlightDark,
   moonlightLight,
 } from "../codegen/moonlight.css";
-import { createTheme } from "@vanilla-extract/css";
 
 export const [themeMoonlightLightClass, themeMoonlightLightVars] = createTheme({
   color: moonlightLight,

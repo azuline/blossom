@@ -1,7 +1,7 @@
-import { Touchable, TouchableProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
+import { Touchable, TouchableProps } from ".";
 
 import { describe, expect, it } from "vitest";
 

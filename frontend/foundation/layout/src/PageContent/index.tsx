@@ -1,8 +1,8 @@
-import { useHeaderExists } from "../WithHeader/state";
 import { mergeRefs, useScrollObserver } from "@foundation/std";
 import { View } from "@foundation/ui";
 import { clsx } from "clsx";
 import { MutableRefObject, useRef, useState } from "react";
+import { useHeaderExists } from "../WithHeader/state";
 import {
   sPageContentPadding,
   sPageContentScroll,

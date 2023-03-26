@@ -1,6 +1,6 @@
 import { FontCodeVariant, SX } from "@foundation/theme";
-import { Type, TypeProps } from "../Type";
 import { CSSProperties, FC } from "react";
+import { Type, TypeProps } from "../Type";
 
 type Props = {
   variant?: FontCodeVariant;

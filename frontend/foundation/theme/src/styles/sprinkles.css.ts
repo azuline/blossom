@@ -1,6 +1,6 @@
 import { flattenRecord } from "@foundation/std";
-import { t } from ".";
 import { createSprinkles, defineProperties } from "@vanilla-extract/sprinkles";
+import { t } from ".";
 
 const colorContent = flattenRecord(t.color.content);
 const colorBackground = flattenRecord(t.color.background);

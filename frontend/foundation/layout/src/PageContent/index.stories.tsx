@@ -1,6 +1,3 @@
-import { PageContent } from ".";
-import { WithHeader } from "../WithHeader";
-import { LayoutPaddingVariableSetter } from "../LayoutPaddingVariableSetter";
 import {
   DocumentationStory,
   StoryParagraph,
@@ -11,6 +8,9 @@ import {
 } from "@foundation/stories";
 import { Card, Type } from "@foundation/ui";
 import { FC, ReactNode, useEffect, useRef } from "react";
+import { LayoutPaddingVariableSetter } from "../LayoutPaddingVariableSetter";
+import { WithHeader } from "../WithHeader";
+import { PageContent } from ".";
 
 export default {
   title: "Layout",

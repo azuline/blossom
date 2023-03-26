@@ -1,4 +1,10 @@
 import { setSXVars, SX } from "@foundation/theme";
+import { RecipeVariants } from "@vanilla-extract/recipes";
+import clsx from "clsx";
+import { CSSProperties, FC } from "react";
+import {
+  View,
+} from "../View";
 import {
   bleedBottomVar,
   bleedLeftVar,
@@ -6,12 +12,6 @@ import {
   bleedTopVar,
   sBleed,
 } from "./index.css";
-import {
-  View,
-} from "../View";
-import { RecipeVariants } from "@vanilla-extract/recipes";
-import clsx from "clsx";
-import { CSSProperties, FC } from "react";
 
 type Props = RecipeVariants<typeof sBleed> & {
   vars?: { t?: string; r?: string; b?: string; l?: string };

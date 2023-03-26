@@ -1,5 +1,5 @@
-import { t } from "../styles";
 import { style } from "@vanilla-extract/css";
+import { t } from "../styles";
 
 export const sThemeProvider = style({
   fontFamily: `${t.font.face.body}, sans-serif`,

@@ -1,7 +1,7 @@
 import { FontVariant, SX, t } from "@foundation/theme";
+import { CSSProperties } from "react";
 import { PolymorphicProp } from "../types";
 import { View } from "../View";
-import { CSSProperties } from "react";
 
 export type TypeProps = PolymorphicProp & {
   className?: string;
@@ -36,10 +36,10 @@ export const Type: React.FC<TypeProps> = props => {
   } = props;
 
   const type = variant === undefined
-    && strong === undefined
-    && italic === undefined
-    && underline === undefined
-    && paragraph === undefined
+      && strong === undefined
+      && italic === undefined
+      && underline === undefined
+      && paragraph === undefined
     ? undefined
     : t.fn.font(variant ?? "sm", { strong, underline, italic, paragraph });
 

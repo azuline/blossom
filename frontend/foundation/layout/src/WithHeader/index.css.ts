@@ -1,6 +1,6 @@
-import { layoutPadding } from "../LayoutPaddingVariableSetter/index.css";
 import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
+import { layoutPadding } from "../LayoutPaddingVariableSetter/index.css";
 
 export const HEADER_HEIGHT = t.size[64];
 

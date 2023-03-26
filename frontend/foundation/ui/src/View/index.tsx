@@ -1,7 +1,7 @@
 import { SX, sx } from "@foundation/theme";
-import { PolymorphicProp } from "../types";
 import clsx from "clsx";
 import { CSSProperties, forwardRef } from "react";
+import { PolymorphicProp } from "../types";
 
 type Props = PolymorphicProp & {
   className?: string;

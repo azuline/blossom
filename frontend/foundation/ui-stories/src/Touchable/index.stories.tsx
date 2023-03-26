@@ -6,7 +6,8 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
-  StoryParagraph, StorySection
+  StoryParagraph,
+  StorySection,
 } from "@foundation/stories";
 import { Code, Stack, Type, View } from "@foundation/ui";
 import { Touchable } from ".";

@@ -1,6 +1,6 @@
-import { Redirect } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { Redirect } from ".";
 
 import { describe, expect, it, vi } from "vitest";
 

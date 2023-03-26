@@ -1,8 +1,8 @@
 import { SX, sx } from "@foundation/theme";
-import { sTouchable } from "./index.css";
 import { clsx } from "clsx";
 import { CSSProperties, ReactNode, useRef } from "react";
 import { AriaButtonProps, useButton } from "react-aria";
+import { sTouchable } from "./index.css";
 
 export type TouchableProps = {
   disabled?: boolean;

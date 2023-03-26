@@ -1,7 +1,7 @@
-import { Checkbox, CheckboxProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";
+import { Checkbox, CheckboxProps } from ".";
 
 import { describe, expect, it } from "vitest";
 

@@ -1,7 +1,7 @@
 import { useAtom } from "jotai";
-import { availablePathsAtom } from "./paths";
 import { useCallback, useEffect } from "react";
 import { useRouter } from "wouter";
+import { availablePathsAtom } from "./paths";
 
 export const usePrefetchPath = (route: string | undefined): void => {
   const router = useRouter();

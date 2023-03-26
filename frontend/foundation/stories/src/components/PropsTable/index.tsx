@@ -1,7 +1,7 @@
-import { StorySection } from "../StorySection";
 import { SX } from "@foundation/theme";
 import { Code, Type, View } from "@foundation/ui";
 import { FC, Fragment, ReactNode } from "react";
+import { StorySection } from "../StorySection";
 import { sPropsTable, sPropsTableChild } from "./index.css";
 
 type Arg =

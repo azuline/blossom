@@ -33,12 +33,10 @@ lintcheck:
 	# pnpm unimported
 
 start:
-	cd product/app
-	pnpm vite --port 40853 --strictPort
+	cd product/app && pnpm vite --port 40853 --strictPort
 
 preview:
-	cd product/app
-	pnpm vite preview
+	cd product/app && pnpm vite preview
 
 stories:
 	pnpm ladle serve --port 40854

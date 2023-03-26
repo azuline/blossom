@@ -1,8 +1,8 @@
-import { availablePathsAtom } from "../../state/paths";
 import { filterObject } from "@foundation/std";
 import { useAtom } from "jotai";
 import { FC, lazy, Suspense, useEffect, useMemo } from "react";
 import { Route as WouterRoute, useRoute } from "wouter";
+import { availablePathsAtom } from "../../state/paths";
 
 type RouteProps = {
   path: string;

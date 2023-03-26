@@ -1,6 +1,6 @@
-import { usePrefetchPath } from "./prefetch";
 import { startTransition, useCallback } from "react";
 import { useLocation } from "wouter";
+import { usePrefetchPath } from "./prefetch";
 
 export type RedirectFn = (arg0?: { replace: boolean }) => void;
 export type RedirectFnWithoutPrefetch = (route: string, arg1?: { replace: boolean }) => void;

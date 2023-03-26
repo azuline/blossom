@@ -1,10 +1,10 @@
 import { SX, sx } from "@foundation/theme";
-import { View } from "../View";
-import { PolymorphicProp } from "../types";
-import { sCenter } from "./index.css";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { PolymorphicProp } from "../types";
+import { View } from "../View";
+import { sCenter } from "./index.css";
 
 type Props = RecipeVariants<typeof sCenter> & PolymorphicProp & {
   className?: string;

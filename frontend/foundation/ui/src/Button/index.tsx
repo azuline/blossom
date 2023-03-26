@@ -1,9 +1,9 @@
+import { RecipeVariants } from "@vanilla-extract/recipes";
+import clsx from "clsx";
 import { Center } from "../Center";
 import { Redirect, RedirectProps } from "../Redirect";
 import { Touchable, TouchableProps } from "../Touchable";
 import { sButton } from "./index.css";
-import { RecipeVariants } from "@vanilla-extract/recipes";
-import clsx from "clsx";
 
 export type ButtonProps =
   & RecipeVariants<typeof sButton>

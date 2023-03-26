@@ -1,7 +1,7 @@
-import { StorySection } from "../../components/StorySection";
-import { DocumentationStory } from "../../components/DocumentationStory";
 import { Link, Type } from "@foundation/ui";
 import { FC } from "react";
+import { DocumentationStory } from "../../components/DocumentationStory";
+import { StorySection } from "../../components/StorySection";
 
 export default {
   title: "Hello",

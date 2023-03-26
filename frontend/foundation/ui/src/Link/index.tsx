@@ -1,8 +1,8 @@
 import { SX } from "@foundation/theme";
-import { Redirect, RedirectProps } from "../Redirect";
-import { sLink } from "./index.css";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
+import { Redirect, RedirectProps } from "../Redirect";
+import { sLink } from "./index.css";
 
 type Props = RecipeVariants<typeof sLink> & {
   href: RedirectProps["href"];
