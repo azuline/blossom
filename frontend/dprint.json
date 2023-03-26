@@ -23,12 +23,11 @@
     "**/node_modules",
     "**/*-lock.json",
     "**/.mypy_cache",
-    "coverage",
-    "dist",
-    "build",
+    "**/coverage",
+    "**/dist",
+    "**/build",
     "patches",
-    "public",
-    ".unimportedrc.json"
+    "public"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.83.0.wasm",
