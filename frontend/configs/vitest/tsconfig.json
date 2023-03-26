@@ -2,9 +2,11 @@
   "extends": "@configs/typescript/base.json",
   "compilerOptions": {
     "composite": true,
+    "module": "commonjs",
+    "moduleResolution": "nodenext",
     "rootDir": ".",
     "outDir": "dist"
   },
-  "include": ["index.ts", "global.ts", ".eslintrc.cjs"],
+  "include": ["index.cts", "global.ts", ".eslintrc.cjs"],
   "exclude": ["node_modules", "dist"]
 }

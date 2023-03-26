@@ -1,12 +1,12 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
+const { defineConfig } = require("vitest/config");
 
-export default defineConfig({
+module.exports = defineConfig({
   test: {
     exclude: ["node_modules", "dist"],
     globals: true,
     environment: "jsdom",
-    setupFiles: "./global.ts",
+    setupFiles: `${__dirname}/global.js`,
     passWithNoTests: true,
   },
 });

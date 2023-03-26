@@ -33,8 +33,7 @@
   "globalDependencies": [
     "configs/typescript/base.json",
     "configs/eslint/.eslintrc.cjs",
-    "configs/vitest/index.ts",
-    "configs/vitest/global.ts",
+    "configs/vitest/*.{cts,ts}",
     "dprint.json",
     "scripts/*"
   ]
