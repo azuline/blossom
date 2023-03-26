@@ -1,0 +1,10 @@
+{
+  "extends": "@configs/typescript/base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["vitest.config.ts", "global.ts"],
+  "exclude": ["node_modules", "dist"]
+}

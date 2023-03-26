@@ -1,0 +1,20 @@
+{
+  "name": "@configs/vitest",
+  "version": "0.0.0",
+  "main": "./index.js",
+  "module": "./index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh"
+  },
+  "devDependencies": {
+    "vitest": "*",
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@testing-library/jest-dom": "*",
+    "@testing-library/react": "*"
+  }
+}

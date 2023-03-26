@@ -7,10 +7,13 @@ See the `Makefile` for a list of common dev tool commands.
 # Directories
 
 - `codegen/` contains the outputs of codegen systems.
+- `configs/` contains tooling configurations shared between packages.
 - `foundation/` contains the developer platform.
 - `patches/` contains override patches for third-party dependencies.
 - `product/` contains the product-specific code.
 - `public/` contains static assets.
+- `scripts/` contains shared build scripts.
+- `templates/` contains a template directory for a package.
 - `visualtest/` contains the visual testing harness and snapshots.
 
 # Stories
@@ -20,7 +23,7 @@ The frontend stories are hosted with Ladle at https://celestial.sunsetglow.net.
 ## Stack
 
 - Language: TypeScript
-- Builds: Vite (SWC+esbuild+Rollup)
+- Builds: Vite (Turborepo+SWC+esbuild+Rollup)
 - Package Manager: pnpm
 - State Management: Jotai
 - UI Framework: React
