@@ -737,13 +737,13 @@ importers:
   product/home:
     dependencies:
       '@foundation/layout':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/layout
       '@foundation/stories':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/stories
       '@foundation/ui':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/ui
       react:
         specifier: '*'
@@ -817,16 +817,16 @@ importers:
   product/notfound:
     dependencies:
       '@foundation/layout':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/layout
       '@foundation/stories':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/stories
       '@foundation/theme':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/theme
       '@foundation/ui':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../foundation/ui
       react:
         specifier: '*'
