@@ -2,7 +2,7 @@
   "extends": "@configs/typescript/base.json",
   "compilerOptions": {
     "composite": true,
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist"
   },
   "include": ["src", ".eslintrc.cjs", "vite.config.ts"],

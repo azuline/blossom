@@ -9,8 +9,7 @@ import {
   StoryParagraph,
   StorySection,
 } from "@foundation/stories";
-import { Code, Stack, Type, View } from "@foundation/ui";
-import { Redirect } from ".";
+import { Code, Redirect, Stack, Type, View } from "@foundation/ui";
 
 export default {
   title: "Primitives",

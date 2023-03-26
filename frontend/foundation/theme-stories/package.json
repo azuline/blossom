@@ -1,16 +1,11 @@
 {
   "name": "@foundation/theme-stories",
   "version": "0.0.0",
-  "dependencies": {
-    "@foundation/std": "workspace:*",
-    "@foundation/ui": "workspace:*",
-    "@foundation/theme": "workspace:*",
-    "@foundation/stories": "workspace:*"
-  },
   "scripts": {
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
-    "lintcheck": "../../scripts/lintcheck.sh"
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh"
   },
   "dependencies": {
     "@foundation/theme": "workspace:*",

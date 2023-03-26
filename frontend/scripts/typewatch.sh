@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-pnpm tsc
-exit $?
+pnpm tsc --watch

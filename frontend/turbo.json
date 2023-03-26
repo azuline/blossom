@@ -4,6 +4,9 @@
     "build": {
       "outputs": ["dist/**"]
     },
+    "typecheck": {
+      "inputs": ["src/**/*.{ts,tsx}", "tsconfig.json"]
+    },
     "test": {
       "inputs": ["src/**/*.{ts,tsx}"]
     },
@@ -12,6 +15,10 @@
     },
     "lintcheck": {
       "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"]
+    },
+    "typewatch": {
+      "cache": false,
+      "persistent": true
     },
     "start": {
       "cache": false,

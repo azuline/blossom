@@ -2,6 +2,8 @@ import { SX, sx, t } from "@foundation/theme";
 import { Suspense } from "react";
 import { ICONS_MAP } from "./codegen/imports";
 
+export { ICONS_MAP };
+
 type Props = {
   icon: keyof typeof ICONS_MAP;
   color?: SX["color"];

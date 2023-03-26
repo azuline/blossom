@@ -9,8 +9,7 @@ import {
   StoryParagraph,
   StorySection,
 } from "@foundation/stories";
-import { Code, Stack, Type, View } from "@foundation/ui";
-import { Touchable } from ".";
+import { Code, Stack, Touchable, Type, View } from "@foundation/ui";
 
 export default {
   title: "Primitives",

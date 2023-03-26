@@ -24,6 +24,9 @@ lint:
 lintcheck:
 	pnpm turbo lintcheck
 
+typewatch:
+	pnpm turbo typewatch --concurrency 999
+
 start:
 	pnpm turbo start
 

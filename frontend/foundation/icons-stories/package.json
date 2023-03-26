@@ -4,7 +4,8 @@
   "scripts": {
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
-    "lintcheck": "../../scripts/lintcheck.sh"
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh"
   },
   "dependencies": {
     "@foundation/theme": "workspace:*",

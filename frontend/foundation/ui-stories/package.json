@@ -2,22 +2,17 @@
   "name": "@foundation/ui-stories",
   "version": "0.0.0",
   "dependencies": {
-    "@foundation/theme": "workspace:*",
-    "@foundation/stories": "workspace:*",
-    "@foundation/ui": "workspace:*",
-    "react": "*"
-  },
-  "scripts": {
-    "typecheck": "../../scripts/typecheck.sh",
-    "lint": "../../scripts/lint.sh",
-    "lintcheck": "../../scripts/lintcheck.sh"
-  },
-  "dependencies": {
     "jotai": "*",
     "react": "*",
     "@foundation/stories": "workspace:*",
     "@foundation/ui": "workspace:*",
     "@foundation/theme": "workspace:*"
+  },
+  "scripts": {
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
