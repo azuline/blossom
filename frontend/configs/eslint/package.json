@@ -19,7 +19,6 @@
     "eslint-plugin-unused-imports": "*"
   },
   "devDependencies": {
-    "@configs/typescript": "workspace:*",
-    "@configs/vitest": "workspace:*"
+    "@configs/typescript": "workspace:*"
   }
 }

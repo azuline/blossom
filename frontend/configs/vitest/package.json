@@ -16,7 +16,6 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*",
-    "@configs/vitest": "workspace:*"
+    "@testing-library/react": "*"
   }
 }
