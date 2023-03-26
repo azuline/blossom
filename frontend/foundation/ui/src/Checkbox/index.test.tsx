@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxProps } from "@foundation/ui";
+import { Checkbox, CheckboxProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";

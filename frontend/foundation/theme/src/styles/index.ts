@@ -59,9 +59,11 @@ export type FontVariantOptions = {
  */
 const font = (variant: FontVariant, options: FontVariantOptions = {}): CSSProperties => {
   let face: keyof typeof fontFaces = "body";
+  // @ts-expect-error variant is wider than displayVariants
   if (displayVariants.includes(variant)) {
     face = "display";
   }
+  // @ts-expect-error variant is wider than codeVariants
   if (codeVariants.includes(variant)) {
     face = "code";
   }

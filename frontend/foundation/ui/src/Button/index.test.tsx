@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@foundation/ui";
+import { Button, ButtonProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";

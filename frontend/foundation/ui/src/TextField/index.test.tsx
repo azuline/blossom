@@ -1,4 +1,4 @@
-import { TextField, TextFieldProps } from "@foundation/ui";
+import { TextField, TextFieldProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";

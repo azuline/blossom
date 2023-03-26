@@ -1,4 +1,4 @@
-import { Touchable, TouchableProps } from "@foundation/ui";
+import { Touchable, TouchableProps } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC, useState } from "react";

@@ -28,6 +28,5 @@
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true
-  },
-  "exclude": ["node_modules", "dist"]
+  }
 }

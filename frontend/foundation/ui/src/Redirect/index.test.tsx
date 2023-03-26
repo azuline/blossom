@@ -1,4 +1,4 @@
-import { Redirect } from "@foundation/ui";
+import { Redirect } from ".";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
