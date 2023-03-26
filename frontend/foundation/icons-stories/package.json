@@ -7,5 +7,10 @@
     "@foundation/icons": "workspace:*",
     "react": "*",
     "@vanilla-extract/css": "*"
+  },
+  "scripts": {
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh"
   }
 }

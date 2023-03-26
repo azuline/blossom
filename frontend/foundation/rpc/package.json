@@ -6,7 +6,11 @@
   "types": "./dist/index.d.ts",
   "files": ["dist", "src"],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh"
   },
   "dependencies": {
     "@codegen/rpc": "workspace:*",

@@ -20,23 +20,12 @@ typecheck:
 
 lint:
 	pnpm turbo lint
-	# pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 --fix .
-	# dprint fmt
-	# semgrep --autofix .
-	# pnpm unimported
 
 lintcheck:
 	pnpm turbo lintcheck
-	# pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 .
-	# dprint check
-	# semgrep .
-	# pnpm unimported
 
 start:
-	cd product/app && pnpm vite --port 40853 --strictPort
-
-preview:
-	cd product/app && pnpm vite preview
+	pnpm turbo start
 
 stories:
 	pnpm ladle serve --port 40854

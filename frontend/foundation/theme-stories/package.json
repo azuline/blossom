@@ -6,5 +6,10 @@
     "@foundation/ui": "workspace:*",
     "@foundation/theme": "workspace:*",
     "@foundation/stories": "workspace:*"
+  },
+  "scripts": {
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh"
   }
 }
