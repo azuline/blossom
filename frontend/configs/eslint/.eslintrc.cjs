@@ -21,8 +21,8 @@ module.exports = {
   env: { es6: true, browser: true, jest: true },
   ignorePatterns: [
     "coverage",
-    ".eslintrc.cjs",
     "public",
+    "!.eslintrc.cjs",
     "!.ladle",
     "build",
     "dist",
@@ -32,8 +32,6 @@ module.exports = {
     // This goes off when we have useEffects that return either nothing or a cleanup
     // function.
     "consistent-return": "off",
-    // I don't care and would rather have the optionality.
-    "object-curly-newline": "off",
     // vanilla-extract really cares about the numbers being string types.
     "quote-props": ["warn", "as-needed", { numbers: true }],
     // I like underscore dangle.
@@ -176,7 +174,6 @@ module.exports = {
     "one-var-declaration-per-line": "off",
     "operator-linebreak": "off",
     "padded-blocks": "off",
-    "quote-props": "off",
     quotes: "off",
     "rest-spread-spacing": "off",
     semi: "off",
