@@ -1,1 +1,3 @@
-../../configs/eslint/config.package.cjs
+module.exports = {
+  extends: [require.resolve("@configs/eslint")],
+};
