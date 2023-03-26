@@ -9,7 +9,9 @@
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"]
     },
     "test": {
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"]
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
+      // Depends on building the @configs/vitest package.
+      "dependsOn": ["build"]
     },
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],
