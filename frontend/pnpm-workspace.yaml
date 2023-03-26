@@ -1,5 +1,5 @@
 packages:
-  - "configs/*"
-  - "codegen/*"
-  - "foundation/*"
-  - "product/*"
+  - "configs/**/*"
+  - "codegen/**/*"
+  - "foundation/**/*"
+  - "product/**/*"

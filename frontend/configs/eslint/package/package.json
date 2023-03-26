@@ -1,7 +1,7 @@
 {
   "name": "@configs/eslint",
   "version": "0.0.0",
-  "main": "./src/index.cjs",
+  "main": "./index.cjs",
   "scripts": {
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh"

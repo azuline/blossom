@@ -11,5 +11,8 @@
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*"
   }
 }
