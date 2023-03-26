@@ -2,7 +2,10 @@
   "name": "@product/app",
   "version": "0.0.0",
   "type": "commonjs",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "vite build",
     "start": "vite --port 40853 --strictPort",
@@ -23,5 +26,9 @@
     "@product/home": "workspace:*",
     "@product/login": "workspace:*",
     "@product/notfound": "workspace:*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

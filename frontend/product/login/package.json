@@ -4,7 +4,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "../../scripts/test.sh",
@@ -14,13 +17,21 @@
   },
   "dependencies": {
     "react": "*",
-    "@foundation/stories": "*",
-    "@foundation/ui": "*",
-    "@foundation/testing": "*",
-    "@foundation/rpc": "*",
-    "@foundation/icons": "*",
-    "@foundation/forms": "*",
-    "@foundation/layout": "*",
-    "@foundation/routing": "*"
+    "jotai": "*",
+    "@foundation/stories": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/testing": "workspace:*",
+    "@foundation/rpc": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "@foundation/forms": "workspace:*",
+    "@foundation/layout": "workspace:*",
+    "@foundation/routing": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "vitest": "*",
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

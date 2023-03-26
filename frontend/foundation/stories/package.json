@@ -4,7 +4,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "../../scripts/test.sh",
@@ -16,6 +19,11 @@
     "@foundation/theme": "workspace:*",
     "@foundation/ui": "workspace:*",
     "@vanilla-extract/dynamic": "*",
+    "@vanilla-extract/css": "*",
     "react": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

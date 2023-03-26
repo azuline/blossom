@@ -11,5 +11,16 @@
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh"
+  },
+  "dependencies": {
+    "jotai": "*",
+    "react": "*",
+    "@foundation/stories": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/theme": "workspace:*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

@@ -11,5 +11,16 @@
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh"
+  },
+  "dependencies": {
+    "@foundation/theme": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/stories": "workspace:*",
+    "@vanilla-extract/css": "*",
+    "react": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

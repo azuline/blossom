@@ -5,8 +5,7 @@ import {
   StoryParagraph,
   StorySection,
 } from "@foundation/stories";
-import { CodeBlock, Type } from "@foundation/ui";
-import { VisuallyHidden } from "react-aria";
+import { CodeBlock, Type, VisuallyHidden } from "@foundation/ui";
 
 export default {
   title: "Primitives",

@@ -19,8 +19,8 @@
     }
   },
   "globalDependencies": [
-    "tsconfig.base.json",
-    "configs/typescript/tsconfig.package.json",
+    "configs/typescript/base.json",
+    "configs/eslint/.eslintrc.cjs",
     "dprint.json"
   ]
 }

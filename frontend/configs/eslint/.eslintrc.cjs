@@ -71,6 +71,10 @@ module.exports = {
     // Imports
     "no-duplicate-imports": "warn",
 
+    // Exports
+    // Useful in the multi-package world.
+    "no-restricted-exports": "off",
+
     // Overrides for React.
     // There is a time and place for each...
     "react/function-component-definition": "off",

@@ -4,7 +4,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "../../scripts/test.sh",
@@ -14,6 +17,15 @@
   },
   "dependencies": {
     "@foundation/rpc": "workspace:*",
-    "@codegen/rpc": "workspace:*"
+    "@codegen/rpc": "workspace:*",
+    "@tanstack/query-core": "*",
+    "@tanstack/react-query": "*",
+    "msw": "*",
+    "react": "*",
+    "vitest": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }
