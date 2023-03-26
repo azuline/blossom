@@ -13,6 +13,10 @@
     "@foundation/auth": "workspace:*",
     "@foundation/loaders": "workspace:*",
     "@foundation/stories": "workspace:*",
-    "@foundation/std": "workspace:*"
+    "@foundation/std": "workspace:*",
+    "react": "*",
+    "clsx": "*",
+    "@vanilla-extract/css": "*",
+    "@vanilla-extract/recipes": "*"
   }
 }

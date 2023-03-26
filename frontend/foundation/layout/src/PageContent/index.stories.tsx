@@ -1,4 +1,6 @@
-import { LayoutPaddingVariableSetter, PageContent, WithHeader } from "@foundation/layout";
+import { PageContent } from ".";
+import { WithHeader } from "../WithHeader";
+import { LayoutPaddingVariableSetter } from "../LayoutPaddingVariableSetter";
 import {
   DocumentationStory,
   StoryParagraph,

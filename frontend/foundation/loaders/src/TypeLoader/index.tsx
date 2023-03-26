@@ -1,4 +1,4 @@
-import { sTypeLoader } from "@foundation/loaders";
+import { sTypeLoader } from "./index.css";
 import { SX, t } from "@foundation/theme";
 import { View } from "@foundation/ui";
 

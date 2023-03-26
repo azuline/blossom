@@ -1,5 +1,6 @@
 import { useCurrentTenant } from "@foundation/auth";
-import { HeaderExistsContextProvider, sHeaderLayout, sLogoFont } from "@foundation/layout";
+import { HeaderExistsContextProvider } from "./state";
+import { sHeaderLayout, sLogoFont } from "./index.css";
 import { TypeLoader } from "@foundation/loaders";
 import { Avatar, Stack, Type, View } from "@foundation/ui";
 

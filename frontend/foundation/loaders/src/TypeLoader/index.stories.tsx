@@ -1,4 +1,4 @@
-import { TypeLoader } from "@foundation/loaders";
+import { TypeLoader } from ".";
 import { DocumentationStory, Variant, VariantsGallery } from "@foundation/stories";
 import { Type } from "@foundation/ui";
 

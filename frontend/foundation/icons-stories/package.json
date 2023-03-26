@@ -1,0 +1,11 @@
+{
+  "name": "@foundation/icons-stories",
+  "version": "0.0.0",
+  "dependencies": {
+    "@foundation/stories": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "react": "*",
+    "@vanilla-extract/css": "*"
+  }
+}

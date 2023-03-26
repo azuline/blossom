@@ -9,6 +9,8 @@ import {
   RPCError,
 } from "./error";
 
+export { type PossibleRPCErrors, RPCError };
+
 // Vitest only works with absolute URLs. But the browser supports relative URLs.
 export const baseURL = typeof process !== "undefined" && process.env.VITEST !== undefined
   ? "http://localhost:40851"

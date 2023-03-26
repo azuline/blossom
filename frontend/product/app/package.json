@@ -5,5 +5,9 @@
   "files": ["dist", "src"],
   "scripts": {
     "build": "vite build"
+  },
+  "dependencies": {
+    "react": "*",
+    "@tanstack/react-query": "*"
   }
 }

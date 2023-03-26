@@ -1,4 +1,4 @@
-import { layoutPadding } from "@foundation/layout";
+import { layoutPadding } from "../LayoutPaddingVariableSetter/index.css";
 import { t } from "@foundation/theme";
 import { style } from "@vanilla-extract/css";
 

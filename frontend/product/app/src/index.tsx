@@ -1,7 +1,7 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout";
 import { ThemeProvider } from "@foundation/theme";
-import { Contexts } from "@product/app/Contexts";
-import { Router } from "@product/app/Router";
+import { Contexts } from "./Contexts";
+import { Router } from "./Router";
 
 export const App: React.FC = () => (
   <ThemeProvider>

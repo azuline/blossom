@@ -17,20 +17,20 @@ export const Router: React.FC = () => {
     <Switch>
       {auths.tenant && (
         <>
-          <Route factory={() => import("../home/page")} path="/" />
+          <Route factory={() => import("@product/home")} path="/" />
         </>
       )}
       {auths.user && (
         <>
-          <Route factory={() => import("../home/page")} path="/" />
+          <Route factory={() => import("@product/home")} path="/" />
         </>
       )}
       {auths.public && (
         <>
-          <Route factory={() => import("../login/page")} path="/:any*" />
+          <Route factory={() => import("@product/login")} path="/:any*" />
         </>
       )}
-      <Route factory={() => import("../notfound/page")} path="/:any*" />
+      <Route factory={() => import("@product/notfound")} path="/:any*" />
     </Switch>
   );
 };

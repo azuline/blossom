@@ -1,8 +1,7 @@
 import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
 import { Stack, Type, View } from "@foundation/ui";
 import React from "react";
-import { Icon } from ".";
-import { ICONS_MAP } from "./codegen/imports";
+import { Icon, ICONS_MAP } from "@foundation/icons";
 import { sIconGallery } from "./index.css";
 
 export default {

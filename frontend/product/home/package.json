@@ -1,5 +1,5 @@
 {
-  "name": "@foundation/icons",
+  "name": "@product/home",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -9,7 +9,6 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@foundation/theme": "workspace:*",
     "react": "*"
   }
 }
