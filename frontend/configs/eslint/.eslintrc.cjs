@@ -1,14 +1,3 @@
-const fs = require("fs");
-
-const excludedAliases = ["node_modules", "coverage", "public", "dist", "patches"];
-// dprint-ignore
-const importAliases =
-  fs.readdirSync(".", { withFileTypes: true })
-    .filter(x => x.isDirectory())
-    .map(x => x.name)
-    .filter(x => !excludedAliases.includes(x))
-    .map(x => ({ alias: `@${x}/`, matcher: `^${x}/` }));
-
 module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
