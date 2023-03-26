@@ -11,11 +11,13 @@
     "lintcheck": "../../scripts/lintcheck.sh",
     "typewatch": "../../scripts/typewatch.sh"
   },
-  "devDependencies": {
+  "dependencies": {
     "vitest": "*",
-    "@configs/eslint": "workspace:*",
-    "@configs/typescript": "workspace:*",
     "@testing-library/jest-dom": "*",
     "@testing-library/react": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*"
   }
 }

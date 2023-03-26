@@ -5,6 +5,6 @@
     "rootDir": ".",
     "outDir": "dist"
   },
-  "include": ["index.ts", "global.ts"],
+  "include": ["index.ts", "global.ts", ".eslintrc.cjs"],
   "exclude": ["node_modules", "dist"]
 }

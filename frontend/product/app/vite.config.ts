@@ -26,10 +26,4 @@ export default defineConfig({
       "/api": "http://127.0.0.1:40851",
     },
   },
-  test: {
-    exclude: [".ladle", "visualtest", "node_modules", "dist"],
-    globals: true,
-    environment: "jsdom",
-    // setupFiles: "./vitest.global.ts",
-  },
 });
