@@ -6,7 +6,6 @@
   "types": "./dist/index.d.ts",
   "files": ["dist", "src"],
   "scripts": {
-    "build": "tsc",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+    "build": "tsc"
   }
 }
