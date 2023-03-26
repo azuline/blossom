@@ -1,6 +1,6 @@
 import { flattenRecord } from "@foundation/std";
 import { mapTokenScale, t } from "@foundation/theme";
-import { createVar } from "@vanilla-extract/css";
+import { createVar, StyleRule } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 
 const sizeVar = createVar();
@@ -27,11 +27,11 @@ export const sDivider = recipe({
     mx: {
       auto: { marginLeft: "auto", marginRight: "auto" },
       ...mapTokenScale(t.space, tok => ({ marginLeft: t.space[tok], marginRight: t.space[tok] })),
-    },
+    } as Record<"auto" | keyof typeof t.space, StyleRule>,
     my: {
       auto: { marginTop: "auto", marginBottom: "auot" },
       ...mapTokenScale(t.space, tok => ({ marginTop: t.space[tok], marginBottom: t.space[tok] })),
-    },
+    } as Record<"auto" | keyof typeof t.space, StyleRule>,
   },
   defaultVariants: {
     orientation: "horizontal",
