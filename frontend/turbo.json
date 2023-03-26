@@ -4,6 +4,23 @@
     "build": {
       "outputs": ["dist/**"]
     },
-    "lint": {}
-  }
+    "test": {
+      "inputs": ["src/**/*.{ts,tsx}"]
+    },
+    "lint": {
+      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"]
+    },
+    "lintcheck": {
+      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalDependencies": [
+    "tsconfig.base.json",
+    "configs/typescript/tsconfig.package.json",
+    "dprint.json"
+  ]
 }
