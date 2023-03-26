@@ -2,25 +2,30 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "inputs": ["src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"]
     },
     "typecheck": {
       "inputs": ["src/**/*.{ts,tsx}", "tsconfig.json"]
     },
+    "lint": {
+      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"],
+      // Depends on successfully building .d.ts files.
+      "dependsOn": ["typecheck"]
+    },
     "test": {
       "inputs": ["src/**/*.{ts,tsx}"]
     },
-    "lint": {
-      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"]
-    },
     "lintcheck": {
-      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"]
+      "inputs": ["src/**/*.{ts,tsx}", ".eslintrc.cjs"],
+      // Depends on successfully building .d.ts files.
+      "dependsOn": ["typecheck"]
     },
-    "typewatch": {
+    "start": {
       "cache": false,
       "persistent": true
     },
-    "start": {
+    "typewatch": {
       "cache": false,
       "persistent": true
     }
@@ -28,6 +33,7 @@
   "globalDependencies": [
     "configs/typescript/base.json",
     "configs/eslint/.eslintrc.cjs",
-    "dprint.json"
+    "dprint.json",
+    "scripts/*"
   ]
 }
