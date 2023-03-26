@@ -293,12 +293,6 @@ importers:
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
-      '@foundation/stories':
-        specifier: workspace:*
-        version: link:../stories
-      '@foundation/ui':
-        specifier: workspace:*
-        version: link:../ui
       '@vanilla-extract/css':
         specifier: '*'
         version: 1.10.0
@@ -315,15 +309,66 @@ importers:
         specifier: '*'
         version: 18.2.0
 
+  foundation/theme-stories:
+    dependencies:
+      '@foundation/std':
+        specifier: workspace:*
+        version: link:../std
+      '@foundation/stories':
+        specifier: workspace:*
+        version: link:../stories
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+
   foundation/ui:
     dependencies:
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
+      '@vanilla-extract/recipes':
+        specifier: '*'
+        version: 0.4.0(@vanilla-extract/css@1.10.0)
+      clsx:
+        specifier: '*'
+        version: 1.2.1
+      react:
+        specifier: '*'
+        version: 18.2.0
+      react-aria:
+        specifier: '*'
+        version: 3.23.1(react-dom@18.2.0)(react@18.2.0)
+      react-stately:
+        specifier: '*'
+        version: 3.21.0(react@18.2.0)
     devDependencies:
+      '@testing-library/react':
+        specifier: '*'
+        version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
+      '@testing-library/user-event':
+        specifier: '*'
+        version: 14.4.3(@testing-library/dom@9.0.1)
+      vitest:
+        specifier: '*'
+        version: 0.29.7(jsdom@21.1.1)
+
+  foundation/ui-stories:
+    dependencies:
       '@foundation/stories':
         specifier: workspace:*
         version: link:../stories
+      '@foundation/theme':
+        specifier: workspace:*
+        version: link:../theme
+      '@foundation/ui':
+        specifier: workspace:*
+        version: link:../ui
+      react:
+        specifier: '*'
+        version: 18.2.0
 
 packages:
 

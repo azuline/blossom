@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/ui-stories",
+  "version": "0.0.0",
+  "dependencies": {
+    "@foundation/theme": "workspace:*",
+    "@foundation/stories": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "react": "*"
+  }
+}

@@ -1,5 +1,8 @@
 import { ColorBorder, Space, SX, sx } from "@foundation/theme";
-import { Divider, PolymorphicProp, sStack, View } from "@foundation/ui";
+import { Divider } from "../Divider";
+import { PolymorphicProp } from "../types";
+import { View } from "../View";
+import { sStack } from "./index.css";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import { clsx } from "clsx";
 import { Children, CSSProperties } from "react";

@@ -5,8 +5,10 @@ import {
   bleedRightVar,
   bleedTopVar,
   sBleed,
+} from "./index.css";
+import {
   View,
-} from "@foundation/ui";
+} from "../View";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 import { CSSProperties, FC } from "react";

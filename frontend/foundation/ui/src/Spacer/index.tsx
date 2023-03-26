@@ -1,5 +1,6 @@
 import { setSXVars, SX } from "@foundation/theme";
-import { spacerXVar, spacerYVar, sSpacer, View } from "@foundation/ui";
+import { spacerXVar, spacerYVar, sSpacer } from "./index.css";
+import { View } from "../View";
 import { RecipeVariants } from "@vanilla-extract/recipes";
 import clsx from "clsx";
 

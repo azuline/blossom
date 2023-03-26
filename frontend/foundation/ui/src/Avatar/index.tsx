@@ -1,5 +1,6 @@
 import { SX } from "@foundation/theme";
-import { sAvatar, View } from "@foundation/ui";
+import { View } from "../View";
+import { sAvatar } from "./index.css";
 
 type Props = {
   size: SX["h"];

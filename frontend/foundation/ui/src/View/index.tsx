@@ -1,5 +1,5 @@
 import { SX, sx } from "@foundation/theme";
-import { PolymorphicProp } from "@foundation/ui";
+import { PolymorphicProp } from "../types";
 import clsx from "clsx";
 import { CSSProperties, forwardRef } from "react";
 

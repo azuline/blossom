@@ -1,5 +1,5 @@
 import { FontCodeVariant, SX } from "@foundation/theme";
-import { Type, TypeProps } from "@foundation/ui";
+import { Type, TypeProps } from "../Type";
 import { CSSProperties, FC } from "react";
 
 type Props = {

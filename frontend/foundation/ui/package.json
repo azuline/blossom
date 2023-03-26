@@ -9,9 +9,16 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@foundation/theme": "workspace:*"
+    "@foundation/theme": "workspace:*",
+    "react": "*",
+    "react-aria": "*",
+    "react-stately": "*",
+    "@vanilla-extract/recipes": "*",
+    "clsx": "*"
   },
   "devDependencies": {
-    "@foundation/stories": "workspace:*"
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "vitest": "*"
   }
 }

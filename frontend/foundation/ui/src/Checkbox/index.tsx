@@ -1,12 +1,9 @@
 import { Icon } from "@foundation/icons";
 import { SX, sx } from "@foundation/theme";
-import {
-  LabellableProps,
-  sCheckboxBox,
-  sCheckboxLayout,
-  Type,
-  View,
-} from "@foundation/ui";
+import { LabellableProps } from "../types";
+import { sCheckboxBox, sCheckboxLayout } from "./index.css";
+import { Type } from "../Type";
+import { View } from "../View";
 import clsx from "clsx";
 import { useId, useRef } from "react";
 import { AriaCheckboxProps, useCheckbox, useFocusRing, VisuallyHidden } from "react-aria";

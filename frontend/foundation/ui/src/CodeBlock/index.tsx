@@ -1,5 +1,6 @@
 import { FontCodeVariant, t } from "@foundation/theme";
-import { Type, View } from "@foundation/ui";
+import { Type } from "../Type";
+import { View } from "../View";
 import { FC } from "react";
 
 type Props = {
