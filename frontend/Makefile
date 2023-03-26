@@ -7,22 +7,22 @@ install:
 	pnpm install
 
 test:
-	+pnpm turbo test --concurrency "$(nproc)"
+	+pnpm turbo test --concurrency `nproc`
 
 build:
-	pnpm turbo build --concurrency "$(nproc)"
+	pnpm turbo build --concurrency `nproc`
 
 build-analyze:
-	ANALYZE=1 pnpm turbo build --concurrency "$(nproc)"
+	ANALYZE=1 pnpm turbo build --concurrency `nproc`
 
 typecheck:
-	pnpm turbo typecheck --concurrency "$(nproc)"
+	pnpm turbo typecheck --concurrency `nproc`
 
 lint:
-	pnpm turbo lint --concurrency "$(nproc)"
+	pnpm turbo lint --concurrency `nproc`
 
 lintcheck:
-	pnpm turbo lintcheck --concurrency "$(nproc)"
+	pnpm turbo lintcheck --concurrency `nproc`
 
 typewatch:
 	pnpm turbo typewatch --concurrency 999
