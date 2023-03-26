@@ -1,8 +1,6 @@
 /// <reference types="vitest" />
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react-swc";
-import fs from "fs";
-import path from "path";
 import analyze from "rollup-plugin-analyzer";
 import { defineConfig } from "vite";
 
