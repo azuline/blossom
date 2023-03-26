@@ -18,6 +18,7 @@
   "dependencies": {
     "@foundation/loaders": "workspace:*",
     "@foundation/rpc": "workspace:*",
+    "@codegen/rpc": "workspace:*",
     "react": "*"
   },
   "devDependencies": {
