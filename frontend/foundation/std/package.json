@@ -7,9 +7,5 @@
   "files": ["dist", "src"],
   "scripts": {
     "build": "tsc"
-  },
-  "dependencies": {
-    "@foundation/loaders": "workspace:*",
-    "@foundation/rpc": "workspace:*"
   }
 }
