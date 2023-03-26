@@ -3,5 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "typewatch": "../../scripts/typewatch.sh"
+  },
+  "devDependencies": {
+    "@configs/vitest": "workspace:*"
   }
 }

@@ -33,6 +33,7 @@
     "@testing-library/user-event": "*",
     "vitest": "*",
     "@configs/eslint": "workspace:*",
-    "@configs/typescript": "workspace:*"
+    "@configs/typescript": "workspace:*",
+    "@configs/vitest": "workspace:*"
   }
 }

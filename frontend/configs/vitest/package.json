@@ -5,6 +5,7 @@
   "module": "./index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc",
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh",
@@ -15,6 +16,7 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*"
+    "@testing-library/react": "*",
+    "@configs/vitest": "workspace:*"
   }
 }

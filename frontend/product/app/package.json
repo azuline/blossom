@@ -34,6 +34,7 @@
     "@vanilla-extract/vite-plugin": "*",
     "@vitejs/plugin-react-swc": "*",
     "rollup-plugin-analyzer": "*",
-    "vite": "*"
+    "vite": "*",
+    "@configs/vitest": "workspace:*"
   }
 }

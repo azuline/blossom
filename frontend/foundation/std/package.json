@@ -22,6 +22,7 @@
   "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
-    "vitest": "*"
+    "vitest": "*",
+    "@configs/vitest": "workspace:*"
   }
 }
