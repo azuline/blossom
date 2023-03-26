@@ -18,9 +18,9 @@
   },
   "dependencies": {
     "react": "*",
-    "@foundation/stories": "*",
-    "@foundation/ui": "*",
-    "@foundation/layout": "*"
+    "@foundation/stories": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/layout": "workspace:*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "react": "*",
-    "@foundation/stories": "*",
-    "@foundation/theme": "*",
-    "@foundation/ui": "*",
-    "@foundation/layout": "*"
+    "@foundation/stories": "workspace:*",
+    "@foundation/theme": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/layout": "workspace:*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
