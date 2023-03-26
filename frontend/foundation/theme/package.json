@@ -14,8 +14,6 @@
     "clsx": "*",
     "jotai": "*",
     "@vanilla-extract/css": "*",
-    "@vanilla-extract/sprinkles": "*",
-    "@foundation/ui": "workspace:*",
-    "@foundation/stories": "workspace:*"
+    "@vanilla-extract/sprinkles": "*"
   }
 }

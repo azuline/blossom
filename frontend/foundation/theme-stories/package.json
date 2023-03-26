@@ -1,0 +1,10 @@
+{
+  "name": "@foundation/theme-stories",
+  "version": "0.0.0",
+  "dependencies": {
+    "@foundation/std": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/theme": "workspace:*",
+    "@foundation/stories": "workspace:*"
+  }
+}
