@@ -8,18 +8,18 @@
     "typecheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"]
     },
+    "test": {
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"]
+    },
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["typecheck"]
-    },
-    "test": {
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"]
+      "dependsOn": ["build"]
     },
     "lintcheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["typecheck"]
+      "dependsOn": ["build"]
     },
     "start": {
       "cache": false,
