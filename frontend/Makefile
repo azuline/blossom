@@ -6,16 +6,38 @@ clean:
 install:
 	pnpm install
 
-start:
-	pnpm vite --port 40853 --strictPort
+test:
+	pnpm turbo test
 
 build:
-	pnpm vite build
+	pnpm turbo build
 
 build-analyze:
-	ANALYZE=1 pnpm vite build
+	ANALYZE=1 pnpm turbo build
+
+typecheck:
+	pnpm turbo typecheck
+
+lint:
+	pnpm turbo lint
+	# pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 --fix .
+	# dprint fmt
+	# semgrep --autofix .
+	# pnpm unimported
+
+lintcheck:
+	pnpm turbo lintcheck
+	# pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 .
+	# dprint check
+	# semgrep .
+	# pnpm unimported
+
+start:
+	cd product/app
+	pnpm vite --port 40853 --strictPort
 
 preview:
+	cd product/app
 	pnpm vite preview
 
 stories:
@@ -23,9 +45,6 @@ stories:
 
 build-stories:
 	pnpm ladle build
-
-test:
-	pnpm vitest run --coverage
 
 test-visual: visual-container
 	pnpm start-server-and-test \
@@ -38,21 +57,6 @@ update-visual: visual-container
 		'pnpm ladle build && pnpm ladle preview --host 172.17.0.1 --port 40855' \
 		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
-
-typecheck:
-	pnpm tsc
-
-lint:
-	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 --fix .
-	dprint fmt
-	semgrep --autofix .
-	pnpm unimported
-
-lintcheck:
-	pnpm eslint --ext .js,.cjs,.ts,.tsx --cache --max-warnings=0 .
-	dprint check
-	semgrep .
-	pnpm unimported
 
 .PHONY: check install start build build-analyze preview stories prop-types build-stories test test-visual update-visual typecheck lint lintcheck
 
