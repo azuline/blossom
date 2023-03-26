@@ -4,9 +4,8 @@
   "type": "commonjs",
   "main": "./dist/index.cjs",
   "module": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.cts",
   "scripts": {
-    "build": "tsc",
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh",

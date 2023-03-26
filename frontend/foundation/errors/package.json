@@ -9,7 +9,6 @@
     "src"
   ],
   "scripts": {
-    "build": "tsc",
     "test": "../../scripts/test.sh",
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
