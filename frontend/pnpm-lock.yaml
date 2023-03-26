@@ -164,6 +164,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   configs/eslint:
     dependencies:
@@ -198,8 +201,15 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../vitest
 
-  configs/typescript: {}
+  configs/typescript:
+    devDependencies:
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../vitest
 
   configs/vitest:
     devDependencies:
@@ -209,6 +219,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: 'link:'
       '@testing-library/jest-dom':
         specifier: '*'
         version: 5.16.5
@@ -240,6 +253,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/errors:
     devDependencies:
@@ -249,6 +265,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/forms:
     dependencies:
@@ -265,6 +284,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/icons:
     dependencies:
@@ -281,6 +303,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/icons-stories:
     dependencies:
@@ -309,6 +334,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/layout:
     dependencies:
@@ -349,6 +377,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/loaders:
     dependencies:
@@ -371,6 +402,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/routing:
     dependencies:
@@ -393,6 +427,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/rpc:
     dependencies:
@@ -421,6 +458,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/std:
     dependencies:
@@ -434,6 +474,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       vitest:
         specifier: '*'
         version: 0.29.7(jsdom@21.1.1)
@@ -462,6 +505,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/testing:
     dependencies:
@@ -493,6 +539,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/theme:
     dependencies:
@@ -524,6 +573,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/theme-stories:
     dependencies:
@@ -549,6 +601,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   foundation/ui:
     dependencies:
@@ -589,6 +644,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@testing-library/react':
         specifier: '*'
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -623,6 +681,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   product/app:
     dependencies:
@@ -666,6 +727,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@vanilla-extract/vite-plugin':
         specifier: '*'
         version: 3.8.0(@types/node@18.15.5)(vite@4.2.1)
@@ -700,6 +764,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
   product/login:
     dependencies:
@@ -743,6 +810,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@testing-library/react':
         specifier: '*'
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
@@ -777,6 +847,9 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
 
 packages:
 
