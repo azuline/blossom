@@ -35,6 +35,7 @@
     "@vitejs/plugin-react-swc": "*",
     "rollup-plugin-analyzer": "*",
     "vite": "*",
-    "@configs/vitest": "workspace:*"
+    "@configs/vitest": "workspace:*",
+    "unimported": "*"
   }
 }

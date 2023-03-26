@@ -22,6 +22,7 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "vitest": "*",
-    "@configs/vitest": "workspace:*"
+    "@configs/vitest": "workspace:*",
+    "unimported": "*"
   }
 }
