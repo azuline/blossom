@@ -3,10 +3,13 @@
   "pipeline": {
     "build": {
       "outputs": ["dist/**"],
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"]
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
+      "dependsOn": ["^build", "^typecheck"]
     },
     "typecheck": {
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"]
+      "outputs": ["dist/**"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
+      "dependsOn": ["^typecheck"]
     },
     "test": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
@@ -15,12 +18,12 @@
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["build"]
+      "dependsOn": ["^typecheck"]
     },
     "lintcheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["build"]
+      "dependsOn": ["^typecheck"]
     },
     "start": {
       "cache": false,
