@@ -9,7 +9,7 @@
       "outputMode": "new-only"
     },
     "build": {
-      "outputs": ["dist/**"],
+      "outputs": ["build/**"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
       "dependsOn": ["^build", "typecheck"],
       "outputMode": "new-only"

@@ -18,6 +18,8 @@
     "moduleResolution": "bundler",
     // Allow importing .JSON files.
     "resolveJsonModule": true,
+    // https://www.typescriptlang.org/tsconfig#composite.
+    "composite": true,
     // Generate .d.ts files.
     "declaration": true,
     // Generate a sourcemap for .d.ts files that link back to the source.

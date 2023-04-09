@@ -8,6 +8,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react(), vanillaExtractPlugin()],
   build: {
+    outDir: "build",
     rollupOptions: {
       plugins: process.env.ANALYZE != null ? [analyze()] : [],
     },
