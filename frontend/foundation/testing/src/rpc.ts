@@ -1,5 +1,5 @@
 import { RPCs } from "@codegen/rpc";
-import { RPCMockOut } from "./msw";
+import { RPCMockOut } from "./msw.shared";
 
 // All RPC endpoints must define a set of default mock data for stories and visual
 // tests. These can also be used as mock data in unit and integration tests.

@@ -1,48 +1,27 @@
-import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
-import { baseURL } from "@foundation/rpc";
-import { rest, RestHandler, setupWorker } from "msw";
-import { setupServer } from "msw/node";
-import { afterAll, afterEach, beforeAll } from "vitest";
-
-type RPCErrorOut<RPC extends keyof RPCs, E extends RPCs[RPC]["errors"] = RPCs[RPC]["errors"]> = {
-  error: E;
-  data: RPCErrors[E];
-};
-
-export type RPCMockOut<RPC extends keyof RPCs> = {
-  out: RPCs[RPC]["out"] | RPCErrorOut<RPC>;
-  status: number;
-};
-
-export type RPCMocks = { [RPC in keyof RPCs]?: RPCMockOut<RPC> };
+import { setupWorker } from "msw";
+import { mockRPCHandlers, RPCMocks } from "./msw.shared";
 
 export const mockRPCsWorker = (mocks: RPCMocks): void => {
   const worker = setupWorker(...mockRPCHandlers(mocks));
   void worker.start({ onUnhandledRequest: "bypass" });
 };
 
-export const mockRPCHandlers = (mocks: RPCMocks): RestHandler[] => {
-  return Object.entries(mocks).map(([name, out]) => {
-    const method = RPCMethods[name as keyof RPCs].toLowerCase() as "get" | "post";
-    return rest[method](
-      `${baseURL}/api/${name}`,
-      (_, res, ctx) => res(ctx.status(out.status), ctx.json(out.out)),
-    );
-  });
-};
-
 /** This function allows for RPC mocking in a describe test suite. */
 export const mockRPCsForSuite = (mocks: RPCMocks): void => {
-  const server = setupServer(...mockRPCHandlers(mocks));
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+  if (typeof process !== "undefined") {
+    // eslint-disable-next-line
+    const { mockRPCsForSuite } = require("./msw.server");
+    // eslint-disable-next-line
+    mockRPCsForSuite(mocks);
+  }
 };
 
 /** This function allows for RPC mocking in a single test case. */
 export const mockRPCsForTest = async (mocks: RPCMocks, fn: () => Promise<void>): Promise<void> => {
-  const server = setupServer(...mockRPCHandlers(mocks));
-  server.listen();
-  await fn();
-  server.close();
+  if (typeof process !== "undefined") {
+    // eslint-disable-next-line
+    const { mockRPCsForTest } = require("./msw.server");
+    // eslint-disable-next-line
+    await mockRPCsForTest(mocks, fn);
+  }
 };
