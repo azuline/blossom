@@ -1,0 +1,28 @@
+{
+  "name": "@stories",
+  "version": "0.0.0",
+  "scripts": {
+    "visualtest": "../scripts/visualtest.sh",
+    "typecheck": "../scripts/typecheck.sh",
+    "lint": "../scripts/lint.sh",
+    "lintcheck": "../scripts/lintcheck.sh",
+    "typewatch": "../scripts/typewatch.sh",
+    "clean": "../scripts/clean.sh"
+  },
+  "dependencies": {
+    "@foundation/theme": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/testing": "workspace:*",
+    "@foundation/layout": "workspace:*",
+    "@ladle/react": "*",
+    "@tanstack/react-query": "*",
+    "@vanilla-extract/dynamic": "*",
+    "@vanilla-extract/css": "*",
+    "react": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@playwright/test": "*"
+  }
+}

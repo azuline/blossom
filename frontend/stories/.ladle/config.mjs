@@ -1,5 +1,5 @@
 export default {
-  stories: ["foundation/**/*.stories.tsx", "product/**/*stories.tsx"],
+  stories: ["src/**/*.stories.tsx"],
   storyOrder: [
     "hello--introduction",
     "guides--*",
