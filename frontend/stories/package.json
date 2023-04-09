@@ -18,7 +18,8 @@
     "@tanstack/react-query": "*",
     "@vanilla-extract/dynamic": "*",
     "@vanilla-extract/css": "*",
-    "react": "*"
+    "react": "*",
+    "jotai": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
