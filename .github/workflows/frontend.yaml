@@ -36,6 +36,9 @@ jobs:
       - name: Lintcheck
         if: success() || failure()
         run: nix develop ../\#devShells.x86_64-linux.frontend --command make lintcheck
+      - name: Build
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.frontend --command make build-app
   visual:
     runs-on: ubuntu-latest
     env:
