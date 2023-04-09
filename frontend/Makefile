@@ -46,13 +46,13 @@ lintcheck:
 
 test-visual: visual-container
 	pnpm start-server-and-test \
-		'pnpm ladle build && pnpm ladle preview --host 172.17.0.1 --port 40855' \
+		'make build-stories && cd stories && pnpm preview --host 172.17.0.1 --port 40855' \
 		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest'
 
 update-visual: visual-container
 	pnpm start-server-and-test \
-		'pnpm ladle build && pnpm ladle preview --host 172.17.0.1 --port 40855' \
+		'make build-stories && cd stories && pnpm preview --host 172.17.0.1 --port 40855' \
 		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
 
@@ -60,5 +60,5 @@ update-visual: visual-container
 
 # Below here are not commands.
 
-visual-container: playwright.Dockerfile
-	docker build --tag playwright-test:latest - < playwright.Dockerfile
+visual-container: stories/playwright.Dockerfile
+	docker build --tag playwright-test:latest - < stories/playwright.Dockerfile
