@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "react": "*",
-    "@foundation/stories": "workspace:*",
     "@foundation/ui": "workspace:*",
     "@foundation/layout": "workspace:*"
   },

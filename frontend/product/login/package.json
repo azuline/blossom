@@ -19,7 +19,6 @@
   "dependencies": {
     "react": "*",
     "jotai": "*",
-    "@foundation/stories": "workspace:*",
     "@foundation/ui": "workspace:*",
     "@codegen/rpc": "workspace:*",
     "@foundation/testing": "workspace:*",

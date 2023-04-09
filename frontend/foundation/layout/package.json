@@ -21,7 +21,6 @@
     "@foundation/theme": "workspace:*",
     "@foundation/auth": "workspace:*",
     "@foundation/loaders": "workspace:*",
-    "@foundation/stories": "workspace:*",
     "@foundation/std": "workspace:*",
     "react": "*",
     "clsx": "*",

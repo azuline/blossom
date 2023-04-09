@@ -19,7 +19,6 @@
   "dependencies": {
     "@foundation/theme": "workspace:*",
     "@foundation/ui": "workspace:*",
-    "@foundation/stories": "workspace:*",
     "@vanilla-extract/recipes": "*"
   },
   "devDependencies": {

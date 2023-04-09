@@ -1,5 +1,6 @@
 packages:
-  - "configs/*"
   - "codegen/*"
+  - "configs/*"
   - "foundation/*"
   - "product/*"
+  - "stories"
