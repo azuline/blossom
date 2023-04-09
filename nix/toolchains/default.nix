@@ -3,6 +3,7 @@
 rec {
   general = with pkgs; [
     coreutils
+    fd
     gnumake
     fail-on-dirty-diff
   ];

@@ -5,6 +5,7 @@ clean:
 	pnpm turbo --no-daemon clean --concurrency `nproc`
 
 install:
+	fd -u node_modules . | xargs rm -rf
 	pnpm install
 
 typewatch:
