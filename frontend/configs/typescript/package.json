@@ -2,6 +2,7 @@
   "name": "@configs/typescript",
   "version": "0.0.0",
   "scripts": {
-    "typewatch": "../../scripts/typewatch.sh"
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
   }
 }

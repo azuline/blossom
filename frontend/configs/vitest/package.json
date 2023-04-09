@@ -9,7 +9,8 @@
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh",
-    "typewatch": "../../scripts/typewatch.sh"
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
     "vitest": "*",

@@ -29,6 +29,9 @@
       // Depends on successfully building .d.ts files.
       "dependsOn": ["^topology", "^typecheck"]
     },
+    "clean": {
+      "cache": false
+    },
     "start": {
       "cache": false,
       "persistent": true

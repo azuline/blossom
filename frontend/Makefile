@@ -1,13 +1,13 @@
 check: typecheck test lintcheck
 
 clean:
-	rm -rf build dist coverage
+	pnpm turbo clean --concurrency `nproc`
 
 install:
 	pnpm install
 
 test:
-	+pnpm turbo test --concurrency `nproc`
+	pnpm turbo test --concurrency `nproc`
 
 build:
 	pnpm turbo build --concurrency `nproc`
