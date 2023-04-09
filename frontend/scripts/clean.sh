@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-rm -rf build dist coverage
+rm -rf build dist coverage ./*.tsbuildinfo

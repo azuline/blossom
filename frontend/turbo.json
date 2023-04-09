@@ -5,32 +5,38 @@
     "topology": {
       "dependsOn": ["^topology"]
     },
-    "build": {
-      "outputs": ["dist/**", "*.tsbuildinfo"],
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
-      "dependsOn": ["^topology", "^build", "^typecheck"]
-    },
+    // typecheck transpiles .ts files into output .js and .d.ts files and checks for correctness.
     "typecheck": {
       "outputs": ["dist/**", "*.tsbuildinfo"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
-      "dependsOn": ["^topology"]
+      "dependsOn": ["^topology"],
+      "outputMode": "errors-only"
+    },
+    "build": {
+      "outputs": ["dist/**"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
+      "dependsOn": ["^topology", "^build", "^typecheck"]
     },
     "test": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
-      "dependsOn": ["^topology", "@configs/vitest#typecheck"]
+      "dependsOn": ["^topology", "@configs/vitest#typecheck"],
+      "outputMode": "errors-only"
     },
     "lint": {
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "errors-only"
     },
     "lintcheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "errors-only"
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "outputMode": "errors-only"
     },
     "start": {
       "cache": false,
@@ -38,7 +44,8 @@
     },
     "typewatch": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": ["^typecheck"]
     }
   },
   "globalDependencies": [
