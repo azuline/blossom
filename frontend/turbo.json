@@ -6,12 +6,12 @@
       "dependsOn": ["^topology"]
     },
     "build": {
-      "outputs": ["dist/**"],
+      "outputs": ["dist/**", "*.tsbuildinfo"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
       "dependsOn": ["^topology", "^build", "^typecheck"]
     },
     "typecheck": {
-      "outputs": ["dist/**"],
+      "outputs": ["dist/**", "*.tsbuildinfo"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
       "dependsOn": ["^topology"]
     },
