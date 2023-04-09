@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["index.cjs", ".eslintrc.cjs"]
+  "include": [
+    "index.cjs",
+    ".eslintrc.cjs"
+  ]
 }

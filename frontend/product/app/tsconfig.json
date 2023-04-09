@@ -1,10 +1,16 @@
 {
   "extends": "@configs/typescript/base.json",
   "compilerOptions": {
-    "composite": true,
-    "rootDir": ".",
     "outDir": "dist"
   },
-  "include": ["src", ".eslintrc.cjs", "vite.config.ts", "vitest.config.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    "vite.config.ts",
+    "vitest.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

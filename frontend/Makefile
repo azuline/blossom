@@ -1,34 +1,35 @@
+# we run turbo commands with --no-daemon to avoid this bug: https://github.com/vercel/turbo/issues/4137.
 check: typecheck test lintcheck
 
 clean:
-	pnpm turbo clean --concurrency `nproc`
+	pnpm turbo --no-daemon clean --concurrency `nproc`
 
 install:
 	pnpm install
 
 test:
-	pnpm turbo test --concurrency `nproc`
+	pnpm turbo --no-daemon test --concurrency `nproc`
 
 build:
-	pnpm turbo build --concurrency `nproc`
+	pnpm turbo --no-daemon build --concurrency `nproc`
 
 build-analyze:
-	ANALYZE=1 pnpm turbo build --concurrency `nproc`
+	ANALYZE=1 pnpm turbo --no-daemon build --concurrency `nproc`
 
 typecheck:
-	pnpm turbo typecheck --concurrency `nproc`
+	pnpm turbo --no-daemon typecheck --concurrency `nproc`
 
 lint:
-	pnpm turbo lint --concurrency `nproc`
+	pnpm turbo --no-daemon lint --concurrency `nproc`
 
 lintcheck:
-	pnpm turbo lintcheck --concurrency `nproc`
+	pnpm turbo --no-daemon lintcheck --concurrency `nproc`
 
 typewatch:
-	pnpm turbo typewatch --concurrency 999
+	pnpm turbo --no-daemon typewatch --concurrency 999
 
 start:
-	pnpm turbo start --concurrency 999
+	pnpm turbo --no-daemon start --concurrency 999
 
 stories:
 	pnpm ladle serve --port 40854
