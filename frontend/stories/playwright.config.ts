@@ -1,6 +1,7 @@
 import { defineConfig } from "@playwright/test";
+import os from "os";
 
 export default defineConfig({
   fullyParallel: true,
-  workers: process.env.NUM_WORKERS,
+  workers: os.cpus().length,
 });
