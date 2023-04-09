@@ -7,21 +7,17 @@ export const mockRPCsWorker = (mocks: RPCMocks): void => {
 };
 
 /** This function allows for RPC mocking in a describe test suite. */
-export const mockRPCsForSuite = (mocks: RPCMocks): void => {
+export const mockRPCsForSuite = async (mocks: RPCMocks): Promise<void> => {
   if (typeof process !== "undefined") {
-    // eslint-disable-next-line
-    const { mockRPCsForSuite } = require("./msw.server");
-    // eslint-disable-next-line
-    mockRPCsForSuite(mocks);
+    const srv = await import("./msw.server");
+    srv.mockRPCsForSuite(mocks);
   }
 };
 
 /** This function allows for RPC mocking in a single test case. */
 export const mockRPCsForTest = async (mocks: RPCMocks, fn: () => Promise<void>): Promise<void> => {
   if (typeof process !== "undefined") {
-    // eslint-disable-next-line
-    const { mockRPCsForTest } = require("./msw.server");
-    // eslint-disable-next-line
-    await mockRPCsForTest(mocks, fn);
+    const srv = await import("./msw.server");
+    await srv.mockRPCsForTest(mocks, fn);
   }
 };
