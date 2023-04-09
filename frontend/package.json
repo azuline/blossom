@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "commonjs",
+  "//": "@vanilla-extract/css causes a build issue at 1.11.0 where CSS can't be attached to files.",
   "dependencies": {
     "@tanstack/query-core": "^4.27.0",
     "@tanstack/react-query": "^4.28.0",
     "@total-typescript/ts-reset": "^0.4.2",
-    "@vanilla-extract/css": "^1.11.0",
+    "@vanilla-extract/css": "1.10.0",
     "@vanilla-extract/dynamic": "^2.0.3",
     "@vanilla-extract/recipes": "^0.4.0",
     "@vanilla-extract/sprinkles": "^1.5.2",
