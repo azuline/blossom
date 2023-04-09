@@ -48,13 +48,13 @@ test-visual: visual-container
 	pnpm start-server-and-test \
 		'make build-stories && cd stories && pnpm preview --host 172.17.0.1 --port 40855' \
 		'http://172.17.0.1:40855' \
-		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest'
+		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --env NUM_WORKERS=`nproc` --network host --add-host host.docker.internal:host-gateway playwright-test:latest'
 
 update-visual: visual-container
 	pnpm start-server-and-test \
 		'make build-stories && cd stories && pnpm preview --host 172.17.0.1 --port 40855' \
 		'http://172.17.0.1:40855' \
-		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
+		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --env NUM_WORKERS=`nproc` --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
 
 .PHONY: check install typewatch start test build build-app build-stories preview preview-app preview-stories typecheck lint lintcheck test-visual update-visual
 
