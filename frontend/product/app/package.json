@@ -7,8 +7,9 @@
     "src"
   ],
   "scripts": {
-    "build": "vite build",
     "start": "vite --port 40853 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "../../scripts/test.sh",
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",

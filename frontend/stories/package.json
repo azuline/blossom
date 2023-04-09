@@ -2,6 +2,9 @@
   "name": "@stories",
   "version": "0.0.0",
   "scripts": {
+    "start": "ladle serve",
+    "build": "ladle build",
+    "preview": "ladle preview",
     "visualtest": "../scripts/visualtest.sh",
     "typecheck": "../scripts/typecheck.sh",
     "lint": "../scripts/lint.sh",
@@ -30,6 +33,9 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@playwright/test": "*",
+    "@vanilla-extract/vite-plugin": "*",
+    "@vitejs/plugin-react-swc": "*",
+    "vite": "*",
     "sync-fetch": "*"
   }
 }

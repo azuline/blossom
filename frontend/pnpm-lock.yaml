@@ -766,6 +766,18 @@ importers:
       '@playwright/test':
         specifier: '*'
         version: 1.31.2
+      '@vanilla-extract/vite-plugin':
+        specifier: '*'
+        version: 3.8.0(@types/node@18.15.5)(vite@4.2.1)
+      '@vitejs/plugin-react-swc':
+        specifier: '*'
+        version: 3.2.0(vite@4.2.1)
+      sync-fetch:
+        specifier: '*'
+        version: 0.4.2
+      vite:
+        specifier: '*'
+        version: 4.2.1(@types/node@18.15.5)
 
 packages:
 

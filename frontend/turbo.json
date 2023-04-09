@@ -10,7 +10,7 @@
     },
     "build": {
       "outputs": ["build/**"],
-      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
       "dependsOn": ["^build", "typecheck"],
       "outputMode": "new-only"
     },
@@ -39,6 +39,11 @@
     "start": {
       "cache": false,
       "persistent": true
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"]
     },
     "typewatch": {
       "cache": false,

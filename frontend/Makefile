@@ -7,14 +7,24 @@ clean:
 install:
 	pnpm install
 
+typewatch:
+	pnpm turbo --no-daemon typewatch --concurrency 999
+
+start:
+	pnpm turbo --no-daemon start --concurrency 999
+
 test:
 	pnpm turbo --no-daemon test --concurrency `nproc`
 
+# Set ANALYZE=1 to analyze build output.
 build:
 	pnpm turbo --no-daemon build --concurrency `nproc`
 
-build-analyze:
-	ANALYZE=1 pnpm turbo --no-daemon build --concurrency `nproc`
+build-app:
+	pnpm turbo --no-daemon build --concurrency `nproc` --filter="@product/app"
+
+build-stories:
+	pnpm turbo --no-daemon build --concurrency `nproc` --filter="@stories"
 
 typecheck:
 	pnpm turbo --no-daemon typecheck --concurrency `nproc`
@@ -24,18 +34,6 @@ lint:
 
 lintcheck:
 	pnpm turbo --no-daemon lintcheck --concurrency `nproc`
-
-typewatch:
-	pnpm turbo --no-daemon typewatch --concurrency 999
-
-start:
-	pnpm turbo --no-daemon start --concurrency 999
-
-stories:
-	pnpm ladle serve --port 40854
-
-build-stories:
-	pnpm ladle build
 
 test-visual: visual-container
 	pnpm start-server-and-test \
@@ -49,7 +47,7 @@ update-visual: visual-container
 		'http://172.17.0.1:40855' \
 		'docker run --mount type=bind,source="$(realpath .)",target=/usr/app --network host --add-host host.docker.internal:host-gateway playwright-test:latest --update-snapshots'
 
-.PHONY: check install start build build-analyze preview stories prop-types build-stories test test-visual update-visual typecheck lint lintcheck
+.PHONY: check install typewatch start test build build-app build-stories typecheck lint lintcheck test-visual update-visual
 
 # Below here are not commands.
 
