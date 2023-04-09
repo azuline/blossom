@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-pnpm tsc --watch
+pnpm tsc --watch --preserveWatchOutput

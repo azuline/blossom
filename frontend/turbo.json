@@ -9,30 +9,36 @@
     "typecheck": {
       "outputs": ["dist/**", "*.tsbuildinfo"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "new-only"
     },
     "build": {
       "outputs": ["dist/**"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
-      "dependsOn": ["^topology", "^build", "^typecheck"]
+      "dependsOn": ["^topology", "^build", "^typecheck"],
+      "outputMode": "new-only"
     },
     "test": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "new-only"
     },
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files of dependencies.
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "new-only"
     },
     "lintcheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["^topology", "^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"],
+      "outputMode": "new-only"
     },
     "clean": {
       "inputs": ["dist/**", "*.tsbuildinfo", "build/**"],
-      "cache": false
+      "cache": false,
+      "outputMode": "none"
     },
     "start": {
       "cache": false,
