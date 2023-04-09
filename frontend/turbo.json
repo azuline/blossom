@@ -9,7 +9,7 @@
     "typecheck": {
       "outputs": ["dist/**", "*.tsbuildinfo"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
-      "dependsOn": ["^topology"],
+      "dependsOn": ["^topology", "^typecheck"],
       "outputMode": "errors-only"
     },
     "build": {
