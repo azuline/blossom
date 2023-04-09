@@ -4,6 +4,14 @@
 
 See the `Makefile` for a list of common dev tool commands.
 
+This directory contains a multipackage setup with the Turborepo monorepo build
+tool. For the best developer experience:
+
+1. Run `make install` whenever the `dependencies` change in a `package.json`.
+2. Run `make typewatch` in a shell when developing. This protects you from
+   seeing stale types from old code.
+3. Run `make start` to run dev servers for the app and the stories.
+
 # Directories
 
 - `codegen/` contains the outputs of codegen systems.
@@ -13,8 +21,8 @@ See the `Makefile` for a list of common dev tool commands.
 - `product/` contains the product-specific code.
 - `public/` contains static assets.
 - `scripts/` contains shared build scripts.
+- `stories/` contains the storybook application.
 - `templates/` contains a template directory for a package.
-- `visualtest/` contains the visual testing harness and snapshots.
 
 # Stories
 
