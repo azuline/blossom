@@ -20,6 +20,8 @@
     "resolveJsonModule": true,
     // Generate .d.ts files.
     "declaration": true,
+    // Generate a sourcemap for .d.ts files that link back to the source.
+    "declarationMap": true,
     // Generate source maps for jump to definition.
     "sourceMap": true,
     // Transpile JSX to `_jsx` calls.

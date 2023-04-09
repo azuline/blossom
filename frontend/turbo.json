@@ -1,29 +1,33 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    // topology is a dummy key to ensure that changes in dependencies result in a cache miss.
+    "topology": {
+      "dependsOn": ["^topology"]
+    },
     "build": {
       "outputs": ["dist/**"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json", "vite.config.ts"],
-      "dependsOn": ["^build", "^typecheck"]
+      "dependsOn": ["^topology", "^build", "^typecheck"]
     },
     "typecheck": {
       "outputs": ["dist/**"],
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^topology"]
     },
     "test": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
-      "dependsOn": ["@configs/vitest#typecheck"]
+      "dependsOn": ["^topology", "@configs/vitest#typecheck"]
     },
     "lint": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs", "vitest.config.ts"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"]
     },
     "lintcheck": {
       "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
       // Depends on successfully building .d.ts files.
-      "dependsOn": ["^typecheck"]
+      "dependsOn": ["^topology", "^typecheck"]
     },
     "start": {
       "cache": false,
@@ -35,9 +39,6 @@
     }
   },
   "globalDependencies": [
-    "configs/typescript/base.json",
-    "configs/eslint/.eslintrc.cjs",
-    "configs/vitest/*.{cts,ts}",
     "dprint.json",
     "scripts/*"
   ]
