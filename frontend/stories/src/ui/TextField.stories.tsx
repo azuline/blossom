@@ -1,6 +1,9 @@
-import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
 import { TextField } from "@foundation/ui";
 import { useState } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StorySection } from "../lib/StorySection";
+import { Variant } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Atoms",

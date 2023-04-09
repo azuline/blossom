@@ -1,6 +1,8 @@
-import { DocumentationStory, Variant, VariantsGallery } from "@foundation/stories";
+import { TypeLoader } from "@foundation/loaders";
 import { Type } from "@foundation/ui";
-import { TypeLoader } from ".";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { Variant } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Loaders",

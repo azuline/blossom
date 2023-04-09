@@ -1,5 +1,7 @@
-import { DocumentationStory, StoryParagraph, StorySection } from "@foundation/stories";
 import { Code, Divider, Stack, Type } from "@foundation/ui";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
 
 export default {
   title: "Theme",

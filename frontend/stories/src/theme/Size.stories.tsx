@@ -1,8 +1,10 @@
-import { DocumentationStory, StoryParagraph, StorySection } from "@foundation/stories";
 import { t } from "@foundation/theme";
 import { Type, View } from "@foundation/ui";
 import { FC, Fragment } from "react";
-import { sSizeScale } from "./size.css";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
+import { sSizeScale } from "./Size.css";
 
 export default {
   title: "Theme",

@@ -1,16 +1,11 @@
-import {
-  DocumentationStory,
-  StoryParagraph,
-  StorySection,
-  Variant,
-  VariantGroup,
-  VariantsGallery,
-} from "@foundation/stories";
+import { LayoutPaddingVariableSetter, PageContent, WithHeader } from "@foundation/layout";
 import { Card, Type } from "@foundation/ui";
 import { FC, ReactNode, useEffect, useRef } from "react";
-import { LayoutPaddingVariableSetter } from "../LayoutPaddingVariableSetter";
-import { WithHeader } from "../WithHeader";
-import { PageContent } from ".";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
+import { Variant, VariantGroup } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Layout",

@@ -1,7 +1,9 @@
-import { DocumentationStory, StoryParagraph, StorySection } from "@foundation/stories";
 import { moonlightPalette, t } from "@foundation/theme";
 import { Stack, Type, View } from "@foundation/ui";
 import { FC } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
 
 export default {
   title: "Theme",

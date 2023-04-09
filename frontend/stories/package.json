@@ -14,6 +14,11 @@
     "@foundation/ui": "workspace:*",
     "@foundation/testing": "workspace:*",
     "@foundation/layout": "workspace:*",
+    "@foundation/loaders": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "@product/home": "workspace:*",
+    "@product/login": "workspace:*",
+    "@product/notfound": "workspace:*",
     "@ladle/react": "*",
     "@tanstack/react-query": "*",
     "@vanilla-extract/dynamic": "*",
@@ -24,6 +29,7 @@
   "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
-    "@playwright/test": "*"
+    "@playwright/test": "*",
+    "sync-fetch": "*"
   }
 }

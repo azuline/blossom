@@ -1,5 +1,5 @@
-import { DocumentationStory } from "@foundation/stories";
 import { Card, Center, Stack, View } from "@foundation/ui";
+import { DocumentationStory } from "../lib/DocumentationStory";
 
 export default {
   title: "Layout",

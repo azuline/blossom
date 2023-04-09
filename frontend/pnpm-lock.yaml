@@ -711,9 +711,15 @@ importers:
 
   stories:
     dependencies:
+      '@foundation/icons':
+        specifier: workspace:*
+        version: link:../foundation/icons
       '@foundation/layout':
         specifier: workspace:*
         version: link:../foundation/layout
+      '@foundation/loaders':
+        specifier: workspace:*
+        version: link:../foundation/loaders
       '@foundation/testing':
         specifier: workspace:*
         version: link:../foundation/testing
@@ -726,6 +732,15 @@ importers:
       '@ladle/react':
         specifier: '*'
         version: 2.10.1(@types/node@18.15.5)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.2)
+      '@product/home':
+        specifier: workspace:*
+        version: link:../product/home
+      '@product/login':
+        specifier: workspace:*
+        version: link:../product/login
+      '@product/notfound':
+        specifier: workspace:*
+        version: link:../product/notfound
       '@tanstack/react-query':
         specifier: '*'
         version: 4.28.0(react-dom@18.2.0)(react@18.2.0)

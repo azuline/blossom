@@ -1,15 +1,15 @@
+import { Code, Redirect, Stack, Type, View } from "@foundation/ui";
+import { DocumentationStory } from "../lib/DocumentationStory";
 import {
-  DocumentationStory,
   propDocChildren,
   propDocClassName,
   propDocID,
   propDocStyle,
   propDocSX,
   PropsTable,
-  StoryParagraph,
-  StorySection,
-} from "@foundation/stories";
-import { Code, Redirect, Stack, Type, View } from "@foundation/ui";
+} from "../lib/PropsTable";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
 
 export default {
   title: "Primitives",

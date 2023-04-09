@@ -1,6 +1,9 @@
-import { DocumentationStory, StorySection, Variant, VariantsGallery } from "@foundation/stories";
 import { Checkbox, Type } from "@foundation/ui";
 import { atom, useAtom } from "jotai";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StorySection } from "../lib/StorySection";
+import { Variant } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Atoms",

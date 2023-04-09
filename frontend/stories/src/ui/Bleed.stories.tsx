@@ -1,17 +1,17 @@
+import { t } from "@foundation/theme";
+import { Bleed, Card, Center, Stack, Type, View } from "@foundation/ui";
+import { ReactNode } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
 import {
-  DocumentationStory,
   propDocChildren,
   propDocClassName,
   propDocID,
   propDocStyle,
   propDocSX,
   PropsTable,
-  StoryParagraph,
-  StorySection,
-} from "@foundation/stories";
-import { t } from "@foundation/theme";
-import { Bleed, Card, Center, Stack, Type, View } from "@foundation/ui";
-import { ReactNode } from "react";
+} from "../lib/PropsTable";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
 
 export default {
   title: "Layout",

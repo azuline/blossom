@@ -1,6 +1,6 @@
-import { DocumentationStory } from "@foundation/stories";
 import { Code } from "@foundation/ui";
 import { FC } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
 
 export default {
   title: "Atoms",

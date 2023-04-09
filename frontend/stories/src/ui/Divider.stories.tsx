@@ -1,12 +1,10 @@
-import {
-  DocumentationStory,
-  StoryParagraph,
-  StorySection,
-  Variant,
-  VariantsGallery,
-} from "@foundation/stories";
 import { Card, Center, Divider, Stack, Type, View } from "@foundation/ui";
 import { FC, ReactNode } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
+import { Variant } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Layout",

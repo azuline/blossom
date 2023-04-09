@@ -1,11 +1,8 @@
-import {
-  DocumentationStory,
-  propDocChildren,
-  PropsTable,
-  StoryParagraph,
-  StorySection,
-} from "@foundation/stories";
 import { CodeBlock, Type, VisuallyHidden } from "@foundation/ui";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { propDocChildren, PropsTable } from "../lib/PropsTable";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
 
 export default {
   title: "Primitives",

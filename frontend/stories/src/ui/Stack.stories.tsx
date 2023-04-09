@@ -1,5 +1,8 @@
+import { SX, t } from "@foundation/theme";
+import { Center, Code, Stack, StackProps, Type } from "@foundation/ui";
+import { FC, ReactNode } from "react";
+import { DocumentationStory } from "../lib/DocumentationStory";
 import {
-  DocumentationStory,
   propDocAs,
   propDocChildren,
   propDocClassName,
@@ -7,15 +10,11 @@ import {
   propDocStyle,
   propDocSX,
   PropsTable,
-  StoryParagraph,
-  StorySection,
-  Variant,
-  VariantGroup,
-  VariantsGallery,
-} from "@foundation/stories";
-import { SX, t } from "@foundation/theme";
-import { Center, Code, Stack, StackProps, Type } from "@foundation/ui";
-import { FC, ReactNode } from "react";
+} from "../lib/PropsTable";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
+import { Variant, VariantGroup } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Layout",

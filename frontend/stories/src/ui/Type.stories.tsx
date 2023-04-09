@@ -1,12 +1,9 @@
-import {
-  DocumentationStory,
-  StoryParagraph,
-  StorySection,
-  Variant,
-  VariantGroup,
-  VariantsGallery,
-} from "@foundation/stories";
 import { Type } from "@foundation/ui";
+import { DocumentationStory } from "../lib/DocumentationStory";
+import { StoryParagraph } from "../lib/StoryParagraph";
+import { StorySection } from "../lib/StorySection";
+import { Variant, VariantGroup } from "../lib/Variant";
+import { VariantsGallery } from "../lib/VariantsGallery";
 
 export default {
   title: "Atoms",

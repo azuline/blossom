@@ -1,5 +1,5 @@
-import { PageStory } from "@foundation/stories";
-import HomePage from ".";
+import HomePage from "@product/home";
+import { PageStory } from "../lib/PageStory";
 
 export default {
   title: "Pages",
