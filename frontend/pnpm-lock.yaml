@@ -735,6 +735,9 @@ importers:
       '@vanilla-extract/dynamic':
         specifier: '*'
         version: 2.0.3
+      jotai:
+        specifier: '*'
+        version: 2.0.3(react@18.2.0)
       react:
         specifier: '*'
         version: 18.2.0

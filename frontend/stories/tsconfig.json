@@ -6,8 +6,9 @@
   "include": [
     "src",
     ".eslintrc.cjs",
-    "playwright.config.ts",
     ".ladle/**/*"
+    "playwright.config.ts",
+    "visualtest/visual.spec.ts",
   ],
   "exclude": [
     "node_modules",
