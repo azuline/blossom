@@ -74,7 +74,9 @@ def codegen_typescript() -> None:
     tmpl = env.from_string(TEMPLATE)  # nosemgrep
     code = tmpl.render(catalog=catalog)
 
-    code_path = Path(os.environ["BLOSSOM_ROOT"]) / "frontend" / "codegen" / "rpc" / "index.ts"
+    code_path = (
+        Path(os.environ["BLOSSOM_ROOT"]) / "frontend" / "codegen" / "rpc" / "src" / "index.ts"
+    )
     code_path.parent.mkdir(parents=True, exist_ok=True)
     with code_path.open("w") as fptr:
         fptr.write(code)

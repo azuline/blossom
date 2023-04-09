@@ -1,0 +1,18 @@
+{
+  "extends": "@configs/typescript/base.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    ".ladle/**/*",
+    "playwright.config.ts",
+    "visualtest/visual.spec.ts",
+    "vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

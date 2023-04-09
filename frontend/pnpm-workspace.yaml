@@ -1,0 +1,6 @@
+packages:
+  - "codegen/*"
+  - "configs/*"
+  - "foundation/*"
+  - "product/*"
+  - "stories"

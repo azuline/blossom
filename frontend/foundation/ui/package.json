@@ -1,0 +1,39 @@
+{
+  "name": "@foundation/ui",
+  "version": "0.0.0",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
+  },
+  "dependencies": {
+    "@foundation/theme": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "@foundation/routing": "workspace:*",
+    "@foundation/std": "workspace:*",
+    "react": "*",
+    "react-aria": "*",
+    "react-stately": "*",
+    "@vanilla-extract/recipes": "*",
+    "@vanilla-extract/css": "*",
+    "clsx": "*"
+  },
+  "devDependencies": {
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "vitest": "*",
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@configs/vitest": "workspace:*"
+  }
+}

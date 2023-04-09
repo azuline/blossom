@@ -1,0 +1,24 @@
+{
+  "name": "@codegen/rpc",
+  "version": "0.0.0",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@configs/vitest": "workspace:*"
+  }
+}

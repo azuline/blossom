@@ -1,0 +1,58 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    // typecheck transpiles .ts files into output .js and .d.ts files and checks for correctness.
+    "typecheck": {
+      "outputs": ["dist/**", "*.tsbuildinfo"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
+      "dependsOn": ["^typecheck"],
+      "outputMode": "new-only"
+    },
+    "build": {
+      "outputs": ["build/**"],
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "tsconfig.json"],
+      "dependsOn": ["^build", "typecheck"],
+      "outputMode": "new-only"
+    },
+    "test": {
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", "vitest.config.ts"],
+      "dependsOn": ["^typecheck"],
+      "outputMode": "new-only"
+    },
+    "lint": {
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
+      // Depends on successfully building .d.ts files of dependencies.
+      "dependsOn": ["^typecheck"],
+      "outputMode": "new-only"
+    },
+    "lintcheck": {
+      "inputs": ["package.json", "src/**/*.{ts,tsx}", ".eslintrc.cjs"],
+      // Depends on successfully building .d.ts files.
+      "dependsOn": ["^typecheck"],
+      "outputMode": "new-only"
+    },
+    "clean": {
+      "inputs": ["dist/**", "*.tsbuildinfo", "build/**"],
+      "cache": false,
+      "outputMode": "none"
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["build"]
+    },
+    "typewatch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^typecheck"]
+    }
+  },
+  "globalDependencies": [
+    "dprint.json",
+    "scripts/*"
+  ]
+}

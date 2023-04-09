@@ -14,7 +14,7 @@ import shutil
 from pathlib import Path
 
 icons_dir = Path(__file__).parent.parent / "svgs"
-output_dir = Path(__file__).parent.parent / "codegen" / "icons"
+output_dir = Path(__file__).parent.parent / "src" / "codegen" / "icons"
 shutil.rmtree(output_dir)
 output_dir.mkdir(exist_ok=True, parents=True)
 

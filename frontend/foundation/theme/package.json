@@ -1,0 +1,33 @@
+{
+  "name": "@foundation/theme",
+  "version": "0.0.0",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
+  },
+  "dependencies": {
+    "@foundation/std": "workspace:*",
+    "react": "*",
+    "clsx": "*",
+    "jotai": "*",
+    "@vanilla-extract/css": "*",
+    "@vanilla-extract/sprinkles": "*",
+    "@vanilla-extract/dynamic": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@configs/vitest": "workspace:*"
+  }
+}

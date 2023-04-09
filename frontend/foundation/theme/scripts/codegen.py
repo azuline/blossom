@@ -321,7 +321,7 @@ def dict_to_ts(variable_name: str, inp: dict[str, Any]) -> str:
     return ts
 
 
-out_dir = PACKAGE_DIR / "codegen"
+out_dir = PACKAGE_DIR / "src" / "codegen"
 out_dir.mkdir(exist_ok=True)
 for f in out_dir.iterdir():
     f.unlink()

@@ -1,0 +1,42 @@
+{
+  "name": "@product/app",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "start": "vite --port 40853 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "@total-typescript/ts-reset": "*",
+    "@tanstack/react-query": "*",
+    "@foundation/layout": "workspace:*",
+    "@foundation/auth": "workspace:*",
+    "@foundation/routing": "workspace:*",
+    "@foundation/theme": "workspace:*",
+    "@product/home": "workspace:*",
+    "@product/login": "workspace:*",
+    "@product/notfound": "workspace:*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@vanilla-extract/vite-plugin": "*",
+    "@vitejs/plugin-react-swc": "*",
+    "rollup-plugin-analyzer": "*",
+    "vite": "*",
+    "@configs/vitest": "workspace:*"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@stories",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "ladle serve",
+    "build": "ladle build",
+    "preview": "ladle preview",
+    "visualtest": "../scripts/visualtest.sh",
+    "typecheck": "../scripts/typecheck.sh",
+    "lint": "../scripts/lint.sh",
+    "lintcheck": "../scripts/lintcheck.sh",
+    "typewatch": "../scripts/typewatch.sh",
+    "clean": "../scripts/clean.sh"
+  },
+  "dependencies": {
+    "@foundation/theme": "workspace:*",
+    "@foundation/ui": "workspace:*",
+    "@foundation/testing": "workspace:*",
+    "@foundation/layout": "workspace:*",
+    "@foundation/loaders": "workspace:*",
+    "@foundation/icons": "workspace:*",
+    "@product/home": "workspace:*",
+    "@product/login": "workspace:*",
+    "@product/notfound": "workspace:*",
+    "@ladle/react": "*",
+    "@tanstack/react-query": "*",
+    "@vanilla-extract/dynamic": "*",
+    "@vanilla-extract/css": "*",
+    "react": "*",
+    "jotai": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@playwright/test": "*",
+    "@vanilla-extract/vite-plugin": "*",
+    "@vitejs/plugin-react-swc": "*",
+    "vite": "*",
+    "sync-fetch": "*"
+  }
+}

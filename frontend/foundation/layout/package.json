@@ -1,0 +1,35 @@
+{
+  "name": "@foundation/layout",
+  "version": "0.0.0",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "test": "../../scripts/test.sh",
+    "typecheck": "../../scripts/typecheck.sh",
+    "lint": "../../scripts/lint.sh",
+    "lintcheck": "../../scripts/lintcheck.sh",
+    "typewatch": "../../scripts/typewatch.sh",
+    "clean": "../../scripts/clean.sh"
+  },
+  "dependencies": {
+    "@foundation/ui": "workspace:*",
+    "@foundation/theme": "workspace:*",
+    "@foundation/auth": "workspace:*",
+    "@foundation/loaders": "workspace:*",
+    "@foundation/std": "workspace:*",
+    "react": "*",
+    "clsx": "*",
+    "@vanilla-extract/css": "*",
+    "@vanilla-extract/recipes": "*"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/typescript": "workspace:*",
+    "@configs/vitest": "workspace:*"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "@configs/typescript/base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "nodenext",
+    "outDir": "dist"
+  },
+  "include": [
+    "index.cts",
+    "global.ts",
+    ".eslintrc.cjs"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

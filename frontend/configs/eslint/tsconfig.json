@@ -1,0 +1,7 @@
+{
+  "extends": "@configs/typescript/base.json",
+  "include": [
+    "index.cjs",
+    ".eslintrc.cjs"
+  ]
+}
