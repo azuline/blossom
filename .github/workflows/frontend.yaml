@@ -77,7 +77,7 @@ jobs:
       - name: Build Ladle
         run: nix develop ../\#devShells.x86_64-linux.frontend --command make build-stories
       - name: Create Tarball
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command bash -c '(cd ./build && tar -czvf ../ladle.tar.gz *)'
+        run: nix develop ../\#devShells.x86_64-linux.frontend --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
       - name: Create release and upload tarball
         id: upload
         run: |
