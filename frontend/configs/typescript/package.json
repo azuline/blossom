@@ -2,6 +2,7 @@
   "name": "@configs/typescript",
   "version": "0.0.0",
   "scripts": {
+    "typecheck": "echo",
     "clean": "../../scripts/clean.sh"
   }
 }

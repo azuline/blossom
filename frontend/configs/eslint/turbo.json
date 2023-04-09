@@ -1,0 +1,13 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    // these are dummy jobs to ensure that a changes to the configs
+    // invalidate all downstream lint caches
+    "lint": {
+      "inputs": ["index.cjs", ".eslintrc.cjs"]
+    },
+    "lintcheck": {
+      "inputs": ["index.cjs", ".eslintrc.cjs"]
+    }
+  }
+}

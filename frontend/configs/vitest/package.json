@@ -6,6 +6,7 @@
   "module": "./dist/index.cjs",
   "types": "./dist/index.d.cts",
   "scripts": {
+    "test": "echo",
     "typecheck": "../../scripts/typecheck.sh",
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh",
