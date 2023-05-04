@@ -16,7 +16,7 @@
     "typewatch": "../../scripts/typewatch.sh",
     "clean": "../../scripts/clean.sh"
   },
-  "dependencies": {
+  "peerDependencies": {
     "jotai": "*",
     "react": "*"
   },

@@ -17,9 +17,11 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "react": "*",
     "@foundation/ui": "workspace:*",
     "@foundation/layout": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

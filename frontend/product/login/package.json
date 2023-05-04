@@ -17,8 +17,6 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "react": "*",
-    "jotai": "*",
     "@foundation/ui": "workspace:*",
     "@codegen/rpc": "workspace:*",
     "@foundation/testing": "workspace:*",
@@ -27,6 +25,10 @@
     "@foundation/forms": "workspace:*",
     "@foundation/layout": "workspace:*",
     "@foundation/routing": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "jotai": "*"
   },
   "devDependencies": {
     "@testing-library/react": "*",

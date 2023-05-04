@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@foundation/theme": "workspace:*",
-    "@foundation/ui": "workspace:*",
+    "@foundation/ui": "workspace:*"
+  },
+  "peerDependencies": {
     "@vanilla-extract/recipes": "*"
   },
   "devDependencies": {

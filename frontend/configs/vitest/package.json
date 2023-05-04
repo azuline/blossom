@@ -13,7 +13,7 @@
     "typewatch": "../../scripts/typewatch.sh",
     "clean": "../../scripts/clean.sh"
   },
-  "dependencies": {
+  "peerDependencies": {
     "vitest": "*",
     "@testing-library/jest-dom": "*",
     "@testing-library/react": "*"

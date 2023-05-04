@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@foundation/rpc": "workspace:*",
-    "@codegen/rpc": "workspace:*",
+    "@codegen/rpc": "workspace:*"
+  },
+  "peerDependeices": {
     "@tanstack/query-core": "*",
     "@tanstack/react-query": "*",
     "msw": "*",

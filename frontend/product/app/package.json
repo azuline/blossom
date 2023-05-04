@@ -18,10 +18,6 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "react": "*",
-    "react-dom": "*",
-    "@total-typescript/ts-reset": "*",
-    "@tanstack/react-query": "*",
     "@foundation/layout": "workspace:*",
     "@foundation/auth": "workspace:*",
     "@foundation/routing": "workspace:*",
@@ -29,6 +25,12 @@
     "@product/home": "workspace:*",
     "@product/login": "workspace:*",
     "@product/notfound": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*",
+    "@total-typescript/ts-reset": "*",
+    "@tanstack/react-query": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

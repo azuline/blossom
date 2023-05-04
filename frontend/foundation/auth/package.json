@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@foundation/loaders": "workspace:*",
-    "@foundation/rpc": "workspace:*",
+    "@foundation/rpc": "workspace:*"
+  },
+  "peerDependencies": {
     "@codegen/rpc": "workspace:*",
     "react": "*"
   },

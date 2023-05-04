@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@codegen/rpc": "workspace:*",
-    "@foundation/errors": "workspace:*",
+    "@foundation/errors": "workspace:*"
+  },
+  "peerDependencies": {
     "jotai": "*",
     "jotai-tanstack-query": "*",
     "react": "*",

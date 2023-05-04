@@ -20,7 +20,9 @@
     "@foundation/theme": "workspace:*",
     "@foundation/icons": "workspace:*",
     "@foundation/routing": "workspace:*",
-    "@foundation/std": "workspace:*",
+    "@foundation/std": "workspace:*"
+  },
+  "peerDependencies": {
     "react": "*",
     "react-aria": "*",
     "react-stately": "*",

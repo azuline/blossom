@@ -7,7 +7,7 @@
     "lintcheck": "../../scripts/lintcheck.sh",
     "clean": "../../scripts/clean.sh"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
     "eslint-config-airbnb": "*",

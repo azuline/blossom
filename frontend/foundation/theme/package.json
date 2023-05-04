@@ -17,7 +17,9 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "@foundation/std": "workspace:*",
+    "@foundation/std": "workspace:*"
+  },
+  "peerDependencies": {
     "react": "*",
     "clsx": "*",
     "jotai": "*",

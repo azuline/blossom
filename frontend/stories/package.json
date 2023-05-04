@@ -21,7 +21,9 @@
     "@foundation/icons": "workspace:*",
     "@product/home": "workspace:*",
     "@product/login": "workspace:*",
-    "@product/notfound": "workspace:*",
+    "@product/notfound": "workspace:*"
+  },
+  "peerDependencies": {
     "@ladle/react": "*",
     "@tanstack/react-query": "*",
     "@vanilla-extract/dynamic": "*",

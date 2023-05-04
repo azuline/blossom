@@ -21,7 +21,9 @@
     "@foundation/theme": "workspace:*",
     "@foundation/auth": "workspace:*",
     "@foundation/loaders": "workspace:*",
-    "@foundation/std": "workspace:*",
+    "@foundation/std": "workspace:*"
+  },
+  "peerDependencies": {
     "react": "*",
     "clsx": "*",
     "@vanilla-extract/css": "*",
