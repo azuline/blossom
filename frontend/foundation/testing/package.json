@@ -18,9 +18,10 @@
   },
   "dependencies": {
     "@foundation/rpc": "workspace:*",
-    "@codegen/rpc": "workspace:*"
+    "@codegen/rpc": "workspace:*",
+    "@configs/vitest": "workspace:*"
   },
-  "peerDependeices": {
+  "peerDependencies": {
     "@tanstack/query-core": "*",
     "@tanstack/react-query": "*",
     "msw": "*",
@@ -29,7 +30,6 @@
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
-    "@configs/typescript": "workspace:*",
-    "@configs/vitest": "workspace:*"
+    "@configs/typescript": "workspace:*"
   }
 }

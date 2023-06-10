@@ -2,48 +2,48 @@
 check: typecheck test lintcheck
 
 clean:
-	pnpm turbo --no-daemon clean --concurrency `nproc`
+	pnpm turbo --continue --no-daemon clean --concurrency `nproc`
 
 install:
 	fd -u node_modules . | xargs rm -rf
 	pnpm install
 
 typewatch:
-	pnpm turbo --no-daemon typewatch --concurrency 999
+	pnpm turbo --continue --no-daemon typewatch --concurrency 999
 
 start:
-	pnpm turbo --no-daemon start --concurrency 999
+	pnpm turbo --continue --no-daemon start --concurrency 999
 
 # Set ANALYZE=1 to analyze build output.
 build:
-	pnpm turbo --no-daemon build --concurrency `nproc`
+	pnpm turbo --continue --no-daemon build --concurrency `nproc`
 
 build-app:
-	pnpm turbo --no-daemon build --concurrency `nproc` --filter="@product/app"
+	pnpm turbo --continue --no-daemon build --concurrency `nproc` --filter="@product/app"
 
 build-stories:
-	pnpm turbo --no-daemon build --concurrency `nproc` --filter="@stories"
+	pnpm turbo --continue --no-daemon build --concurrency `nproc` --filter="@stories"
 
 preview:
-	pnpm turbo --no-daemon preview --concurrency 999
+	pnpm turbo --continue --no-daemon preview --concurrency 999
 
 preview-app:
-	pnpm turbo --no-daemon preview --concurrency 999 --filter="@product/app"
+	pnpm turbo --continue --no-daemon preview --concurrency 999 --filter="@product/app"
 
 preview-stories:
-	pnpm turbo --no-daemon preview --concurrency 999 --filter="@stories"
+	pnpm turbo --continue --no-daemon preview --concurrency 999 --filter="@stories"
 
 test:
-	pnpm turbo --no-daemon test --concurrency `nproc`
+	pnpm turbo --continue --no-daemon test --concurrency `nproc`
 
 typecheck:
-	pnpm turbo --no-daemon typecheck --concurrency `nproc`
+	pnpm turbo --continue --no-daemon typecheck --concurrency `nproc`
 
 lint:
-	pnpm turbo --no-daemon lint --concurrency `nproc`
+	pnpm turbo --continue --no-daemon lint --concurrency `nproc`
 
 lintcheck:
-	pnpm turbo --no-daemon lintcheck --concurrency `nproc`
+	pnpm turbo --continue --no-daemon lintcheck --concurrency `nproc`
 
 test-visual: visual-container
 	pnpm start-server-and-test \
