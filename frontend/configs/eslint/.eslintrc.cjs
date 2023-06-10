@@ -120,7 +120,6 @@ module.exports = {
         "**/*.spec.tsx",
         // Adding the below to the defaults.
         "**/*.config.ts",
-        "**/foundation/testing/**",
       ],
     }],
 
