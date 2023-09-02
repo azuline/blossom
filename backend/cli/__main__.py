@@ -34,9 +34,11 @@ def with_cq(f: Any) -> Any:
 
     @functools.wraps(f)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
-        async with await create_pg_pool(confvars.psycopg_database_url) as pg_pool:
-            async with conn_admin(pg_pool) as cq:
-                return await f(*args, **kwargs, cq=cq)
+        async with (
+            await create_pg_pool(confvars.psycopg_database_url) as pg_pool,
+            conn_admin(pg_pool) as cq,
+        ):
+            return await f(*args, **kwargs, cq=cq)
 
     return wrapper
 
