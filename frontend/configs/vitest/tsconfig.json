@@ -1,7 +1,7 @@
 {
   "extends": "@configs/typescript/base.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
     "outDir": "dist"
   },
