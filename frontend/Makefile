@@ -2,7 +2,7 @@
 check: typecheck test lintcheck
 
 clean:
-	pnpm turbo --continue --no-daemon clean --concurrency `nproc`
+	pnpm -r clean
 
 install:
 	rm -rf node_modules/.cache
