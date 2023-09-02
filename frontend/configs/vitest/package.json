@@ -16,8 +16,7 @@
   "peerDependencies": {
     "vitest": "*",
     "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*",
-    "@types/testing-library__jest-dom": "*"
+    "@testing-library/react": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

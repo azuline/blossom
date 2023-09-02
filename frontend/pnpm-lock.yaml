@@ -90,9 +90,6 @@ importers:
       '@types/sync-fetch':
         specifier: ^0.4.0
         version: 0.4.0
-      '@types/testing-library__jest-dom':
-        specifier: ^6.0.0
-        version: 6.0.0(vitest@0.34.3)
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.5.0
         version: 6.5.0(@typescript-eslint/parser@6.5.0)(eslint@8.48.0)(typescript@5.2.2)
@@ -216,9 +213,6 @@ importers:
       '@testing-library/react':
         specifier: '*'
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
-      '@types/testing-library__jest-dom':
-        specifier: '*'
-        version: 6.0.0(vitest@0.29.7)
       vitest:
         specifier: '*'
         version: 0.29.7(jsdom@22.1.0)
@@ -801,6 +795,7 @@ packages:
 
   /@adobe/css-tools@4.3.1:
     resolution: {integrity: sha512-/62yikz7NLScCGAAST5SHdnjaDJQBDq0M2muyRTpf2VQhw6StBg2ALiu73zSJQ4fMVLA+0uBhBHAle7Wg+2kSg==}
+    dev: true
 
   /@ampproject/remapping@2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
@@ -5047,35 +5042,6 @@ packages:
       redent: 3.0.0
     dev: false
 
-  /@testing-library/jest-dom@6.1.2(vitest@0.29.7):
-    resolution: {integrity: sha512-NP9jl1Q2qDDtx+cqogowtQtmgD2OVs37iMSIsTv5eN5ETRkf26Kj6ugVwA93/gZzzFWQAsgkKkcftDe91BJCkQ==}
-    engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
-    peerDependencies:
-      '@jest/globals': '>= 28'
-      '@types/jest': '>= 28'
-      jest: '>= 28'
-      vitest: '>= 0.32'
-    peerDependenciesMeta:
-      '@jest/globals':
-        optional: true
-      '@types/jest':
-        optional: true
-      jest:
-        optional: true
-      vitest:
-        optional: true
-    dependencies:
-      '@adobe/css-tools': 4.3.1
-      '@babel/runtime': 7.22.11
-      aria-query: 5.3.0
-      chalk: 3.0.0
-      css.escape: 1.5.1
-      dom-accessibility-api: 0.5.16
-      lodash: 4.17.21
-      redent: 3.0.0
-      vitest: 0.29.7(jsdom@22.1.0)
-    dev: false
-
   /@testing-library/jest-dom@6.1.2(vitest@0.34.3):
     resolution: {integrity: sha512-NP9jl1Q2qDDtx+cqogowtQtmgD2OVs37iMSIsTv5eN5ETRkf26Kj6ugVwA93/gZzzFWQAsgkKkcftDe91BJCkQ==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
@@ -5308,30 +5274,6 @@ packages:
     dependencies:
       '@types/jest': 29.5.0
     dev: false
-
-  /@types/testing-library__jest-dom@6.0.0(vitest@0.29.7):
-    resolution: {integrity: sha512-bnreXCgus6IIadyHNlN/oI5FfX4dWgvGhOPvpr7zzCYDGAPIfvyIoAozMBINmhmsVuqV0cncejF2y5KC7ScqOg==}
-    deprecated: This is a stub types definition. @testing-library/jest-dom provides its own type definitions, so you do not need this installed.
-    dependencies:
-      '@testing-library/jest-dom': 6.1.2(vitest@0.29.7)
-    transitivePeerDependencies:
-      - '@jest/globals'
-      - '@types/jest'
-      - jest
-      - vitest
-    dev: false
-
-  /@types/testing-library__jest-dom@6.0.0(vitest@0.34.3):
-    resolution: {integrity: sha512-bnreXCgus6IIadyHNlN/oI5FfX4dWgvGhOPvpr7zzCYDGAPIfvyIoAozMBINmhmsVuqV0cncejF2y5KC7ScqOg==}
-    deprecated: This is a stub types definition. @testing-library/jest-dom provides its own type definitions, so you do not need this installed.
-    dependencies:
-      '@testing-library/jest-dom': 6.1.2(vitest@0.34.3)
-    transitivePeerDependencies:
-      - '@jest/globals'
-      - '@types/jest'
-      - jest
-      - vitest
-    dev: true
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
