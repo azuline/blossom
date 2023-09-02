@@ -2,7 +2,7 @@ import { PageTestWrap } from "@foundation/testing";
 import { mockRPCsForTest } from "@foundation/testing/dist/src/msw.server";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import LoginPage from ".";
 
 describe("@product/login", () => {
