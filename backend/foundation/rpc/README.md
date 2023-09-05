@@ -69,7 +69,7 @@ async def generate_bunnies(req: Req[ReqIn]) -> ReqOut:
     if req.user is None:
         raise CannotMakeBunniesError
 
-    return ReqOut(bunnies=await cq.q.fetch_bunnies(tenant_id=req.tenant.id))
+    return ReqOut(bunnies=await req.cq.q.fetch_bunnies(tenant_id=req.tenant.id))
 ```
 
 ## Codegen
