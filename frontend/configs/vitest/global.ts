@@ -3,7 +3,8 @@
 
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // Learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
+import { afterEach } from "vitest";
+import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 
 // Resets all renders after each test.

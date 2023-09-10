@@ -27,13 +27,13 @@
     "@foundation/routing": "workspace:*"
   },
   "peerDependencies": {
-    "react": "*",
-    "jotai": "*"
-  },
-  "devDependencies": {
     "@testing-library/react": "*",
     "@testing-library/user-event": "*",
-    "vitest": "*",
+    "jotai": "*",
+    "react": "*",
+    "vitest": "*"
+  },
+  "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
