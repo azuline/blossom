@@ -1,5 +1,5 @@
 job "blossom-ladle" {
-  datacenters = ["zen"]
+  datacenters = ["frieren"]
   namespace   = "blossom"
   type        = "service"
 
