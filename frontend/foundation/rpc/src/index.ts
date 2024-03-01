@@ -21,15 +21,11 @@ export const baseURL = typeof process !== "undefined" && process.env.VITEST !== 
  * given arguments.
  *
  * The function signature of rpc is a little unorthodox. It returns either the response
- * data or a request error. It also has a mandatory onError parameter that handles
- * errors.
+ * data or a request error.
  *
- * The intention is to guard against the incorrect-by-default nature of JavaScript error
- * handling by making sure that all requests define some form of error handling that
- * explicitly returns true.
- *
- * And then outside of the rpc function, `resp instanceof RPCError` can be used to
- * determine whether the request was successful or not.
+ * The intention is to guard against the incorrect-by-default nature of JavaScript error handling.
+ * This setup requires the caller to refine the type down to the response type (e.g. with `resp
+ * instanceof RPCError`) in order to use the response data.
  */
 export const rpc = async <T extends keyof RPCs>(
   name: T,
