@@ -7,9 +7,6 @@ test:
 	pytest --cov=. --cov-branch .
 	coverage html
 
-snapshot:
-	pytest --snapshot-update .
-
 migrate:
 	blossom migrate
 
@@ -24,14 +21,14 @@ typecheck:
 	mypy .
 
 lintcheck:
-	black --check .
-	ruff .
-	semgrep .
+	ruff format --check .
+	ruff check .
+	semgrep --config .semgrep/ .
 
 lint:
-	black .
-	ruff --fix .
-	semgrep --autofix .
+	ruff format .
+	ruff check --fix .
+	semgrep --config .semgrep/ --autofix .
 
 new-migration:
 	yoyo new --sql

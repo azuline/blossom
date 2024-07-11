@@ -136,7 +136,7 @@ async def test_route_invalid_json_data(t: TFix) -> None:
 async def test_route_different_input_schema(t: TFix) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", json={"strawberry": "blossoms"})
-    await t.rpc.assert_error(resp, DataMismatchError)
+    await t.rpc.assert_error(resp, InputValidationError)
 
 
 async def test_route_data_wrong_type(t: TFix) -> None:
@@ -144,7 +144,7 @@ async def test_route_data_wrong_type(t: TFix) -> None:
     resp = await (await t.rpc.client()).post("/api/Test", json={"cherry": {"a": "b"}})
     await t.rpc.assert_error(resp, InputValidationError)
     out = await t.rpc.parse_error(resp, InputValidationError)
-    assert out.fields["cherry"] == "str type expected"
+    assert out.fields["cherry"] == "Input should be a valid string"
 
 
 async def test_route_no_data(t: TFix) -> None:

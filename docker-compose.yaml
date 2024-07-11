@@ -2,7 +2,7 @@ services:
   # This image is for local backend development. The local devserver, local
   # migrations, and local tests all use this database.
   postgres:
-    image: postgres:15
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: password
     # `restart: unless-stopped` restarts the service on computer reboot if it
