@@ -1,6 +1,8 @@
-FROM mcr.microsoft.com/playwright:v1.31.2-focal 
+FROM mcr.microsoft.com/playwright:v1.45.1-focal 
 WORKDIR /usr/app/stories
 # We install pnpm to use it with the host packages. Make sure to pnpm install
 # in the host!
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 ENTRYPOINT ["pnpm", "playwright", "test", "visualtest"]

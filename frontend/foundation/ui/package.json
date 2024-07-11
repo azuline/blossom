@@ -23,19 +23,20 @@
     "@foundation/std": "workspace:*"
   },
   "peerDependencies": {
+    "@testing-library/react": "*",
+    "@testing-library/user-event": "*",
+    "@vanilla-extract/recipes": "*",
+    "@vanilla-extract/css": "*",
+    "clsx": "*",
     "react": "*",
     "react-aria": "*",
     "react-stately": "*",
-    "@vanilla-extract/recipes": "*",
-    "@vanilla-extract/css": "*",
-    "clsx": "*"
+    "vitest": "*"
   },
   "devDependencies": {
-    "@testing-library/react": "*",
-    "@testing-library/user-event": "*",
-    "vitest": "*",
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
-  }
+  },
+  "type": "module"
 }

@@ -101,12 +101,14 @@ class TestRPC:
         # Though this doesn't seem like a useful abstraction, abstract away "success
         # criteria" in case we want to make further assertions later around what success
         # means.
+        __tracebackhide__ = True
         assert resp.status_code == 200
 
     def assert_failed(self, resp: Response) -> None:
         # Though this doesn't seem like a useful abstraction, abstract away "failure
         # criteria" in case we want to make further assertions later around what failure
         # means.
+        __tracebackhide__ = True
         assert resp.status_code == 400
 
     async def assert_error(self, resp: Response, error: type[Exception]) -> None:
@@ -114,6 +116,7 @@ class TestRPC:
         This function subsumes assert_failed; if calling this, no need to call
         assert_failed above.
         """
+        __tracebackhide__ = True
         self.assert_failed(resp)
         data = json.loads(await resp.get_data())
         assert data["error"] == error.__name__

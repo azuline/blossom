@@ -2,23 +2,18 @@
   description = "blossom development environment";
 
   inputs = {
-    nixpkgs.url = github:nixos/nixpkgs/nixos-unstable;
-    # dprint is broken on latest unstable.
-    nixpkgs-dprint-pin.url = github:nixos/nixpkgs?rev=1b1f50645af2a70dc93eae18bfd88d330bfbcf7f;
-    flake-utils.url = github:numtide/flake-utils;
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs =
     { self
     , nixpkgs
-    , nixpkgs-dprint-pin
     , flake-utils
     }:
     flake-utils.lib.eachDefaultSystem (system:
     let
-      pkg-pins = {
-        dprint = (import nixpkgs-dprint-pin { inherit system; }).dprint;
-      };
+      pkg-pins = { };
       pkgs = import ./nix/pkgs { inherit nixpkgs system pkg-pins; };
       builds = import ./nix/builds { inherit pkgs; };
       toolchains = import ./nix/toolchains { inherit pkgs; };

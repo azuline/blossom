@@ -1,7 +1,7 @@
 {
   "name": "@product/app",
   "version": "0.0.0",
-  "type": "commonjs",
+  "type": "module",
   "files": [
     "dist",
     "src"

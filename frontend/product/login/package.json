@@ -19,7 +19,8 @@
   "dependencies": {
     "@foundation/ui": "workspace:*",
     "@codegen/rpc": "workspace:*",
-    "@foundation/testing": "workspace:*",
+    "@foundation/testing-rpc": "workspace:*",
+    "@foundation/testing-server": "workspace:*",
     "@foundation/rpc": "workspace:*",
     "@foundation/icons": "workspace:*",
     "@foundation/forms": "workspace:*",
@@ -27,15 +28,16 @@
     "@foundation/routing": "workspace:*"
   },
   "peerDependencies": {
-    "react": "*",
-    "jotai": "*"
-  },
-  "devDependencies": {
     "@testing-library/react": "*",
     "@testing-library/user-event": "*",
-    "vitest": "*",
+    "jotai": "*",
+    "react": "*",
+    "vitest": "*"
+  },
+  "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
-  }
+  },
+  "type": "module"
 }

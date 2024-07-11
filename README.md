@@ -43,7 +43,7 @@ The backend is a Python monolith with Postgres database.
 
 Features:
 
-- [Lazy test fixtures](./foundation/test) for concise test setup.
+- [Lazy test fixtures](./backend/foundation/test) for concise test setup.
 - Parallelized tests with shared database.
 - Multi-tenant account system.
 - [Row Level Security](./backend/foundation/database) for secure multi-tenancy.

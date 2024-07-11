@@ -15,7 +15,8 @@
   "dependencies": {
     "@foundation/theme": "workspace:*",
     "@foundation/ui": "workspace:*",
-    "@foundation/testing": "workspace:*",
+    "@foundation/testing-rpc": "workspace:*",
+    "@foundation/testing-browser": "workspace:*",
     "@foundation/layout": "workspace:*",
     "@foundation/loaders": "workspace:*",
     "@foundation/icons": "workspace:*",
@@ -39,5 +40,6 @@
     "@vitejs/plugin-react-swc": "*",
     "vite": "*",
     "sync-fetch": "*"
-  }
+  },
+  "type": "module"
 }

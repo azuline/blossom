@@ -24,5 +24,6 @@
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*",
     "vitest": "*"
-  }
+  },
+  "type": "module"
 }

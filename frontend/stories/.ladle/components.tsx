@@ -1,7 +1,8 @@
-import { GlobalProvider, useLadleContext } from "@ladle/react";
+import { GlobalProvider, ThemeState } from "@ladle/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { DEFAULT_MOCK_RPC_OUTPUT, mockRPCsWorker } from "@foundation/testing";
+import { mockRPCsWorker } from "@foundation/testing-browser";
+import { DEFAULT_MOCK_RPC_OUTPUT } from "@foundation/testing-rpc";
 
 import { LayoutPaddingVariableSetter } from "@foundation/layout";
 import { ThemeProvider } from "@foundation/theme";
@@ -12,9 +13,8 @@ const queryClient = new QueryClient();
 // Set up MSW with dummy endpoints.
 mockRPCsWorker(DEFAULT_MOCK_RPC_OUTPUT);
 
-export const Provider: GlobalProvider = ({ children }) => {
-  const { globalState } = useLadleContext();
-  const theme = globalState.theme === "light" || globalState.theme === "dark"
+export const Provider: GlobalProvider = ({ children, globalState }) => {
+  const theme = globalState.theme === ThemeState.Light || globalState.theme === ThemeState.Dark
     ? globalState.theme
     : undefined;
 

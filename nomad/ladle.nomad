@@ -2,14 +2,11 @@ job "blossom-ladle" {
   datacenters = ["frieren"]
   namespace   = "blossom"
   type        = "service"
-
   group "blossom-ladle" {
     count = 1
-
     network {
       mode = "bridge"
     }
-
     service {
       name = "blossom-ladle"
       port = "80"
@@ -24,7 +21,6 @@ job "blossom-ladle" {
         timeout  = "2s"
       }
     }
-
     task "blossom-ladle" {
       driver = "docker"
       config {
@@ -45,7 +41,6 @@ server {
   listen [::]:80;
   root /www;
   index index.html;
-
   location /health {
     return 200 'ok';
   }
@@ -57,7 +52,6 @@ EOF
       }
     }
   }
-
   update {
     max_parallel      = 1
     health_check      = "checks"

@@ -77,6 +77,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         # Await the connection creations and assert the new connection has the correct user ID.
         results = await asyncio.gather(*ctasks, return_exceptions=True)
         for r in results:
+            assert not isinstance(r, BaseException)
             assert await get_user_id(r) is None
 
         # Cleanup; destroy all connections.
