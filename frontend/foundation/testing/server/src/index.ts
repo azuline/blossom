@@ -1,12 +1,6 @@
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll } from "vitest";
-import { mockRPCHandlers, RPCMocks } from "./msw.shared";
-
-/**
- * These functions aren't exported from index.js because of
- * https://github.com/mswjs/msw/issues/1539. Import them from the full path instead
- * until that issue is fixed.
- */
+import { mockRPCHandlers, RPCMocks } from "@foundation/testing/rpc";
 
 /** This function allows for RPC mocking in a describe test suite. */
 export const mockRPCsForSuite = (mocks: RPCMocks): void => {

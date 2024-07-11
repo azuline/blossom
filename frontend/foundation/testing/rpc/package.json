@@ -1,5 +1,5 @@
 {
-  "name": "@product/login",
+  "name": "@foundation/testing/rpc",
   "version": "0.0.0",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
@@ -17,20 +17,13 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "@foundation/ui": "workspace:*",
-    "@codegen/rpc": "workspace:*",
-    "@foundation/testing/rpc": "workspace:*",
-    "@foundation/testing/server": "workspace:*",
     "@foundation/rpc": "workspace:*",
-    "@foundation/icons": "workspace:*",
-    "@foundation/forms": "workspace:*",
-    "@foundation/layout": "workspace:*",
-    "@foundation/routing": "workspace:*"
+    "@codegen/rpc": "workspace:*"
   },
   "peerDependencies": {
-    "@testing-library/react": "*",
-    "@testing-library/user-event": "*",
-    "jotai": "*",
+    "@tanstack/query-core": "*",
+    "@tanstack/react-query": "*",
+    "msw": "*",
     "react": "*",
     "vitest": "*"
   },
