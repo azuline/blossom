@@ -17,7 +17,8 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "@foundation/testing-rpc": "workspace:*"
+    "@foundation/testing-rpc": "workspace:*",
+    "@configs/vitest": "workspace:*"
   },
   "peerDependencies": {
     "msw": "*",
@@ -25,8 +26,7 @@
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
-    "@configs/typescript": "workspace:*",
-    "@configs/vitest": "workspace:*"
+    "@configs/typescript": "workspace:*"
   },
   "type": "module"
 }
