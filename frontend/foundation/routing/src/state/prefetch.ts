@@ -9,7 +9,7 @@ export const usePrefetchPath = (route: string | undefined): void => {
 
   const prefetch = useCallback((to: string) => {
     const path = Array.from(Object.keys(paths)).find(
-      pattern => router.matcher(pattern, to)[0],
+      p => router.parser(p).pattern.test(to),
     );
     if (path === undefined) {
       return;

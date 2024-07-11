@@ -10,8 +10,6 @@ export default defineConfig({
   build: {
     outDir: "build",
     rollupOptions: {
-      // Some minor type compatibility issue in between versions, doesn't really matter.
-      // @ts-expect-error Rollup plugin types are subtly different doesn't match up.
       plugins: process.env.ANALYZE != null ? [analyze()] : [],
     },
   },

@@ -68,7 +68,7 @@ export const useRPC = <T extends keyof RPCs>(
     RPCError<T, PossibleRPCErrors<T>>,
     RPCs[T]["out"],
     [T, RPCs[T]["in"]]
-  >([rpcName, args], ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]), options);
+  >({ queryKey: [rpcName, args], queryFn: ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]), ...options });
 };
 
 type RPCAtom<T extends keyof RPCs> = ReturnType<
@@ -119,9 +119,9 @@ export const useRefetchRPC = <T extends keyof RPCs>(): (
     if (args === undefined) {
       // This is akin to a prefix match--invalidates all queries with a cache key that
       // start with rpcName.
-      await queryClient.invalidateQueries([rpcName]);
+      await queryClient.invalidateQueries({ queryKey: [rpcName] });
     } else {
-      await queryClient.invalidateQueries([rpcName, args]);
+      await queryClient.invalidateQueries({ queryKey: [rpcName, args] });
     }
   }, [queryClient]);
 };

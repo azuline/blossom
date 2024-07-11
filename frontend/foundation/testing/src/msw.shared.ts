@@ -1,6 +1,6 @@
 import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
 import { baseURL } from "@foundation/rpc";
-import { rest, RestHandler } from "msw";
+import { http, HttpHandler, HttpResponse } from "msw";
 
 type RPCErrorOut<RPC extends keyof RPCs, E extends RPCs[RPC]["errors"] = RPCs[RPC]["errors"]> = {
   error: E;
@@ -14,12 +14,12 @@ export type RPCMockOut<RPC extends keyof RPCs> = {
 
 export type RPCMocks = { [RPC in keyof RPCs]?: RPCMockOut<RPC> };
 
-export const mockRPCHandlers = (mocks: RPCMocks): RestHandler[] => {
+export const mockRPCHandlers = (mocks: RPCMocks): HttpHandler[] => {
   return Object.entries(mocks).map(([name, out]) => {
     const method = RPCMethods[name as keyof RPCs].toLowerCase() as "get" | "post";
-    return rest[method](
+    return http[method](
       `${baseURL}/api/${name}`,
-      (_, res, ctx) => res(ctx.status(out.status), ctx.json(out.out)),
+      () => HttpResponse.json(out.out, { status: out.status }),
     );
   });
 };

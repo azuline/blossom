@@ -1,6 +1,6 @@
 {
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     // this is a dummy job to ensures that a change to the configs invlidate
     // all downstream test caches
     "test": {

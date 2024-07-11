@@ -1,4 +1,4 @@
-import { setupWorker } from "msw";
+import { setupWorker } from "msw/browser";
 import { mockRPCHandlers, RPCMocks } from "./msw.shared";
 
 export const mockRPCsWorker = (mocks: RPCMocks): void => {

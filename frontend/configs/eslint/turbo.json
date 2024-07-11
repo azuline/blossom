@@ -1,6 +1,6 @@
 {
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     // these are dummy jobs to ensure that a changes to the configs
     // invalidate all downstream lint caches
     "lint": {

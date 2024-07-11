@@ -5,7 +5,7 @@ clean:
 	pnpm -r clean
 
 install:
-	rm -rf node_modules/.cache
+	rm -rf .turbo
 	pnpm install
 
 typewatch:
