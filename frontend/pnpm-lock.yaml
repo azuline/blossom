@@ -448,6 +448,9 @@ importers:
 
   foundation/testing-browser:
     dependencies:
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@foundation/testing-rpc':
         specifier: workspace:*
         version: link:../testing-rpc
@@ -461,15 +464,15 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
-      '@configs/vitest':
-        specifier: workspace:*
-        version: link:../../configs/vitest
 
   foundation/testing-rpc:
     dependencies:
       '@codegen/rpc':
         specifier: workspace:*
         version: link:../../codegen/rpc
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@foundation/rpc':
         specifier: workspace:*
         version: link:../rpc
@@ -495,12 +498,12 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
-      '@configs/vitest':
-        specifier: workspace:*
-        version: link:../../configs/vitest
 
   foundation/testing-server:
     dependencies:
+      '@configs/vitest':
+        specifier: workspace:*
+        version: link:../../configs/vitest
       '@foundation/testing-rpc':
         specifier: workspace:*
         version: link:../testing-rpc
@@ -517,9 +520,6 @@ importers:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../../configs/typescript
-      '@configs/vitest':
-        specifier: workspace:*
-        version: link:../../configs/vitest
 
   foundation/theme:
     dependencies:
@@ -778,9 +778,6 @@ importers:
       '@foundation/loaders':
         specifier: workspace:*
         version: link:../foundation/loaders
-      '@foundation/testing-browser':
-        specifier: workspace:*
-        version: link:../foundation/testing-browser
       '@foundation/testing-rpc':
         specifier: workspace:*
         version: link:../foundation/testing-rpc

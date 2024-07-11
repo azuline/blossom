@@ -14,6 +14,7 @@ export default {
     "*",
   ],
   addons: {
+    msw: { enabled: true },
     width: { enabled: false },
     links: { enabled: false },
   },

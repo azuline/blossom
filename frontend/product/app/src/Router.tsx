@@ -27,10 +27,10 @@ export const Router: React.FC = () => {
       )}
       {auths.public && (
         <>
-          <Route factory={() => import("@product/login")} path="/:any*" />
+          <Route factory={() => import("@product/login")} path="/*?" />
         </>
       )}
-      <Route factory={() => import("@product/notfound")} path="/:any*" />
+      <Route factory={() => import("@product/notfound")} path="/*?" />
     </Switch>
   );
 };
