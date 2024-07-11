@@ -11,7 +11,7 @@ const url = "http://host.docker.internal:40855";
 const { stories } = fetch(`${url}/meta.json`).json() as { stories: string[] };
 
 // remove snapshots that no longer correspond to a story
-const storyDir = `${__dirname}/visual.spec.ts-snapshots`;
+const storyDir = `${import.meta.dirname}/visual.spec.ts-snapshots`;
 fs.readdirSync(storyDir).forEach(file => {
   const storyName = file.replace(/--(light|dark)-linux.png$/, "");
   const fetchedStoryKeys = Object.keys(stories);
