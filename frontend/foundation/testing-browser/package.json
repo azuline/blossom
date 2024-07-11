@@ -1,5 +1,5 @@
 {
-  "name": "@foundation/testing/server",
+  "name": "@foundation/testing-browser",
   "version": "0.0.0",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
@@ -17,11 +17,10 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "@foundation/testing/rpc": "workspace:*"
+    "@foundation/testing-rpc": "workspace:*"
   },
   "peerDependencies": {
-    "msw": "*",
-    "vitest": "*"
+    "msw": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

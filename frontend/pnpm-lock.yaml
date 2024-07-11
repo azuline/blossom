@@ -446,33 +446,33 @@ importers:
         specifier: '*'
         version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
 
-  foundation/testing/browser:
+  foundation/testing-browser:
     dependencies:
-      '@foundation/testing/rpc':
+      '@foundation/testing-rpc':
         specifier: workspace:*
-        version: link:../rpc
+        version: link:../testing-rpc
       msw:
         specifier: '*'
         version: 2.3.1(typescript@5.5.3)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
-        version: link:../../../configs/eslint
+        version: link:../../configs/eslint
       '@configs/typescript':
         specifier: workspace:*
-        version: link:../../../configs/typescript
+        version: link:../../configs/typescript
       '@configs/vitest':
         specifier: workspace:*
-        version: link:../../../configs/vitest
+        version: link:../../configs/vitest
 
-  foundation/testing/rpc:
+  foundation/testing-rpc:
     dependencies:
       '@codegen/rpc':
         specifier: workspace:*
-        version: link:../../../codegen/rpc
+        version: link:../../codegen/rpc
       '@foundation/rpc':
         specifier: workspace:*
-        version: link:../../rpc
+        version: link:../rpc
       '@tanstack/query-core':
         specifier: '*'
         version: 5.51.1
@@ -491,19 +491,19 @@ importers:
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
-        version: link:../../../configs/eslint
+        version: link:../../configs/eslint
       '@configs/typescript':
         specifier: workspace:*
-        version: link:../../../configs/typescript
+        version: link:../../configs/typescript
       '@configs/vitest':
         specifier: workspace:*
-        version: link:../../../configs/vitest
+        version: link:../../configs/vitest
 
-  foundation/testing/server:
+  foundation/testing-server:
     dependencies:
-      '@foundation/testing/rpc':
+      '@foundation/testing-rpc':
         specifier: workspace:*
-        version: link:../rpc
+        version: link:../testing-rpc
       msw:
         specifier: '*'
         version: 2.3.1(typescript@5.5.3)
@@ -513,13 +513,13 @@ importers:
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
-        version: link:../../../configs/eslint
+        version: link:../../configs/eslint
       '@configs/typescript':
         specifier: workspace:*
-        version: link:../../../configs/typescript
+        version: link:../../configs/typescript
       '@configs/vitest':
         specifier: workspace:*
-        version: link:../../../configs/vitest
+        version: link:../../configs/vitest
 
   foundation/theme:
     dependencies:
@@ -707,12 +707,12 @@ importers:
       '@foundation/rpc':
         specifier: workspace:*
         version: link:../../foundation/rpc
-      '@foundation/testing/rpc':
+      '@foundation/testing-rpc':
         specifier: workspace:*
-        version: link:../../foundation/testing/rpc
-      '@foundation/testing/server':
+        version: link:../../foundation/testing-rpc
+      '@foundation/testing-server':
         specifier: workspace:*
-        version: link:../../foundation/testing/server
+        version: link:../../foundation/testing-server
       '@foundation/ui':
         specifier: workspace:*
         version: link:../../foundation/ui
@@ -778,12 +778,12 @@ importers:
       '@foundation/loaders':
         specifier: workspace:*
         version: link:../foundation/loaders
-      '@foundation/testing/browser':
+      '@foundation/testing-browser':
         specifier: workspace:*
-        version: link:../foundation/testing/browser
-      '@foundation/testing/rpc':
+        version: link:../foundation/testing-browser
+      '@foundation/testing-rpc':
         specifier: workspace:*
-        version: link:../foundation/testing/rpc
+        version: link:../foundation/testing-rpc
       '@foundation/theme':
         specifier: workspace:*
         version: link:../foundation/theme

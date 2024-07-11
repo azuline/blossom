@@ -19,8 +19,8 @@
   "dependencies": {
     "@foundation/ui": "workspace:*",
     "@codegen/rpc": "workspace:*",
-    "@foundation/testing/rpc": "workspace:*",
-    "@foundation/testing/server": "workspace:*",
+    "@foundation/testing-rpc": "workspace:*",
+    "@foundation/testing-server": "workspace:*",
     "@foundation/rpc": "workspace:*",
     "@foundation/icons": "workspace:*",
     "@foundation/forms": "workspace:*",

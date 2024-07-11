@@ -1,5 +1,5 @@
 {
-  "name": "@foundation/testing/browser",
+  "name": "@foundation/testing-rpc",
   "version": "0.0.0",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
@@ -17,10 +17,15 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
-    "@foundation/testing/rpc": "workspace:*"
+    "@foundation/rpc": "workspace:*",
+    "@codegen/rpc": "workspace:*"
   },
   "peerDependencies": {
-    "msw": "*"
+    "@tanstack/query-core": "*",
+    "@tanstack/react-query": "*",
+    "msw": "*",
+    "react": "*",
+    "vitest": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
