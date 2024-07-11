@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "commonjs",
-  "//": "@vanilla-extract/css causes a build issue at 1.11.0 where CSS can't be attached to files.",
+  "packageManager": "pnpm@9.4.0",
   "dependencies": {
     "@tanstack/query-core": "^5.51.1",
     "@tanstack/react-query": "^5.51.1",
