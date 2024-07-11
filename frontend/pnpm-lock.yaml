@@ -778,6 +778,9 @@ importers:
       '@foundation/loaders':
         specifier: workspace:*
         version: link:../foundation/loaders
+      '@foundation/testing-browser':
+        specifier: workspace:*
+        version: link:../foundation/testing-browser
       '@foundation/testing-rpc':
         specifier: workspace:*
         version: link:../foundation/testing-rpc
