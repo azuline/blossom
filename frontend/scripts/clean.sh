@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-rm -rf build dist ./*.tsbuildinfo
+rm -rf build dist ./*.tsbuildinfo node_modules

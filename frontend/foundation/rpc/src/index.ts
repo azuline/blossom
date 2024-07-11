@@ -2,7 +2,7 @@ import { RPCErrors, RPCMethods, RPCs } from "@codegen/rpc";
 import { BaseError } from "@foundation/errors";
 import { useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { Getter } from "jotai";
-import { atomsWithQuery } from "jotai-tanstack-query";
+import { atomWithQuery } from "jotai-tanstack-query";
 import { useCallback } from "react";
 import {
   PossibleRPCErrors,
@@ -72,14 +72,13 @@ export const useRPC = <T extends keyof RPCs>(
 };
 
 type RPCAtom<T extends keyof RPCs> = ReturnType<
-  typeof atomsWithQuery<
+  typeof atomWithQuery<
     RPCs[T]["out"],
     RPCError<T, PossibleRPCErrors<T>>,
     RPCs[T]["out"],
-    RPCs[T]["out"],
     [T, RPCs[T]["in"]]
   >
->[0];
+>;
 
 /**
  * rpcAtom allows for rpc calls to be made as a part of Jotai's state management.
@@ -93,10 +92,9 @@ export const rpcAtom = <T extends keyof RPCs>(
   // we only take one parameter, the RPC name.
   ...getArgs: RPCs[T]["in"] extends null ? [] : [(get: Getter) => RPCs[T]["in"]]
 ): RPCAtom<T> => {
-  const [atom] = atomsWithQuery<
+  const atom = atomWithQuery<
     RPCs[T]["out"],
     RPCError<T, PossibleRPCErrors<T>>,
-    RPCs[T]["out"],
     RPCs[T]["out"],
     [T, RPCs[T]["in"]]
   >(get => ({

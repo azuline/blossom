@@ -31,5 +31,6 @@
   "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*"
-  }
+  },
+  "type": "module"
 }

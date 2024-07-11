@@ -6,7 +6,7 @@
     "outDir": "dist"
   },
   "include": [
-    "index.cts",
+    "index.ts",
     "global.ts",
     ".eslintrc.cjs"
   ],

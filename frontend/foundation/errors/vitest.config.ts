@@ -1,1 +1,1 @@
-export * as default from "@configs/vitest";
+export { default } from "@configs/vitest";

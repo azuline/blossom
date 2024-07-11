@@ -26,5 +26,6 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
-  }
+  },
+  "type": "module"
 }

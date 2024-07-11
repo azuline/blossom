@@ -39,5 +39,6 @@
     "@vitejs/plugin-react-swc": "*",
     "vite": "*",
     "sync-fetch": "*"
-  }
+  },
+  "type": "module"
 }

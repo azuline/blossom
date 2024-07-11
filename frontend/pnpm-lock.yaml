@@ -1,7 +1,7 @@
 lockfileVersion: '9.0'
 
 settings:
-  autoInstallPeers: false
+  autoInstallPeers: true
   excludeLinksFromLockfile: true
 
 importers:
@@ -170,14 +170,59 @@ importers:
         version: link:../../configs/vitest
 
   configs/eslint:
+    dependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: '*'
+        version: 7.16.0(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3)
+      '@typescript-eslint/parser':
+        specifier: '*'
+        version: 7.16.0(eslint@8.57.0)(typescript@5.5.3)
+      eslint-config-airbnb:
+        specifier: '*'
+        version: 19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.34.3(eslint@8.57.0))(eslint@8.57.0)
+      eslint-config-airbnb-typescript:
+        specifier: '*'
+        version: 18.0.0(@typescript-eslint/eslint-plugin@7.16.0(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3))(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import:
+        specifier: '*'
+        version: 2.29.1(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)
+      eslint-plugin-jsx-a11y:
+        specifier: '*'
+        version: 6.9.0(eslint@8.57.0)
+      eslint-plugin-react:
+        specifier: '*'
+        version: 7.34.3(eslint@8.57.0)
+      eslint-plugin-react-hooks:
+        specifier: '*'
+        version: 4.6.2(eslint@8.57.0)
+      eslint-plugin-unused-imports:
+        specifier: '*'
+        version: 3.2.0(@typescript-eslint/eslint-plugin@7.16.0(@typescript-eslint/parser@7.16.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)
     devDependencies:
       '@configs/typescript':
         specifier: workspace:*
         version: link:../typescript
 
-  configs/typescript: {}
+  configs/typescript:
+    dependencies:
+      '@testing-library/jest-dom':
+        specifier: '*'
+        version: 6.4.6(vitest@2.0.2(@types/node@20.14.10)(jsdom@24.1.0))
 
   configs/vitest:
+    dependencies:
+      '@testing-library/jest-dom':
+        specifier: '*'
+        version: 6.4.6(vitest@2.0.2(@types/node@20.14.10)(jsdom@24.1.0))
+      '@testing-library/react':
+        specifier: '*'
+        version: 16.0.0(@testing-library/dom@10.3.1)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@vanilla-extract/vite-plugin':
+        specifier: '*'
+        version: 4.0.13(@types/node@20.14.10)(vite@5.3.3(@types/node@20.14.10))
+      vitest:
+        specifier: '*'
+        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -197,6 +242,9 @@ importers:
       '@foundation/rpc':
         specifier: workspace:*
         version: link:../rpc
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -221,6 +269,13 @@ importers:
         version: link:../../configs/vitest
 
   foundation/forms:
+    dependencies:
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -237,6 +292,9 @@ importers:
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -265,6 +323,18 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.15.3
+      '@vanilla-extract/recipes':
+        specifier: '*'
+        version: 0.5.3(@vanilla-extract/css@1.15.3)
+      clsx:
+        specifier: '*'
+        version: 2.1.1
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -284,6 +354,9 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../ui
+      '@vanilla-extract/recipes':
+        specifier: '*'
+        version: 0.5.3(@vanilla-extract/css@1.15.3)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -300,6 +373,15 @@ importers:
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      react:
+        specifier: '*'
+        version: 18.3.1
+      wouter:
+        specifier: '*'
+        version: 3.3.1(react@18.3.1)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -319,6 +401,21 @@ importers:
       '@foundation/errors':
         specifier: workspace:*
         version: link:../errors
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 5.51.1(react@18.3.1)
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      jotai-tanstack-query:
+        specifier: '*'
+        version: 0.8.5(@tanstack/query-core@5.51.1)(jotai@2.9.0(@types/react@18.3.3)(react@18.3.1))(wonka@6.3.4)
+      react:
+        specifier: '*'
+        version: 18.3.1
+      wonka:
+        specifier: '*'
+        version: 6.3.4
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -360,6 +457,21 @@ importers:
       '@foundation/rpc':
         specifier: workspace:*
         version: link:../rpc
+      '@tanstack/query-core':
+        specifier: '*'
+        version: 5.51.1
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 5.51.1(react@18.3.1)
+      msw:
+        specifier: '*'
+        version: 2.3.1(typescript@5.5.3)
+      react:
+        specifier: '*'
+        version: 18.3.1
+      vitest:
+        specifier: '*'
+        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -373,6 +485,24 @@ importers:
       '@foundation/std':
         specifier: workspace:*
         version: link:../std
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.15.3
+      '@vanilla-extract/dynamic':
+        specifier: '*'
+        version: 2.1.1
+      '@vanilla-extract/sprinkles':
+        specifier: '*'
+        version: 1.6.2(@vanilla-extract/css@1.15.3)
+      clsx:
+        specifier: '*'
+        version: 2.1.1
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -398,6 +528,33 @@ importers:
       '@foundation/theme':
         specifier: workspace:*
         version: link:../theme
+      '@testing-library/react':
+        specifier: '*'
+        version: 16.0.0(@testing-library/dom@10.3.1)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@testing-library/user-event':
+        specifier: '*'
+        version: 14.5.2(@testing-library/dom@10.3.1)
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.15.3
+      '@vanilla-extract/recipes':
+        specifier: '*'
+        version: 0.5.3(@vanilla-extract/css@1.15.3)
+      clsx:
+        specifier: '*'
+        version: 2.1.1
+      react:
+        specifier: '*'
+        version: 18.3.1
+      react-aria:
+        specifier: '*'
+        version: 3.33.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-stately:
+        specifier: '*'
+        version: 3.31.1(react@18.3.1)
+      vitest:
+        specifier: '*'
+        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -432,6 +589,18 @@ importers:
       '@product/notfound':
         specifier: workspace:*
         version: link:../notfound
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 5.51.1(react@18.3.1)
+      '@total-typescript/ts-reset':
+        specifier: '*'
+        version: 0.5.1
+      react:
+        specifier: '*'
+        version: 18.3.1
+      react-dom:
+        specifier: '*'
+        version: 18.3.1(react@18.3.1)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -463,6 +632,9 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../../foundation/ui
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -500,6 +672,21 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../../foundation/ui
+      '@testing-library/react':
+        specifier: '*'
+        version: 16.0.0(@testing-library/dom@10.3.1)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@testing-library/user-event':
+        specifier: '*'
+        version: 14.5.2(@testing-library/dom@10.3.1)
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      react:
+        specifier: '*'
+        version: 18.3.1
+      vitest:
+        specifier: '*'
+        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -522,6 +709,9 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../../foundation/ui
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*
@@ -553,6 +743,9 @@ importers:
       '@foundation/ui':
         specifier: workspace:*
         version: link:../foundation/ui
+      '@ladle/react':
+        specifier: '*'
+        version: 4.1.0(@swc/helpers@0.5.11)(@types/node@20.14.10)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.5.3)
       '@product/home':
         specifier: workspace:*
         version: link:../product/home
@@ -562,6 +755,21 @@ importers:
       '@product/notfound':
         specifier: workspace:*
         version: link:../product/notfound
+      '@tanstack/react-query':
+        specifier: '*'
+        version: 5.51.1(react@18.3.1)
+      '@vanilla-extract/css':
+        specifier: '*'
+        version: 1.15.3
+      '@vanilla-extract/dynamic':
+        specifier: '*'
+        version: 2.1.1
+      jotai:
+        specifier: '*'
+        version: 2.9.0(@types/react@18.3.3)(react@18.3.1)
+      react:
+        specifier: '*'
+        version: 18.3.1
     devDependencies:
       '@configs/eslint':
         specifier: workspace:*

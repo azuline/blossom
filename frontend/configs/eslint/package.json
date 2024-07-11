@@ -20,5 +20,6 @@
   },
   "devDependencies": {
     "@configs/typescript": "workspace:*"
-  }
+  },
+  "type": "module"
 }
