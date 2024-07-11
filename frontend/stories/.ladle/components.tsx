@@ -1,4 +1,4 @@
-import { GlobalProvider, useLadleContext } from "@ladle/react";
+import { GlobalProvider, ThemeState, useLadleContext } from "@ladle/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { DEFAULT_MOCK_RPC_OUTPUT, mockRPCsWorker } from "@foundation/testing";
@@ -14,7 +14,7 @@ mockRPCsWorker(DEFAULT_MOCK_RPC_OUTPUT);
 
 export const Provider: GlobalProvider = ({ children }) => {
   const { globalState } = useLadleContext();
-  const theme = globalState.theme === "light" || globalState.theme === "dark"
+  const theme = globalState.theme === ThemeState.Light || globalState.theme === ThemeState.Dark
     ? globalState.theme
     : undefined;
 

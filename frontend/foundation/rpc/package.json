@@ -23,6 +23,7 @@
   "peerDependencies": {
     "jotai": "*",
     "jotai-tanstack-query": "*",
+    "wonka": "*",
     "react": "*",
     "@tanstack/react-query": "*"
   },

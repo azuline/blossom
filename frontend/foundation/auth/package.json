@@ -17,11 +17,11 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
+    "@codegen/rpc": "workspace:*",
     "@foundation/loaders": "workspace:*",
     "@foundation/rpc": "workspace:*"
   },
   "peerDependencies": {
-    "@codegen/rpc": "workspace:*",
     "react": "*"
   },
   "devDependencies": {

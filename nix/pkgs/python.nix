@@ -1,29 +1,7 @@
 { pkgs }:
 
 let
-  python = pkgs.python310;
-  quart = python.pkgs.buildPythonPackage rec {
-    pname = "Quart";
-    version = "0.18.3";
-    src = python.pkgs.fetchPypi {
-      inherit pname;
-      inherit version;
-      hash = "sha256-3E3ll9XUaTYnyQkEsjPXKVMfayfBFk92BHbTlnruKko=";
-    };
-    propagatedBuildInputs = with python.pkgs; [
-      aiofiles
-      blinker
-      click
-      hypercorn
-      importlib-metadata
-      itsdangerous
-      jinja2
-      markupsafe
-      pydata-sphinx-theme
-      typing-extensions
-      werkzeug
-    ];
-  };
+  python = pkgs.python312;
   runtime-deps = with python.pkgs; [
     click
     cryptography
