@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["BLOSSOM_ROOT"],
   "tasks": {
     // typecheck transpiles .ts files into output .js and .d.ts files and checks for correctness.
     "typecheck": {
