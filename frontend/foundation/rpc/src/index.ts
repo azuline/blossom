@@ -68,7 +68,11 @@ export const useRPC = <T extends keyof RPCs>(
     RPCError<T, PossibleRPCErrors<T>>,
     RPCs[T]["out"],
     [T, RPCs[T]["in"]]
-  >({ queryKey: [rpcName, args], queryFn: ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]), ...options });
+  >({
+    queryKey: [rpcName, args],
+    queryFn: ({ queryKey }) => baseRPCExecutor(queryKey[0], queryKey[1]),
+    ...options,
+  });
 };
 
 type RPCAtom<T extends keyof RPCs> = ReturnType<

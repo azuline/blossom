@@ -1,6 +1,6 @@
+import { mockRPCHandlers, RPCMocks } from "@foundation/testing-rpc";
 import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll } from "vitest";
-import { mockRPCHandlers, RPCMocks } from "@foundation/testing-rpc";
 
 /** This function allows for RPC mocking in a describe test suite. */
 export const mockRPCsForSuite = (mocks: RPCMocks): void => {
