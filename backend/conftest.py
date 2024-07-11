@@ -82,9 +82,7 @@ async def t(pg_pool: ConnPool) -> AsyncIterator[TFix]:
 
 # Pytest has a bug where it doesn't handle namespace packages and treats same-name files
 # in different packages as a naming collision.
-#
 # https://stackoverflow.com/a/72366347
-# Tweaked from ^ to handle our foundation/product split.
 
 resolve_pkg_path_orig = _pytest.pathlib.resolve_package_path
 namespace_pkg_dirs = [str(d) for d in pathlib.Path(__file__).parent.iterdir() if d.is_dir()]
