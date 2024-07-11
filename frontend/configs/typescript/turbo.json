@@ -1,10 +1,10 @@
 {
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     // this is a dummy job to ensures that a change to base.json invalidates
     // all downstream typecheck caches
     "typecheck": {
-      "inputs": ["base.json"]
+      "inputs": ["base.json", "index.ts"]
     }
   }
 }

@@ -1,14 +1,14 @@
 /// <reference types="vitest" />
-const { defineConfig } = require("vitest/config");
-const { vanillaExtractPlugin } = require("@vanilla-extract/vite-plugin");
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
+import { defineConfig } from "vitest/config";
 
-module.exports = defineConfig({
+export default defineConfig({
   plugins: [vanillaExtractPlugin()],
   test: {
     exclude: ["node_modules", "dist"],
     globals: true,
     environment: "jsdom",
-    setupFiles: `${__dirname}/global.js`,
+    setupFiles: `${import.meta.dirname}/global.js`,
     passWithNoTests: true,
   },
 });

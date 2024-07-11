@@ -17,6 +17,11 @@ force-exclude = '''
 '''
 
 [tool.ruff]
+line-length = 100
+exclude = ["snapshots", ".venv", "codegen"]
+src = ["."]
+
+[tool.ruff.lint]
 select = [
   # pycodestyle
   "E",
@@ -44,8 +49,8 @@ select = [
   "SIM",
   # pandas-vet
   "PD",
-  # flake8-use-pathlib - in ruff/main but not yet in the nixified version
-  # "PTH",
+  # flake8-use-pathlib
+  "PTH",
 ]
 ignore = [
   # Rule: Use `@pytest.mark.asyncio()` over `@pytest.mark.asyncio`
@@ -57,9 +62,6 @@ ignore = [
   # missed f-string, so I'm picking the semgrep rule.
   "F541",
 ]
-line-length = 100
-exclude = ["snapshots", ".venv", "codegen"]
-src = ["."]
 
 [tool.mypy]
 strict = true

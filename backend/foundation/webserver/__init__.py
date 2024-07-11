@@ -71,6 +71,6 @@ def start_app(host: str, port: int) -> None:  # pragma no cover
 
     async def run() -> None:
         app = await create_app()
-        await serve(app, config, shutdown_trigger=shutdown_event.wait)  # type: ignore
+        await serve(app, config, shutdown_trigger=shutdown_event.wait)
 
     loop.run_until_complete(run())

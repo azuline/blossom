@@ -2,10 +2,10 @@
 check: typecheck test lintcheck
 
 clean:
-	pnpm turbo --continue --no-daemon clean --concurrency `nproc`
+	pnpm -r clean
 
 install:
-	fd -u node_modules . | xargs rm -rf
+	rm -rf .turbo
 	pnpm install
 
 typewatch:

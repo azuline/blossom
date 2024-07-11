@@ -2,6 +2,7 @@
 
 import nixpkgs {
   inherit system;
+  config.allowUnfree = true;
   overlays = [
     (self: super: pkg-pins)
     (self: super:

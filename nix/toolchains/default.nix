@@ -22,7 +22,7 @@ rec {
   frontend = general ++ (with pkgs; [
     docker
     dprint
-    nodejs-18_x
+    nodejs_20
     nodePackages.pnpm
     semgrep
   ]);

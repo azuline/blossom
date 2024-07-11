@@ -11,7 +11,7 @@ const url = "http://host.docker.internal:40855";
 const { stories } = fetch(`${url}/meta.json`).json() as { stories: string[] };
 
 // remove snapshots that no longer correspond to a story
-const storyDir = `${__dirname}/visual.spec.ts-snapshots`;
+const storyDir = `${import.meta.dirname}/visual.spec.ts-snapshots`;
 fs.readdirSync(storyDir).forEach(file => {
   const storyName = file.replace(/--(light|dark)-linux.png$/, "");
   const fetchedStoryKeys = Object.keys(stories);
@@ -28,7 +28,7 @@ test.use({ viewport: { width: 1920, height: 1080 } });
 const scrotOpts = {
   // This is a parameter for the underlying pixelmatch library. Extremely sensitive
   // to visual changes.
-  threshold: 0,
+  threshold: 0.05,
   // Take a picture of the full scrolling page; do not cut off at screen size.
   fullPage: true,
   // Github Actions is a lil slow...

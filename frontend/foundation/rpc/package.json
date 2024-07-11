@@ -23,6 +23,7 @@
   "peerDependencies": {
     "jotai": "*",
     "jotai-tanstack-query": "*",
+    "wonka": "*",
     "react": "*",
     "@tanstack/react-query": "*"
   },
@@ -30,5 +31,6 @@
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
-  }
+  },
+  "type": "module"
 }

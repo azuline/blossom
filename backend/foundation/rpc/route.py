@@ -118,7 +118,7 @@ def route(
     """
 
     def decorator(
-        func: Callable[[Req[Any]], Awaitable[Any]]
+        func: Callable[[Req[Any]], Awaitable[Any]],
     ) -> Callable[[], Awaitable[ResponseReturnValue]]:
         type_hints = get_type_hints(func)
 
@@ -137,6 +137,10 @@ def route(
             raise InvalidRPCDefinitionError(
                 f"RPC handlers must take in a parameter named `req`. Failed to wrap {name}"
             ) from e
+
+        # Turn the input dataclass into a Pydantic dataclass for validation purposes.
+        if in_.__name__ != "NoneType":
+            in_ = pydantic.dataclasses.dataclass(in_)
 
         @functools.wraps(func)
         async def handler() -> ResponseReturnValue:
@@ -174,7 +178,7 @@ def route(
 
                 # A raw handler should handle its own return value.
                 if type_ == "raw":
-                    return rdata
+                    return rdata  # type: ignore
                 # But an RPC handler returns a dataclass that we serialize.
                 return quart.jsonify(asdict(rdata) if rdata else {"ok": True}), 200
             except APIError as e:
@@ -270,21 +274,17 @@ async def _validate_data(spec: type[T], method: Method) -> T | None:
             logger.info(f"Input JSON decode failure: {e}")
             raise ServerJSONDeserializeError(message="Failed to deserialize input to JSON.") from e
 
-    pydantic.dataclasses.dataclass(spec)
-    with pydantic.dataclasses.set_validation(spec, True):  # type: ignore
-        try:
-            return spec(**data)
-        except TypeError as e:
-            logger.info(f"Input pydantic parse failure: {e}")
-            raise DataMismatchError(
-                message="Failed to parse request data: mismatching fields."
-            ) from e
-        except ValidationError as e:
-            logger.info(f"Input pydantic validation failure: {e}")
-            fields = {}
-            for field_error in e.errors():
-                fields[str(field_error["loc"][0])] = field_error["msg"]
-            raise InputValidationError(
-                message="Failed to validate request data.",
-                fields=fields,
-            ) from e
+    try:
+        return spec(**data)
+    except TypeError as e:
+        logger.info(f"Input pydantic parse failure: {e}")
+        raise DataMismatchError(message="Failed to parse request data: incorrect type.") from e
+    except ValidationError as e:
+        logger.info(f"Input pydantic validation failure: {e}")
+        fields = {}
+        for field_error in e.errors():
+            fields[str(field_error["loc"][0])] = field_error["msg"]
+        raise InputValidationError(
+            message="Failed to validate request data.",
+            fields=fields,
+        ) from e

@@ -17,16 +17,17 @@
     "clean": "../../scripts/clean.sh"
   },
   "dependencies": {
+    "@codegen/rpc": "workspace:*",
     "@foundation/loaders": "workspace:*",
     "@foundation/rpc": "workspace:*"
   },
   "peerDependencies": {
-    "@codegen/rpc": "workspace:*",
     "react": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
-  }
+  },
+  "type": "module"
 }

@@ -1,10 +1,10 @@
 {
   "name": "@configs/vitest",
   "version": "0.0.0",
-  "type": "commonjs",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.cjs",
-  "types": "./dist/index.d.cts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "echo",
     "typecheck": "../../scripts/typecheck.sh",
@@ -16,7 +16,8 @@
   "peerDependencies": {
     "vitest": "*",
     "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*"
+    "@testing-library/react": "*",
+    "@vanilla-extract/vite-plugin": "*"
   },
   "devDependencies": {
     "@configs/eslint": "workspace:*",

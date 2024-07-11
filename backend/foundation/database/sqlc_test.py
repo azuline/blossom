@@ -1,5 +1,4 @@
 import re
-from glob import glob
 from pathlib import Path
 
 from foundation.root import BACKEND_ROOT
@@ -12,8 +11,8 @@ nl = "\n"
 def test_sqlc_query_prefixes() -> None:
     failed: list[str] = []
 
-    query_files = glob(f"{BACKEND_ROOT}/**/queries.sql", recursive=True)
-    for qf_name in query_files:
+    root = Path(BACKEND_ROOT)
+    for qf_name in root.glob("**/queries.sql"):
         qf = Path(qf_name)
         package = qf.parent.name
 
