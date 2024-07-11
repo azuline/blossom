@@ -8,7 +8,7 @@ module.exports = defineConfig({
     exclude: ["node_modules", "dist"],
     globals: true,
     environment: "jsdom",
-    setupFiles: `${__dirname}/global.js`,
+    setupFiles: `${__dirname}/global.ts`,
     passWithNoTests: true,
   },
 });

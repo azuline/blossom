@@ -28,8 +28,6 @@
     "sourceMap": true,
     // Transpile JSX to `_jsx` calls.
     "jsx": "react-jsx",
-    // Global typings across all packages.
-    "types": ["@configs/typescript"],
     // Magical stuff, IDK.
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,

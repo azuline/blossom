@@ -2,9 +2,9 @@
   "name": "@configs/vitest",
   "version": "0.0.0",
   "type": "commonjs",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.cjs",
-  "types": "./dist/index.d.cts",
+  "main": "./index.cts",
+  "module": "./index.cts",
+  "types": "./index.cts",
   "scripts": {
     "test": "echo",
     "typecheck": "../../scripts/typecheck.sh",
