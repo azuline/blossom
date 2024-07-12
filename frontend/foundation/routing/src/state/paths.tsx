@@ -1,4 +1,4 @@
-import { atom } from "jotai";
+import { atom, PrimitiveAtom } from "jotai";
 
 type Paths = Record<string, () => Promise<unknown>>;
-export const availablePathsAtom = atom<Paths>({});
+export const availablePathsAtom: PrimitiveAtom<Paths> = atom({});

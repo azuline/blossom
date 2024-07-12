@@ -29,9 +29,9 @@ nl = "\n"
 contents = f"""\
 /* dprint-ignore-file */
 /* eslint-disable */
-import {{ lazy }} from "react";
+import {{ FC, lazy, LazyExoticComponent }} from "react";
 
-export const ICONS_MAP = {{
+export const ICONS_MAP: Record<string, LazyExoticComponent<FC>> = {{
 {nl.join(record_lines)}
 }} as const;
 """

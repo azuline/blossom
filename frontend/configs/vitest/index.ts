@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
-import { defineConfig } from "vitest/config";
+import { defineConfig, UserConfig } from "vitest/config";
 
-export default defineConfig({
+const config: UserConfig = defineConfig({
   plugins: [vanillaExtractPlugin()],
   test: {
     exclude: ["node_modules", "dist"],
@@ -12,3 +12,4 @@ export default defineConfig({
     passWithNoTests: true,
   },
 });
+export default config;

@@ -15,8 +15,7 @@
   "dependencies": {
     "@foundation/theme": "workspace:*",
     "@foundation/ui": "workspace:*",
-    "@foundation/testing-rpc": "workspace:*",
-    "@foundation/testing-browser": "workspace:*",
+    "@foundation/testing": "workspace:*",
     "@foundation/layout": "workspace:*",
     "@foundation/loaders": "workspace:*",
     "@foundation/icons": "workspace:*",

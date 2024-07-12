@@ -24,8 +24,6 @@
     "declaration": true,
     // Generate a sourcemap for .d.ts files that link back to the source.
     "declarationMap": true,
-    // Require that all exported declarations have explicit types.
-    "isolatedDeclarations": true,
     // Generate source maps for jump to definition.
     "sourceMap": true,
     // Transpile JSX to `_jsx` calls.

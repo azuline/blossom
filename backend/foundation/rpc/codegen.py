@@ -59,11 +59,11 @@ export type RPCs = {
   {% endfor %}
 };
 
-export const RPCMethods = {
+export const RPCMethods: Record<keyof RPCs, "GET" | "POST"> = {
   {% for rpcname, rpc in catalog.rpcs.items() %}
   {{ rpcname }}: "{{ rpc.method }}",
   {% endfor %}
-} satisfies Record<keyof RPCs, "GET" | "POST">;
+};
 """
 
 

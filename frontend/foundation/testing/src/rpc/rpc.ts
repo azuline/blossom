@@ -26,7 +26,7 @@ export const mockRPCHandlers = (mocks: RPCMocks): HttpHandler[] => {
 
 // All RPC endpoints must define a set of default mock data for stories and visual
 // tests. These can also be used as mock data in unit and integration tests.
-export const DEFAULT_MOCK_RPC_OUTPUT = {
+export const DEFAULT_MOCK_RPC_OUTPUT: { [RPC in keyof RPCs]: RPCMockOut<RPC> } = {
   Login: { status: 200, out: null },
   Logout: { status: 200, out: null },
   GetPageLoadInfo: {
@@ -42,4 +42,4 @@ export const DEFAULT_MOCK_RPC_OUTPUT = {
       ],
     },
   },
-} satisfies { [RPC in keyof RPCs]: RPCMockOut<RPC> };
+};

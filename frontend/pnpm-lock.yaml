@@ -446,26 +446,7 @@ importers:
         specifier: '*'
         version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
 
-  foundation/testing-browser:
-    dependencies:
-      '@configs/vitest':
-        specifier: workspace:*
-        version: link:../../configs/vitest
-      '@foundation/testing-rpc':
-        specifier: workspace:*
-        version: link:../testing-rpc
-      msw:
-        specifier: '*'
-        version: 2.3.1(typescript@5.5.3)
-    devDependencies:
-      '@configs/eslint':
-        specifier: workspace:*
-        version: link:../../configs/eslint
-      '@configs/typescript':
-        specifier: workspace:*
-        version: link:../../configs/typescript
-
-  foundation/testing-rpc:
+  foundation/testing:
     dependencies:
       '@codegen/rpc':
         specifier: workspace:*
@@ -488,28 +469,6 @@ importers:
       react:
         specifier: '*'
         version: 18.3.1
-      vitest:
-        specifier: '*'
-        version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
-    devDependencies:
-      '@configs/eslint':
-        specifier: workspace:*
-        version: link:../../configs/eslint
-      '@configs/typescript':
-        specifier: workspace:*
-        version: link:../../configs/typescript
-
-  foundation/testing-server:
-    dependencies:
-      '@configs/vitest':
-        specifier: workspace:*
-        version: link:../../configs/vitest
-      '@foundation/testing-rpc':
-        specifier: workspace:*
-        version: link:../testing-rpc
-      msw:
-        specifier: '*'
-        version: 2.3.1(typescript@5.5.3)
       vitest:
         specifier: '*'
         version: 2.0.2(@types/node@20.14.10)(jsdom@24.1.0)
@@ -707,12 +666,9 @@ importers:
       '@foundation/rpc':
         specifier: workspace:*
         version: link:../../foundation/rpc
-      '@foundation/testing-rpc':
+      '@foundation/testing':
         specifier: workspace:*
-        version: link:../../foundation/testing-rpc
-      '@foundation/testing-server':
-        specifier: workspace:*
-        version: link:../../foundation/testing-server
+        version: link:../../foundation/testing
       '@foundation/ui':
         specifier: workspace:*
         version: link:../../foundation/ui
@@ -778,12 +734,9 @@ importers:
       '@foundation/loaders':
         specifier: workspace:*
         version: link:../foundation/loaders
-      '@foundation/testing-browser':
+      '@foundation/testing':
         specifier: workspace:*
-        version: link:../foundation/testing-browser
-      '@foundation/testing-rpc':
-        specifier: workspace:*
-        version: link:../foundation/testing-rpc
+        version: link:../foundation/testing
       '@foundation/theme':
         specifier: workspace:*
         version: link:../foundation/theme

@@ -2,6 +2,7 @@
 check: typecheck test lintcheck
 
 clean:
+	rm -rf node_modules build .mypy_cache .turbo
 	pnpm -r clean
 
 install:
