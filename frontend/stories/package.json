@@ -40,5 +40,11 @@
     "vite": "*",
     "sync-fetch": "*"
   },
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": null,
+      "import": null
+    }
+  }
 }

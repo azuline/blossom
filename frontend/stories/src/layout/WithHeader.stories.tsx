@@ -1,5 +1,5 @@
 import { LayoutPaddingVariableSetter } from "@foundation/layout";
-import { WithHeader } from "@foundation/layout/dist/src/WithHeader";
+import { WithHeader } from "@foundation/layout";
 import { Card, View } from "@foundation/ui";
 import { DocumentationStory } from "../lib/DocumentationStory";
 

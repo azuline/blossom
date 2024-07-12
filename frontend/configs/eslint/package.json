@@ -1,7 +1,6 @@
 {
   "name": "@configs/eslint",
   "version": "0.0.0",
-  "main": "./index.cjs",
   "scripts": {
     "lint": "../../scripts/lint.sh",
     "lintcheck": "../../scripts/lintcheck.sh",
@@ -21,5 +20,11 @@
   "devDependencies": {
     "@configs/typescript": "workspace:*"
   },
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": null,
+      "import": "./index.cjs"
+    }
+  }
 }

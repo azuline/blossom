@@ -1,9 +1,6 @@
 {
   "name": "@foundation/icons",
   "version": "0.0.0",
-  "main": "./dist/src/index.js",
-  "module": "./dist/src/index.js",
-  "types": "./dist/src/index.d.ts",
   "files": [
     "dist",
     "src"
@@ -27,5 +24,11 @@
     "@configs/typescript": "workspace:*",
     "@configs/vitest": "workspace:*"
   },
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  }
 }

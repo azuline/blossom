@@ -40,5 +40,11 @@
     "rollup-plugin-analyzer": "*",
     "vite": "*",
     "@configs/vitest": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "types": null,
+      "import": null
+    }
   }
 }
