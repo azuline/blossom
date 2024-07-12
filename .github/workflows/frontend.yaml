@@ -124,11 +124,13 @@ jobs:
         with:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Build Nix
+        run: |
+          nix build -j8 ../\#devShells.x86_64-linux.deployments
+          nix develop ../\#devShells.x86_64-linux.deployments --command echo
       - name: Tailscale
         uses: tailscale/github-action@v1
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-      - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.deployments
       - name: Deploy
         run: nix develop ../\#devShells.x86_64-linux.deployments --command levant deploy -log-level=debug -var "artifact_source_url=$ARTIFACT_SOURCE_URL" ladle.nomad
