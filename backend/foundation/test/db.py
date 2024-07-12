@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import os
+import subprocess
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from codegen.sqlc.models import Tenant, User
@@ -61,3 +64,11 @@ class TestDB:
             await self.pg_pool.putconn(self._conn_admin.c)
         if self._conn_customer:
             await self.pg_pool.putconn(self._conn_customer.c)
+
+
+def run_database_migrations(db: str) -> None:
+    subprocess.run(
+        ["pgmigrate", "--database", db, "migrate"],
+        cwd=Path(os.environ["BLOSSOM_ROOT"]) / "backend",
+        check=True,
+    )

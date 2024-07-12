@@ -18,6 +18,7 @@ rec {
     sqlc-py
     sqlc-gen-python
     dprint # needed for typescript codegen
+    pgmigrate
   ]);
   frontend = general ++ (with pkgs; [
     docker

@@ -25,40 +25,32 @@ class _Config:
     def __init__(self) -> None:
         # Parse all config values at application startup. This way we do not have an
         # unexpected config parse error at runtime.
-        self.psycopg_database_url = self._psycopg_database_url()
-        self.yoyo_database_url = self._yoyo_database_url()
-        self.pool_size = self._pool_size()
-        self.session_secret = self._session_secret()
-        self.vault_encryption_key = self._vault_encryption_key()
-        self.app_url = self._app_url()
+        self.database_url = self.__database_url()
+        self.pool_size = self.__pool_size()
+        self.session_secret = self.__session_secret()
+        self.vault_encryption_key = self.__vault_encryption_key()
+        self.app_url = self.__app_url()
 
-    def _psycopg_database_url(self) -> str:
+    def __database_url(self) -> str:
         user = env["POSTGRES_USER"]
         password = env["POSTGRES_PASSWORD"]
         host = env["POSTGRES_HOST"]
         port = env["POSTGRES_PORT"]
         return f"postgresql://{user}:{password}@{host}:{port}"
 
-    def _yoyo_database_url(self) -> str:
-        user = env["POSTGRES_USER"]
-        password = env["POSTGRES_PASSWORD"]
-        host = env["POSTGRES_HOST"]
-        port = env["POSTGRES_PORT"]
-        return f"postgresql+psycopg://{user}:{password}@{host}:{port}"
-
-    def _pool_size(self) -> int:
+    def __pool_size(self) -> int:
         try:
             return int(env.get("POOL_SIZE", 20))
         except ValueError as e:  # pragma: no cover
             raise InvalidConfigValueError("Failed to parse POOL_SIZE to int.") from e
 
-    def _session_secret(self) -> str:
+    def __session_secret(self) -> str:
         return env["SESSION_SECRET"]
 
-    def _vault_encryption_key(self) -> bytes:
+    def __vault_encryption_key(self) -> bytes:
         return bytes.fromhex(env["VAULT_ENCRYPTION_KEY"])
 
-    def _app_url(self) -> str:
+    def __app_url(self) -> str:
         return env["APP_URL"]
 
 

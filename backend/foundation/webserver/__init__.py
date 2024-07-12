@@ -35,7 +35,7 @@ async def create_app(
 
     :return: The created Quart application.
     """
-    pg_pool = pg_pool or await create_pg_pool(confvars.psycopg_database_url)
+    pg_pool = pg_pool or await create_pg_pool(confvars.database_url)
 
     logger.debug("Creating Quart app.")
     app = Quart(__name__)

@@ -3,6 +3,7 @@
 # ruff: noqa: F811
 import asyncio
 import functools
+import subprocess
 from typing import Any
 
 import click
@@ -11,7 +12,6 @@ from codegen.sqlc.models import TenantsInboundSource
 from foundation.config import confvars
 from foundation.database import ConnQuerier, conn_admin, create_pg_pool
 from foundation.log import option_log_level
-from foundation.migrate import run_database_migrations
 from foundation.rpc.codegen import codegen_typescript
 from foundation.test.rand import TestRandGen
 from foundation.webserver import start_app
@@ -35,7 +35,7 @@ def with_cq(f: Any) -> Any:
     @functools.wraps(f)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         async with (
-            await create_pg_pool(confvars.psycopg_database_url) as pg_pool,
+            await create_pg_pool(confvars.database_url) as pg_pool,
             conn_admin(pg_pool) as cq,
         ):
             return await f(*args, **kwargs, cq=cq)
@@ -64,13 +64,14 @@ def webserver(host: str, port: int) -> None:
 
 @cli.command()
 def migrate() -> None:
-    """Migrate the Postgres database."""
-    run_database_migrations()
+    """Migrate the database."""
+    subprocess.run(["pgmigrate", "--database", confvars.database_url, "migrate"], check=True)
 
 
 @cli.command()
 def codegen() -> None:
-    """Codegen the frontend RPC bindings."""
+    """Codegen."""
+    subprocess.run(["sqlc-py", "generate"], check=True)
     codegen_typescript()
 
 

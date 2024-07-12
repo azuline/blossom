@@ -13,7 +13,7 @@ pkgs.dockerTools.buildImage {
   tag = "latest";
   copyToRoot = pkgs.buildEnv {
     name = "image-root";
-    paths = [ python-package ];
+    paths = [ python-package pkgs.pgmigrate ];
     pathsToLink = [ "/bin" ];
   };
   config = {
