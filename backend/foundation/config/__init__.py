@@ -55,4 +55,4 @@ class _Config:
 
 
 # Define a Config singleton.
-confvars = _Config()
+CONFVARS = _Config()

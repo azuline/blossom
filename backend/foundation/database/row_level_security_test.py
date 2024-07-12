@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import psycopg
 
-from foundation.config import confvars
+from foundation.config import CONFVARS
 from foundation.database import Conn, create_pg_pool, set_row_level_security
 from foundation.test.db import run_database_migrations
 
@@ -19,7 +19,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     app.current_tenant_id from the connections in the pool upon their return into the pool.
     """
 
-    run_database_migrations(confvars.database_url + "/" + isolated_db)
+    run_database_migrations(CONFVARS.database_url + "/" + isolated_db)
 
     async def get_user_id(c: Conn) -> int | None:
         try:
@@ -31,7 +31,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
             return None
         return int(row[0])
 
-    async with await create_pg_pool(confvars.database_url + "/" + isolated_db) as pg_pool:
+    async with await create_pg_pool(CONFVARS.database_url + "/" + isolated_db) as pg_pool:
         connections: list[Conn] = []
 
         async def create_conn(rls: bool) -> Conn:
@@ -47,7 +47,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
             connections.remove(c)
 
         # Spin up MAX_SIZE conns and give them all a user ID.
-        for _ in range(confvars.pool_size):
+        for _ in range(CONFVARS.pool_size):
             await create_conn(True)
 
         # Check that they all have a user ID.
@@ -59,7 +59,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         # user ID if improperly configured.
         ctasks = []
         existing_conns = [*connections]
-        for _ in range(confvars.pool_size):
+        for _ in range(CONFVARS.pool_size):
             ctasks.append(asyncio.create_task(create_conn(False)))
 
         # Give the coroutines time to make their getconn requests. Assert that the getconn requests
@@ -67,7 +67,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         # connections if there are pending connection requests.
         await asyncio.sleep(0.2)
         assert (
-            pg_pool.get_stats()["requests_waiting"] == confvars.pool_size
+            pg_pool.get_stats()["requests_waiting"] == CONFVARS.pool_size
         ), "Test misconfigured: async sleep too short: getconn requests not yet made."
 
         # Destroy existing connections.

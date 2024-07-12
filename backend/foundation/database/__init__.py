@@ -11,7 +11,7 @@ from psycopg_pool import AsyncConnectionPool, AsyncNullConnectionPool
 
 from codegen.sqlc.models import Tenant, User
 from codegen.sqlc.queries import AsyncQuerier
-from foundation.config import confvars
+from foundation.config import CONFVARS
 
 # Type aliases for everyone.
 Conn = AsyncConnection[Any]
@@ -28,7 +28,7 @@ class ConnQuerier:
 async def create_pg_pool(url: str) -> ConnPool:
     return AsyncNullConnectionPool(
         conninfo=url,
-        max_size=confvars.pool_size,
+        max_size=CONFVARS.pool_size,
         # We turn autocommit on so that by default, queries can run outside of
         # a transaction. When a connection desires to run a series of queries
         # in a single transaction, they can explicitly start a transaction with BEGIN.
