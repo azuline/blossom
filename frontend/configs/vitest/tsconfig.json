@@ -2,16 +2,11 @@
   "extends": "@configs/typescript/base.json",
   "compilerOptions": {
     "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "outDir": "dist"
+    "moduleResolution": "nodenext"
   },
   "include": [
     "index.ts",
     "global.ts",
     ".eslintrc.cjs"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
   ]
 }

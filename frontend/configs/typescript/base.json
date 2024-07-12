@@ -24,15 +24,30 @@
     "declaration": true,
     // Generate a sourcemap for .d.ts files that link back to the source.
     "declarationMap": true,
+    // Require that all exported declarations have explicit types.
+    "isolatedDeclarations": true,
     // Generate source maps for jump to definition.
     "sourceMap": true,
     // Transpile JSX to `_jsx` calls.
     "jsx": "react-jsx",
     // Global typings across all packages.
     "types": ["@configs/typescript"],
-    // Magical stuff, IDK.
+    // Fix problems with CJS interop with ESM.
     "esModuleInterop": false,
+    // Allow a shorthand for default imports.
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": true
-  }
+    // Require that all files support single-file transpilation.
+    "isolatedModules": true,
+    // Emit transpiled code and type declarations to `dist`.
+    "outDir": "${configDir}/dist"
+  },
+  "include": [
+    "${configDir}/src",
+    "${configDir}/.eslintrc.cjs",
+    "${configDir}/vitest.config.ts"
+  ],
+  "exclude": [
+    "${configDir}/node_modules",
+    "${configDir}/dist"
+  ]
 }
