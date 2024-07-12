@@ -1,4 +1,5 @@
 # Allow multiple functions to be defined with the same name.
+# pyright: reportRedeclaration=false
 # mypy: disable-error-code=no-redef
 # ruff: noqa: F811
 import asyncio

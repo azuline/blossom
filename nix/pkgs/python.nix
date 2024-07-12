@@ -15,7 +15,6 @@ let
   ];
   development-deps = runtime-deps ++ (with python.pkgs; [
     dacite
-    mypy # mypy must be here so it can check the types of the dependencies
     pip
     pytest
     pytest-asyncio

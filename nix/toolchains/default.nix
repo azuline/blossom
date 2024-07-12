@@ -8,17 +8,17 @@ rec {
     fail-on-dirty-diff
   ];
   backend = general ++ (with pkgs; [
-    # mypy is defined as a part of python-dev so it can read the dependencies
     black
     docker
+    dprint # needed for typescript codegen
+    pgmigrate
     pip-audit
+    pyright
     python-dev
     ruff
     semgrep
-    sqlc-py
     sqlc-gen-python
-    dprint # needed for typescript codegen
-    pgmigrate
+    sqlc-py
   ]);
   frontend = general ++ (with pkgs; [
     docker

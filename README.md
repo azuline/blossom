@@ -27,7 +27,8 @@ The common code in this repository covers infrastructure, backend, frontend, and
 
 The backend is a Python monolith with Postgres database.
 
-- Language: Python & mypy
+- Language: Python
+- Type Checker: Pyright
 - Builds: Nix
 - Package Manager: Nix
 - Database: Postgres

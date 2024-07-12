@@ -63,19 +63,14 @@ ignore = [
   "F541",
 ]
 
-[tool.mypy]
-strict = true
-strict_optional = true
-explicit_package_bases = true
-disallow_untyped_decorators = false  # pytest.mark.asyncio doesn't like this
-plugins = "pydantic.mypy"
-
-[[tool.mypy.overrides]]
-module = "pytest_asyncio.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
-module = "setuptools"
-ignore_missing_imports = true
+[tool.pyright]
+include = ["."]
+extraPaths = ["."]
+exclude = [
+    "htmlcov",
+    "__pycache__",
+    "result",
+]
 
 [tool.pytest.ini_options]
 addopts = "--cov=. --cov-branch"

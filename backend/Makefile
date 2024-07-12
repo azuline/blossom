@@ -18,7 +18,7 @@ psql:
 	psql postgres://postgres:password@localhost:40852
 
 typecheck:
-	mypy .
+	pyright
 
 lintcheck:
 	ruff check .
