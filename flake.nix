@@ -21,6 +21,7 @@
       };
       pkgs = import ./nix/pkgs { inherit nixpkgs system pkg-pins; };
       toolchains = import ./nix/toolchains { inherit pkgs; };
+      backend-image = import ./backend { inherit pkgs; };
       shellHook = ''
         find-up () {
           path=$(pwd)
@@ -56,7 +57,7 @@
         deployments = makeDevShell toolchains.deployments;
       };
       packages = {
-        backend-image = import ./backend { inherit pkgs; };
+        backend-image = backend-image;
         blossom-dev-cli = pkgs.writeShellScriptBin "blossom" ''
           cd $BLOSSOM_ROOT/backend
           python -m cli $@

@@ -20,6 +20,5 @@ setuptools.setup(
         "python-dotenv",
         "quart",
         "werkzeug",
-        "yoyo-migrations",
     ],
 )
