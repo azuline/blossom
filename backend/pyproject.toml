@@ -71,9 +71,6 @@ disallow_untyped_decorators = false  # pytest.mark.asyncio doesn't like this
 plugins = "pydantic.mypy"
 
 [[tool.mypy.overrides]]
-module = "yoyo.*"
-ignore_missing_imports = true
-[[tool.mypy.overrides]]
 module = "pytest_asyncio.*"
 ignore_missing_imports = true
 [[tool.mypy.overrides]]
