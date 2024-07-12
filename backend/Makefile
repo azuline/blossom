@@ -9,9 +9,9 @@ test:
 
 migrate:
 	blossom migrate
+	pgmigrate dump -o schema.sql
 
 codegen:
-	sqlc-py generate
 	blossom codegen
 
 psql:
@@ -21,16 +21,13 @@ typecheck:
 	mypy .
 
 lintcheck:
-	ruff format --check .
 	ruff check .
+	ruff format --check .
 	semgrep --config .semgrep/ .
 
 lint:
-	ruff format .
 	ruff check --fix .
+	ruff format .
 	semgrep --config .semgrep/ --autofix .
 
-new-migration:
-	yoyo new --sql
-
-.PHONY: check start test testseq codegen migrate psql typecheck lintcheck lint new-migration
+.PHONY: check start test testseq codegen migrate psql typecheck lintcheck lint

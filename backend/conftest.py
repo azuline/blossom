@@ -24,7 +24,7 @@ from quart.typing import TestClientProtocol
 import foundation.log  # noqa
 from foundation.config import confvars
 from foundation.database import ConnPool, create_pg_pool
-from foundation.migrate import run_database_migrations
+from foundation.test.db import run_database_migrations
 from foundation.test.factory import TestFactory
 from foundation.test.fixture import TFix
 
@@ -52,17 +52,17 @@ def event_loop(
 @pytest_asyncio.fixture(scope="session")
 async def db() -> AsyncIterator[str]:
     db_name = "test_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
-    with psycopg.connect(confvars.psycopg_database_url, autocommit=True) as conn:
+    with psycopg.connect(confvars.database_url, autocommit=True) as conn:
         # nosemgrep
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
-    run_database_migrations(confvars.yoyo_database_url + "/" + db_name)
+    run_database_migrations(confvars.database_url + "/" + db_name)
     yield db_name
 
 
 @pytest.fixture()
 def isolated_db() -> str:
     db_name = "test_iso_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
-    with psycopg.connect(confvars.psycopg_database_url, autocommit=True) as conn:
+    with psycopg.connect(confvars.database_url, autocommit=True) as conn:
         # nosemgrep
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     return db_name
@@ -70,7 +70,7 @@ def isolated_db() -> str:
 
 @pytest_asyncio.fixture(scope="session")
 async def pg_pool(db: str) -> AsyncIterator[ConnPool]:
-    async with await create_pg_pool(confvars.psycopg_database_url + "/" + db) as pg_pool:
+    async with await create_pg_pool(confvars.database_url + "/" + db) as pg_pool:
         yield pg_pool
 
 

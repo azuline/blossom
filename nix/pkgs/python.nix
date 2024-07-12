@@ -12,7 +12,6 @@ let
     python-dotenv
     quart
     werkzeug
-    yoyo-migrations
   ];
   development-deps = runtime-deps ++ (with python.pkgs; [
     dacite

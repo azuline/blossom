@@ -4,19 +4,24 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    pgmigrate.url = "github:peterldowns/pgmigrate";
+    pgmigrate.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     { self
     , nixpkgs
     , flake-utils
+    , pgmigrate
     }:
     flake-utils.lib.eachDefaultSystem (system:
     let
-      pkg-pins = { };
+      pkg-pins = {
+        pgmigrate = pgmigrate.packages.${system}.default;
+      };
       pkgs = import ./nix/pkgs { inherit nixpkgs system pkg-pins; };
-      builds = import ./nix/builds { inherit pkgs; };
       toolchains = import ./nix/toolchains { inherit pkgs; };
+      backend-image = import ./backend { inherit pkgs; };
       shellHook = ''
         find-up () {
           path=$(pwd)
@@ -52,7 +57,7 @@
         deployments = makeDevShell toolchains.deployments;
       };
       packages = {
-        backend-image = builds.backend;
+        backend-image = backend-image;
         blossom-dev-cli = pkgs.writeShellScriptBin "blossom" ''
           cd $BLOSSOM_ROOT/backend
           python -m cli $@

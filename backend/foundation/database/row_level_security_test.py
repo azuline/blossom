@@ -5,7 +5,7 @@ import psycopg
 
 from foundation.config import confvars
 from foundation.database import Conn, create_pg_pool, set_row_level_security
-from foundation.migrate import run_database_migrations
+from foundation.test.db import run_database_migrations
 
 
 @dataclass
@@ -19,7 +19,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     app.current_tenant_id from the connections in the pool upon their return into the pool.
     """
 
-    run_database_migrations(confvars.yoyo_database_url + "/" + isolated_db)
+    run_database_migrations(confvars.database_url + "/" + isolated_db)
 
     async def get_user_id(c: Conn) -> int | None:
         try:
@@ -31,7 +31,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
             return None
         return int(row[0])
 
-    async with await create_pg_pool(confvars.psycopg_database_url + "/" + isolated_db) as pg_pool:
+    async with await create_pg_pool(confvars.database_url + "/" + isolated_db) as pg_pool:
         connections: list[Conn] = []
 
         async def create_conn(rls: bool) -> Conn:

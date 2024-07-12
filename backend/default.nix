@@ -4,7 +4,7 @@ let
   python-package = pkgs.python-prod.pkgs.buildPythonPackage {
     pname = "blossom";
     version = "0.0.0";
-    src = ../../backend;
+    src = ./.;
     propagatedBuildInputs = pkgs.python-prod-deps;
   };
 in
@@ -13,7 +13,7 @@ pkgs.dockerTools.buildImage {
   tag = "latest";
   copyToRoot = pkgs.buildEnv {
     name = "image-root";
-    paths = [ python-package ];
+    paths = [ python-package pkgs.pgmigrate ];
     pathsToLink = [ "/bin" ];
   };
   config = {

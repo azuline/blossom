@@ -38,6 +38,9 @@ jobs:
       - name: Codegen
         if: success() || failure()
         run: nix develop ../\#devShells.x86_64-linux.backend --command make codegen
+      - name: Migrate
+        if: success() || failure()
+        run: nix develop ../\#devShells.x86_64-linux.backend --command make migrate
       - name: Diff
         if: success() || failure()
         run: nix develop ../\#devShells.x86_64-linux.backend --command fail-on-dirty-diff
