@@ -23,8 +23,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": null,
-      "import": "./index.cjs"
+      "require": "./index.cjs"
     }
   }
 }
