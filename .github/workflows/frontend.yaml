@@ -132,6 +132,5 @@ jobs:
         uses: tailscale/github-action@v1
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-          args: --accept-routes --accept-dns
       - name: Deploy
         run: nix develop ../\#devShells.x86_64-linux.deployments --command levant deploy -log-level=debug -var "artifact_source_url=$ARTIFACT_SOURCE_URL" ladle.nomad
