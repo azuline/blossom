@@ -28,19 +28,19 @@ jobs:
         run: docker compose up postgres -d
       - name: Typecheck
         if: success() || failure()  # Means that we run all steps even if one fails.
-        run: nix develop ../\#devShells.x86_64-linux.python --command make typecheck
+        run: nix develop ../\#devShells.x86_64-linux.python --command just typecheck
       - name: Test
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command make test
+        run: nix develop ../\#devShells.x86_64-linux.python --command just test
       - name: Lint
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command make lintcheck
+        run: nix develop ../\#devShells.x86_64-linux.python --command just lintcheck
       - name: Codegen
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command make codegen
+        run: nix develop ../\#devShells.x86_64-linux.python --command just codegen
       - name: Migrate
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command make migrate
+        run: nix develop ../\#devShells.x86_64-linux.python --command just migrate
       - name: Diff
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command make diff
+        run: nix develop ../\#devShells.x86_64-linux.python --command just diff
