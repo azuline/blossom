@@ -1,5 +1,3 @@
-check: typecheck test lintcheck
-
 start:
 	QUART_DEBUG=1 QUART_APP="foundation.webserver:debug_app()" quart run --port 40851
 
@@ -17,17 +15,15 @@ codegen:
 psql:
 	psql postgres://postgres:password@localhost:40852
 
-typecheck:
-	pyright
-
-lintcheck:
-	ruff check .
-	ruff format --check .
-	semgrep --config .semgrep/ .
-
 lint:
+	pyright
 	ruff check --fix .
 	ruff format .
 	semgrep --config .semgrep/ --autofix .
 
-.PHONY: check start test testseq codegen migrate psql typecheck lintcheck lint
+diff:
+	git status
+	git diff
+	bash -c '[[ -z $(git status -s) ]] || (exit 1)'
+
+.PHONY: start test migrate codegen psql lint diff

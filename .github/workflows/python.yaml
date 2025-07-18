@@ -1,15 +1,15 @@
-name: backend
+name: python
 on: 
   push:
     paths:
-      - .github/workflows/backend.yaml
+      - .github/workflows/python.yaml
       - flake.*
-      - nix/**
-      - backend/**
+      - python/**
+      - infra/deploy/**
       - '!**/*.md'
 defaults:
   run:
-    working-directory: backend/
+    working-directory: python/
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -23,24 +23,24 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.backend
+        run: nix build -j8 ../\#devShells.x86_64-linux.python
       - name: Start Postgres
         run: docker compose up postgres -d
       - name: Typecheck
         if: success() || failure()  # Means that we run all steps even if one fails.
-        run: nix develop ../\#devShells.x86_64-linux.backend --command make typecheck
+        run: nix develop ../\#devShells.x86_64-linux.python --command make typecheck
       - name: Test
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.backend --command make test
+        run: nix develop ../\#devShells.x86_64-linux.python --command make test
       - name: Lint
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.backend --command make lintcheck
+        run: nix develop ../\#devShells.x86_64-linux.python --command make lintcheck
       - name: Codegen
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.backend --command make codegen
+        run: nix develop ../\#devShells.x86_64-linux.python --command make codegen
       - name: Migrate
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.backend --command make migrate
+        run: nix develop ../\#devShells.x86_64-linux.python --command make migrate
       - name: Diff
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.backend --command fail-on-dirty-diff
+        run: nix develop ../\#devShells.x86_64-linux.python --command make diff

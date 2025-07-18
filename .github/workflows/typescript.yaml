@@ -1,16 +1,15 @@
-name: frontend
+name: typescript
 on: 
   push:
     paths:
-      - .github/workflows/frontend.yaml
+      - .github/workflows/typescript.yaml
       - flake.*
-      - nix/**
-      - frontend/**
-      - nomad/ladle.nomad
+      - typescript/**
+      - infra/deploy/**
       - '!**/*.md'
 defaults:
   run:
-    working-directory: frontend/
+    working-directory: typescript/
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -24,21 +23,21 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.frontend
+        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command pnpm install
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
       - name: Typecheck
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make typecheck
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make typecheck
       - name: Test
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make test
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make test
       - name: Lintcheck
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make lintcheck
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make lintcheck
       - name: Build
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make build-app
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make build-app
   visual:
     runs-on: ubuntu-latest
     env:
@@ -51,12 +50,12 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.frontend
+        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command pnpm install
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
       - name: Visual Tests
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make test-visual
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make test-visual
   build-ladle:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -74,13 +73,13 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.frontend
+        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command pnpm install
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
       - name: Build Ladle
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command make build-stories
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command make build-stories
       - name: Create Tarball
-        run: nix develop ../\#devShells.x86_64-linux.frontend --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
+        run: nix develop ../\#devShells.x86_64-linux.typescript --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
       - name: Create release and upload tarball
         id: upload
         run: |
