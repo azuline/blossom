@@ -47,7 +47,7 @@ export type RPCs = {
     in: {{ rpc.in_ }};
     out: {{ rpc.out }};
     {% if rpc.error_names %}
-    errors: 
+    errors:
       {% for errname in rpc.error_names %}
       | "{{ errname }}"
       {% endfor %}

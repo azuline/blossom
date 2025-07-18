@@ -8,7 +8,7 @@ import json
 import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Generic, Literal, TypeVar, get_args, get_type_hints
+from typing import Any, Literal, TypeVar, get_args, get_type_hints
 
 import pydantic.dataclasses
 import quart
@@ -43,7 +43,7 @@ D = TypeVar("D")
 
 
 @dataclass
-class Req(Generic[D]):
+class Req[D]:
     cq: ConnQuerier
     user: User | None
     tenant: Tenant | None
@@ -253,7 +253,7 @@ async def _check_authorization(
 T = TypeVar("T")
 
 
-async def _validate_data(spec: type[T], method: Method) -> T | None:
+async def _validate_data[T](spec: type[T], method: Method) -> T | None:
     """
     This decorates a quart endpoint. Taking a pydantic input dataclass as an argument,
     this decorator parses the request data with that dataclass. If parsing fails, this

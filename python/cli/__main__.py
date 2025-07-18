@@ -155,14 +155,6 @@ async def create_test_account(cq: ConnQuerier) -> None:
         inbound_source=TenantsInboundSource.UNKNOWN,
     )
     await tenant_add_user(cq=cq, tenant_id=tenant.external_id, user_id=user.external_id)
-    print(
-        f"""\
-Created test account. Credentials:
-
-{user.email}
-password
-"""
-    )
 
 
 if __name__ == "__main__":
