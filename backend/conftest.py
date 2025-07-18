@@ -59,7 +59,7 @@ async def db() -> AsyncIterator[str]:
     yield db_name
 
 
-@pytest.fixture()
+@pytest.fixture
 def isolated_db() -> str:
     db_name = "test_iso_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
     with psycopg.connect(CONFVARS.database_url, autocommit=True) as conn:

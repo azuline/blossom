@@ -62,9 +62,7 @@ def catalog_rpc(
     catalog_rpc adds a route to the RPC catalog. The RPC catalog is read
     when applying the RPC routes to the webserver and codegen.
     """
-    _catalog.rpcs.append(
-        RPCRoute(name=name, in_=in_, out=out, errors=errors, method=method, handler=handler)
-    )
+    _catalog.rpcs.append(RPCRoute(name=name, in_=in_, out=out, errors=errors, method=method, handler=handler))
 
 
 def catalog_raw_route(

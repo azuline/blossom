@@ -74,9 +74,7 @@ def codegen_typescript() -> None:
     tmpl = env.from_string(TEMPLATE)  # nosemgrep
     code = tmpl.render(catalog=catalog)
 
-    code_path = (
-        Path(os.environ["BLOSSOM_ROOT"]) / "frontend" / "codegen" / "rpc" / "src" / "index.ts"
-    )
+    code_path = Path(os.environ["BLOSSOM_ROOT"]) / "frontend" / "codegen" / "rpc" / "src" / "index.ts"
     code_path.parent.mkdir(parents=True, exist_ok=True)
     with code_path.open("w") as fptr:
         fptr.write(code)
@@ -125,9 +123,7 @@ def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
         name = e.__name__
         esch = ErrorSchema(data=dataclass_to_str(e))
         if name in schema.errors and schema.errors[name] != esch:
-            raise ErrorNameCollisionError(
-                f"The error name {name} has multiple definitions with different schemas."
-            )
+            raise ErrorNameCollisionError(f"The error name {name} has multiple definitions with different schemas.")
         schema.errors[name] = esch
 
     for e in catalog.global_errors:
@@ -165,7 +161,7 @@ def dataclass_to_str(d: type[Any]) -> str:
 
 
 def type_to_str(t: Any) -> str:
-    if is_dataclass(t):
+    if is_dataclass(t) and isinstance(t, type):
         return dataclass_to_str(t)
 
     t_name = getattr(t, "__name__", None)

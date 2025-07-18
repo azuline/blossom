@@ -336,18 +336,13 @@ async def test_foreign_key_indexes(t: TFix) -> None:
     )
     failing = [MissingFK(table=x[0], columns=x[1]) for x in await cursor.fetchall()]
     assert not failing, f"""\
-Please add indexes on foreign keys {
-    ", ".join([f"{x.table} ({','.join(x.columns)})" for x in failing])
-}.
+Please add indexes on foreign keys {", ".join([f"{x.table} ({','.join(x.columns)})" for x in failing])}.
 
 See https://www.cybertec-postgresql.com/en/index-your-foreign-key/ for rationale.
 
 Fixes:
 
-{nl.join([
-    f"CREATE INDEX {x.table}_{'_'.join(x.columns)}_idx ON {x.table} ({', '.join(x.columns)});"
-    for x in failing
-])}
+{nl.join([f"CREATE INDEX {x.table}_{'_'.join(x.columns)}_idx ON {x.table} ({', '.join(x.columns)});" for x in failing])}
 """  # pragma: no cover
 
 

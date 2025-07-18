@@ -134,9 +134,7 @@ def route(
         except KeyError as e:
             # We look for the request type by examining the function parameter named `req`. If the
             # function takes a parameter of a different name, we cannot pull its types.
-            raise InvalidRPCDefinitionError(
-                f"RPC handlers must take in a parameter named `req`. Failed to wrap {name}"
-            ) from e
+            raise InvalidRPCDefinitionError(f"RPC handlers must take in a parameter named `req`. Failed to wrap {name}") from e
 
         # Turn the input dataclass into a Pydantic dataclass for validation purposes.
         if in_.__name__ != "NoneType":

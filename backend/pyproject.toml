@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 100
+line-length = 160
 force-exclude = '''
 (
   /(
@@ -17,7 +17,7 @@ force-exclude = '''
 '''
 
 [tool.ruff]
-line-length = 100
+line-length = 160
 exclude = ["snapshots", ".venv", "codegen"]
 src = ["."]
 

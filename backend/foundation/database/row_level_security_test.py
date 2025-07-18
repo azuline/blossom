@@ -66,9 +66,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         # have been made. This is necessary for a NullPool, since a NullPool only re-uses
         # connections if there are pending connection requests.
         await asyncio.sleep(0.2)
-        assert (
-            pg_pool.get_stats()["requests_waiting"] == CONFVARS.pool_size
-        ), "Test misconfigured: async sleep too short: getconn requests not yet made."
+        assert pg_pool.get_stats()["requests_waiting"] == CONFVARS.pool_size, "Test misconfigured: async sleep too short: getconn requests not yet made."
 
         # Destroy existing connections.
         for c in existing_conns:
