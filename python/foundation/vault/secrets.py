@@ -46,7 +46,7 @@ async def fetch_vaulted_secret(cq: ConnQuerier, tenant_id: int, secret_id: int) 
     """
     vs = await cq.q.vault_fetch_secret(id=secret_id)
     if vs is None:
-        raise SecretNotFoundError()
+        raise SecretNotFoundError
 
     cipher = ChaCha20Poly1305(CONFVARS.vault_encryption_key)
     plaintext = cipher.decrypt(

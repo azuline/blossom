@@ -11,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from foundation.test.fixture import TFix
 
 # password='password'
-DEFAULT_PASSWORD_HASH = "pbkdf2:sha256:260000$q7moIpBgn1qWGg6Q$110299a9e14a5d29d21a4d22bfa43e81587380bc0e3a607bd5b3222f27d47973"  # noqa
+DEFAULT_PASSWORD_HASH = "pbkdf2:sha256:260000$q7moIpBgn1qWGg6Q$110299a9e14a5d29d21a4d22bfa43e81587380bc0e3a607bd5b3222f27d47973"
 
 T = TypeVar("T")
 

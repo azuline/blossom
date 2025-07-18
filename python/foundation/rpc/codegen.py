@@ -152,10 +152,10 @@ def dataclass_to_str(d: type[Any]) -> str:
     if not schema:
         return "null"
 
-    out = f"{{\n"
+    out = "{\n"
     for k, v in schema.items():
         out += f'"{k}": {v};\n'
-    out += f"}}"
+    out += "}"
 
     return out
 

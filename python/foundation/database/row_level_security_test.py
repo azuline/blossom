@@ -10,7 +10,7 @@ from foundation.test.db import run_database_migrations
 
 @dataclass
 class FakeUser:
-    id: int  # noqa: A003
+    id: int
 
 
 async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:

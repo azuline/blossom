@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash
 from foundation.rpc.error import APIError
 from foundation.rpc.route import SESSION_ID_KEY, Req, route
 
-BOGUS_PASSWORD_HASH = "pbkdf2:sha256:260000$HdBKH9zwdJpNsm8I$a0adb646f827525b478cc13db89e6ade694d2951987572edabf354b1821ae498"  # noqa
+BOGUS_PASSWORD_HASH = "pbkdf2:sha256:260000$HdBKH9zwdJpNsm8I$a0adb646f827525b478cc13db89e6ade694d2951987572edabf354b1821ae498"
 
 
 @dataclass
@@ -46,9 +46,9 @@ async def login(req: Req[LoginIn]) -> None:
         # Spin some cycles so that we take the same time for no user & no password. This prevents
         # information leak via timing side channel.
         check_password_hash(BOGUS_PASSWORD_HASH, "garbage")
-        raise InvalidCredentialsError()
+        raise InvalidCredentialsError
     if not check_password_hash(user.password_hash, req.data.password):
-        raise InvalidCredentialsError()
+        raise InvalidCredentialsError
 
     # All sessions are tied to a tenant. Unless a tenant_external_id is explicitly passed in, the
     # session is tied to the most recently accessed tenant.
@@ -60,7 +60,7 @@ async def login(req: Req[LoginIn]) -> None:
         )
         # If the passed in tenant ID doesn't exist, raise an error.
         if tenant is None:
-            raise AuthTenantNotFoundError()
+            raise AuthTenantNotFoundError
     else:
         tenant = await req.cq.q.authn_fetch_most_recently_accessed_tenant(user_id=user.id)
 

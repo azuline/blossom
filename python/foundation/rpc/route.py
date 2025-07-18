@@ -241,11 +241,11 @@ async def _check_authorization(
         return
     if authorization == "user":
         if user is None:
-            raise UnauthorizedError()
+            raise UnauthorizedError
         return
     if authorization == "tenant":
         if user is None or tenant is None:
-            raise UnauthorizedError()
+            raise UnauthorizedError
         return
     raise Exception("Missed authorization type check in _check_authorization.")  # pragma: no cover
 
