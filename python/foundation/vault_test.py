@@ -1,7 +1,7 @@
 import pytest
 
 from database.access.xact import xact_admin
-from foundation.testing.fixture import TFix
+from foundation.conftest import FoundationFixture
 from foundation.vault import (
     SecretNotFoundError,
     delete_vaulted_secret,
@@ -10,7 +10,7 @@ from foundation.vault import (
 )
 
 
-async def test_vaulted_secrets(t: TFix) -> None:
+async def test_vaulted_secrets(t: FoundationFixture) -> None:
     organization = await t.factory.organization()
     async with xact_admin() as q:
         # 1. Vault a secret.

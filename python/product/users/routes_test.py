@@ -1,64 +1,45 @@
-from foundation.test.fixture import TFix
-from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoOrganization
+from product.conftest import ProductFixture
+from product.users.routes import GetPageLoadInfoOrganization, GetPageLoadInfoOut, GetPageLoadInfoUser
 
 
-async def test_page_load_info_logged_in_with_organization(t: TFix) -> None:
-    user, organization = await t.f.customer()
+async def test_page_load_info_logged_in_with_organization(t: ProductFixture) -> None:
+    user, organization = await t.factory.customer()
     # Make a second organization that the user belongs to..
-    organization2 = await t.f.organization()
-    await t.f.organization_user_create(user_id=user.id, organization_id=organization2.id)
+    organization2 = await t.factory.organization()
+    await t.factory.organization_user_create(user_id=user.id, organization_id=organization2.id)
     # Make a third organization that the user does not belong to.
-    await t.f.organization()
+    await t.factory.organization()
     await t.rpc.login_as(user, organization)
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
 
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
     assert out == GetPageLoadInfoOut(
-        external_id=user.external_id,
-        name=user.name,
-        email=user.email,
-        organization=GetPageLoadInfoOrganization(
-            external_id=organization.external_id,
-            name=organization.name,
-        ),
+        user=GetPageLoadInfoUser(id=user.id, name=user.name, email=user.email),
+        organization=GetPageLoadInfoOrganization(id=organization.id, name=organization.name),
         available_organizations=[
-            GetPageLoadInfoOrganization(
-                external_id=organization.external_id,
-                name=organization.name,
-            ),
-            GetPageLoadInfoOrganization(
-                external_id=organization2.external_id,
-                name=organization2.name,
-            ),
+            GetPageLoadInfoOrganization(id=organization.id, name=organization.name),
+            GetPageLoadInfoOrganization(id=organization2.id, name=organization2.name),
         ],
     )
 
 
-async def test_page_load_info_logged_in_without_organization(t: TFix) -> None:
-    user = await t.f.user()
+async def test_page_load_info_logged_in_without_organization(t: ProductFixture) -> None:
+    user = await t.factory.user()
     await t.rpc.login_as(user)
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
 
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
     assert out == GetPageLoadInfoOut(
-        external_id=user.external_id,
-        name=user.name,
-        email=user.email,
+        user=GetPageLoadInfoUser(id=user.id, name=user.name, email=user.email),
         organization=None,
         available_organizations=[],
     )
 
 
-async def test_page_load_info_not_logged_in(t: TFix) -> None:
+async def test_page_load_info_not_logged_in(t: ProductFixture) -> None:
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
-    assert out == GetPageLoadInfoOut(
-        external_id=None,
-        name=None,
-        email=None,
-        organization=None,
-        available_organizations=[],
-    )
+    assert out == GetPageLoadInfoOut(user=None, organization=None, available_organizations=[])

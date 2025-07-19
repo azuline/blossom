@@ -13,7 +13,7 @@ from foundation.rpc.route import (
     UnauthorizedError,
     route,
 )
-from foundation.testing.fixture import TFix
+from foundation.conftest import FoundationFixture
 from foundation.time import CLOCK
 
 
@@ -46,7 +46,7 @@ async def make_test_route(
     app.register_blueprint(bp)
 
 
-async def test_route_auth_public(t: TFix) -> None:
+async def test_route_auth_public(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "public")
 
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
@@ -57,7 +57,7 @@ async def test_route_auth_public(t: TFix) -> None:
     assert out.organization_id is None
 
 
-async def test_route_auth_organization(t: TFix) -> None:
+async def test_route_auth_organization(t: FoundationFixture) -> None:
     user, organization = await t.factory.customer()
     await make_test_route(await t.rpc.app(), "organization")
 
@@ -70,7 +70,7 @@ async def test_route_auth_organization(t: TFix) -> None:
     assert out.organization_id == organization.id
 
 
-async def test_route_auth_user(t: TFix) -> None:
+async def test_route_auth_user(t: FoundationFixture) -> None:
     user = await t.factory.user()
     await make_test_route(await t.rpc.app(), "user")
 
@@ -83,19 +83,19 @@ async def test_route_auth_user(t: TFix) -> None:
     assert out.organization_id is None
 
 
-async def test_route_auth_user_fail(t: TFix) -> None:
+async def test_route_auth_user_fail(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "user")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_auth_organization_fail(t: TFix) -> None:
+async def test_route_auth_organization_fail(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_invalid_session(t: TFix) -> None:
+async def test_route_invalid_session(t: FoundationFixture) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = "1234"
 
@@ -104,7 +104,7 @@ async def test_route_invalid_session(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_expired_session_expired_at(t: TFix) -> None:
+async def test_route_expired_session_expired_at(t: FoundationFixture) -> None:
     user = await t.factory.user()
     session = await t.factory.session(user=user, expired_at=CLOCK.now())
 
@@ -116,7 +116,7 @@ async def test_route_expired_session_expired_at(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_expired_session_last_seen_at(t: TFix) -> None:
+async def test_route_expired_session_last_seen_at(t: FoundationFixture) -> None:
     user = await t.factory.user()
     session = await t.factory.session(user=user, last_seen_at=CLOCK.now() - timedelta(days=20))
 
@@ -128,19 +128,19 @@ async def test_route_expired_session_last_seen_at(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_invalid_json_data(t: TFix) -> None:
+async def test_route_invalid_json_data(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", data="aaoejfawpokl")
     await t.rpc.assert_error(resp, ServerJSONDeserializeError)
 
 
-async def test_route_different_input_schema(t: TFix) -> None:
+async def test_route_different_input_schema(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", json={"strawberry": "blossoms"})
     await t.rpc.assert_error(resp, InputValidationError)
 
 
-async def test_route_data_wrong_type(t: TFix) -> None:
+async def test_route_data_wrong_type(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await (await t.rpc.client()).post("/api/Test", json={"cherry": {"a": "b"}})
     await t.rpc.assert_error(resp, InputValidationError)
@@ -148,7 +148,7 @@ async def test_route_data_wrong_type(t: TFix) -> None:
     assert out.fields["cherry"] == "Input should be a valid string"
 
 
-async def test_route_no_data(t: TFix) -> None:
+async def test_route_no_data(t: FoundationFixture) -> None:
     await make_test_route(await t.rpc.app(), "public")
     resp = await t.rpc.execute("Test")
     await t.rpc.assert_error(resp, DataMismatchError)

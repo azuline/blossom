@@ -3,7 +3,7 @@ import pytest
 
 from foundation.dag import dag_asset
 from foundation.errors import BlossomError
-from foundation.testing.fixture import TFix
+from foundation.conftest import FoundationFixture
 
 
 def test_asset_decorator_creates_dagster_asset():
@@ -25,7 +25,7 @@ def test_asset_decorator_preserves_function_behavior():
     assert isinstance(compute_value, dagster.AssetsDefinition)
 
 
-def test_asset_decorator_reports_errors_to_sentry(t: TFix):
+def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
     """Test that errors raised inside asset functions are reported to Sentry."""
 
     class TestAssetError(BlossomError):

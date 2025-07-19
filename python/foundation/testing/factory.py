@@ -4,16 +4,13 @@ from datetime import datetime
 
 from database.access.xact import xact_admin
 from database.codegen import models
+from database.enums.enums import OrganizationsInboundSourceEnum, UserSignupStepEnum
 from foundation.identifiers import generate_email, generate_name
 from foundation.time import CLOCK
 from foundation.types import UNSET, Unset, cast_notnull
 
 # password='password'
 DEFAULT_PASSWORD_HASH = "pbkdf2:sha256:260000$q7moIpBgn1qWGg6Q$110299a9e14a5d29d21a4d22bfa43e81587380bc0e3a607bd5b3222f27d47973"
-
-# TODO(enum): Replace.
-OrganizationsInboundSourceEnum = str
-UserSignupStepEnum = str
 
 
 class TestFactory:

@@ -7,10 +7,12 @@ Blossom contains code patterns that I've accumulated between various projects. I
 template repository for my future projects (they _blossom_ out of this repository, get it? Ha ha!).
 Blossom is is a superset of features; most projects benefit from a trimming of features post-fork.
 
-The tooling and code structure reflect my personal preferences and taste in software. They likely do
-not match yours. But please feel free to take inspiration and/or copy code. This repository contains
-code in Python and TypeScript. Many of the patterns here are translatable to other languages, but
-they are not provided in this repository.
+The tooling and code structure reflect my personal preferences and taste in software. They are meant
+to be sensible for small-medium scale projects; think Seed-Series B startups.
+
+Please feel free to take inspiration and/or copy code. This repository contains code in Python and
+TypeScript. Many of the patterns here are translatable to other languages, but they are not provided
+in this repository.
 
 The project is structured as a monorepo organized by `{language}/{project}`. Each `project`
 directory represents a deployed service, with the exception of the `foundation` directories, which

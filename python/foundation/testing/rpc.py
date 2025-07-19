@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Awaitable, Callable
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, TypeVar
 
@@ -11,14 +12,11 @@ from database.codegen.models import Organization, User
 from foundation.logs import get_logger
 from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import SESSION_ID_KEY
-from foundation.webserver import create_app
+from foundation.testing.factory import TestFactory
 
 if TYPE_CHECKING:  # pragma: no cover
     from quart.typing import TestClientProtocol
 
-    from foundation.testing.fixture import TFix
-
-T = TypeVar("T")
 E = TypeVar("E", bound=Exception)
 
 logger = get_logger()
@@ -29,7 +27,7 @@ class TestRPC:
     The WebApp+RPC subset of fixtures on TFix.
     """
 
-    _t: TFix
+    _factory: TestFactory
     _app: Quart | None
     _client: TestClientProtocol | None
     # This variable stores which organization to make future RPC requests as.
@@ -43,8 +41,9 @@ class TestRPC:
     # which time we inject this value into the request headers.
     _logged_in_as_organization_external_id: str | None
 
-    def __init__(self, t: TFix) -> None:
-        self._t = t
+    def __init__(self, factory: TestFactory, create_app: Callable[[], Awaitable[quart.Quart]]) -> None:
+        self._factory = factory
+        self._create_app = create_app
         self._app = None
         self._client = None
         self._logged_in_as_organization_external_id = None
@@ -59,7 +58,7 @@ class TestRPC:
     async def app(self) -> quart.Quart:
         if self._app is not None:
             return self._app
-        self._app = await create_app(None)
+        self._app = await self._create_app()
         return self._app
 
     async def client(self) -> TestClientProtocol:
@@ -71,10 +70,7 @@ class TestRPC:
     async def login_as(self, user: User, organization: Organization | None = None) -> None:
         logger.debug(f"Setting session to user {user.id} - {user.email}.")
         async with (await self.client()).session_transaction() as quart_sess:
-            session = await self._t.factory.session(
-                user_id=user.id,
-                organization_id=organization.id if organization else None,
-            )
+            session = await self._factory.session(user=user, organization=organization)
             quart_sess[SESSION_ID_KEY] = session.id
 
     async def execute(
@@ -123,7 +119,7 @@ class TestRPC:
         data = json.loads(await resp.get_data())
         assert data["error"] == error.__name__
 
-    async def parse_response(self, resp: Response, dclass: type[T]) -> T:
+    async def parse_response[T](self, resp: Response, dclass: type[T]) -> T:
         logger.debug(f"Attemping to parse response {(await resp.get_data())=}.")
         return from_dict(dclass, json.loads(await resp.get_data()))
 

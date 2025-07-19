@@ -14,7 +14,7 @@ from foundation.rpc.catalog import RPCCatalog
 logger = get_logger()
 
 
-async def create_app(catalog: RPCCatalog) -> quart.Quart:
+async def create_app_from_catalog(catalog: RPCCatalog) -> quart.Quart:
     """
     Create, set up, and return a new Quart application object. If a ``config``
     is passed in, it will be modified and used; however, if one is not passed

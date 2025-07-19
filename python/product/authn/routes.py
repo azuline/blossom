@@ -14,7 +14,7 @@ class LoginIn:
     email: str
     password: str
     permanent: bool
-    organization_external_id: str | None
+    organization_id: str | None
 
 
 @dataclass
@@ -35,7 +35,7 @@ async def login(req: Req[LoginIn]) -> None:
     This function is ran with an admin database connection, which means there is no Row Level
     Security.
     """
-    user = await req.cq.q.authn_fetch_user_email(email=req.data.email)
+    user = await req.q.orm.authn_user_fetch_by_email(email=req.data.email)
 
     # Fail auth if:
     # 1. No user with this email exists
@@ -53,23 +53,17 @@ async def login(req: Req[LoginIn]) -> None:
     # All sessions are tied to a organization. Unless a organization_external_id is explicitly passed in, the
     # session is tied to the most recently accessed organization.
     organization = None
-    if req.data.organization_external_id is not None:
-        organization = await req.cq.q.authn_fetch_linked_organization(
-            user_id=user.id,
-            external_id=req.data.organization_external_id,
-        )
+    if req.data.organization_id is not None:
+        organization = await req.q.orm.authn_linked_organization_fetch(user_id=user.id, id=req.data.organization_id)
         # If the passed in organization ID doesn't exist, raise an error.
         if organization is None:
             raise AuthOrganizationNotFoundError
     else:
-        organization = await req.cq.q.authn_fetch_most_recently_accessed_organization(user_id=user.id)
+        organization = await req.q.orm.authn_most_recently_accessed_organization_fetch(user_id=user.id)
 
-    session = await req.cq.q.authn_create_session(
-        user_id=user.id,
-        organization_id=organization.id if organization else None,
-    )
+    session = await req.q.orm.authn_session_create(user_id=user.id, organization_id=organization.id if organization else None)
     assert session is not None
-    quart.session[SESSION_ID_KEY] = session.external_id
+    quart.session[SESSION_ID_KEY] = session.id
     quart.session.permanent = req.data.permanent
     return None
 
@@ -82,7 +76,7 @@ async def logout(req: Req[None]) -> None:
     As our cookies are HTTPOnly, clients cannot expire their own sessions. Thus, we must
     expose this endpoint.
     """
-    session_external_id = quart.session[SESSION_ID_KEY]
-    await req.cq.q.authn_expire_session(external_id=session_external_id)
+    session_id = quart.session[SESSION_ID_KEY]
+    await req.q.orm.authn_session_expire(id=session_id)
     quart.session.clear()
     return None

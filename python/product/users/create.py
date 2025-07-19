@@ -1,16 +1,11 @@
 from werkzeug.security import generate_password_hash
 
-from database.codegen.models import User, UserSignupStep
-from database.access import ConnQuerier
+from database.access.xact import DBQuerier
+from database.codegen import models
+from foundation.types import cast_notnull
 
 
-async def user_create(*, cq: ConnQuerier, email: str, name: str, password: str | None) -> User:
+async def user_create(*, q: DBQuerier, email: str, name: str, password: str | None) -> models.User:
     password_hash = generate_password_hash(password) if password else None
-    user = await cq.q.user_create(
-        name=name,
-        email=email,
-        password_hash=password_hash,
-        signup_step=UserSignupStep.COMPLETE if password_hash else UserSignupStep.CREATED,
-    )
-    assert user is not None
-    return user
+    signup_step = "complete" if password_hash else "created"
+    return cast_notnull(await q.orm.user_create(name=name, email=email, password_hash=password_hash, signup_step=signup_step))

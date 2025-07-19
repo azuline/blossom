@@ -13,7 +13,6 @@ from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenA
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
 from foundation.logs import get_logger
-from foundation.testing.fixture import TFix
 from foundation.testing.testdb import TestDB
 
 logger = get_logger()
@@ -105,9 +104,3 @@ def fake_ext(request: pytest.FixtureRequest) -> Iterator[None]:
     for f in dataclasses.fields(EXT):
         if f.name.startswith("test_"):
             setattr(EXT, f.name, None)
-
-
-@pytest.fixture
-def t() -> TFix:
-    """Global test fixture with factory methods."""
-    return TFix.create()

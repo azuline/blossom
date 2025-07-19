@@ -1,5 +1,6 @@
 from database.access.xact import DBQuerier
-from database.codegen.models import Organization, OrganizationsInboundSource, OrganizationsUser
+from database.codegen import models
+from database.enums.enums import OrganizationsInboundSourceEnum
 from foundation.types import cast_notnull
 
 
@@ -11,13 +12,13 @@ class UserNotFoundError(Exception):
     pass
 
 
-async def organization_create(q: DBQuerier, *, name: str, inbound_source: OrganizationsInboundSource) -> Organization:
+async def organization_create(q: DBQuerier, *, name: str, inbound_source: OrganizationsInboundSourceEnum) -> models.Organization:
     organization = await q.orm.organization_create(name=name, inbound_source=inbound_source)
     assert organization is not None
     return organization
 
 
-async def organization_add_user(q: DBQuerier, *, organization_id: str, user_id: str) -> OrganizationsUser:
+async def organization_add_user(q: DBQuerier, *, organization_id: str, user_id: str) -> models.OrganizationsUser:
     organization = await q.orm.organization_fetch(id=organization_id)
     if not organization:
         raise OrganizationNotFoundError
