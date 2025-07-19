@@ -4,6 +4,8 @@ import dataclasses
 import os
 from typing import Literal, cast, get_args
 
+from dotenv import dotenv_values
+
 env: dict[str, str] = {
     **dotenv_values(".env"),  # type: ignore
     # The is not committed to git and contains sensitive overrides for development.
@@ -47,7 +49,10 @@ class _Env:
     database_pool_size: int
     eval_concurrency: int
 
-    # API keys.
+    # First-party secrets.
+    vault_encryption_key: bytes
+
+    # Third-party API keys.
     slack_token: str | None
     slack_signing_secret: str | None
     openai_api_key: str
@@ -68,6 +73,7 @@ class _Env:
             sentry_dsn=cls._optional("SENTRY_DSN"),
             database_pool_size=int(cls._optional("DATABASE_POOL_SIZE") or 5),
             eval_concurrency=int(cls._optional("EVAL_CONCURRENCY") or 25),
+            vault_encryption_key=bytes.fromhex(cls._required("VAULT_ENCRYPTION_KEY")),
             slack_token=cls._optional("SLACK_TOKEN"),
             slack_signing_secret=cls._optional("SLACK_SIGNING_SECRET"),
             openai_api_key=cls._required("OPENAI_API_KEY"),

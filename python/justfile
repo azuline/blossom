@@ -1,6 +1,3 @@
-start:
-    QUART_DEBUG=1 QUART_APP="foundation.webserver:debug_app()" quart run --port 40811
-
 # HELP
 
 help:  ## Describe the available commands.
@@ -74,4 +71,3 @@ branch-changes:  ## Print a diff of all code changes made in the current branch.
     else
         git -c core.pager=cat diff $(git merge-base HEAD master)
     fi
-

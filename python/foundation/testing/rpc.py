@@ -4,11 +4,11 @@ import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, TypeVar
 
+from codegen.sqlc.models import Tenant, User
 from dacite import from_dict
 from quart import Quart, Response, json
 from quart.typing import TestClientProtocol
 
-from codegen.sqlc.models import Tenant, User
 from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import SESSION_ID_KEY
 from foundation.webserver import create_app

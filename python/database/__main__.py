@@ -1,161 +1,28 @@
-# Allow multiple functions to be defined with the same name.
-# pyright: reportRedeclaration=false
-# mypy: disable-error-code=no-redef
-# ruff: noqa: F811
 import asyncio
-import functools
-import subprocess
-from typing import Any
 
 import click
 
-from codegen.sqlc.models import TenantsInboundSource
+from database.schema.codegen import run_codegen
+from database.schema.migrate import migrate_database
 from foundation.env import ENV
-from database.access import ConnQuerier, conn_admin, create_pg_pool
-from foundation.log import option_log_level
-from foundation.rpc.codegen import codegen_typescript
-from foundation.test.rand import TestRandGen
-from foundation.webserver import start_app
-from product.tenants.lib import tenant_add_user, tenant_create
-from product.users.create import user_create
-
-
-def coro(f: Any) -> Any:
-    """Use this decorator to create async click handlers."""
-
-    @functools.wraps(f)
-    def wrapper(*args: Any, **kwargs: Any) -> Any:
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
-
-
-def with_cq(f: Any) -> Any:
-    """Use this decorator to create a ConnQuerier instance for a command's executor."""
-
-    @functools.wraps(f)
-    async def wrapper(*args: Any, **kwargs: Any) -> Any:
-        async with (
-            await create_pg_pool(ENV.database_url) as pg_pool,
-            conn_admin(pg_pool) as cq,
-        ):
-            return await f(*args, **kwargs, cq=cq)
-
-    return wrapper
 
 
 @click.group()
-@option_log_level
-def cli() -> None:
-    """Blossom CLI"""
+def main() -> None:
+    pass
 
 
-@cli.group()
-def start() -> None:
-    """Start backend services."""
-
-
-@start.command()
-@click.option("--host", "-h", default="127.0.0.1", help="Address to listen on.")
-@click.option("--port", "-p", default=40851, help="Port to listen on.")
-def webserver(host: str, port: int) -> None:
-    """Start the backend webserver."""
-    start_app(host, port)
-
-
-@cli.command()
-def migrate() -> None:
+@main.command()
+def migrate():
     """Migrate the database."""
-    subprocess.run(["pgmigrate", "--database", ENV.database_url, "migrate"], check=True)
+    migrate_database(ENV.database_uri)
 
 
-@cli.command()
-def codegen() -> None:
-    """Codegen."""
-    subprocess.run(["sqlc-py", "generate"], check=True)
-    codegen_typescript()
-
-
-@cli.group()
-def ops() -> None:
-    """Manual operations executed via CLI."""
-
-
-@ops.group()
-def tenant() -> None:
-    """Operations on tenants."""
-
-
-@tenant.command()
-@click.option("--name", type=str, required=True, help="The new tenant's name.")
-@click.option(
-    "--inbound-source",
-    type=TenantsInboundSource,
-    required=True,
-    default=TenantsInboundSource.UNKNOWN,
-    help="The tenant's inbound source.",
-)
-@coro
-@with_cq
-async def create(cq: ConnQuerier, name: str, inbound_source: TenantsInboundSource) -> None:
-    """Create a tenant."""
-    await tenant_create(cq=cq, name=name, inbound_source=inbound_source)
-
-
-@tenant.command()
-@click.option("--tenant-id", type=str, required=True, help="The tenant's external ID.")
-@click.option("--user-id", type=str, required=True, help="The user's external ID.")
-@coro
-@with_cq
-async def add_user(cq: ConnQuerier, tenant_id: str, user_id: TenantsInboundSource) -> None:
-    """Add a user to a tenant."""
-    await tenant_add_user(cq=cq, tenant_id=tenant_id, user_id=user_id)
-
-
-@ops.group()
-def user() -> None:
-    """Operations on users."""
-
-
-@user.command()
-@click.option("--email", type=str, required=True, help="The new user's email.")
-@click.option("--name", type=str, required=True, help="The new user's name.")
-@click.option(
-    "--password",
-    type=str,
-    help="The new user's password. Leave blank to create a signing up user.",
-)
-@coro
-@with_cq
-async def create(cq: ConnQuerier, email: str, name: str, password: str | None) -> None:
-    """Create a user."""
-    await user_create(cq=cq, email=email, name=name, password=password)
-
-
-@cli.group()
-def dev() -> None:
-    """Operations meant for local development."""
-
-
-@dev.command()
-@coro
-@with_cq
-async def create_test_account(cq: ConnQuerier) -> None:
-    """Create a test account with associated tenant."""
-    rand = TestRandGen()
-    user = await user_create(
-        cq=cq,
-        email=rand.email(),
-        name="Demo User",
-        password="password",
-    )
-    tenant = await tenant_create(
-        cq=cq,
-        name=rand.string(),
-        inbound_source=TenantsInboundSource.UNKNOWN,
-    )
-    await tenant_add_user(cq=cq, tenant_id=tenant.external_id, user_id=user.external_id)
+@main.command()
+def codegen():
+    """Codegen models from the database."""
+    asyncio.run(run_codegen())
 
 
 if __name__ == "__main__":
-    cli()
+    main()

@@ -16,7 +16,7 @@ logger = get_logger()
 class TestDB:
     __test__ = False
 
-    def db_uri(self, db_name: str) -> str:
+    def database_uri(self, db_name: str) -> str:
         base_uri, _ = ENV.database_uri.rsplit("/", 1)
         return f"{base_uri}/{db_name}"
 
@@ -49,7 +49,8 @@ class TestDB:
             await conn.execute(SQL("CREATE DATABASE {}").format(Identifier(tmpl_name)))
 
             migrations = yoyo.read_migrations(str(PYTHON_ROOT / "database/migrations"))
-            with yoyo.get_backend(self.db_uri(tmpl_name).replace("postgres://", "postgres+psycopg://")) as backend, backend.lock():
+            db_uri_yoyo = self.database_uri(tmpl_name).replace("postgres://", "postgresql+psycopg://")
+            with yoyo.get_backend(db_uri_yoyo) as backend, backend.lock():
                 backend.apply_migrations(backend.to_apply(migrations))
 
             await conn.execute(SQL("UPDATE pg_database SET datistemplate = true WHERE datname = {}").format(Identifier(tmpl_name)))

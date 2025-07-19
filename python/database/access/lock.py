@@ -4,11 +4,11 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
-from foundation.errors import BlossomError
-from foundation.logs import get_logger
 from psycopg.sql import SQL, Identifier
 
-from database.access.access import DBConnPool, connect_db_admin
+from database.access.conn import DBConnPool, connect_db_admin
+from foundation.errors import BlossomError
+from foundation.logs import get_logger
 
 logger = get_logger()
 

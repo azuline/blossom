@@ -5,6 +5,8 @@ import tempfile
 from pathlib import Path
 
 import yaml
+
+from foundation.logs import get_logger
 from foundation.testing.testdb import TestDB
 
 logger = get_logger()
@@ -19,7 +21,7 @@ async def run_codegen():
         with tempfile.NamedTemporaryFile(prefix=".sqlc.config", suffix=".yaml", dir=".") as tmp_config:
             # Create a testdb.
             db_name = await testdb.create_db()
-            test_db_uri = testdb.db_uri(db_name)
+            test_db_uri = testdb.database_uri(db_name)
             logger.info("Using test database for codegen", db_name=db_name)
 
             # Create a new temporary config pointing to the testdb.
