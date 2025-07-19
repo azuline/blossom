@@ -25,5 +25,3 @@ diff:
     git status
     git diff
     bash -c '[[ -z $(git status -s) ]] || (exit 1)'
-
-.PHONY: start test migrate codegen psql lint diff
