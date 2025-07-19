@@ -11,15 +11,15 @@ from database.codegen import models
 
 
 AUTHN_LINKED_TENANT_FETCH = """-- name: authn_linked_tenant_fetch \\:one
-SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM tenants t
 JOIN tenants_users tu ON tu.tenant_id = t.id
-WHERE tu.user_id = %s AND t.external_id = %s
+WHERE tu.user_id = %s AND t.id = %s
 """
 
 
 AUTHN_MOST_RECENTLY_ACCESSED_TENANT_FETCH = """-- name: authn_most_recently_accessed_tenant_fetch \\:one
-SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM tenants t
 JOIN tenants_users tu ON tu.tenant_id = t.id
 LEFT JOIN sessions s ON s.tenant_id = t.id AND s.user_id = tu.user_id
@@ -32,19 +32,19 @@ LIMIT 1
 AUTHN_SESSION_CREATE = """-- name: authn_session_create \\:one
 INSERT INTO sessions (user_id, tenant_id)
 VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
 """
 
 
 AUTHN_SESSION_EXPIRE = """-- name: authn_session_expire \\:exec
 UPDATE sessions
 SET expired_at = NOW() 
-WHERE external_id = %s
+WHERE id = %s
 """
 
 
 AUTHN_SESSION_FETCH_BY_USER = """-- name: authn_session_fetch_by_user \\:one
-SELECT id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+SELECT id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
 FROM sessions
 WHERE user_id = %s
 ORDER BY last_seen_at DESC
@@ -53,16 +53,16 @@ LIMIT 1
 
 
 AUTHN_USER_FETCH_BY_EMAIL = """-- name: authn_user_fetch_by_email \\:one
-SELECT id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
+SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
 WHERE email = %s
 """
 
 
 RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch \\:one
-SELECT id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+SELECT id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
 FROM sessions
-WHERE external_id = %s
+WHERE id = %s
 AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
@@ -71,26 +71,26 @@ AND last_seen_at > NOW() - '14 days'::INTERVAL
 TENANT_ADD_USER = """-- name: tenant_add_user \\:one
 INSERT INTO tenants_users (tenant_id, user_id)
 VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
+RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, removed_at, removed_by_user
 """
 
 
 TENANT_CREATE = """-- name: tenant_create \\:one
 INSERT INTO tenants (name, inbound_source)
 VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, name, inbound_source
+RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
 
 TENANT_FETCH = """-- name: tenant_fetch \\:one
-SELECT id, external_id, created_at, updated_at, name, inbound_source
+SELECT id, created_at, updated_at, storytime, name, inbound_source
 FROM tenants
 WHERE id = %s
 """
 
 
 TENANT_FETCH_ALL = """-- name: tenant_fetch_all \\:many
-SELECT t.id, t.external_id, t.created_at, t.updated_at, t.name, t.inbound_source
+SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM tenants t
 JOIN tenants_users tu ON tu.tenant_id = t.id
 WHERE tu.user_id = %s
@@ -100,21 +100,21 @@ WHERE tu.user_id = %s
 TEST_SESSION_CREATE = """-- name: test_session_create \\:one
 INSERT INTO sessions (user_id, tenant_id, expired_at, last_seen_at)
 VALUES (%s, %s, %s, %s)
-RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, last_seen_at, expired_at
+RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
 """
 
 
 TEST_TENANT_CREATE = """-- name: test_tenant_create \\:one
 INSERT INTO tenants (name, inbound_source)
 VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, name, inbound_source
+RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
 
 TEST_TENANT_USER_CREATE = """-- name: test_tenant_user_create \\:one
 INSERT INTO tenants_users (user_id, tenant_id)
 VALUES (%s, %s)
-RETURNING id, external_id, created_at, updated_at, user_id, tenant_id, removed_at, removed_by_user
+RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, removed_at, removed_by_user
 """
 
 
@@ -122,28 +122,28 @@ TEST_USER_CREATE = """-- name: test_user_create \\:one
 
 INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
 VALUES (%s, %s, %s, %s, %s)
-RETURNING id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
+RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
 
 USER_CREATE = """-- name: user_create \\:one
 INSERT INTO users (name, email, password_hash, signup_step)
 VALUES (%s, %s, %s, %s)
-RETURNING id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
+RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
 
 USER_FETCH = """-- name: user_fetch \\:one
-SELECT id, external_id, created_at, updated_at, name, email, password_hash, signup_step, is_enabled, last_visited_at
+SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
 WHERE id = %s
 """
 
 
 VAULT_SECRET_CREATE = """-- name: vault_secret_create \\:one
-INSERT INTO vaulted_secrets (tenant_id, ciphertext, nonce)
-VALUES (%s, %s, %s)
-RETURNING id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
+INSERT INTO vaulted_secrets (tenant_id, ciphertext)
+VALUES (%s, %s)
+RETURNING id, created_at, updated_at, storytime, tenant_id, ciphertext
 """
 
 
@@ -155,7 +155,7 @@ WHERE id = %s
 
 
 VAULT_SECRET_FETCH = """-- name: vault_secret_fetch \\:one
-SELECT id, external_id, created_at, updated_at, tenant_id, ciphertext, nonce
+SELECT id, created_at, updated_at, storytime, tenant_id, ciphertext
 FROM vaulted_secrets
 WHERE id = %s
 """
@@ -165,59 +165,59 @@ class AsyncQuerier:
     def __init__(self, conn: psycopg.AsyncConnection[Any]):
         self._conn = conn
 
-    async def authn_linked_tenant_fetch(self, *, user_id: int, external_id: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(AUTHN_LINKED_TENANT_FETCH, (user_id, external_id))).fetchone()
+    async def authn_linked_tenant_fetch(self, *, user_id: str, id: str) -> Optional[models.Tenant]:
+        row = await (await self._conn.execute(AUTHN_LINKED_TENANT_FETCH, (user_id, id))).fetchone()
         if row is None:
             return None
         return models.Tenant(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             inbound_source=row[5],
         )
 
-    async def authn_most_recently_accessed_tenant_fetch(self, *, user_id: int) -> Optional[models.Tenant]:
+    async def authn_most_recently_accessed_tenant_fetch(self, *, user_id: str) -> Optional[models.Tenant]:
         row = await (await self._conn.execute(AUTHN_MOST_RECENTLY_ACCESSED_TENANT_FETCH, (user_id, ))).fetchone()
         if row is None:
             return None
         return models.Tenant(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             inbound_source=row[5],
         )
 
-    async def authn_session_create(self, *, user_id: int, tenant_id: Optional[int]) -> Optional[models.Session]:
+    async def authn_session_create(self, *, user_id: str, tenant_id: Optional[str]) -> Optional[models.Session]:
         row = await (await self._conn.execute(AUTHN_SESSION_CREATE, (user_id, tenant_id))).fetchone()
         if row is None:
             return None
         return models.Session(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
 
-    async def authn_session_expire(self, *, external_id: str) -> None:
-        await self._conn.execute(AUTHN_SESSION_EXPIRE, (external_id, ))
+    async def authn_session_expire(self, *, id: str) -> None:
+        await self._conn.execute(AUTHN_SESSION_EXPIRE, (id, ))
 
-    async def authn_session_fetch_by_user(self, *, user_id: int) -> Optional[models.Session]:
+    async def authn_session_fetch_by_user(self, *, user_id: str) -> Optional[models.Session]:
         row = await (await self._conn.execute(AUTHN_SESSION_FETCH_BY_USER, (user_id, ))).fetchone()
         if row is None:
             return None
         return models.Session(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             last_seen_at=row[6],
@@ -230,9 +230,9 @@ class AsyncQuerier:
             return None
         return models.User(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             email=row[5],
             password_hash=row[6],
@@ -241,126 +241,126 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def rpc_unexpired_session_fetch(self, *, external_id: str) -> Optional[models.Session]:
-        row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, (external_id, ))).fetchone()
+    async def rpc_unexpired_session_fetch(self, *, id: str) -> Optional[models.Session]:
+        row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, (id, ))).fetchone()
         if row is None:
             return None
         return models.Session(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
 
-    async def tenant_add_user(self, *, tenant_id: int, user_id: int) -> Optional[models.TenantsUser]:
+    async def tenant_add_user(self, *, tenant_id: str, user_id: str) -> Optional[models.TenantsUser]:
         row = await (await self._conn.execute(TENANT_ADD_USER, (tenant_id, user_id))).fetchone()
         if row is None:
             return None
         return models.TenantsUser(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             removed_at=row[6],
             removed_by_user=row[7],
         )
 
-    async def tenant_create(self, *, name: str, inbound_source: models.TenantsInboundSource) -> Optional[models.Tenant]:
+    async def tenant_create(self, *, name: str, inbound_source: str) -> Optional[models.Tenant]:
         row = await (await self._conn.execute(TENANT_CREATE, (name, inbound_source))).fetchone()
         if row is None:
             return None
         return models.Tenant(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             inbound_source=row[5],
         )
 
-    async def tenant_fetch(self, *, id: int) -> Optional[models.Tenant]:
+    async def tenant_fetch(self, *, id: str) -> Optional[models.Tenant]:
         row = await (await self._conn.execute(TENANT_FETCH, (id, ))).fetchone()
         if row is None:
             return None
         return models.Tenant(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             inbound_source=row[5],
         )
 
-    async def tenant_fetch_all(self, *, user_id: int) -> AsyncIterator[models.Tenant]:
+    async def tenant_fetch_all(self, *, user_id: str) -> AsyncIterator[models.Tenant]:
         cursor = await self._conn.execute(TENANT_FETCH_ALL, (user_id, ))
         async for row in cursor:
             yield models.Tenant(
                 id=row[0],
-                external_id=row[1],
-                created_at=row[2],
-                updated_at=row[3],
+                created_at=row[1],
+                updated_at=row[2],
+                storytime=row[3],
                 name=row[4],
                 inbound_source=row[5],
             )
 
-    async def test_session_create(self, *, user_id: int, tenant_id: Optional[int], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
+    async def test_session_create(self, *, user_id: str, tenant_id: Optional[str], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
         row = await (await self._conn.execute(TEST_SESSION_CREATE, (user_id, tenant_id, expired_at, last_seen_at))).fetchone()
         if row is None:
             return None
         return models.Session(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
 
-    async def test_tenant_create(self, *, name: str, inbound_source: models.TenantsInboundSource) -> Optional[models.Tenant]:
+    async def test_tenant_create(self, *, name: str, inbound_source: str) -> Optional[models.Tenant]:
         row = await (await self._conn.execute(TEST_TENANT_CREATE, (name, inbound_source))).fetchone()
         if row is None:
             return None
         return models.Tenant(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             inbound_source=row[5],
         )
 
-    async def test_tenant_user_create(self, *, user_id: int, tenant_id: int) -> Optional[models.TenantsUser]:
+    async def test_tenant_user_create(self, *, user_id: str, tenant_id: str) -> Optional[models.TenantsUser]:
         row = await (await self._conn.execute(TEST_TENANT_USER_CREATE, (user_id, tenant_id))).fetchone()
         if row is None:
             return None
         return models.TenantsUser(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             user_id=row[4],
             tenant_id=row[5],
             removed_at=row[6],
             removed_by_user=row[7],
         )
 
-    async def test_user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: models.UserSignupStep, is_enabled: bool) -> Optional[models.User]:
+    async def test_user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: str, is_enabled: bool) -> Optional[models.User]:
         row = await (await self._conn.execute(TEST_USER_CREATE, (name, email, password_hash, signup_step, is_enabled))).fetchone()
         if row is None:
             return None
         return models.User(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             email=row[5],
             password_hash=row[6],
@@ -369,15 +369,15 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: models.UserSignupStep) -> Optional[models.User]:
+    async def user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: str) -> Optional[models.User]:
         row = await (await self._conn.execute(USER_CREATE, (name, email, password_hash, signup_step))).fetchone()
         if row is None:
             return None
         return models.User(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             email=row[5],
             password_hash=row[6],
@@ -386,15 +386,15 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def user_fetch(self, *, id: int) -> Optional[models.User]:
+    async def user_fetch(self, *, id: str) -> Optional[models.User]:
         row = await (await self._conn.execute(USER_FETCH, (id, ))).fetchone()
         if row is None:
             return None
         return models.User(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             name=row[4],
             email=row[5],
             password_hash=row[6],
@@ -403,33 +403,31 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def vault_secret_create(self, *, tenant_id: int, ciphertext: str, nonce: str) -> Optional[models.VaultedSecret]:
-        row = await (await self._conn.execute(VAULT_SECRET_CREATE, (tenant_id, ciphertext, nonce))).fetchone()
+    async def vault_secret_create(self, *, tenant_id: str, ciphertext: str) -> Optional[models.VaultedSecret]:
+        row = await (await self._conn.execute(VAULT_SECRET_CREATE, (tenant_id, ciphertext))).fetchone()
         if row is None:
             return None
         return models.VaultedSecret(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             tenant_id=row[4],
             ciphertext=row[5],
-            nonce=row[6],
         )
 
-    async def vault_secret_delete(self, *, id: int) -> None:
+    async def vault_secret_delete(self, *, id: str) -> None:
         await self._conn.execute(VAULT_SECRET_DELETE, (id, ))
 
-    async def vault_secret_fetch(self, *, id: int) -> Optional[models.VaultedSecret]:
+    async def vault_secret_fetch(self, *, id: str) -> Optional[models.VaultedSecret]:
         row = await (await self._conn.execute(VAULT_SECRET_FETCH, (id, ))).fetchone()
         if row is None:
             return None
         return models.VaultedSecret(
             id=row[0],
-            external_id=row[1],
-            created_at=row[2],
-            updated_at=row[3],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
             tenant_id=row[4],
             ciphertext=row[5],
-            nonce=row[6],
         )

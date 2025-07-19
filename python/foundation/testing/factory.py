@@ -53,15 +53,15 @@ class TestFactory:
         await self.tenant_user_create(user_id=user.id, tenant_id=tenant.id)
         return user, tenant
 
-    async def tenant_user_create(self, *, user_id: int, tenant_id: int) -> models.TenantsUser:
+    async def tenant_user_create(self, *, user_id: str, tenant_id: str) -> models.TenantsUser:
         async with xact_admin() as q:
             return cast_notnull(await q.orm.test_tenant_user_create(user_id=user_id, tenant_id=tenant_id))
 
     async def session(
         self,
         *,
-        user_id: int,
-        tenant_id: int | None = None,
+        user_id: str,
+        tenant_id: str | None = None,
         expired_at: datetime | None = None,
         last_seen_at: datetime | None = None,
     ) -> models.Session:

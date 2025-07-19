@@ -3,30 +3,16 @@
 #   sqlc v1.29.0
 import dataclasses
 import datetime
-import enum
-from typing import Optional
-
-
-class TenantsInboundSource(str, enum.Enum):
-    OUTREACH = "outreach"
-    ORGANIC = "organic"
-    WORD_OF_MOUTH = "word_of_mouth"
-    REFERRAL = "referral"
-    UNKNOWN = "unknown"
-
-
-class UserSignupStep(str, enum.Enum):
-    CREATED = "created"
-    COMPLETE = "complete"
+from typing import Any, Optional
 
 
 @dataclasses.dataclass()
 class Invite:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    user_id: int
+    storytime: Optional[Any]
+    user_id: str
     code_hash: str
     expires_at: datetime.datetime
     accepted_at: Optional[datetime.datetime]
@@ -34,58 +20,67 @@ class Invite:
 
 @dataclasses.dataclass()
 class Session:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    user_id: int
-    tenant_id: Optional[int]
+    storytime: Optional[Any]
+    user_id: str
+    tenant_id: Optional[str]
     last_seen_at: datetime.datetime
     expired_at: Optional[datetime.datetime]
 
 
 @dataclasses.dataclass()
 class Tenant:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    storytime: Optional[Any]
     name: str
-    inbound_source: TenantsInboundSource
+    inbound_source: str
+
+
+@dataclasses.dataclass()
+class TenantsInboundSourceEnum:
+    value: str
 
 
 @dataclasses.dataclass()
 class TenantsUser:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    user_id: int
-    tenant_id: int
+    storytime: Optional[Any]
+    user_id: str
+    tenant_id: str
     removed_at: Optional[datetime.datetime]
-    removed_by_user: Optional[int]
+    removed_by_user: Optional[str]
 
 
 @dataclasses.dataclass()
 class User:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
+    storytime: Optional[Any]
     name: str
     email: str
     password_hash: Optional[str]
-    signup_step: UserSignupStep
+    signup_step: str
     is_enabled: bool
     last_visited_at: Optional[datetime.datetime]
 
 
 @dataclasses.dataclass()
+class UserSignupStepEnum:
+    value: str
+
+
+@dataclasses.dataclass()
 class VaultedSecret:
-    id: int
-    external_id: str
+    id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    tenant_id: int
+    storytime: Optional[Any]
+    tenant_id: str
     ciphertext: str
-    nonce: str

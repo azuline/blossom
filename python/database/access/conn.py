@@ -36,8 +36,8 @@ async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
 
 
 if "pytest" in sys.modules:  # pragma: no cover
-    logging.getLogger("psycopg").setLevel(logging.DEBUG)
-    logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)
+    logging.getLogger("psycopg").setLevel(logging.DEBUG)  # noqa: TID251
+    logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)  # noqa: TID251
 
 
 _cached_db_uri: str = ENV.database_uri

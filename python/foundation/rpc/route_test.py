@@ -25,8 +25,8 @@ class SpecTestIn:
 @dataclass
 class SpecTestOut:
     data: SpecTestIn
-    user_id: int | None
-    tenant_id: int | None
+    user_id: str | None
+    tenant_id: str | None
 
 
 async def make_test_route(

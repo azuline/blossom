@@ -5,21 +5,21 @@
 -- Create functions to get current tenant and current user. These will be used
 -- in upcoming policies.
 CREATE FUNCTION current_tenant_id()
-RETURNS bigint AS $$
+RETURNS text AS $$
 DECLARE
-    tenant_id bigint;
+    tenant_id text;
 BEGIN
-    SELECT NULLIF(current_setting('app.current_tenant_id', TRUE), '')::bigint INTO tenant_id;
+    SELECT NULLIF(current_setting('app.current_tenant_id', TRUE), '')::text INTO tenant_id;
     RETURN tenant_id;
 END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 
 CREATE FUNCTION current_user_id()
-RETURNS bigint AS $$
+RETURNS text AS $$
 DECLARE
-    user_id bigint;
+    user_id text;
 BEGIN
-    SELECT NULLIF(current_setting('app.current_user_id', TRUE), '')::bigint INTO user_id;
+    SELECT NULLIF(current_setting('app.current_user_id', TRUE), '')::text INTO user_id;
     RETURN user_id;
 END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;

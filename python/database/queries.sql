@@ -42,13 +42,13 @@ RETURNING *;
 -- name: AuthnSessionExpire :exec
 UPDATE sessions
 SET expired_at = NOW() 
-WHERE external_id = $1;
+WHERE id = $1;
 
 -- name: AuthnLinkedTenantFetch :one
 SELECT t.*
 FROM tenants t
 JOIN tenants_users tu ON tu.tenant_id = t.id
-WHERE tu.user_id = $1 AND t.external_id = $2;
+WHERE tu.user_id = $1 AND t.id = $2;
 
 -- name: AuthnMostRecentlyAccessedTenantFetch :one
 SELECT t.*
@@ -67,8 +67,8 @@ ORDER BY last_seen_at DESC
 LIMIT 1;
 
 -- name: VaultSecretCreate :one
-INSERT INTO vaulted_secrets (tenant_id, ciphertext, nonce)
-VALUES ($1, $2, $3)
+INSERT INTO vaulted_secrets (tenant_id, ciphertext)
+VALUES ($1, $2)
 RETURNING *;
 
 -- name: VaultSecretFetch :one
@@ -84,7 +84,7 @@ WHERE id = $1;
 -- name: RpcUnexpiredSessionFetch :one
 SELECT *
 FROM sessions
-WHERE external_id = $1
+WHERE id = $1
 AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL;
 
