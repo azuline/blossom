@@ -10,7 +10,7 @@ from typing import Any
 import click
 
 from codegen.sqlc.models import TenantsInboundSource
-from foundation.config import CONFVARS
+from foundation.config import ENV
 from foundation.database import ConnQuerier, conn_admin, create_pg_pool
 from foundation.log import option_log_level
 from foundation.rpc.codegen import codegen_typescript
@@ -36,7 +36,7 @@ def with_cq(f: Any) -> Any:
     @functools.wraps(f)
     async def wrapper(*args: Any, **kwargs: Any) -> Any:
         async with (
-            await create_pg_pool(CONFVARS.database_url) as pg_pool,
+            await create_pg_pool(ENV.database_url) as pg_pool,
             conn_admin(pg_pool) as cq,
         ):
             return await f(*args, **kwargs, cq=cq)
@@ -66,7 +66,7 @@ def webserver(host: str, port: int) -> None:
 @cli.command()
 def migrate() -> None:
     """Migrate the database."""
-    subprocess.run(["pgmigrate", "--database", CONFVARS.database_url, "migrate"], check=True)
+    subprocess.run(["pgmigrate", "--database", ENV.database_url, "migrate"], check=True)
 
 
 @cli.command()

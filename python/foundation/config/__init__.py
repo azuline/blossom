@@ -55,4 +55,4 @@ class _Config:
 
 
 # Define a Config singleton.
-CONFVARS = _Config()
+ENV = _Config()

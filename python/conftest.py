@@ -20,7 +20,7 @@ from quart.typing import TestClientProtocol
 # Configure logging for tests -- we will set up OpenTelemetry and fix this side effect
 # nonsense later.
 import foundation.log  # noqa
-from foundation.config import CONFVARS
+from foundation.config import ENV
 from foundation.database import ConnPool, create_pg_pool
 from foundation.test.db import run_database_migrations
 from foundation.test.fixture import TFix
@@ -48,23 +48,23 @@ def event_loop(
 @pytest_asyncio.fixture(scope="session")
 async def db() -> AsyncIterator[str]:
     db_name = "test_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
-    with psycopg.connect(CONFVARS.database_url, autocommit=True) as conn:
+    with psycopg.connect(ENV.database_url, autocommit=True) as conn:
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
-    run_database_migrations(CONFVARS.database_url + "/" + db_name)
+    run_database_migrations(ENV.database_url + "/" + db_name)
     yield db_name
 
 
 @pytest.fixture
 def isolated_db() -> str:
     db_name = "test_iso_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
-    with psycopg.connect(CONFVARS.database_url, autocommit=True) as conn:
+    with psycopg.connect(ENV.database_url, autocommit=True) as conn:
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     return db_name
 
 
 @pytest_asyncio.fixture(scope="session")
 async def pg_pool(db: str) -> AsyncIterator[ConnPool]:
-    async with await create_pg_pool(CONFVARS.database_url + "/" + db) as pg_pool:
+    async with await create_pg_pool(ENV.database_url + "/" + db) as pg_pool:
         yield pg_pool
 
 

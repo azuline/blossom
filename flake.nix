@@ -49,7 +49,7 @@
           done
           echo "$path"
         }
-        export BLOSSOM_ROOT="$(find-up .monorepo-root)"
+        export BLOSSOM_ROOT="$(find-up flake.nix)"
         # Default biome binary is dynamically linked.
         export BIOME_BINARY="${pkgs.biome}/bin/biome"
         export UV_PYTHON="${pkgs.python-pin}/bin/python"

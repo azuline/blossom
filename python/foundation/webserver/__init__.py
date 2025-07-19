@@ -12,7 +12,7 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 from quart import Quart
 
-from foundation.config import CONFVARS
+from foundation.config import ENV
 from foundation.database import ConnPool, create_pg_pool
 from foundation.rpc.catalog import create_blueprint
 
@@ -35,7 +35,7 @@ async def create_app(
 
     :return: The created Quart application.
     """
-    pg_pool = pg_pool or await create_pg_pool(CONFVARS.database_url)
+    pg_pool = pg_pool or await create_pg_pool(ENV.database_url)
 
     logger.debug("Creating Quart app.")
     app = Quart(__name__)
@@ -45,7 +45,7 @@ async def create_app(
         SESSION_COOKIE_SAMESITE="Lax",
         PG_POOL=pg_pool,
     )
-    app.secret_key = CONFVARS.session_secret
+    app.secret_key = ENV.session_secret
     app.register_blueprint(create_blueprint())
     return app
 

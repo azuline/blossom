@@ -5,7 +5,7 @@ on:
       - .github/workflows/typescript.yaml
       - flake.*
       - typescript/**
-      - infra/deploy/**
+      - infra/deploys/**
       - '!**/*.md'
 defaults:
   run:
@@ -16,9 +16,9 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
-      - uses: cachix/cachix-action@v12
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v15
         with:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -43,9 +43,9 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
-      - uses: cachix/cachix-action@v12
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v15
         with:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -66,9 +66,9 @@ jobs:
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
-      - uses: cachix/cachix-action@v12
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v15
         with:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -117,9 +117,9 @@ jobs:
       NOMAD_NAMESPACE: blossom
       NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
-      - uses: cachix/cachix-action@v12
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: cachix/cachix-action@v15
         with:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -128,7 +128,7 @@ jobs:
           nix build -j8 ../\#devShells.x86_64-linux.deployments
           nix develop ../\#devShells.x86_64-linux.deployments --command echo
       - name: Tailscale
-        uses: tailscale/github-action@v1
+        uses: tailscale/github-action@v3
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
       - name: Deploy
