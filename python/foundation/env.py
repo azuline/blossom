@@ -29,12 +29,14 @@ class InvalidConfigValueError(Exception):
 
 
 EnvironmentEnum = Literal["production", "development"]
+LogLevelEnum = Literal["debug", "info"]
 ServiceEnum = Literal["product", "panopticon", "pipeline"]
 
 
 @dataclasses.dataclass
 class _Env:
     environment: EnvironmentEnum
+    log_level: LogLevelEnum
     service: ServiceEnum
     commit: str
     testing: bool
@@ -66,6 +68,7 @@ class _Env:
     def initialize(cls) -> _Env:
         c = cls(
             environment=cast(EnvironmentEnum, cls._required("ENVIRONMENT")),
+            log_level=cast(LogLevelEnum, cls._optional("LOG_LEVEL") or "info"),
             service=cast(ServiceEnum, cls._optional("SERVICE")),
             testing=bool(cls._optional("TESTING") or False),
             commit=cls._optional("RENDER_GIT_COMMIT") or "development",
@@ -82,6 +85,7 @@ class _Env:
             ramp_token=cls._optional("RAMP_TOKEN"),
         )
         assert c.environment in get_args(EnvironmentEnum), f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(get_args(EnvironmentEnum))}"
+        assert c.log_level in get_args(LogLevelEnum), f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(get_args(LogLevelEnum))}"
         assert c.service is None or c.service in get_args(ServiceEnum), f"SERVICE is invalid: {c.service} not one of {', '.join(get_args(ServiceEnum))}"
         return c
 

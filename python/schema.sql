@@ -93,6 +93,28 @@ END;
 $function$
 ;
 
+CREATE TABLE public._yoyo_log (
+  id character varying(36) PRIMARY KEY NOT NULL,
+  migration_hash character varying(64),
+  migration_id character varying(255),
+  operation character varying(10),
+  username character varying(255),
+  hostname character varying(255),
+  comment character varying(255),
+  created_at_utc timestamp without time zone
+);
+
+CREATE TABLE public._yoyo_migration (
+  migration_hash character varying(64) PRIMARY KEY NOT NULL,
+  migration_id character varying(255),
+  applied_at_utc timestamp without time zone
+);
+
+CREATE TABLE public._yoyo_version (
+  version integer PRIMARY KEY NOT NULL,
+  installed_at_utc timestamp without time zone
+);
+
 CREATE TABLE public.invites (
   id bigint PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
   external_id text UNIQUE NOT NULL DEFAULT generate_external_id('inv'::text),
@@ -130,13 +152,6 @@ CREATE TRIGGER updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUN
 ALTER TABLE public.invites
 ADD CONSTRAINT invites_user_id_fkey
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-
-CREATE TABLE public.pgmigrate_migrations (
-  id text PRIMARY KEY NOT NULL,
-  checksum text NOT NULL,
-  execution_time_in_millis bigint NOT NULL,
-  applied_at timestamp with time zone NOT NULL
-);
 
 CREATE TABLE public.sessions (
   id bigint PRIMARY KEY NOT NULL GENERATED ALWAYS AS IDENTITY,
@@ -224,3 +239,9 @@ CREATE TRIGGER updated_at BEFORE UPDATE ON public.vaulted_secrets FOR EACH ROW E
 ALTER TABLE public.vaulted_secrets
 ADD CONSTRAINT vaulted_secrets_tenant_id_fkey
 FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
+
+CREATE TABLE public.yoyo_lock (
+  locked integer PRIMARY KEY NOT NULL DEFAULT 1,
+  ctime timestamp without time zone,
+  pid integer NOT NULL
+);

@@ -1,0 +1,21 @@
+plugins:
+  - name: py
+    process:
+      cmd: "sqlc-gen-python"
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "database/queries.sql"
+    schema: "database/migrations/"
+    database:
+      uri: postgres://postgres:password@localhost:40801/postgres
+    rules:
+      - sqlc/db-prepare
+    codegen:
+      - out: database/codegen
+        plugin: py
+        options:
+          package: database.codegen
+          emit_sync_querier: false
+          emit_async_querier: true
+          query_parameter_limit: 100  # Always generate kwargs, never argument structs.

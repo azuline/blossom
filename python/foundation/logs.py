@@ -19,7 +19,7 @@ from structlog_sentry import SentryProcessor
 from foundation.env import ENV
 
 # Constants
-DEFAULT_LOG_LEVEL = logging.INFO
+DEFAULT_LOG_LEVEL = logging.DEBUG if ENV.log_level == "debug" else logging.INFO
 SERVICE_NAME = ENV.service
 
 

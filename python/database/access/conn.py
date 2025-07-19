@@ -68,7 +68,7 @@ async def connect_db_admin(pg_pool: DBConnPool | None = None) -> AsyncIterator[D
 
 @contextlib.asynccontextmanager
 async def connect_db_admin_nopool() -> AsyncIterator[DBConn]:
-    async with await psycopg.AsyncConnection.connect(ENV.database_uri) as conn:
+    async with await psycopg.AsyncConnection.connect(ENV.database_uri, autocommit=True) as conn:
         yield conn
 
 

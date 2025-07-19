@@ -40,8 +40,8 @@ class TestDB:
         async with lock("testdb"), connect_db_admin_nopool() as conn:
             tmpl_name = self._tmpl_db_name()
 
-            cursor = await conn.execute("SELECT 1 FROM pg_database WHERE datname = ?", (tmpl_name,))
-            if cursor.fetchone():
+            cursor = await conn.execute("SELECT 1 FROM pg_database WHERE datname = %s", (tmpl_name,))
+            if await cursor.fetchone():
                 logger.debug("template database already exists", tmpl_name=tmpl_name)
                 return tmpl_name
 
@@ -53,7 +53,7 @@ class TestDB:
             with yoyo.get_backend(db_uri_yoyo) as backend, backend.lock():
                 backend.apply_migrations(backend.to_apply(migrations))
 
-            await conn.execute(SQL("UPDATE pg_database SET datistemplate = true WHERE datname = {}").format(Identifier(tmpl_name)))
+            await conn.execute("UPDATE pg_database SET datistemplate = true WHERE datname = %s", (tmpl_name,))
 
         logger.info("created template database", tmpl_name=tmpl_name)
         return tmpl_name
@@ -69,12 +69,13 @@ class TestDB:
     async def drop_db(self, db_name: str):
         async with connect_db_admin_nopool() as conn:
             await conn.execute(
-                SQL("""
+                """
                     SELECT pg_terminate_backend(pg_stat_activity.pid)
                     FROM pg_stat_activity
-                    WHERE pg_stat_activity.datname = {}
-                        AND pid <> pg_backend_pid();
-                """).format(Identifier(db_name))
+                    WHERE pg_stat_activity.datname = %s
+                        AND pid <> pg_backend_pid()
+                """,
+                (db_name,),
             )
             await conn.execute(SQL("DROP DATABASE IF EXISTS {}").format(Identifier(db_name)))
         logger.debug("dropped test database", db_name=db_name)

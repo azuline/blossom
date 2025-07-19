@@ -54,12 +54,12 @@ facade third-party libraries where beneficial to similarly integrate them smooth
   - Linter/Formatter: ruff + Semgrep + Tach
   - Logs: Structlog
   - Metrics: datadog
-  - Migrations: pgmigrate
+  - Migrations: yoyo-migrations
   - ORM: sqlc + psycopg
   - Package Manager: uv
   - Test Runner: pytest
   - Traces: ddtrace
-  - Type Checker: ty
+  - Type Checker: pyright
   - Web Framework: Quart + Hypercorn
 - TypeScript:
   - Builds: Vite (SWC+esbuild)

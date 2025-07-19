@@ -18,10 +18,14 @@ pipeline *ARGS:  ## Start the Dagster developer webapp for the data ingestion pi
 
 psql *ARGS:  ## Runs `psql` on the development database. Accepts `psql` arguments minus the database connection string (already supplied). Use this to run queries on the database.
     psql "postgres://postgres:password@localhost:40801/postgres" {{ARGS}}
-database *ARGS:  ## Interact with the database program. For example. Common subcommands are `migrate` and `codegen`.
-    uv run -- python -m database {{ARGS}}
+migrate:  ## Runs the database migrations. Only run this command once a migration has passed all the tests.
+    uv run -- python -m database migrate
 new-migration MSG:  ## Create a new migration file with the correct naming structure and dependencies. ALWAYS use this tool to create a new migration.
     uv run -- yoyo new --sql --message "{{MSG}}"
+
+# CODEGEN RPC.
+codegen-db:  ## Codegens the database queries from the `queries.sql` file using a test database. Updates `schema.sql` based on the migrations. Run this after every change to the migrations.
+    uv run -- python -m database codegen
 
 # DEPENDENCY MANAGEMENT.
 
@@ -33,10 +37,10 @@ update *ARGS:  ## Update Python dependencies using `uv`.
 # CODE CHECKS.
 
 lint *ARGS:  ## Run the configured Python linters. Pass filename(s) like `just lint file.py [file2.py]` to lint just those files.
-    uv run -- ty check {{ARGS}}
+    uv run -- pyright {{ARGS}}
     uv run -- ruff check --fix {{ARGS}}
     uv run -- ruff format {{ARGS}}
-    semgrep --config .semgrep/ --autofix {{ARGS}}
+    semgrep scan --config .semgrep/ --quiet --autofix {{ARGS}}
     uv run -- tach check
 test *ARGS:  ## Run the Python test suite. Pass filename(s) like `just test file.py [file2.py::test_name]` to just test those files or tests.
     uv run -- pytest {{ARGS}}

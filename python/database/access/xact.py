@@ -2,9 +2,7 @@ import contextlib
 import dataclasses
 from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncConnection
-
-from database.access.conn import DBConnPool, connect_db_admin
+from database.access.conn import DBConn, DBConnPool, connect_db_admin
 from database.codegen.queries import AsyncQuerier
 from foundation.logs import get_logger
 
@@ -14,7 +12,7 @@ logger = get_logger()
 @dataclasses.dataclass
 class DBQuerier:
     orm: AsyncQuerier
-    conn: AsyncConnection
+    conn: DBConn
 
 
 @contextlib.asynccontextmanager

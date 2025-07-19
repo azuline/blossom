@@ -4,8 +4,6 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
-from psycopg.sql import SQL, Identifier
-
 from database.access.conn import DBConnPool, connect_db_admin
 from foundation.errors import BlossomError
 from foundation.logs import get_logger
@@ -42,7 +40,7 @@ async def lock(
     async with connect_db_admin(pool) as c:
         if not block:
             logger.info("trying to acquire advisory lock (nonblocking)", id=id_, name=name)
-            result = await c.execute(SQL("SELECT pg_try_advisory_xact_lock({})").format(Identifier(str(id_))))
+            result = await c.execute("SELECT pg_try_advisory_xact_lock(%s)", (id_,))
             locked = await result.fetchone()
             if not locked:
                 logger.info("failed to acquire advisory lock (nonblocking)", id=id_, name=name)
@@ -54,7 +52,7 @@ async def lock(
                 try:
                     # We must always call the pg_advisory_unlock no matter what in case we secured
                     # the lock in the DB and timed out in the response I/O.
-                    await asyncio.wait_for(c.execute(SQL("SELECT pg_advisory_xact_lock({})").format(Identifier(str(id_)))), timeout=block_timeout)
+                    await asyncio.wait_for(c.execute("SELECT pg_advisory_xact_lock(%s)", (id_,)), timeout=block_timeout)
                 except TimeoutError as e:
                     logger.info("failed to acquire advisory lock (blocking)", id=id_, name=name)
                     await c.rollback()
@@ -63,5 +61,5 @@ async def lock(
             yield
         finally:
             logger.info("releasing advisory lock", id=id_, name=name)
-            await c.execute(SQL("SELECT pg_advisory_unlock({})").format(Identifier(str(id_))))
+            await c.execute("SELECT pg_advisory_unlock(%s)", (id_,))
             await c.commit()

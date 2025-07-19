@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from codegen.sqlc.models import Session, Tenant, TenantsInboundSource, TenantsUser, User
+from database.codegen.models import Session, Tenant, TenantsInboundSource, TenantsUser, User
 
 from database.access.xact import xact
 from foundation.identifiers import generate_name

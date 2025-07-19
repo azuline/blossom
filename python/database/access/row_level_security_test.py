@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import psycopg
 
 from database.access.conn import DBConn, _set_row_level_security, create_pg_pool
+from database.schema.migrate import migrate_database
 from foundation.env import ENV
-from foundation.test.db import run_database_migrations
 
 
 @dataclass
@@ -19,7 +19,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     app.current_tenant_id from the connections in the pool upon their return into the pool.
     """
 
-    run_database_migrations(ENV.database_url + "/" + isolated_db)
+    migrate_database(ENV.database_uri + "/" + isolated_db)
 
     async def get_user_id(c: DBConn) -> int | None:
         try:
@@ -31,7 +31,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
             return None
         return int(row[0])
 
-    async with await create_pg_pool(ENV.database_url + "/" + isolated_db) as pg_pool:
+    async with await create_pg_pool(ENV.database_uri + "/" + isolated_db) as pg_pool:
         connections: list[DBConn] = []
 
         async def create_conn(rls: bool) -> DBConn:
@@ -47,7 +47,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
             connections.remove(c)
 
         # Spin up MAX_SIZE conns and give them all a user ID.
-        for _ in range(ENV.pool_size):
+        for _ in range(ENV.database_pool_size):
             await create_conn(True)
 
         # Check that they all have a user ID.
@@ -59,14 +59,14 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         # user ID if improperly configured.
         ctasks = []
         existing_conns = [*connections]
-        for _ in range(ENV.pool_size):
+        for _ in range(ENV.database_pool_size):
             ctasks.append(asyncio.create_task(create_conn(False)))
 
         # Give the coroutines time to make their getconn requests. Assert that the getconn requests
         # have been made. This is necessary for a NullPool, since a NullPool only re-uses
         # connections if there are pending connection requests.
         await asyncio.sleep(0.2)
-        assert pg_pool.get_stats()["requests_waiting"] == ENV.pool_size, "Test misconfigured: async sleep too short: getconn requests not yet made."
+        assert pg_pool.get_stats()["requests_waiting"] == ENV.database_pool_size, "Test misconfigured: async sleep too short: getconn requests not yet made."
 
         # Destroy existing connections.
         for c in existing_conns:

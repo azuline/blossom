@@ -2,9 +2,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 
-import sqlalchemy
-
-from database.access.xact import xact
+from database.access.xact import xact_admin
 
 # TODO(md): Check for *_id which are not FK-ed; they should probably be _extid.
 
@@ -12,10 +10,9 @@ nl = "\n"  # can't put backslash in f-string expression
 
 
 async def test_all_tables_have_primary_keys():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text(
-                """
+    async with xact_admin() as q:
+        cursor = await q.conn.execute(
+            """
                 SELECT t.table_name
                 FROM information_schema.tables t
                 WHERE t.table_type = 'BASE TABLE'
@@ -28,10 +25,9 @@ async def test_all_tables_have_primary_keys():
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
                     AND t.table_name NOT LIKE '%_enum'
-                """,
-            ),
+                """
         )
-        failing = result.scalars().all()
+        failing = [row[0] for row in await cursor.fetchall()]
         assert not failing, f"""\
 Please update tables {", ".join(failing)} to have an `id` primary key column.
 
@@ -48,9 +44,8 @@ DEFAULT_REGEX = re.compile(r"generate_id\('([^']+)'::text\)")
 
 
 async def test_id_prefix_validation():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT c.table_name, c.column_name, c.column_default
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -60,12 +55,11 @@ async def test_id_prefix_validation():
                 AND t.table_type = 'BASE TABLE'
                 AND t.table_name NOT LIKE '%yoyo%'
             """)
-        )
 
         id_prefix_regex = re.compile(r"^[a-z]{2,}$")
 
         seen_prefixes = set()
-        for table, column, default in result.all():
+        for table, column, default in await cursor.fetchall():
             m = DEFAULT_REGEX.match(default)
             assert m is not None
             prefix = m[1]
@@ -81,9 +75,8 @@ Table {table} has an invalid `{column}` column prefix. Prefixes must be at least
 
 
 async def test_all_tables_have_metadata_columns():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT t.table_name
                 FROM information_schema.tables t
                 WHERE t.table_type = 'BASE TABLE'
@@ -110,9 +103,8 @@ async def test_all_tables_have_metadata_columns():
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
                     AND t.table_name NOT LIKE '%_enum'
-            """),
-        )
-        failing = result.scalars().all()
+            """)
+        failing = [row[0] for row in await cursor.fetchall()]
         assert not failing, f"""\
 Please update tables {", ".join(failing)} to have created_at, updated_at and storytime columns.
 
@@ -122,9 +114,8 @@ Failing tables:
 
 
 async def test_all_created_and_updated_at_definition():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -137,9 +128,8 @@ async def test_all_created_and_updated_at_definition():
                         OR c.is_nullable = 'YES'
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
-            """),
-        )
-        failing = [f"{x[0]}.{x[1]}" for x in result.all()]
+            """)
+        failing = [f"{x[0]}.{x[1]}" for x in await cursor.fetchall()]
         assert not failing, f"""\
 Please update columns {", ".join(failing)} to NOT NULL DEFAULT NOW().
 
@@ -149,9 +139,8 @@ Failing columns:
 
 
 async def test_all_updated_at_columns_have_trigger():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT c.table_name
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -170,9 +159,8 @@ async def test_all_updated_at_columns_have_trigger():
                             AND action_timing = 'BEFORE'
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
-            """),
-        )
-        failing = result.scalars().all()
+            """)
+        failing = [row[0] async for row in cursor]
         assert not failing, f"""\
 Please update tables {", ".join(failing)} to have an updated_at trigger.
 
@@ -183,9 +171,8 @@ Fixes:
 
 
 async def test_integers_should_be_bigints():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -194,9 +181,8 @@ async def test_integers_should_be_bigints():
                     AND t.table_schema = 'public'
                     AND t.table_type = 'BASE TABLE'
                     AND t.table_name NOT LIKE '%yoyo%'
-            """),
-        )
-        failing = [f"{x[0]}.{x[1]}" for x in result.all()]
+            """)
+        failing = [f"{x[0]}.{x[1]}" async for x in cursor]
         assert not failing, f"""\
 Please update columns {", ".join(failing)} to be of the BIGINT type.
 
@@ -208,9 +194,8 @@ Failing columns:
 
 
 async def test_timestamps_should_be_timestamptz():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -219,9 +204,8 @@ async def test_timestamps_should_be_timestamptz():
                     AND t.table_schema = 'public'
                     AND t.table_type = 'BASE TABLE'
                     AND t.table_name NOT LIKE '%yoyo%'
-            """),
-        )
-        failing = [f"{x[0]}.{x[1]}" for x in result.all()]
+            """)
+        failing = [f"{x[0]}.{x[1]}" async for x in cursor]
         assert not failing, f"""\
 Please update columns {", ".join(failing)} to be of the TIMESTAMPTZ type.
 
@@ -237,9 +221,8 @@ class MissingFK:
 
 
 async def test_foreign_key_indexes():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 -- Based on https://www.cybertec-postgresql.com/en/index-your-foreign-key/.
                 SELECT
                     c.conrelid::regclass AS table,
@@ -281,8 +264,7 @@ async def test_foreign_key_indexes():
                     AND c.contype = 'f'
                 GROUP BY c.conrelid, c.conname
             """)
-        )
-        failing = [MissingFK(table=x[0], columns=x[1]) for x in result.all()]
+        failing = [MissingFK(table=x[0], columns=x[1]) async for x in cursor]
         assert not failing, f"""\
 Please add indexes on foreign keys {", ".join([f"{x.table} ({','.join(x.columns)})" for x in failing])}.
 
@@ -307,10 +289,9 @@ async def test_foreign_key_cascades():
     root_tables = ["organizations", "conversations"]
     whitelist = []
 
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text(
-                """
+    async with xact_admin() as q:
+        cursor = await q.conn.execute(
+            """
                 SELECT
                     tc.table_name AS src_table,
                     kcu.column_name AS src_column,
@@ -327,10 +308,9 @@ async def test_foreign_key_cascades():
                 WHERE tc.constraint_type = 'FOREIGN KEY'
                 ORDER BY tc.table_name
                 """
-            )
         )
         foreign_keys: dict[str, list[FK]] = defaultdict(list)
-        for x in result:
+        for x in await cursor.fetchall():
             foreign_keys[x[0]].append(FK(src_table=x[0], src_column=x[1], dst_table=x[2], dst_column=x[3], cascade=x[4]))
 
     # We put the cascade on the narrowest scoped object, essentially creating a hierarchy that goes
@@ -371,10 +351,9 @@ or whitelist them in database/schema/schema_test.py.
 
 
 async def test_id_columns_have_check_constraint():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text(
-                """
+    async with xact_admin() as q:
+        cursor = await q.conn.execute(
+            """
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -384,21 +363,18 @@ async def test_id_columns_have_check_constraint():
                     AND t.table_type = 'BASE TABLE'
                     AND t.table_name NOT LIKE '%yoyo%'
                 """
-            ),
         )
-        cols = [(x[0], x[1]) for x in result.fetchall()]
+        cols = [(x[0], x[1]) for x in await cursor.fetchall()]
 
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+        cursor = await q.conn.execute("""
                 SELECT tc.table_name, kcu.column_name
                 FROM information_schema.table_constraints tc
                 JOIN information_schema.constraint_column_usage kcu
                     ON tc.constraint_name = kcu.constraint_name AND tc.table_name = kcu.table_name
                 WHERE tc.constraint_type = 'CHECK'
                 AND kcu.column_name = 'id'
-            """),
-        )
-        constraints = [(x[0], x[1]) for x in result.fetchall()]
+            """)
+        constraints = [(x[0], x[1]) for x in await cursor.fetchall()]
         failing = [c for c in cols if c not in constraints]
         assert not failing, f"""\
 Please add a CHECK constraint with a prefix match to the following columns:
@@ -408,9 +384,8 @@ Please add a CHECK constraint with a prefix match to the following columns:
 
 
 async def test_id_columns_have_collation_c():
-    async with xact() as q:
-        result = await q.conn.execute(
-            sqlalchemy.text("""
+    async with xact_admin() as q:
+        cursor = await q.conn.execute("""
                 SELECT t.table_name, c.column_name, c.collation_name
                 FROM information_schema.tables t
                 JOIN information_schema.columns c ON c.table_name = t.table_name
@@ -419,9 +394,8 @@ async def test_id_columns_have_collation_c():
                     AND (c.column_name = 'id' OR c.column_name LIKE '%_id')
                     AND (c.collation_name != 'C' OR c.collation_name IS NULL)
                     AND t.table_name NOT LIKE '%yoyo%'
-            """),
-        )
-        failing = list(result.fetchall())
+            """)
+        failing = list(await cursor.fetchall())
 
         assert not failing, f"""\
 The following ID columns must use COLLATE "C":
