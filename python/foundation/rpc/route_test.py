@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from quart import Blueprint, Quart
 
+from foundation.conftest import FoundationFixture
 from foundation.rpc.route import (
     SESSION_ID_KEY,
     Authorization,
@@ -13,7 +14,6 @@ from foundation.rpc.route import (
     UnauthorizedError,
     route,
 )
-from foundation.conftest import FoundationFixture
 from foundation.time import CLOCK
 
 

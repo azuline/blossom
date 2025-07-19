@@ -1,14 +1,10 @@
-# My old rules were subsumed by Ruff. Will add more rules later.
-# TODO: One rule for using xact_customer inside routes.
 rules:
-  - id: missed-f-string
-    languages:
-      - python
-    patterns:
-      - pattern: '"=~/[{}]/"'
-      - pattern-not-inside: f"..."
-      - pattern-not-inside: r"..."
+  # This provides easy contextual namespacing for AI.
+  - id: models-import
+    languages: [python]
+    pattern: |
+      from database.codegen.models import $MODEL
     message: |
-      Should this string be an f-string? If not, to make this rule shut up, use
-      an f-string with double-braces.
+      Please import models as `from database.codegen import models`
+      and access each model as a property on `models` (e.g., `models.User`).
     severity: WARNING

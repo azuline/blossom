@@ -116,7 +116,7 @@ def _initialize_logging() -> None:
     )
 
     # Configure standard logger.
-    root_logger = logging.getLogger()
+    root_logger = logging.getLogger()  # noqa: TID251
     root_logger.setLevel(level)
     formatter = structlog.stdlib.ProcessorFormatter(
         foreign_pre_chain=processors,
@@ -142,7 +142,7 @@ def get_logger(debug: bool = False) -> BoundLogger:
         frm = inspect.stack()[1]
         mod = inspect.getmodule(frm[0])
         if mod is not None:
-            logging.getLogger(mod.__name__).setLevel(logging.DEBUG)
+            logging.getLogger(mod.__name__).setLevel(logging.DEBUG)  # noqa: TID251
 
     return cast(BoundLogger, logger)
 

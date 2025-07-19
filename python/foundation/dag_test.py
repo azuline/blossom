@@ -1,9 +1,9 @@
 import dagster
 import pytest
 
+from foundation.conftest import FoundationFixture
 from foundation.dag import dag_asset
 from foundation.errors import BlossomError
-from foundation.conftest import FoundationFixture
 
 
 def test_asset_decorator_creates_dagster_asset():

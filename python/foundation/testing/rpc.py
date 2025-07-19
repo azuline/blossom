@@ -8,7 +8,7 @@ import quart
 from dacite import from_dict
 from quart import Quart, Response, json
 
-from database.codegen.models import Organization, User
+from database.codegen import models
 from foundation.logs import get_logger
 from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import SESSION_ID_KEY
@@ -67,7 +67,7 @@ class TestRPC:
         self._client = (await self.app()).test_client()
         return self._client
 
-    async def login_as(self, user: User, organization: Organization | None = None) -> None:
+    async def login_as(self, user: models.User, organization: models.Organization | None = None) -> None:
         logger.debug(f"Setting session to user {user.id} - {user.email}.")
         async with (await self.client()).session_transaction() as quart_sess:
             session = await self._factory.session(user=user, organization=organization)

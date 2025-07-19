@@ -1,6 +1,6 @@
 import contextlib
 from collections.abc import Generator
-from datetime import UTC, datetime
+from datetime import datetime
 
 from foundation.env import ENV
 
@@ -17,8 +17,8 @@ class Clock:
             return self._TESTING_frozen_time
         if self._TESTING_base_time:
             assert self._TESTING_base_time_set_at is not None
-            return self._TESTING_base_time + (datetime.now(UTC) - self._TESTING_base_time_set_at)
-        return datetime.now(UTC)
+            return self._TESTING_base_time + (CLOCK.now() - self._TESTING_base_time_set_at)
+        return CLOCK.now()
 
     def time(self) -> float:
         """Get the current time as a Unix timestamp."""
@@ -28,7 +28,7 @@ class Clock:
         """Adjust the "current time" of the clock. The clock will continue ticking."""
         assert ENV.testing
         self._TESTING_base_time = time
-        self._TESTING_base_time_set_at = datetime.now(UTC)
+        self._TESTING_base_time_set_at = CLOCK.now()
 
     @contextlib.contextmanager
     def TESTING_freeze(self, time: datetime) -> Generator[None]:

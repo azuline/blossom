@@ -1,12 +1,12 @@
 from database.access.xact import DBQuerier
-from database.codegen.models import VaultedSecret
+from database.codegen import models
 from foundation.crypt import decrypt_symmetric, encrypt_symmetric
 from foundation.types import cast_notnull
 
 Secret = str
 
 
-async def vault_secret(q: DBQuerier, organization_id: str, secret: Secret) -> VaultedSecret:
+async def vault_secret(q: DBQuerier, organization_id: str, secret: Secret) -> models.VaultedSecret:
     """Encrypt and stores a organization secret into the vault table."""
     ciphertext = encrypt_symmetric(secret, organization_id.encode())
     return cast_notnull(await q.orm.vault_secret_create(organization_id=organization_id, ciphertext=ciphertext))
