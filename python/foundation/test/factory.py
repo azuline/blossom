@@ -21,6 +21,8 @@ class TestFactory:
     The testfactory generates test data for testing purposes!
     """
 
+    __test__ = False
+
     _t: TFix
     _conn: Conn
     _query: AsyncQuerier

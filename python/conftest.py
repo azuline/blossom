@@ -6,13 +6,11 @@ for documentation on `t`.
 
 import asyncio
 import logging
-import pathlib
 import random
 from asyncio import AbstractEventLoop
 from collections.abc import AsyncIterator, Iterator
 from string import ascii_lowercase
 
-import _pytest.pathlib
 import psycopg
 import pytest
 import pytest_asyncio
@@ -25,12 +23,10 @@ import foundation.log  # noqa
 from foundation.config import CONFVARS
 from foundation.database import ConnPool, create_pg_pool
 from foundation.test.db import run_database_migrations
-from foundation.test.factory import TestFactory
 from foundation.test.fixture import TFix
 
 # Tricks to avoid pytest's auto-test detection.
 TestClientProtocol.__test__ = False  # type: ignore
-TestFactory.__test__ = False  # type: ignore
 
 
 logger = logging.getLogger(__name__)
@@ -76,27 +72,3 @@ async def pg_pool(db: str) -> AsyncIterator[ConnPool]:
 async def t(pg_pool: ConnPool) -> AsyncIterator[TFix]:
     async with await TFix.create(pg_pool=pg_pool) as t:
         yield t
-
-
-# Pytest has a bug where it doesn't handle namespace packages and treats same-name files
-# in different packages as a naming collision.
-# https://stackoverflow.com/a/72366347
-
-resolve_pkg_path_orig = _pytest.pathlib.resolve_package_path
-namespace_pkg_dirs = [str(d) for d in pathlib.Path(__file__).parent.iterdir() if d.is_dir()]
-
-
-# patched method
-def resolve_package_path(path: pathlib.Path) -> pathlib.Path | None:
-    # call original lookup
-    result = resolve_pkg_path_orig(path)
-    if result is None:
-        result = path  # let's search from the current directory upwards
-    for parent in result.parents:  # pragma: no cover
-        if str(parent) in namespace_pkg_dirs:
-            return parent
-    return None  # pragma: no cover
-
-
-# apply patch
-_pytest.pathlib.resolve_package_path = resolve_package_path

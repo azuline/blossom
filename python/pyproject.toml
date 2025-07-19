@@ -43,6 +43,7 @@ dev = [
     "pytest-cov>=6.2.1",
     "pytest-timeout>=2.4.0",
     "pytest-xdist>=3.7.0",
+    "syrupy>=4.9.1",
     "tach>=0.29.0",
 ]
 
@@ -130,6 +131,8 @@ markers = [
 [tool.pytest_env]
 ENVIRONMENT = "testing"
 
+[tool.coverage.run]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*"]
 [tool.coverage.report]
 include_namespace_packages = true
-omit = [".venv/*", ".direnv/*"]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*"]
