@@ -10,19 +10,19 @@ import psycopg
 from database.codegen import models
 
 
-AUTHN_LINKED_TENANT_FETCH = """-- name: authn_linked_tenant_fetch \\:one
+AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch \\:one
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = %s AND t.id = %s
 """
 
 
-AUTHN_MOST_RECENTLY_ACCESSED_TENANT_FETCH = """-- name: authn_most_recently_accessed_tenant_fetch \\:one
+AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH = """-- name: authn_most_recently_accessed_organization_fetch \\:one
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
-LEFT JOIN sessions s ON s.tenant_id = t.id AND s.user_id = tu.user_id
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
+LEFT JOIN sessions s ON s.organization_id = t.id AND s.user_id = tu.user_id
 WHERE tu.user_id = %s
 ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
@@ -30,9 +30,9 @@ LIMIT 1
 
 
 AUTHN_SESSION_CREATE = """-- name: authn_session_create \\:one
-INSERT INTO sessions (user_id, tenant_id)
+INSERT INTO sessions (user_id, organization_id)
 VALUES (%s, %s)
-RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
 
@@ -44,7 +44,7 @@ WHERE id = %s
 
 
 AUTHN_SESSION_FETCH_BY_USER = """-- name: authn_session_fetch_by_user \\:one
-SELECT id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
+SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE user_id = %s
 ORDER BY last_seen_at DESC
@@ -59,8 +59,37 @@ WHERE email = %s
 """
 
 
+ORGANIZATION_ADD_USER = """-- name: organization_add_user \\:one
+INSERT INTO organizations_users (organization_id, user_id)
+VALUES (%s, %s)
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
+"""
+
+
+ORGANIZATION_CREATE = """-- name: organization_create \\:one
+INSERT INTO organizations (name, inbound_source)
+VALUES (%s, %s)
+RETURNING id, created_at, updated_at, storytime, name, inbound_source
+"""
+
+
+ORGANIZATION_FETCH = """-- name: organization_fetch \\:one
+SELECT id, created_at, updated_at, storytime, name, inbound_source
+FROM organizations
+WHERE id = %s
+"""
+
+
+ORGANIZATION_FETCH_ALL = """-- name: organization_fetch_all \\:many
+SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
+WHERE tu.user_id = %s
+"""
+
+
 RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch \\:one
-SELECT id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
+SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE id = %s
 AND expired_at IS NULL
@@ -68,53 +97,24 @@ AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
 
 
-TENANT_ADD_USER = """-- name: tenant_add_user \\:one
-INSERT INTO tenants_users (tenant_id, user_id)
-VALUES (%s, %s)
-RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, removed_at, removed_by_user
-"""
-
-
-TENANT_CREATE = """-- name: tenant_create \\:one
-INSERT INTO tenants (name, inbound_source)
+TEST_ORGANIZATION_CREATE = """-- name: test_organization_create \\:one
+INSERT INTO organizations (name, inbound_source)
 VALUES (%s, %s)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
 
-TENANT_FETCH = """-- name: tenant_fetch \\:one
-SELECT id, created_at, updated_at, storytime, name, inbound_source
-FROM tenants
-WHERE id = %s
-"""
-
-
-TENANT_FETCH_ALL = """-- name: tenant_fetch_all \\:many
-SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
-WHERE tu.user_id = %s
+TEST_ORGANIZATION_USER_CREATE = """-- name: test_organization_user_create \\:one
+INSERT INTO organizations_users (user_id, organization_id)
+VALUES (%s, %s)
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
 
 TEST_SESSION_CREATE = """-- name: test_session_create \\:one
-INSERT INTO sessions (user_id, tenant_id, expired_at, last_seen_at)
+INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
 VALUES (%s, %s, %s, %s)
-RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, last_seen_at, expired_at
-"""
-
-
-TEST_TENANT_CREATE = """-- name: test_tenant_create \\:one
-INSERT INTO tenants (name, inbound_source)
-VALUES (%s, %s)
-RETURNING id, created_at, updated_at, storytime, name, inbound_source
-"""
-
-
-TEST_TENANT_USER_CREATE = """-- name: test_tenant_user_create \\:one
-INSERT INTO tenants_users (user_id, tenant_id)
-VALUES (%s, %s)
-RETURNING id, created_at, updated_at, storytime, user_id, tenant_id, removed_at, removed_by_user
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
 
@@ -141,9 +141,9 @@ WHERE id = %s
 
 
 VAULT_SECRET_CREATE = """-- name: vault_secret_create \\:one
-INSERT INTO vaulted_secrets (tenant_id, ciphertext)
+INSERT INTO vaulted_secrets (organization_id, ciphertext)
 VALUES (%s, %s)
-RETURNING id, created_at, updated_at, storytime, tenant_id, ciphertext
+RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
 """
 
 
@@ -155,7 +155,7 @@ WHERE id = %s
 
 
 VAULT_SECRET_FETCH = """-- name: vault_secret_fetch \\:one
-SELECT id, created_at, updated_at, storytime, tenant_id, ciphertext
+SELECT id, created_at, updated_at, storytime, organization_id, ciphertext
 FROM vaulted_secrets
 WHERE id = %s
 """
@@ -165,11 +165,11 @@ class AsyncQuerier:
     def __init__(self, conn: psycopg.AsyncConnection[Any]):
         self._conn = conn
 
-    async def authn_linked_tenant_fetch(self, *, user_id: str, id: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(AUTHN_LINKED_TENANT_FETCH, (user_id, id))).fetchone()
+    async def authn_linked_organization_fetch(self, *, user_id: str, id: str) -> Optional[models.Organization]:
+        row = await (await self._conn.execute(AUTHN_LINKED_ORGANIZATION_FETCH, (user_id, id))).fetchone()
         if row is None:
             return None
-        return models.Tenant(
+        return models.Organization(
             id=row[0],
             created_at=row[1],
             updated_at=row[2],
@@ -178,11 +178,11 @@ class AsyncQuerier:
             inbound_source=row[5],
         )
 
-    async def authn_most_recently_accessed_tenant_fetch(self, *, user_id: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(AUTHN_MOST_RECENTLY_ACCESSED_TENANT_FETCH, (user_id, ))).fetchone()
+    async def authn_most_recently_accessed_organization_fetch(self, *, user_id: str) -> Optional[models.Organization]:
+        row = await (await self._conn.execute(AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH, (user_id, ))).fetchone()
         if row is None:
             return None
-        return models.Tenant(
+        return models.Organization(
             id=row[0],
             created_at=row[1],
             updated_at=row[2],
@@ -191,8 +191,8 @@ class AsyncQuerier:
             inbound_source=row[5],
         )
 
-    async def authn_session_create(self, *, user_id: str, tenant_id: Optional[str]) -> Optional[models.Session]:
-        row = await (await self._conn.execute(AUTHN_SESSION_CREATE, (user_id, tenant_id))).fetchone()
+    async def authn_session_create(self, *, user_id: str, organization_id: Optional[str]) -> Optional[models.Session]:
+        row = await (await self._conn.execute(AUTHN_SESSION_CREATE, (user_id, organization_id))).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -201,7 +201,7 @@ class AsyncQuerier:
             updated_at=row[2],
             storytime=row[3],
             user_id=row[4],
-            tenant_id=row[5],
+            organization_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
@@ -219,7 +219,7 @@ class AsyncQuerier:
             updated_at=row[2],
             storytime=row[3],
             user_id=row[4],
-            tenant_id=row[5],
+            organization_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
@@ -241,6 +241,59 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
+    async def organization_add_user(self, *, organization_id: str, user_id: str) -> Optional[models.OrganizationsUser]:
+        row = await (await self._conn.execute(ORGANIZATION_ADD_USER, (organization_id, user_id))).fetchone()
+        if row is None:
+            return None
+        return models.OrganizationsUser(
+            id=row[0],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
+            user_id=row[4],
+            organization_id=row[5],
+            removed_at=row[6],
+            removed_by_user=row[7],
+        )
+
+    async def organization_create(self, *, name: str, inbound_source: str) -> Optional[models.Organization]:
+        row = await (await self._conn.execute(ORGANIZATION_CREATE, (name, inbound_source))).fetchone()
+        if row is None:
+            return None
+        return models.Organization(
+            id=row[0],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def organization_fetch(self, *, id: str) -> Optional[models.Organization]:
+        row = await (await self._conn.execute(ORGANIZATION_FETCH, (id, ))).fetchone()
+        if row is None:
+            return None
+        return models.Organization(
+            id=row[0],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def organization_fetch_all(self, *, user_id: str) -> AsyncIterator[models.Organization]:
+        cursor = await self._conn.execute(ORGANIZATION_FETCH_ALL, (user_id, ))
+        async for row in cursor:
+            yield models.Organization(
+                id=row[0],
+                created_at=row[1],
+                updated_at=row[2],
+                storytime=row[3],
+                name=row[4],
+                inbound_source=row[5],
+            )
+
     async def rpc_unexpired_session_fetch(self, *, id: str) -> Optional[models.Session]:
         row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, (id, ))).fetchone()
         if row is None:
@@ -251,66 +304,41 @@ class AsyncQuerier:
             updated_at=row[2],
             storytime=row[3],
             user_id=row[4],
-            tenant_id=row[5],
+            organization_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
         )
 
-    async def tenant_add_user(self, *, tenant_id: str, user_id: str) -> Optional[models.TenantsUser]:
-        row = await (await self._conn.execute(TENANT_ADD_USER, (tenant_id, user_id))).fetchone()
+    async def test_organization_create(self, *, name: str, inbound_source: str) -> Optional[models.Organization]:
+        row = await (await self._conn.execute(TEST_ORGANIZATION_CREATE, (name, inbound_source))).fetchone()
         if row is None:
             return None
-        return models.TenantsUser(
+        return models.Organization(
+            id=row[0],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
+            name=row[4],
+            inbound_source=row[5],
+        )
+
+    async def test_organization_user_create(self, *, user_id: str, organization_id: str) -> Optional[models.OrganizationsUser]:
+        row = await (await self._conn.execute(TEST_ORGANIZATION_USER_CREATE, (user_id, organization_id))).fetchone()
+        if row is None:
+            return None
+        return models.OrganizationsUser(
             id=row[0],
             created_at=row[1],
             updated_at=row[2],
             storytime=row[3],
             user_id=row[4],
-            tenant_id=row[5],
+            organization_id=row[5],
             removed_at=row[6],
             removed_by_user=row[7],
         )
 
-    async def tenant_create(self, *, name: str, inbound_source: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(TENANT_CREATE, (name, inbound_source))).fetchone()
-        if row is None:
-            return None
-        return models.Tenant(
-            id=row[0],
-            created_at=row[1],
-            updated_at=row[2],
-            storytime=row[3],
-            name=row[4],
-            inbound_source=row[5],
-        )
-
-    async def tenant_fetch(self, *, id: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(TENANT_FETCH, (id, ))).fetchone()
-        if row is None:
-            return None
-        return models.Tenant(
-            id=row[0],
-            created_at=row[1],
-            updated_at=row[2],
-            storytime=row[3],
-            name=row[4],
-            inbound_source=row[5],
-        )
-
-    async def tenant_fetch_all(self, *, user_id: str) -> AsyncIterator[models.Tenant]:
-        cursor = await self._conn.execute(TENANT_FETCH_ALL, (user_id, ))
-        async for row in cursor:
-            yield models.Tenant(
-                id=row[0],
-                created_at=row[1],
-                updated_at=row[2],
-                storytime=row[3],
-                name=row[4],
-                inbound_source=row[5],
-            )
-
-    async def test_session_create(self, *, user_id: str, tenant_id: Optional[str], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
-        row = await (await self._conn.execute(TEST_SESSION_CREATE, (user_id, tenant_id, expired_at, last_seen_at))).fetchone()
+    async def test_session_create(self, *, user_id: str, organization_id: Optional[str], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
+        row = await (await self._conn.execute(TEST_SESSION_CREATE, (user_id, organization_id, expired_at, last_seen_at))).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -319,37 +347,9 @@ class AsyncQuerier:
             updated_at=row[2],
             storytime=row[3],
             user_id=row[4],
-            tenant_id=row[5],
+            organization_id=row[5],
             last_seen_at=row[6],
             expired_at=row[7],
-        )
-
-    async def test_tenant_create(self, *, name: str, inbound_source: str) -> Optional[models.Tenant]:
-        row = await (await self._conn.execute(TEST_TENANT_CREATE, (name, inbound_source))).fetchone()
-        if row is None:
-            return None
-        return models.Tenant(
-            id=row[0],
-            created_at=row[1],
-            updated_at=row[2],
-            storytime=row[3],
-            name=row[4],
-            inbound_source=row[5],
-        )
-
-    async def test_tenant_user_create(self, *, user_id: str, tenant_id: str) -> Optional[models.TenantsUser]:
-        row = await (await self._conn.execute(TEST_TENANT_USER_CREATE, (user_id, tenant_id))).fetchone()
-        if row is None:
-            return None
-        return models.TenantsUser(
-            id=row[0],
-            created_at=row[1],
-            updated_at=row[2],
-            storytime=row[3],
-            user_id=row[4],
-            tenant_id=row[5],
-            removed_at=row[6],
-            removed_by_user=row[7],
         )
 
     async def test_user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: str, is_enabled: bool) -> Optional[models.User]:
@@ -403,8 +403,8 @@ class AsyncQuerier:
             last_visited_at=row[9],
         )
 
-    async def vault_secret_create(self, *, tenant_id: str, ciphertext: str) -> Optional[models.VaultedSecret]:
-        row = await (await self._conn.execute(VAULT_SECRET_CREATE, (tenant_id, ciphertext))).fetchone()
+    async def vault_secret_create(self, *, organization_id: str, ciphertext: str) -> Optional[models.VaultedSecret]:
+        row = await (await self._conn.execute(VAULT_SECRET_CREATE, (organization_id, ciphertext))).fetchone()
         if row is None:
             return None
         return models.VaultedSecret(
@@ -412,7 +412,7 @@ class AsyncQuerier:
             created_at=row[1],
             updated_at=row[2],
             storytime=row[3],
-            tenant_id=row[4],
+            organization_id=row[4],
             ciphertext=row[5],
         )
 
@@ -428,6 +428,6 @@ class AsyncQuerier:
             created_at=row[1],
             updated_at=row[2],
             storytime=row[3],
-            tenant_id=row[4],
+            organization_id=row[4],
             ciphertext=row[5],
         )

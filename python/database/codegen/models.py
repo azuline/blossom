@@ -19,19 +19,7 @@ class Invite:
 
 
 @dataclasses.dataclass()
-class Session:
-    id: str
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    storytime: Optional[Any]
-    user_id: str
-    tenant_id: Optional[str]
-    last_seen_at: datetime.datetime
-    expired_at: Optional[datetime.datetime]
-
-
-@dataclasses.dataclass()
-class Tenant:
+class Organization:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -41,20 +29,32 @@ class Tenant:
 
 
 @dataclasses.dataclass()
-class TenantsInboundSourceEnum:
+class OrganizationsInboundSourceEnum:
     value: str
 
 
 @dataclasses.dataclass()
-class TenantsUser:
+class OrganizationsUser:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
     storytime: Optional[Any]
     user_id: str
-    tenant_id: str
+    organization_id: str
     removed_at: Optional[datetime.datetime]
     removed_by_user: Optional[str]
+
+
+@dataclasses.dataclass()
+class Session:
+    id: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    storytime: Optional[Any]
+    user_id: str
+    organization_id: Optional[str]
+    last_seen_at: datetime.datetime
+    expired_at: Optional[datetime.datetime]
 
 
 @dataclasses.dataclass()
@@ -82,5 +82,5 @@ class VaultedSecret:
     created_at: datetime.datetime
     updated_at: datetime.datetime
     storytime: Optional[Any]
-    tenant_id: str
+    organization_id: str
     ciphertext: str

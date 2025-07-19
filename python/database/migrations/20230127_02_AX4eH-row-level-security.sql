@@ -1,16 +1,16 @@
 -- row-level-security
 -- depends: 20230127_01_aQQKb-setup
 
--- Drawing somewhat from https://www.thenile.dev/blog/multi-tenant-rls.
--- Create functions to get current tenant and current user. These will be used
+-- Drawing somewhat from https://www.thenile.dev/blog/multi-organization-rls.
+-- Create functions to get current organization and current user. These will be used
 -- in upcoming policies.
-CREATE FUNCTION current_tenant_id()
+CREATE FUNCTION current_organization_id()
 RETURNS text AS $$
 DECLARE
-    tenant_id text;
+    organization_id text;
 BEGIN
-    SELECT NULLIF(current_setting('app.current_tenant_id', TRUE), '')::text INTO tenant_id;
-    RETURN tenant_id;
+    SELECT NULLIF(current_setting('app.current_organization_id', TRUE), '')::text INTO organization_id;
+    RETURN organization_id;
 END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 

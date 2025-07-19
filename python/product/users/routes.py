@@ -2,18 +2,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from database.codegen.models import Tenant
+from database.codegen.models import Organization
 from database.access import conn_admin
 from foundation.rpc.route import Req, route
 
 
 @dataclass
-class GetPageLoadInfoTenant:
+class GetPageLoadInfoOrganization:
     external_id: str
     name: str
 
     @classmethod
-    def from_model(cls: type[GetPageLoadInfoTenant], t: Tenant) -> GetPageLoadInfoTenant:
+    def from_model(cls: type[GetPageLoadInfoOrganization], t: Organization) -> GetPageLoadInfoOrganization:
         return cls(
             external_id=t.external_id,
             name=t.name,
@@ -25,8 +25,8 @@ class GetPageLoadInfoOut:
     external_id: str | None
     name: str | None
     email: str | None
-    tenant: GetPageLoadInfoTenant | None
-    available_tenants: list[GetPageLoadInfoTenant]
+    organization: GetPageLoadInfoOrganization | None
+    available_organizations: list[GetPageLoadInfoOrganization]
 
 
 @route(authorization="public", method="GET", errors=[])
@@ -40,19 +40,19 @@ async def get_page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
             external_id=None,
             name=None,
             email=None,
-            tenant=None,
-            available_tenants=[],
+            organization=None,
+            available_organizations=[],
         )
 
-    # By default, our Row Level Security only allow for the active tenant to be read. So we need to
-    # drop to admin to read all available tenants.
+    # By default, our Row Level Security only allow for the active organization to be read. So we need to
+    # drop to admin to read all available organizations.
     async with conn_admin(req.pg_pool) as cq_admin:
-        available_tenants = [x async for x in cq_admin.q.tenant_fetch_all(user_id=req.user.id)]
+        available_organizations = [x async for x in cq_admin.q.organization_fetch_all(user_id=req.user.id)]
 
     return GetPageLoadInfoOut(
         external_id=req.user.external_id,
         name=req.user.name,
         email=req.user.email,
-        tenant=GetPageLoadInfoTenant.from_model(req.tenant) if req.tenant else None,
-        available_tenants=[GetPageLoadInfoTenant.from_model(t) for t in available_tenants],
+        organization=GetPageLoadInfoOrganization.from_model(req.organization) if req.organization else None,
+        available_organizations=[GetPageLoadInfoOrganization.from_model(t) for t in available_organizations],
     )

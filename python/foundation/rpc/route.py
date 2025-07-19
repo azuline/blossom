@@ -26,7 +26,7 @@ logger = get_logger()
 
 SESSION_ID_KEY = "session_external_id"
 
-Authorization = Literal["public", "user", "tenant"]
+Authorization = Literal["public", "user", "organization"]
 
 
 class InvalidRPCDefinitionError(Exception):
@@ -40,7 +40,7 @@ D = TypeVar("D")
 class Req[D]:
     q: DBQuerier
     user: models.User | None
-    tenant: models.Tenant | None
+    organization: models.Organization | None
     data: D
 
 
@@ -137,10 +137,10 @@ def route(
             # 2. Trap exceptions and convert them into API responses.
             try:
                 # 3. Authenticate the user.
-                user, tenant = await _check_session_auth()
+                user, organization = await _check_session_auth()
 
                 # 4. Authorize the user against the authorization level.
-                await _check_authorization(authorization, user, tenant)
+                await _check_authorization(authorization, user, organization)
                 logger.info("Request passed user authorization check.")
 
                 # 5. Parse input data.
@@ -149,9 +149,9 @@ def route(
 
                 # 6. Configure the customer's database connection with
                 # row-level-security (if logged in). Then execute the request.
-                transaction = xact_customer(user.id, tenant.id) if user else xact_admin()
+                transaction = xact_customer(user.id, organization.id if organization else None) if user else xact_admin()
                 async with transaction as q:
-                    req = Req(data=data, user=user, tenant=tenant, q=q)
+                    req = Req(data=data, user=user, organization=organization, q=q)
                     logger.info(f"Entering request handler with {user is None}.")
                     rdata = await func(req)
                     logger.info("Exited request handler.")
@@ -180,30 +180,30 @@ def route(
     return decorator
 
 
-async def _check_session_auth() -> tuple[models.User | None, models.Tenant | None]:
+async def _check_session_auth() -> tuple[models.User | None, models.Organization | None]:
     """
     Check the current request's session authentication. If so, fetch the associated user
-    and the tenant they're logged in as.
+    and the organization they're logged in as.
     """
     session_external_id = quart.session.get(SESSION_ID_KEY, None)
 
     user = None
-    tenant = None
+    organization = None
 
     logger.info(f"Session ID found in session: {session_external_id is not None}")
     if session_external_id:
         async with xact_admin() as q:
-            session = await q.orm.rpc_unexpired_session_fetch(external_id=session_external_id)
+            session = await q.orm.rpc_unexpired_session_fetch(id=session_external_id)
             logger.info(f"Session found: {session is not None}")
             if session is not None:
                 user = await q.orm.user_fetch(id=session.user_id)
-                if session.tenant_id is not None:
-                    tenant = await q.orm.tenant_fetch(id=session.tenant_id)
+                if session.organization_id is not None:
+                    organization = await q.orm.organization_fetch(id=session.organization_id)
 
-    return user, tenant
+    return user, organization
 
 
-async def _check_authorization(authorization: Authorization, user: models.User | None, tenant: models.Tenant | None) -> None:
+async def _check_authorization(authorization: Authorization, user: models.User | None, organization: models.Organization | None) -> None:
     """
     Validate that the user is authorized to submit a request this endpoint. For now, we
     only check the existence of a user, but this function can be expanded to RBAC
@@ -215,8 +215,8 @@ async def _check_authorization(authorization: Authorization, user: models.User |
         if user is None:
             raise UnauthorizedError
         return
-    if authorization == "tenant":
-        if user is None or tenant is None:
+    if authorization == "organization":
+        if user is None or organization is None:
             raise UnauthorizedError
         return
     raise ImpossibleError("Missed authorization type check in _check_authorization.")  # pragma: no cover

@@ -7,5 +7,5 @@ tables:
     code_hash: This column is a hex value.
     expires_at: If this time is in the past, it means the invite has expired. Do a 14 day expiration window I personally take _forever_ to sign up for a SaaS.
     accepted_at: If this is not null, it means this invite was accepted.
-  tenants_users:
-    removed_at: If this is not null, it means the user was removed from the tenant at this time.
+  organizations_users:
+    removed_at: If this is not null, it means the user was removed from the organization at this time.

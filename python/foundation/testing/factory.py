@@ -15,15 +15,15 @@ DEFAULT_PASSWORD_HASH = "pbkdf2:sha256:260000$q7moIpBgn1qWGg6Q$110299a9e14a5d29d
 class TestFactory:
     __test__ = False
 
-    async def tenant(
+    async def organization(
         self,
         *,
         name: str | None = None,
-        inbound_source: models.TenantsInboundSource = models.TenantsInboundSource.ORGANIC,
-    ) -> models.Tenant:
+        inbound_source: models.OrganizationsInboundSource = models.OrganizationsInboundSource.ORGANIC,
+    ) -> models.Organization:
         name = name or generate_name()
         async with xact_admin() as q:
-            return cast_notnull(await q.orm.test_tenant_create(name=name, inbound_source=inbound_source))
+            return cast_notnull(await q.orm.test_organization_create(name=name, inbound_source=inbound_source))
 
     async def user(
         self,
@@ -46,22 +46,22 @@ class TestFactory:
                 )
             )
 
-    async def customer(self) -> tuple[models.User, models.Tenant]:
-        """A convenience function for creating a user, tenant, and user_tenant."""
-        tenant = await self.tenant()
+    async def customer(self) -> tuple[models.User, models.Organization]:
+        """A convenience function for creating a user, organization, and user_organization."""
+        organization = await self.organization()
         user = await self.user()
-        await self.tenant_user_create(user_id=user.id, tenant_id=tenant.id)
-        return user, tenant
+        await self.organization_user_create(user_id=user.id, organization_id=organization.id)
+        return user, organization
 
-    async def tenant_user_create(self, *, user_id: str, tenant_id: str) -> models.TenantsUser:
+    async def organization_user_create(self, *, user_id: str, organization_id: str) -> models.OrganizationsUser:
         async with xact_admin() as q:
-            return cast_notnull(await q.orm.test_tenant_user_create(user_id=user_id, tenant_id=tenant_id))
+            return cast_notnull(await q.orm.test_organization_user_create(user_id=user_id, organization_id=organization_id))
 
     async def session(
         self,
         *,
         user_id: str,
-        tenant_id: str | None = None,
+        organization_id: str | None = None,
         expired_at: datetime | None = None,
         last_seen_at: datetime | None = None,
     ) -> models.Session:
@@ -69,7 +69,7 @@ class TestFactory:
             return cast_notnull(
                 await q.orm.test_session_create(
                     user_id=user_id,
-                    tenant_id=tenant_id,
+                    organization_id=organization_id,
                     expired_at=expired_at,
                     last_seen_at=last_seen_at or CLOCK.now(),
                 )

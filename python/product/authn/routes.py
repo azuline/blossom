@@ -14,7 +14,7 @@ class LoginIn:
     email: str
     password: str
     permanent: bool
-    tenant_external_id: str | None
+    organization_external_id: str | None
 
 
 @dataclass
@@ -23,11 +23,11 @@ class InvalidCredentialsError(RPCError):
 
 
 @dataclass
-class AuthTenantNotFoundError(RPCError):
+class AuthOrganizationNotFoundError(RPCError):
     pass
 
 
-@route(authorization="public", errors=[InvalidCredentialsError, AuthTenantNotFoundError])
+@route(authorization="public", errors=[InvalidCredentialsError, AuthOrganizationNotFoundError])
 async def login(req: Req[LoginIn]) -> None:
     """
     Log a user in if their credentials are correct.
@@ -50,23 +50,23 @@ async def login(req: Req[LoginIn]) -> None:
     if not check_password_hash(user.password_hash, req.data.password):
         raise InvalidCredentialsError
 
-    # All sessions are tied to a tenant. Unless a tenant_external_id is explicitly passed in, the
-    # session is tied to the most recently accessed tenant.
-    tenant = None
-    if req.data.tenant_external_id is not None:
-        tenant = await req.cq.q.authn_fetch_linked_tenant(
+    # All sessions are tied to a organization. Unless a organization_external_id is explicitly passed in, the
+    # session is tied to the most recently accessed organization.
+    organization = None
+    if req.data.organization_external_id is not None:
+        organization = await req.cq.q.authn_fetch_linked_organization(
             user_id=user.id,
-            external_id=req.data.tenant_external_id,
+            external_id=req.data.organization_external_id,
         )
-        # If the passed in tenant ID doesn't exist, raise an error.
-        if tenant is None:
-            raise AuthTenantNotFoundError
+        # If the passed in organization ID doesn't exist, raise an error.
+        if organization is None:
+            raise AuthOrganizationNotFoundError
     else:
-        tenant = await req.cq.q.authn_fetch_most_recently_accessed_tenant(user_id=user.id)
+        organization = await req.cq.q.authn_fetch_most_recently_accessed_organization(user_id=user.id)
 
     session = await req.cq.q.authn_create_session(
         user_id=user.id,
-        tenant_id=tenant.id if tenant else None,
+        organization_id=organization.id if organization else None,
     )
     assert session is not None
     quart.session[SESSION_ID_KEY] = session.external_id

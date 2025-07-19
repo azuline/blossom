@@ -7,13 +7,13 @@ CREATE TABLE vaulted_secrets (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
 
-    tenant_id TEXT NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
     ciphertext TEXT NOT NULL
 );
 CREATE TRIGGER updated_at BEFORE UPDATE ON vaulted_secrets
 FOR EACH ROW EXECUTE PROCEDURE updated_at();
 
 ALTER TABLE vaulted_secrets ENABLE ROW LEVEL SECURITY;
-CREATE POLICY vaulted_secrets_self_all ON vaulted_secrets USING (tenant_id = current_tenant_id());
+CREATE POLICY vaulted_secrets_self_all ON vaulted_secrets USING (organization_id = current_organization_id());
 
-CREATE INDEX ON vaulted_secrets (tenant_id);
+CREATE INDEX ON vaulted_secrets (organization_id);

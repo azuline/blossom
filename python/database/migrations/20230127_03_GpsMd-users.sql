@@ -34,10 +34,10 @@ CREATE INDEX ON users(signup_step);
 
 -- The invites table holds invitations for users to signup.
 --
--- When a user is invited to a tenant, the user is created in a `created`
--- signup step, inserted into `tenants_users`, and given an active row in
+-- When a user is invited to a organization, the user is created in a `created`
+-- signup step, inserted into `organizations_users`, and given an active row in
 -- invites. Upon invite completion, the user transitions to a `completed`
--- signup step and has already been added to the tenant.
+-- signup step and has already been added to the organization.
 CREATE TABLE invites (
     id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('inv') CHECK (id LIKE 'inv_%'),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),

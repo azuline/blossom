@@ -1,21 +1,21 @@
--- name: TenantFetch :one
+-- name: OrganizationFetch :one
 SELECT *
-FROM tenants
+FROM organizations
 WHERE id = $1;
 
--- name: TenantFetchAll :many
+-- name: OrganizationFetchAll :many
 SELECT t.*
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1;
 
--- name: TenantCreate :one
-INSERT INTO tenants (name, inbound_source)
+-- name: OrganizationCreate :one
+INSERT INTO organizations (name, inbound_source)
 VALUES ($1, $2)
 RETURNING *;
 
--- name: TenantAddUser :one
-INSERT INTO tenants_users (tenant_id, user_id)
+-- name: OrganizationAddUser :one
+INSERT INTO organizations_users (organization_id, user_id)
 VALUES ($1, $2)
 RETURNING *;
 
@@ -35,7 +35,7 @@ FROM users
 WHERE email = $1;
 
 -- name: AuthnSessionCreate :one
-INSERT INTO sessions (user_id, tenant_id)
+INSERT INTO sessions (user_id, organization_id)
 VALUES ($1, $2)
 RETURNING *;
 
@@ -44,17 +44,17 @@ UPDATE sessions
 SET expired_at = NOW() 
 WHERE id = $1;
 
--- name: AuthnLinkedTenantFetch :one
+-- name: AuthnLinkedOrganizationFetch :one
 SELECT t.*
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1 AND t.id = $2;
 
--- name: AuthnMostRecentlyAccessedTenantFetch :one
+-- name: AuthnMostRecentlyAccessedOrganizationFetch :one
 SELECT t.*
-FROM tenants t
-JOIN tenants_users tu ON tu.tenant_id = t.id
-LEFT JOIN sessions s ON s.tenant_id = t.id AND s.user_id = tu.user_id
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
+LEFT JOIN sessions s ON s.organization_id = t.id AND s.user_id = tu.user_id
 WHERE tu.user_id = $1
 ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1;
@@ -67,7 +67,7 @@ ORDER BY last_seen_at DESC
 LIMIT 1;
 
 -- name: VaultSecretCreate :one
-INSERT INTO vaulted_secrets (tenant_id, ciphertext)
+INSERT INTO vaulted_secrets (organization_id, ciphertext)
 VALUES ($1, $2)
 RETURNING *;
 
@@ -97,17 +97,17 @@ INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
 VALUES ($1, $2, $3, $4, $5)
 RETURNING *;
 
--- name: TestTenantCreate :one
-INSERT INTO tenants (name, inbound_source)
+-- name: TestOrganizationCreate :one
+INSERT INTO organizations (name, inbound_source)
 VALUES ($1, $2)
 RETURNING *;
 
--- name: TestTenantUserCreate :one
-INSERT INTO tenants_users (user_id, tenant_id)
+-- name: TestOrganizationUserCreate :one
+INSERT INTO organizations_users (user_id, organization_id)
 VALUES ($1, $2)
 RETURNING *;
 
 -- name: TestSessionCreate :one
-INSERT INTO sessions (user_id, tenant_id, expired_at, last_seen_at)
+INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
 VALUES ($1, $2, $3, $4)
 RETURNING *;

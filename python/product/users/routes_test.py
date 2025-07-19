@@ -1,15 +1,15 @@
 from foundation.test.fixture import TFix
-from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoTenant
+from product.users.routes import GetPageLoadInfoOut, GetPageLoadInfoOrganization
 
 
-async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
-    user, tenant = await t.f.customer()
-    # Make a second tenant that the user belongs to..
-    tenant2 = await t.f.tenant()
-    await t.f.tenant_user_create(user_id=user.id, tenant_id=tenant2.id)
-    # Make a third tenant that the user does not belong to.
-    await t.f.tenant()
-    await t.rpc.login_as(user, tenant)
+async def test_page_load_info_logged_in_with_organization(t: TFix) -> None:
+    user, organization = await t.f.customer()
+    # Make a second organization that the user belongs to..
+    organization2 = await t.f.organization()
+    await t.f.organization_user_create(user_id=user.id, organization_id=organization2.id)
+    # Make a third organization that the user does not belong to.
+    await t.f.organization()
+    await t.rpc.login_as(user, organization)
     resp = await t.rpc.execute("GetPageLoadInfo")
     t.rpc.assert_success(resp)
 
@@ -18,24 +18,24 @@ async def test_page_load_info_logged_in_with_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
-        tenant=GetPageLoadInfoTenant(
-            external_id=tenant.external_id,
-            name=tenant.name,
+        organization=GetPageLoadInfoOrganization(
+            external_id=organization.external_id,
+            name=organization.name,
         ),
-        available_tenants=[
-            GetPageLoadInfoTenant(
-                external_id=tenant.external_id,
-                name=tenant.name,
+        available_organizations=[
+            GetPageLoadInfoOrganization(
+                external_id=organization.external_id,
+                name=organization.name,
             ),
-            GetPageLoadInfoTenant(
-                external_id=tenant2.external_id,
-                name=tenant2.name,
+            GetPageLoadInfoOrganization(
+                external_id=organization2.external_id,
+                name=organization2.name,
             ),
         ],
     )
 
 
-async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
+async def test_page_load_info_logged_in_without_organization(t: TFix) -> None:
     user = await t.f.user()
     await t.rpc.login_as(user)
     resp = await t.rpc.execute("GetPageLoadInfo")
@@ -46,8 +46,8 @@ async def test_page_load_info_logged_in_without_tenant(t: TFix) -> None:
         external_id=user.external_id,
         name=user.name,
         email=user.email,
-        tenant=None,
-        available_tenants=[],
+        organization=None,
+        available_organizations=[],
     )
 
 
@@ -59,6 +59,6 @@ async def test_page_load_info_not_logged_in(t: TFix) -> None:
         external_id=None,
         name=None,
         email=None,
-        tenant=None,
-        available_tenants=[],
+        organization=None,
+        available_organizations=[],
     )

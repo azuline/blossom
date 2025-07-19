@@ -16,7 +16,7 @@ class FakeUser:
 async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
     """
     This test checks whether the Connection Pool is correctly scrubbing app.current_user_id and
-    app.current_tenant_id from the connections in the pool upon their return into the pool.
+    app.current_organization_id from the connections in the pool upon their return into the pool.
     """
 
     migrate_database(ENV.database_uri + "/" + isolated_db)

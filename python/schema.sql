@@ -23,16 +23,16 @@ BEGIN
 END $function$
 ;
 
-CREATE OR REPLACE FUNCTION public.current_tenant_id()
+CREATE OR REPLACE FUNCTION public.current_organization_id()
  RETURNS text
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$
 DECLARE
-    tenant_id text;
+    organization_id text;
 BEGIN
-    SELECT NULLIF(current_setting('app.current_tenant_id', TRUE), '')::text INTO tenant_id;
-    RETURN tenant_id;
+    SELECT NULLIF(current_setting('app.current_organization_id', TRUE), '')::text INTO organization_id;
+    RETURN organization_id;
 END;
 $function$
 ;
@@ -158,18 +158,80 @@ ALTER TABLE public.invites
 ADD CONSTRAINT invites_user_id_fkey
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
+CREATE TABLE public.organizations (
+  id text PRIMARY KEY NOT NULL DEFAULT generate_id('org'::text),
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  storytime jsonb,
+  name text NOT NULL,
+  inbound_source text NOT NULL
+);
+
+CREATE INDEX organizations_inbound_source_idx ON public.organizations USING btree (inbound_source);
+
+ALTER TABLE public.organizations
+ADD CONSTRAINT organizations_id_check
+CHECK ((id ~~ 'org_%'::text));
+
+CREATE TRIGGER updated_at BEFORE UPDATE ON public.organizations FOR EACH ROW EXECUTE FUNCTION updated_at();
+
+CREATE TABLE public.organizations_inbound_source_enum (
+  value text PRIMARY KEY NOT NULL
+);
+
+ALTER TABLE public.organizations
+ADD CONSTRAINT organizations_inbound_source_fkey
+FOREIGN KEY (inbound_source) REFERENCES organizations_inbound_source_enum(value);
+
+CREATE TABLE public.organizations_users (
+  id text PRIMARY KEY NOT NULL DEFAULT generate_id('utn'::text),
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  storytime jsonb,
+  user_id text NOT NULL,
+  organization_id text NOT NULL DEFAULT current_organization_id(),
+  removed_at timestamp with time zone,
+  removed_by_user text
+);
+
+CREATE INDEX organizations_users_organization_id_idx ON public.organizations_users USING btree (organization_id);
+
+CREATE UNIQUE INDEX organizations_users_organization_id_user_id_idx ON public.organizations_users USING btree (organization_id, user_id) WHERE (removed_at IS NOT NULL);
+
+CREATE INDEX organizations_users_removed_by_user_idx ON public.organizations_users USING btree (removed_by_user);
+
+CREATE INDEX organizations_users_user_id_idx ON public.organizations_users USING btree (user_id);
+
+ALTER TABLE public.organizations_users
+ADD CONSTRAINT organizations_users_id_check
+CHECK ((id ~~ 'utn_%'::text));
+
+CREATE TRIGGER updated_at BEFORE UPDATE ON public.organizations_users FOR EACH ROW EXECUTE FUNCTION updated_at();
+
+ALTER TABLE public.organizations_users
+ADD CONSTRAINT organizations_users_organization_id_fkey
+FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
+
+ALTER TABLE public.organizations_users
+ADD CONSTRAINT organizations_users_removed_by_user_fkey
+FOREIGN KEY (removed_by_user) REFERENCES users(id) ON DELETE SET NULL;
+
+ALTER TABLE public.organizations_users
+ADD CONSTRAINT organizations_users_user_id_fkey
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+
 CREATE TABLE public.sessions (
   id text PRIMARY KEY NOT NULL DEFAULT generate_id('ses'::text),
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
   storytime jsonb,
   user_id text NOT NULL,
-  tenant_id text,
+  organization_id text,
   last_seen_at timestamp with time zone NOT NULL DEFAULT now(),
   expired_at timestamp with time zone
 );
 
-CREATE INDEX sessions_tenant_id_idx ON public.sessions USING btree (tenant_id);
+CREATE INDEX sessions_organization_id_idx ON public.sessions USING btree (organization_id);
 
 CREATE INDEX sessions_user_id_idx ON public.sessions USING btree (user_id);
 
@@ -179,74 +241,12 @@ CHECK ((id ~~ 'ses_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.sessions FOR EACH ROW EXECUTE FUNCTION updated_at();
 
-CREATE TABLE public.tenants (
-  id text PRIMARY KEY NOT NULL DEFAULT generate_id('org'::text),
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  storytime jsonb,
-  name text NOT NULL,
-  inbound_source text NOT NULL
-);
-
-CREATE INDEX tenants_inbound_source_idx ON public.tenants USING btree (inbound_source);
-
-ALTER TABLE public.tenants
-ADD CONSTRAINT tenants_id_check
-CHECK ((id ~~ 'org_%'::text));
-
-CREATE TRIGGER updated_at BEFORE UPDATE ON public.tenants FOR EACH ROW EXECUTE FUNCTION updated_at();
-
 ALTER TABLE public.sessions
-ADD CONSTRAINT sessions_tenant_id_fkey
-FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
+ADD CONSTRAINT sessions_organization_id_fkey
+FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
 
 ALTER TABLE public.sessions
 ADD CONSTRAINT sessions_user_id_fkey
-FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-
-CREATE TABLE public.tenants_inbound_source_enum (
-  value text PRIMARY KEY NOT NULL
-);
-
-ALTER TABLE public.tenants
-ADD CONSTRAINT tenants_inbound_source_fkey
-FOREIGN KEY (inbound_source) REFERENCES tenants_inbound_source_enum(value);
-
-CREATE TABLE public.tenants_users (
-  id text PRIMARY KEY NOT NULL DEFAULT generate_id('utn'::text),
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  storytime jsonb,
-  user_id text NOT NULL,
-  tenant_id text NOT NULL DEFAULT current_tenant_id(),
-  removed_at timestamp with time zone,
-  removed_by_user text
-);
-
-CREATE INDEX tenants_users_removed_by_user_idx ON public.tenants_users USING btree (removed_by_user);
-
-CREATE INDEX tenants_users_tenant_id_idx ON public.tenants_users USING btree (tenant_id);
-
-CREATE UNIQUE INDEX tenants_users_tenant_id_user_id_idx ON public.tenants_users USING btree (tenant_id, user_id) WHERE (removed_at IS NOT NULL);
-
-CREATE INDEX tenants_users_user_id_idx ON public.tenants_users USING btree (user_id);
-
-ALTER TABLE public.tenants_users
-ADD CONSTRAINT tenants_users_id_check
-CHECK ((id ~~ 'utn_%'::text));
-
-CREATE TRIGGER updated_at BEFORE UPDATE ON public.tenants_users FOR EACH ROW EXECUTE FUNCTION updated_at();
-
-ALTER TABLE public.tenants_users
-ADD CONSTRAINT tenants_users_removed_by_user_fkey
-FOREIGN KEY (removed_by_user) REFERENCES users(id) ON DELETE SET NULL;
-
-ALTER TABLE public.tenants_users
-ADD CONSTRAINT tenants_users_tenant_id_fkey
-FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
-
-ALTER TABLE public.tenants_users
-ADD CONSTRAINT tenants_users_user_id_fkey
 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 CREATE TABLE public.user_signup_step_enum (
@@ -262,11 +262,11 @@ CREATE TABLE public.vaulted_secrets (
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
   storytime jsonb,
-  tenant_id text NOT NULL,
+  organization_id text NOT NULL,
   ciphertext text NOT NULL
 );
 
-CREATE INDEX vaulted_secrets_tenant_id_idx ON public.vaulted_secrets USING btree (tenant_id);
+CREATE INDEX vaulted_secrets_organization_id_idx ON public.vaulted_secrets USING btree (organization_id);
 
 ALTER TABLE public.vaulted_secrets
 ADD CONSTRAINT vaulted_secrets_id_check
@@ -275,8 +275,8 @@ CHECK ((id ~~ 'vsc_%'::text));
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.vaulted_secrets FOR EACH ROW EXECUTE FUNCTION updated_at();
 
 ALTER TABLE public.vaulted_secrets
-ADD CONSTRAINT vaulted_secrets_tenant_id_fkey
-FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE;
+ADD CONSTRAINT vaulted_secrets_organization_id_fkey
+FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
 
 CREATE TABLE public.yoyo_lock (
   locked integer PRIMARY KEY NOT NULL DEFAULT 1,

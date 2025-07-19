@@ -685,7 +685,7 @@ class ReqIn:
 
 @dataclass
 class Bunny:
-    external_id: str
+    id: str
     color: Color
     name: str
     cuteness_level: int
@@ -712,14 +712,14 @@ class CannotMakeBunniesError(APIError):
 #
 # The input and output types are inferred from the function type signature. The
 # RPC name is inferred from the function name.
-@route(authorization="tenant", errors=[CannotMakeBunniesError])
+@route(authorization="organization", errors=[CannotMakeBunniesError])
 async def generate_bunnies(req: Req[ReqIn]) -> ReqOut:
     # The `req` parameter contains many useful attributes for writing handlers.
     # Visit it in the code for additional documentation.
     if req.user is None:
         raise CannotMakeBunniesError
 
-    return ReqOut(bunnies=await req.cq.q.fetch_bunnies(tenant_id=req.tenant.id))
+    return ReqOut(bunnies=await req.cq.q.fetch_bunnies(organization_id=req.organization.id))
 ```
 
 ## Codegen

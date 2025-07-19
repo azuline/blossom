@@ -7,7 +7,7 @@ import quart
 from dacite import from_dict
 from quart import Quart, Response, json
 
-from database.codegen.models import Tenant, User
+from database.codegen.models import Organization, User
 from foundation.logs import get_logger
 from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import SESSION_ID_KEY
@@ -32,22 +32,22 @@ class TestRPC:
     _t: TFix
     _app: Quart | None
     _client: TestClientProtocol | None
-    # This variable stores which tenant to make future RPC requests as.
+    # This variable stores which organization to make future RPC requests as.
     #
-    # This is purely for the convenience of not having to pass tenant into the
+    # This is purely for the convenience of not having to pass organization into the
     # `execute()` function, because it makes more intuitive sense to log in as both the
-    # user and tenant in `login_as()`.
+    # user and organization in `login_as()`.
     #
-    # We have to store this as state because the tenant is authed via a request header,
+    # We have to store this as state because the organization is authed via a request header,
     # not via the session. So we need to store this until we make the actual request, at
     # which time we inject this value into the request headers.
-    _logged_in_as_tenant_external_id: str | None
+    _logged_in_as_organization_external_id: str | None
 
     def __init__(self, t: TFix) -> None:
         self._t = t
         self._app = None
         self._client = None
-        self._logged_in_as_tenant_external_id = None
+        self._logged_in_as_organization_external_id = None
         self._catalog = get_catalog()
 
     def _get_rpc_method(self, path: str) -> Method:
@@ -68,12 +68,12 @@ class TestRPC:
         self._client = (await self.app()).test_client()
         return self._client
 
-    async def login_as(self, user: User, tenant: Tenant | None = None) -> None:
+    async def login_as(self, user: User, organization: Organization | None = None) -> None:
         logger.debug(f"Setting session to user {user.external_id} - {user.email}.")
         async with (await self.client()).session_transaction() as quart_sess:
             session = await self._t.factory.session(
                 user_id=user.id,
-                tenant_id=tenant.id if tenant else None,
+                organization_id=organization.id if organization else None,
             )
             quart_sess[SESSION_ID_KEY] = session.external_id
 

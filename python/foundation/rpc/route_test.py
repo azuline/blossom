@@ -26,7 +26,7 @@ class SpecTestIn:
 class SpecTestOut:
     data: SpecTestIn
     user_id: str | None
-    tenant_id: str | None
+    organization_id: str | None
 
 
 async def make_test_route(
@@ -38,7 +38,7 @@ async def make_test_route(
         return SpecTestOut(
             data=req.data,
             user_id=req.user.id if req.user else None,
-            tenant_id=req.tenant.id if req.tenant else None,
+            organization_id=req.organization.id if req.organization else None,
         )
 
     bp = Blueprint("test_route_e2e", __name__, url_prefix="/api")
@@ -54,20 +54,20 @@ async def test_route_auth_public(t: TFix) -> None:
 
     assert out.data.cherry == "blossom"
     assert out.user_id is None
-    assert out.tenant_id is None
+    assert out.organization_id is None
 
 
-async def test_route_auth_tenant(t: TFix) -> None:
-    user, tenant = await t.f.customer()
-    await make_test_route(await t.rpc.app(), "tenant")
+async def test_route_auth_organization(t: TFix) -> None:
+    user, organization = await t.f.customer()
+    await make_test_route(await t.rpc.app(), "organization")
 
-    await t.rpc.login_as(user, tenant)
+    await t.rpc.login_as(user, organization)
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     out = await t.rpc.parse_response(resp, SpecTestOut)
 
     assert out.data.cherry == "blossom"
     assert out.user_id == user.id
-    assert out.tenant_id == tenant.id
+    assert out.organization_id == organization.id
 
 
 async def test_route_auth_user(t: TFix) -> None:
@@ -80,7 +80,7 @@ async def test_route_auth_user(t: TFix) -> None:
 
     assert out.data.cherry == "blossom"
     assert out.user_id == user.id
-    assert out.tenant_id is None
+    assert out.organization_id is None
 
 
 async def test_route_auth_user_fail(t: TFix) -> None:
@@ -89,8 +89,8 @@ async def test_route_auth_user_fail(t: TFix) -> None:
     await t.rpc.assert_error(resp, UnauthorizedError)
 
 
-async def test_route_auth_tenant_fail(t: TFix) -> None:
-    await make_test_route(await t.rpc.app(), "tenant")
+async def test_route_auth_organization_fail(t: TFix) -> None:
+    await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
@@ -99,7 +99,7 @@ async def test_route_invalid_session(t: TFix) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = "1234"
 
-    await make_test_route(await t.rpc.app(), "tenant")
+    await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
@@ -111,7 +111,7 @@ async def test_route_expired_session_expired_at(t: TFix) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = session.external_id
 
-    await make_test_route(await t.rpc.app(), "tenant")
+    await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
@@ -123,7 +123,7 @@ async def test_route_expired_session_last_seen_at(t: TFix) -> None:
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = session.external_id
 
-    await make_test_route(await t.rpc.app(), "tenant")
+    await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
     await t.rpc.assert_error(resp, UnauthorizedError)
 
