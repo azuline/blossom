@@ -69,13 +69,13 @@ class TestRPC:
         return self._client
 
     async def login_as(self, user: User, organization: Organization | None = None) -> None:
-        logger.debug(f"Setting session to user {user.external_id} - {user.email}.")
+        logger.debug(f"Setting session to user {user.id} - {user.email}.")
         async with (await self.client()).session_transaction() as quart_sess:
             session = await self._t.factory.session(
                 user_id=user.id,
                 organization_id=organization.id if organization else None,
             )
-            quart_sess[SESSION_ID_KEY] = session.external_id
+            quart_sess[SESSION_ID_KEY] = session.id
 
     async def execute(
         self,

@@ -13,7 +13,7 @@ from foundation.rpc.route import (
     UnauthorizedError,
     route,
 )
-from foundation.test.fixture import TFix
+from foundation.testing.fixture import TFix
 from foundation.time import CLOCK
 
 
@@ -58,7 +58,7 @@ async def test_route_auth_public(t: TFix) -> None:
 
 
 async def test_route_auth_organization(t: TFix) -> None:
-    user, organization = await t.f.customer()
+    user, organization = await t.factory.customer()
     await make_test_route(await t.rpc.app(), "organization")
 
     await t.rpc.login_as(user, organization)
@@ -71,7 +71,7 @@ async def test_route_auth_organization(t: TFix) -> None:
 
 
 async def test_route_auth_user(t: TFix) -> None:
-    user = await t.f.user()
+    user = await t.factory.user()
     await make_test_route(await t.rpc.app(), "user")
 
     await t.rpc.login_as(user)
@@ -105,11 +105,11 @@ async def test_route_invalid_session(t: TFix) -> None:
 
 
 async def test_route_expired_session_expired_at(t: TFix) -> None:
-    user = await t.f.user()
-    session = await t.f.session(user_id=user.id, expired_at=CLOCK.now())
+    user = await t.factory.user()
+    session = await t.factory.session(user=user, expired_at=CLOCK.now())
 
     async with (await t.rpc.client()).session_transaction() as sess:
-        sess[SESSION_ID_KEY] = session.external_id
+        sess[SESSION_ID_KEY] = session.id
 
     await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
@@ -117,11 +117,11 @@ async def test_route_expired_session_expired_at(t: TFix) -> None:
 
 
 async def test_route_expired_session_last_seen_at(t: TFix) -> None:
-    user = await t.f.user()
-    session = await t.f.session(user_id=user.id, last_seen_at=CLOCK.now() - timedelta(days=20))
+    user = await t.factory.user()
+    session = await t.factory.session(user=user, last_seen_at=CLOCK.now() - timedelta(days=20))
 
     async with (await t.rpc.client()).session_transaction() as sess:
-        sess[SESSION_ID_KEY] = session.external_id
+        sess[SESSION_ID_KEY] = session.id
 
     await make_test_route(await t.rpc.app(), "organization")
     resp = await t.rpc.execute("Test", SpecTestIn(cherry="blossom"))
