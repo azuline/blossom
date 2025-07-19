@@ -8,10 +8,8 @@ import pytest
 import pytest_asyncio
 
 from foundation.env import ENV
-from foundation.external.brex import CBrex, FakeBrexClient
 from foundation.external.external import EXT
 from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenAIClient
-from foundation.external.ramp import CRamp, FakeRampClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
 from foundation.logs import get_logger
@@ -101,8 +99,6 @@ def fake_ext(request: pytest.FixtureRequest) -> Iterator[None]:
     EXT.test_openai = COpenAI(_fake_client=FakeOpenAIClient())
     EXT.test_slack = CSlack(_fake_client=FakeSlackClient())
     EXT.test_google_sheets = CSheets(_fake_service=FakeGoogleSheetsService())
-    EXT.test_brex = CBrex(_fake_client=FakeBrexClient())
-    EXT.test_ramp = CRamp(_fake_client=FakeRampClient())
 
     yield
 

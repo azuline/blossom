@@ -1,20 +1,22 @@
 from __future__ import annotations
 
-import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from database.codegen.models import Tenant, User
+import quart
 from dacite import from_dict
 from quart import Quart, Response, json
-from quart.typing import TestClientProtocol
 
+from database.codegen.models import Tenant, User
+from foundation.logs import get_logger
 from foundation.rpc.catalog import Method, get_catalog
 from foundation.rpc.route import SESSION_ID_KEY
 from foundation.webserver import create_app
 
 if TYPE_CHECKING:  # pragma: no cover
-    from foundation.test.fixture import TFix
+    from quart.typing import TestClientProtocol
+
+    from foundation.testing.fixture import TFix
 
 T = TypeVar("T")
 E = TypeVar("E", bound=Exception)
@@ -54,10 +56,10 @@ class TestRPC:
                 return rpc.method
         return "POST"
 
-    async def app(self) -> Quart:
+    async def app(self) -> quart.Quart:
         if self._app is not None:
             return self._app
-        self._app = await create_app(pg_pool=self._t.db.pg_pool)
+        self._app = await create_app(None)
         return self._app
 
     async def client(self) -> TestClientProtocol:
@@ -69,7 +71,7 @@ class TestRPC:
     async def login_as(self, user: User, tenant: Tenant | None = None) -> None:
         logger.debug(f"Setting session to user {user.external_id} - {user.email}.")
         async with (await self.client()).session_transaction() as quart_sess:
-            session = await self._t.f.session(
+            session = await self._t.factory.session(
                 user_id=user.id,
                 tenant_id=tenant.id if tenant else None,
             )

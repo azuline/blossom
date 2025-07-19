@@ -48,10 +48,13 @@ class _Env:
     sentry_dsn: str | None
 
     # Configuration parameters (w/ defaults).
+    host: str | None
+    port: int | None
     database_pool_size: int
     eval_concurrency: int
 
     # First-party secrets.
+    quart_session_key: str
     vault_encryption_key: bytes
 
     # Third-party API keys.
@@ -74,8 +77,11 @@ class _Env:
             commit=cls._optional("RENDER_GIT_COMMIT") or "development",
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),
+            host=cls._optional("HOST"),
+            port=int(cls._optional("PORT")),
             database_pool_size=int(cls._optional("DATABASE_POOL_SIZE") or 5),
             eval_concurrency=int(cls._optional("EVAL_CONCURRENCY") or 25),
+            quart_session_key=cls._required("QUART_SESSION_KEY"),
             vault_encryption_key=bytes.fromhex(cls._required("VAULT_ENCRYPTION_KEY")),
             slack_token=cls._optional("SLACK_TOKEN"),
             slack_signing_secret=cls._optional("SLACK_SIGNING_SECRET"),

@@ -8,7 +8,7 @@ from typing import Any, get_args, get_origin, get_type_hints
 
 from jinja2 import BaseLoader, Environment
 
-from foundation.rpc.catalog import Catalog, Method, get_catalog
+from foundation.rpc.catalog import Method, RPCCatalog, get_catalog
 from foundation.rpc.error import RPCError
 
 TEMPLATE = """\
@@ -110,7 +110,7 @@ class ErrorNameCollisionError(Exception):
     pass
 
 
-def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
+def convert_catalog_to_codegen_schema(catalog: RPCCatalog) -> CodegenSchema:
     """
     Convert the RPC schema with its dataclass type annotations into a string form
     that can be used to construct a TypeScript equivalent version.

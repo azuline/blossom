@@ -27,7 +27,7 @@ class RawRoute:
 
 
 @dataclass
-class Catalog:
+class RPCCatalog:
     global_errors: list[type[RPCError]]
     rpcs: list[RPCRoute]
     # Routes to mount that aren't RPCs.
@@ -35,10 +35,10 @@ class Catalog:
 
 
 # This is a global variable that stores the currently accumulated catalog of routes.
-_catalog = Catalog(global_errors=[], rpcs=[], raw_routes=[])
+_catalog = RPCCatalog(global_errors=[], rpcs=[], raw_routes=[])
 
 
-def get_catalog() -> Catalog:
+def get_catalog() -> RPCCatalog:
     # Because routes register themselves into the catalog upon import,
     # we need a central place to define the import paths for all routes.
     # This function is that central place.
@@ -84,14 +84,3 @@ def catalog_global_error(error: type[RPCError]) -> None:
     codegen.
     """
     _catalog.global_errors.append(error)
-
-
-def create_blueprint() -> Blueprint:
-    catalog = get_catalog()
-
-    bp = Blueprint("api", __name__, url_prefix="/api")
-    for route in catalog.rpcs:
-        bp.route("/" + route.name, methods=[route.method])(route.handler)
-    for rawr in catalog.raw_routes:
-        bp.route("/" + rawr.name, methods=[rawr.method])(rawr.handler)
-    return bp

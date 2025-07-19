@@ -73,17 +73,17 @@ async def connect_db_admin_nopool() -> AsyncIterator[DBConn]:
 
 
 @contextlib.asynccontextmanager
-async def connect_db_customer(user_id: str, organization_id: str, pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
+async def connect_db_customer(user_id: str, organization_id: str | None, pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
     pg_pool = pg_pool or await _default_pool()
     async with pg_pool.connection() as conn:
         await _set_row_level_security(conn, user_id, organization_id)
         yield conn
 
 
-async def _set_row_level_security(conn: DBConn, user_id: str, organization_id: str) -> None:
+async def _set_row_level_security(conn: DBConn, user_id: str, organization_id: str | None) -> None:
     # Protect against SQL injection this way.
     assert USER_ID_SAFETY_REGEX.match(user_id)
-    assert ORGANIZATION_ID_SAFETY_REGEX.match(organization_id)
+    assert not organization_id or ORGANIZATION_ID_SAFETY_REGEX.match(organization_id)
 
     # A pipeline runs all the following commands in sequence without waiting for the previous
     # roundtrip to finish. Since we aren't reading the results, this is more performant.
@@ -96,7 +96,8 @@ async def _set_row_level_security(conn: DBConn, user_id: str, organization_id: s
         await conn.execute("SET ROLE customer")
 
         await conn.execute(SQL("SET app.current_user_id = {}").format(Identifier(str(user_id))))
-        await conn.execute(SQL("SET app.current_organization_id = {}").format(Identifier(str(organization_id))))
+        if organization_id:
+            await conn.execute(SQL("SET app.current_organization_id = {}").format(Identifier(str(organization_id))))
 
 
 async def _clean_up_row_level_security(conn: DBConn) -> None:
