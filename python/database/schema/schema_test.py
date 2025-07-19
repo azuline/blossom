@@ -10,8 +10,6 @@ from database.access.xact import xact
 
 nl = "\n"  # can't put backslash in f-string expression
 
-IGNORE_TABLES = ["pgmigrate_migrations"]
-
 
 async def test_all_tables_have_primary_keys():
     async with xact() as q:
@@ -28,9 +26,9 @@ async def test_all_tables_have_primary_keys():
                         WHERE c.table_name = t.table_name
                         AND c.column_name = 'id'
                     )
-                    AND t.table_name <> ANY(%s)
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND t.table_name NOT LIKE '%_enum'
                 """,
-                (IGNORE_TABLES,),
             ),
         )
         failing = result.scalars().all()

@@ -2,11 +2,11 @@ from typing import cast
 
 import click
 import yoyo
+from foundation.logs import get_logger
+from foundation.paths import PYTHON_ROOT
 from yoyo.backends import DatabaseBackend
 
 from database.access.access import set_driver_tag
-from foundation.logs import get_logger
-from foundation.paths import PYTHON_ROOT
 
 logger = get_logger()
 

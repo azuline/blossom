@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 import psycopg
 
+from database.access.conn import DBConn, _set_row_level_security, create_pg_pool
 from foundation.config import ENV
-from foundation.database import Conn, create_pg_pool, set_row_level_security
 from foundation.test.db import run_database_migrations
 
 
@@ -21,7 +21,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
 
     run_database_migrations(ENV.database_url + "/" + isolated_db)
 
-    async def get_user_id(c: Conn) -> int | None:
+    async def get_user_id(c: DBConn) -> int | None:
         try:
             cur = await c.execute("SHOW app.current_user_id")
         except psycopg.errors.UndefinedObject:
@@ -32,17 +32,17 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         return int(row[0])
 
     async with await create_pg_pool(ENV.database_url + "/" + isolated_db) as pg_pool:
-        connections: list[Conn] = []
+        connections: list[DBConn] = []
 
-        async def create_conn(rls: bool) -> Conn:
+        async def create_conn(rls: bool) -> DBConn:
             c = await pg_pool.getconn(timeout=5)
             if rls:
                 # Fake user with a fake ID.
-                await set_row_level_security(c, FakeUser(id=1), None)  # type: ignore
+                await _set_row_level_security(c, FakeUser(id=1), None)  # type: ignore
             connections.append(c)
             return c
 
-        async def destroy_conn(c: Conn) -> None:
+        async def destroy_conn(c: DBConn) -> None:
             await pg_pool.putconn(c)
             connections.remove(c)
 

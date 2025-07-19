@@ -5,8 +5,6 @@ import tempfile
 from pathlib import Path
 
 import yaml
-
-from foundation.logs import get_logger
 from foundation.testing.testdb import TestDB
 
 logger = get_logger()
