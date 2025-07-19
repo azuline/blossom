@@ -4,4 +4,4 @@ services:
     environment: { POSTGRES_PASSWORD: password }
     restart: unless-stopped  # `restart: unless-stopped` restarts the service on computer reboot if it was active before shutdown.
     command: postgres -c log_statement=all -c max_connections=1024
-    ports: ["40852:5432"]
+    ports: ["40801:5432"]

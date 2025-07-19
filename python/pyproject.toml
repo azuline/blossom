@@ -108,6 +108,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
+"datetime.datetime.now".msg = "Use the foundation.time:CLOCK.now method instead."
 "dagster.asset".msg = "Use the foundation.dag:asset facade instead."
 "sentry_sdk.capture_exception".msg = "Use the foundation.errors:report_error facade instead."
 

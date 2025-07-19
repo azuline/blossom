@@ -1,27 +1,77 @@
 start:
-    QUART_DEBUG=1 QUART_APP="foundation.webserver:debug_app()" quart run --port 40851
+    QUART_DEBUG=1 QUART_APP="foundation.webserver:debug_app()" quart run --port 40811
 
-test:
-    pytest --cov=. --cov-branch .
-    coverage html
+# HELP
 
-migrate:
-    blossom migrate
-    pgmigrate dump -o schema.sql
+help:  ## Describe the available commands.
+    @grep -E '^[a-z][^:]+:.*?## .*$$' justfile | sed 's/^/just /' | sed 's/ \*ARGS:/:/'
 
-codegen:
-    blossom codegen
+# RUN PROGRAMS IN DEV.
 
-psql:
-    psql postgres://postgres:password@localhost:40852
+ipython *ARGS:  ## Start an interactive REPL for testing or running parts of the codebase.
+    uv run -- ipython {{ARGS}}
+product *ARGS:  ## Interact with the chatbot project. Run `just chatbot` to see the available subcommands.
+    uv run -- python -m product {{ARGS}}
+panopticon *ARGS:  ## Interact with the chatbot project. Run `just chatbot` to see the available subcommands.
+    uv run -- python -m panopticon {{ARGS}}
+pipeline *ARGS:  ## Start the Dagster developer webapp for the data ingestion pipeline..
+    DAGSTER_HOME="$(pwd)/.dagster_cache" uv run -- dagster dev
 
-lint:
-    pyright
-    ruff check --fix .
-    ruff format .
-    semgrep --config .semgrep/ --autofix .
+# DATABASE MANAGEMENT.
 
+psql *ARGS:  ## Runs `psql` on the development database. Accepts `psql` arguments minus the database connection string (already supplied). Use this to run queries on the database.
+    psql "postgres://postgres:password@localhost:40801/postgres" {{ARGS}}
+database *ARGS:  ## Interact with the database program. For example. Common subcommands are `migrate` and `codegen`.
+    uv run -- python -m database {{ARGS}}
+new-migration MSG:  ## Create a new migration file with the correct naming structure and dependencies. ALWAYS use this tool to create a new migration.
+    uv run -- yoyo new --sql --message "{{MSG}}"
+
+# DEPENDENCY MANAGEMENT.
+
+install:  ## Install Python dependencies using `uv` according to the lockfile.
+    uv sync
+update *ARGS:  ## Update Python dependencies using `uv`.
+    uv sync --upgrade {{ARGS}}
+
+# CODE CHECKS.
+
+lint *ARGS:  ## Run the configured Python linters. Pass filename(s) like `just lint file.py [file2.py]` to lint just those files.
+    uv run -- ty check {{ARGS}}
+    uv run -- ruff check --fix {{ARGS}}
+    uv run -- ruff format {{ARGS}}
+    semgrep --config .semgrep/ --autofix {{ARGS}}
+    uv run -- tach check
+test *ARGS:  ## Run the Python test suite. Pass filename(s) like `just test file.py [file2.py::test_name]` to just test those files or tests.
+    uv run -- pytest {{ARGS}}
+test-snapshot *ARGS:  ## Update the cached LLM data in the Python test suite. Pass filename(s) like `just test-snapshot file.py [file2.py::test_name]` to just update those files or tests.
+    UPDATE_SNAPSHOT=1 uv run -- pytest {{ARGS}}
+dg-check:  ## Check that the Dagster configuration is valid.
+    uv run -- dg check defs
+tach-update:  ## Sync Tach dependencies after making module structure changes.
+    uv run -- tach sync
 diff:
     git status
     git diff
     bash -c '[[ -z $(git status -s) ]] || (exit 1)'
+
+# LLM TOOLS.
+
+list-symbols *ARGS:  ## List all public functions, classes, methods, and literals in the codebase.
+    uv run -- python -m tools.list-symbols {{ARGS}}
+list-fixtures:  ## List all symbols related to the `t` testing fixture.
+    uv run -- python -m tools.list-symbols | grep '^foundation.testing' | grep -v 'testdb:'
+check-for-migration:  ## List any migration files which have been created or modified in the current branch.
+    #!/usr/bin/env bash
+    if [[ "$(git branch --show-current)" = "master" ]]; then
+        git diff HEAD | { grep '^python/database/migrations' || true; }
+    else 
+        git diff --name-only $(git merge-base HEAD master) | { grep '^python/database/migrations' || true; }
+    fi
+branch-changes:  ## Print a diff of all code changes made in the current branch.
+    #!/usr/bin/env bash
+    if [[ "$(git branch --show-current)" = "master" ]]; then
+        git -c core.pager=cat diff HEAD
+    else
+        git -c core.pager=cat diff $(git merge-base HEAD master)
+    fi
+

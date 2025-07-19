@@ -1,0 +1,18 @@
+modules = [
+    { path = "foundation", depends_on = ["database"] },
+    { path = "database", depends_on = ["foundation"] },
+    { path = "pipeline", depends_on = ["foundation", "database"] },
+    { path = "product", depends_on = ["foundation", "database"] },
+    { path = "panopticon", depends_on = ["foundation", "database", "product"] },
+]
+
+exclude = [
+    "*.pyc",
+    "__pycache__",
+    ".*_cache", 
+    ".venv",
+    ".git",
+    ".tach",
+]
+
+forbid_circular_dependencies = false

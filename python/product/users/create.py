@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash
 
 from codegen.sqlc.models import User, UserSignupStep
-from foundation.database import ConnQuerier
+from database.access import ConnQuerier
 
 
 async def user_create(*, cq: ConnQuerier, email: str, name: str, password: str | None) -> User:

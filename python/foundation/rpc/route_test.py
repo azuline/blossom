@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from quart import Blueprint, Quart
 
@@ -14,6 +14,7 @@ from foundation.rpc.route import (
     route,
 )
 from foundation.test.fixture import TFix
+from foundation.time import CLOCK
 
 
 @dataclass
@@ -105,7 +106,7 @@ async def test_route_invalid_session(t: TFix) -> None:
 
 async def test_route_expired_session_expired_at(t: TFix) -> None:
     user = await t.f.user()
-    session = await t.f.session(user_id=user.id, expired_at=datetime.now())
+    session = await t.f.session(user_id=user.id, expired_at=CLOCK.now())
 
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = session.external_id
@@ -117,7 +118,7 @@ async def test_route_expired_session_expired_at(t: TFix) -> None:
 
 async def test_route_expired_session_last_seen_at(t: TFix) -> None:
     user = await t.f.user()
-    session = await t.f.session(user_id=user.id, last_seen_at=datetime.now() - timedelta(days=20))
+    session = await t.f.session(user_id=user.id, last_seen_at=CLOCK.now() - timedelta(days=20))
 
     async with (await t.rpc.client()).session_transaction() as sess:
         sess[SESSION_ID_KEY] = session.external_id

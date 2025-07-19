@@ -6,11 +6,12 @@ import sys
 from collections.abc import AsyncIterator
 from typing import Any
 
+import psycopg
 from psycopg import AsyncConnection
 from psycopg.sql import SQL, Identifier
 from psycopg_pool import AsyncConnectionPool, AsyncNullConnectionPool
 
-from foundation.config import ENV
+from foundation.env import ENV
 
 # Type aliases for everyone.
 DBConn = AsyncConnection[Any]
@@ -24,7 +25,7 @@ ORGANIZATION_ID_SAFETY_REGEX = re.compile(r"org_[A-Za-z0-9]+$")
 async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
     return AsyncNullConnectionPool(
         conninfo=database_uri or ENV.database_uri,
-        max_size=ENV.pool_size,
+        max_size=ENV.database_pool_size,
         # We turn autocommit on so that by default, queries can run outside of
         # a transaction. When a connection desires to run a series of queries
         # in a single transaction, they can explicitly start a transaction with BEGIN.
@@ -62,6 +63,12 @@ async def _default_pool() -> DBConnPool:
 async def connect_db_admin(pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
     pg_pool = pg_pool or await _default_pool()
     async with pg_pool.connection() as conn:
+        yield conn
+
+
+@contextlib.asynccontextmanager
+async def connect_db_admin_nopool() -> AsyncIterator[DBConn]:
+    async with await psycopg.AsyncConnection.connect(ENV.database_uri) as conn:
         yield conn
 
 

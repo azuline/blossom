@@ -9,7 +9,7 @@ from typing import Any, get_args, get_origin, get_type_hints
 from jinja2 import BaseLoader, Environment
 
 from foundation.rpc.catalog import Catalog, Method, get_catalog
-from foundation.rpc.error import APIError
+from foundation.rpc.error import RPCError
 
 TEMPLATE = """\
 export type RPCErrors = {
@@ -117,7 +117,7 @@ def convert_catalog_to_codegen_schema(catalog: Catalog) -> CodegenSchema:
     """
     schema = CodegenSchema(errors={}, rpcs={}, global_error_names=[])
 
-    def add_error_to_schema(e: type[APIError]) -> None:
+    def add_error_to_schema(e: type[RPCError]) -> None:
         """Raises an error if the error has the same name but a duplicate schema."""
         name = e.__name__
         esch = ErrorSchema(data=dataclass_to_str(e))

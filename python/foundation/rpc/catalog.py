@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 from quart import Blueprint, ResponseReturnValue
 
-from foundation.rpc.error import APIError
+from foundation.rpc.error import RPCError
 
 Method = Literal["GET", "POST"]
 
@@ -14,7 +14,7 @@ class RPCRoute:
     name: str
     in_: type[Any]
     out: type[Any]
-    errors: list[type[APIError]]
+    errors: list[type[RPCError]]
     method: Method
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]]
 
@@ -28,7 +28,7 @@ class RawRoute:
 
 @dataclass
 class Catalog:
-    global_errors: list[type[APIError]]
+    global_errors: list[type[RPCError]]
     rpcs: list[RPCRoute]
     # Routes to mount that aren't RPCs.
     raw_routes: list[RawRoute]
@@ -54,7 +54,7 @@ def catalog_rpc(
     name: str,
     in_: type[Any],
     out: type[Any],
-    errors: list[type[APIError]],
+    errors: list[type[RPCError]],
     method: Method,
     handler: Callable[[], Coroutine[Any, Any, ResponseReturnValue]],
 ) -> None:
@@ -78,7 +78,7 @@ def catalog_raw_route(
     _catalog.raw_routes.append(RawRoute(name=name, method=method, handler=handler))
 
 
-def catalog_global_error(error: type[APIError]) -> None:
+def catalog_global_error(error: type[RPCError]) -> None:
     """
     catalog_error adds an error to the RPC catalog. The errors are read when running frontend
     codegen.

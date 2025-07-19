@@ -1,5 +1,5 @@
 from codegen.sqlc.models import Tenant, TenantsInboundSource, TenantsUser
-from foundation.database import ConnQuerier
+from database.access import ConnQuerier
 
 
 class TenantNotFoundError(Exception):

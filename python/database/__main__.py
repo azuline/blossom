@@ -10,8 +10,8 @@ from typing import Any
 import click
 
 from codegen.sqlc.models import TenantsInboundSource
-from foundation.config import ENV
-from foundation.database import ConnQuerier, conn_admin, create_pg_pool
+from foundation.env import ENV
+from database.access import ConnQuerier, conn_admin, create_pg_pool
 from foundation.log import option_log_level
 from foundation.rpc.codegen import codegen_typescript
 from foundation.test.rand import TestRandGen

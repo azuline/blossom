@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import psycopg
 
 from database.access.conn import DBConn, _set_row_level_security, create_pg_pool
-from foundation.config import ENV
+from foundation.env import ENV
 from foundation.test.db import run_database_migrations
 
 

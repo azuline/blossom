@@ -12,11 +12,11 @@ from typing import Any, Literal, TypeVar, get_args, get_type_hints
 
 import pydantic.dataclasses
 import quart
+from codegen.sqlc.models import Tenant, User
 from pydantic import ValidationError
 from quart import ResponseReturnValue
 
-from codegen.sqlc.models import Tenant, User
-from foundation.database import ConnPool, ConnQuerier, conn_admin, conn_cust
+from database.access import ConnPool, ConnQuerier, conn_admin, conn_cust
 from foundation.rpc.catalog import (
     Method,
     catalog_global_error,
@@ -24,9 +24,9 @@ from foundation.rpc.catalog import (
     catalog_rpc,
 )
 from foundation.rpc.error import (
-    APIError,
+    RPCError,
 )
-from foundation.std.str import snake_case_to_pascal_case
+from foundation.str import snake_case_to_pascal_case
 
 logger = logging.getLogger(__name__)
 
@@ -54,27 +54,27 @@ class Req[D]:
 
 
 @dataclass
-class UnknownError(APIError):
+class UnknownError(RPCError):
     pass
 
 
 @dataclass
-class UnauthorizedError(APIError):
+class UnauthorizedError(RPCError):
     pass
 
 
 @dataclass
-class ServerJSONDeserializeError(APIError):
+class ServerJSONDeserializeError(RPCError):
     message: str
 
 
 @dataclass
-class DataMismatchError(APIError):
+class DataMismatchError(RPCError):
     message: str
 
 
 @dataclass
-class InputValidationError(APIError):
+class InputValidationError(RPCError):
     message: str
     fields: dict[str, Any] = field(default_factory=dict)
 
@@ -88,7 +88,7 @@ catalog_global_error(InputValidationError)
 def route(
     *,
     authorization: Authorization,
-    errors: list[type[APIError]],
+    errors: list[type[RPCError]],
     method: Method = "POST",
     # Whether this is a raw route or not.
     type_: Literal["rpc", "raw"] = "rpc",
@@ -179,7 +179,7 @@ def route(
                     return rdata  # type: ignore
                 # But an RPC handler returns a dataclass that we serialize.
                 return quart.jsonify(asdict(rdata) if rdata else {"ok": True}), 200
-            except APIError as e:
+            except RPCError as e:
                 logger.debug(f"API endpoint returned error: {e=} {e.serialize()=}")
                 return quart.jsonify(e.serialize()), 400
             except Exception as e:  # pragma: no cover

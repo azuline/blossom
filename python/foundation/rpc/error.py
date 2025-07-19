@@ -3,7 +3,7 @@ from typing import Any
 
 
 @dataclass
-class APIError(Exception):
+class RPCError(Exception):
     def __init__(self) -> None:
         self.message = self.__class__.__name__
 

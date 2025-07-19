@@ -11,19 +11,19 @@ from asyncio import AbstractEventLoop
 from collections.abc import AsyncIterator, Iterator
 from string import ascii_lowercase
 
-import psycopg
-import pytest
-import pytest_asyncio
-from psycopg.sql import SQL, Identifier
-from quart.typing import TestClientProtocol
-
 # Configure logging for tests -- we will set up OpenTelemetry and fix this side effect
 # nonsense later.
 import foundation.log  # noqa
-from foundation.config import ENV
-from foundation.database import ConnPool, create_pg_pool
+import psycopg
+import pytest
+import pytest_asyncio
 from foundation.test.db import run_database_migrations
 from foundation.test.fixture import TFix
+from psycopg.sql import SQL, Identifier
+from quart.typing import TestClientProtocol
+
+from database.access import ConnPool, create_pg_pool
+from foundation.env import ENV
 
 # Tricks to avoid pytest's auto-test detection.
 TestClientProtocol.__test__ = False  # type: ignore
