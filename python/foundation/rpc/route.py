@@ -7,9 +7,8 @@ import functools
 import json
 from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
-from typing import Any, Literal, TypeVar, get_args, get_type_hints
+from typing import Any, Literal, TypeVar, cast, get_args, get_type_hints
 
-import pydantic.dataclasses
 import quart
 from pydantic import ValidationError
 from quart import ResponseReturnValue
@@ -18,6 +17,7 @@ from database.access.xact import DBQuerier, xact_admin, xact_customer
 from database.codegen import models
 from foundation.errors import ImpossibleError
 from foundation.logs import get_logger
+from foundation.parse import make_pydantic_validator
 from foundation.rpc.catalog import Method, catalog_global_error, catalog_raw_route, catalog_rpc
 from foundation.rpc.error import RPCError
 from foundation.str import snake_case_to_pascal_case
@@ -129,7 +129,7 @@ def route(
 
         # Turn the input dataclass into a Pydantic dataclass for validation purposes.
         if in_.__name__ != "NoneType":
-            in_ = pydantic.dataclasses.dataclass(in_)
+            in_ = cast(type[Any], make_pydantic_validator(in_))
 
         @functools.wraps(func)
         async def handler() -> ResponseReturnValue:
@@ -173,14 +173,7 @@ def route(
             if type_ == "raw":
                 catalog_raw_route(name=name, method=method, handler=handler)
             else:
-                catalog_rpc(
-                    name=name,
-                    in_=in_,
-                    out=out,
-                    errors=errors,
-                    method=method,
-                    handler=handler,
-                )
+                catalog_rpc(name=name, in_=in_, out=out, errors=errors, method=method, handler=handler)
 
         return handler
 
@@ -210,11 +203,7 @@ async def _check_session_auth() -> tuple[models.User | None, models.Tenant | Non
     return user, tenant
 
 
-async def _check_authorization(
-    authorization: Authorization,
-    user: models.User | None,
-    tenant: models.Tenant | None,
-) -> None:
+async def _check_authorization(authorization: Authorization, user: models.User | None, tenant: models.Tenant | None) -> None:
     """
     Validate that the user is authorized to submit a request this endpoint. For now, we
     only check the existence of a user, but this function can be expanded to RBAC
@@ -236,13 +225,13 @@ async def _check_authorization(
 T = TypeVar("T")
 
 
-async def _validate_data[T](spec: type[T], method: Method) -> T | None:
+async def _validate_data[T](validator: type[T], method: Method) -> T | None:
     """
     This decorates a quart endpoint. Taking a pydantic input dataclass as an argument,
     this decorator parses the request data with that dataclass. If parsing fails, this
     decorator returns an error to the requester.
     """
-    if spec.__name__ == "NoneType":
+    if validator.__name__ == "NoneType":
         return None
 
     if method == "GET":
@@ -256,7 +245,7 @@ async def _validate_data[T](spec: type[T], method: Method) -> T | None:
             raise ServerJSONDeserializeError(message="Failed to deserialize input to JSON.") from e
 
     try:
-        return spec(**data)
+        return validator(**data)
     except TypeError as e:
         logger.info(f"Input pydantic parse failure: {e}")
         raise DataMismatchError(message="Failed to parse request data: incorrect type.") from e

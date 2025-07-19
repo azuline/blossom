@@ -43,13 +43,23 @@ class _Env:
 
     # Service references.
     database_uri: str
+    # - Product
+    product_host: str | None
+    product_port: int | None
+    product_public_url: str | None
+    # - Panopticon
+    panopticon_host: str | None
+    panopticon_port: int | None
+    panopticon_public_url: str | None
+    # - Pipeline
+    pipeline_host: str | None
+    pipeline_port: int | None
+    pipeline_public_url: str | None
 
     # Infra parameters.
     sentry_dsn: str | None
 
     # Configuration parameters (w/ defaults).
-    host: str | None
-    port: int | None
     database_pool_size: int
     eval_concurrency: int
 
@@ -77,8 +87,15 @@ class _Env:
             commit=cls._optional("RENDER_GIT_COMMIT") or "development",
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),
-            host=cls._optional("HOST"),
-            port=int(cls._optional("PORT")),
+            product_host=cls._required("PRODUCT_HOST"),
+            product_port=int(cls._required("PRODUCT_PORT")),
+            product_public_url=cls._required("PRODUCT_PUBLIC_URL"),
+            panopticon_host=cls._required("PANOPTICON_HOST"),
+            panopticon_port=int(cls._required("PANOPTICON_PORT")),
+            panopticon_public_url=cls._required("PANOPTICON_PUBLIC_URL"),
+            pipeline_host=cls._required("PIPELINE_HOST"),
+            pipeline_port=int(cls._required("PIPELINE_PORT")),
+            pipeline_public_url=cls._required("PIPELINE_PUBLIC_URL"),
             database_pool_size=int(cls._optional("DATABASE_POOL_SIZE") or 5),
             eval_concurrency=int(cls._optional("EVAL_CONCURRENCY") or 25),
             quart_session_key=cls._required("QUART_SESSION_KEY"),
