@@ -76,16 +76,12 @@ async def set_row_level_security(
         await conn.execute("SET ROLE customer")
 
         if user and isinstance(user.id, int):
-            # nosemgrep
             await conn.execute(SQL("SET app.current_user_id = {}").format(Identifier(str(user.id))))
         else:
             await conn.execute("RESET app.current_user_id")
 
         if tenant and isinstance(tenant.id, int):
-            await conn.execute(
-                # nosemgrep
-                SQL("SET app.current_tenant_id = {}").format(Identifier(str(tenant.id)))
-            )
+            await conn.execute(SQL("SET app.current_tenant_id = {}").format(Identifier(str(tenant.id))))
         else:
             await conn.execute("RESET app.current_tenant_id")
 

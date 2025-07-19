@@ -53,7 +53,6 @@ def event_loop(
 async def db() -> AsyncIterator[str]:
     db_name = "test_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
     with psycopg.connect(CONFVARS.database_url, autocommit=True) as conn:
-        # nosemgrep
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     run_database_migrations(CONFVARS.database_url + "/" + db_name)
     yield db_name
@@ -63,7 +62,6 @@ async def db() -> AsyncIterator[str]:
 def isolated_db() -> str:
     db_name = "test_iso_" + "".join(random.choice(ascii_lowercase) for _ in range(24))
     with psycopg.connect(CONFVARS.database_url, autocommit=True) as conn:
-        # nosemgrep
         conn.execute(SQL("CREATE DATABASE {}").format(Identifier(db_name)))
     return db_name
 

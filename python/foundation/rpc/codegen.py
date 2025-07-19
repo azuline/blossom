@@ -11,7 +11,6 @@ from jinja2 import BaseLoader, Environment
 from foundation.rpc.catalog import Catalog, Method, get_catalog
 from foundation.rpc.error import APIError
 
-# nosemgrep
 TEMPLATE = """\
 export type RPCErrors = {
   {% for errname, err in catalog.errors.items() %}
@@ -71,7 +70,7 @@ def codegen_typescript() -> None:
     catalog = convert_catalog_to_codegen_schema(get_catalog())
 
     env = Environment(loader=BaseLoader(), trim_blocks=True)
-    tmpl = env.from_string(TEMPLATE)  # nosemgrep
+    tmpl = env.from_string(TEMPLATE)
     code = tmpl.render(catalog=catalog)
 
     code_path = Path(os.environ["BLOSSOM_ROOT"]) / "frontend" / "codegen" / "rpc" / "src" / "index.ts"
