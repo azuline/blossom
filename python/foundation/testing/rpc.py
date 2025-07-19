@@ -4,7 +4,7 @@ import logging
 from dataclasses import asdict
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from codegen.sqlc.models import Tenant, User
+from database.codegen.models import Tenant, User
 from dacite import from_dict
 from quart import Quart, Response, json
 from quart.typing import TestClientProtocol
@@ -19,7 +19,7 @@ if TYPE_CHECKING:  # pragma: no cover
 T = TypeVar("T")
 E = TypeVar("E", bound=Exception)
 
-logger = logging.getLogger(__name__)
+logger = get_logger()
 
 
 class TestRPC:

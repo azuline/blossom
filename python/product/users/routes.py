@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from codegen.sqlc.models import Tenant
+from database.codegen.models import Tenant
 from database.access import conn_admin
 from foundation.rpc.route import Req, route
 

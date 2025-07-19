@@ -5,30 +5,24 @@ utilities for the web application package.
 
 import functools
 import json
-import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal, TypeVar, get_args, get_type_hints
 
 import pydantic.dataclasses
 import quart
-from codegen.sqlc.models import Tenant, User
 from pydantic import ValidationError
 from quart import ResponseReturnValue
 
-from database.access import ConnPool, ConnQuerier, conn_admin, conn_cust
-from foundation.rpc.catalog import (
-    Method,
-    catalog_global_error,
-    catalog_raw_route,
-    catalog_rpc,
-)
-from foundation.rpc.error import (
-    RPCError,
-)
+from database.access.xact import DBQuerier, xact_admin, xact_customer
+from database.codegen import models
+from foundation.errors import ImpossibleError
+from foundation.logs import get_logger
+from foundation.rpc.catalog import Method, catalog_global_error, catalog_raw_route, catalog_rpc
+from foundation.rpc.error import RPCError
 from foundation.str import snake_case_to_pascal_case
 
-logger = logging.getLogger(__name__)
+logger = get_logger()
 
 SESSION_ID_KEY = "session_external_id"
 
@@ -44,13 +38,10 @@ D = TypeVar("D")
 
 @dataclass
 class Req[D]:
-    cq: ConnQuerier
-    user: User | None
-    tenant: Tenant | None
+    q: DBQuerier
+    user: models.User | None
+    tenant: models.Tenant | None
     data: D
-
-    # Less-used values, here for convenience.
-    pg_pool: ConnPool
 
 
 @dataclass
@@ -145,11 +136,8 @@ def route(
             # TODO: 1. OpenTelemetry trace
             # 2. Trap exceptions and convert them into API responses.
             try:
-                pg_pool: ConnPool = quart.current_app.config["PG_POOL"]
-
                 # 3. Authenticate the user.
-                async with conn_admin(pg_pool) as conn:
-                    user, tenant = await _check_session_auth(conn)
+                user, tenant = await _check_session_auth()
 
                 # 4. Authorize the user against the authorization level.
                 await _check_authorization(authorization, user, tenant)
@@ -161,15 +149,9 @@ def route(
 
                 # 6. Configure the customer's database connection with
                 # row-level-security (if logged in). Then execute the request.
-                conn_ctx = conn_cust(pg_pool, user, tenant) if user else conn_admin(pg_pool)
-                async with conn_ctx as cq:
-                    req = Req(
-                        data=data,
-                        user=user,
-                        tenant=tenant,
-                        cq=cq,
-                        pg_pool=pg_pool,
-                    )
+                transaction = xact_customer(user.id, tenant.id) if user else xact_admin()
+                async with transaction as q:
+                    req = Req(data=data, user=user, tenant=tenant, q=q)
                     logger.info(f"Entering request handler with {user is None}.")
                     rdata = await func(req)
                     logger.info("Exited request handler.")
@@ -205,7 +187,7 @@ def route(
     return decorator
 
 
-async def _check_session_auth(cq: ConnQuerier) -> tuple[User | None, Tenant | None]:
+async def _check_session_auth() -> tuple[models.User | None, models.Tenant | None]:
     """
     Check the current request's session authentication. If so, fetch the associated user
     and the tenant they're logged in as.
@@ -217,20 +199,21 @@ async def _check_session_auth(cq: ConnQuerier) -> tuple[User | None, Tenant | No
 
     logger.info(f"Session ID found in session: {session_external_id is not None}")
     if session_external_id:
-        session = await cq.q.rpc_fetch_unexpired_session(external_id=session_external_id)
-        logger.info(f"Session found: {session is not None}")
-        if session is not None:
-            user = await cq.q.user_fetch(id=session.user_id)
-            if session.tenant_id is not None:
-                tenant = await cq.q.tenant_fetch(id=session.tenant_id)
+        async with xact_admin() as q:
+            session = await q.orm.rpc_unexpired_session_fetch(external_id=session_external_id)
+            logger.info(f"Session found: {session is not None}")
+            if session is not None:
+                user = await q.orm.user_fetch(id=session.user_id)
+                if session.tenant_id is not None:
+                    tenant = await q.orm.tenant_fetch(id=session.tenant_id)
 
     return user, tenant
 
 
 async def _check_authorization(
     authorization: Authorization,
-    user: User | None,
-    tenant: Tenant | None,
+    user: models.User | None,
+    tenant: models.Tenant | None,
 ) -> None:
     """
     Validate that the user is authorized to submit a request this endpoint. For now, we
@@ -247,7 +230,7 @@ async def _check_authorization(
         if user is None or tenant is None:
             raise UnauthorizedError
         return
-    raise Exception("Missed authorization type check in _check_authorization.")  # pragma: no cover
+    raise ImpossibleError("Missed authorization type check in _check_authorization.")  # pragma: no cover
 
 
 T = TypeVar("T")

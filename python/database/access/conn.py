@@ -73,7 +73,7 @@ async def connect_db_admin_nopool() -> AsyncIterator[DBConn]:
 
 
 @contextlib.asynccontextmanager
-async def connect_db_cust(user_id: str, organization_id: str, pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
+async def connect_db_customer(user_id: str, organization_id: str, pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
     pg_pool = pg_pool or await _default_pool()
     async with pg_pool.connection() as conn:
         await _set_row_level_security(conn, user_id, organization_id)

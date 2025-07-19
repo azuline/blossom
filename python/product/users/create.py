@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from codegen.sqlc.models import User, UserSignupStep
+from database.codegen.models import User, UserSignupStep
 from database.access import ConnQuerier
 
 

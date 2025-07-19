@@ -1,4 +1,5 @@
 # My old rules were subsumed by Ruff. Will add more rules later.
+# TODO: One rule for using xact_customer inside routes.
 rules:
   - id: missed-f-string
     languages:

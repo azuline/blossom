@@ -4,7 +4,6 @@ import dataclasses
 
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
-from foundation.testing.rand import TestRandGen
 from foundation.testing.rpc import TestRPC
 
 
@@ -15,14 +14,13 @@ class TFix:
     factory: TestFactory
     errors: TestErrors
     rpc: TestRPC
-    rand: TestRandGen
 
     @classmethod
     def create(cls) -> TFix:
         t = cls(
             factory=TestFactory(),
             errors=TestErrors(),
-            rpc=TestRPC(t),
-            rand=TestRandGen(),
+            rpc=None,  # type: ignore
         )
+        t.rpc = TestRPC(t)
         return t

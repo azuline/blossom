@@ -10,7 +10,7 @@ ORG_PARTITION = dagster.DynamicPartitionsDefinition(name="organizations")
 DEFAULT_POOL = "default"
 
 
-def asset(
+def dag_asset(
     *,
     name: str | None = None,
     key_prefix: str | Sequence[str] | None = None,

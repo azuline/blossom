@@ -25,7 +25,6 @@ dependencies = [
     "quart>=0.20.0",
     "sentry-sdk>=2.22.0",
     "slack-sdk>=3.35.0",
-    "sqlalchemy>=2.0.41",
     "structlog>=25.4.0",
     "structlog-sentry>=2.1.0",
     "tsidpy>=1.1.5",
@@ -108,6 +107,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
+"logging.getLogger".msg = "Use the foundation.logs:get_logger facade instead."
 "datetime.datetime.now".msg = "Use the foundation.time:CLOCK.now method instead."
 "dagster.asset".msg = "Use the foundation.dag:asset facade instead."
 "sentry_sdk.capture_exception".msg = "Use the foundation.errors:report_error facade instead."

@@ -39,3 +39,7 @@ def generate_slug(num_segments: int = 2) -> str:
 
 def generate_name(num_segments: int = 2) -> str:
     return " ".join(x.capitalize() for x in coolname.generate(num_segments))
+
+
+def generate_email() -> str:
+    return "user@sunsetglow+" + generate_slug(2) + ".net"

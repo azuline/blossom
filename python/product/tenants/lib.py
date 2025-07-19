@@ -1,4 +1,4 @@
-from codegen.sqlc.models import Tenant, TenantsInboundSource, TenantsUser
+from database.codegen.models import Tenant, TenantsInboundSource, TenantsUser
 from database.access import ConnQuerier
 
 

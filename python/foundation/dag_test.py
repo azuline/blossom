@@ -1,13 +1,13 @@
 import dagster
 import pytest
 
-from foundation.dag.dag import asset
+from foundation.dag import dag_asset
 from foundation.errors import BlossomError
 from foundation.testing.fixture import TFix
 
 
 def test_asset_decorator_creates_dagster_asset():
-    @asset()
+    @dag_asset()
     def my_asset():
         return "data"
 
@@ -18,7 +18,7 @@ def test_asset_decorator_creates_dagster_asset():
 def test_asset_decorator_preserves_function_behavior():
     """Test that the asset decorator preserves the original function behavior."""
 
-    @asset()
+    @dag_asset()
     def compute_value():
         return 42
 
@@ -31,7 +31,7 @@ def test_asset_decorator_reports_errors_to_sentry(t: TFix):
     class TestAssetError(BlossomError):
         pass
 
-    @asset()
+    @dag_asset()
     def failing_asset():
         raise TestAssetError("test error")
 
