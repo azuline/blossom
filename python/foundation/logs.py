@@ -1,13 +1,10 @@
 import inspect
 import logging
-from collections.abc import Generator
-from contextlib import contextmanager
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from logging import StreamHandler
-from typing import Any, cast
+from typing import cast
 
-import sentry_sdk
 import sentry_sdk.types
 import structlog
 from sentry_sdk.integrations.asyncio import AsyncioIntegration
@@ -145,12 +142,3 @@ def get_logger(debug: bool = False) -> BoundLogger:
             logging.getLogger(mod.__name__).setLevel(logging.DEBUG)  # noqa: TID251
 
     return cast(BoundLogger, logger)
-
-
-@contextmanager
-def span(**kwargs: Any) -> Generator[None]:
-    tokens = structlog.contextvars.bind_contextvars(**kwargs)
-    try:
-        yield
-    finally:
-        structlog.contextvars.reset_contextvars(**tokens)

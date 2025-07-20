@@ -5,7 +5,7 @@ plugins:
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "database/queries.sql"
+    queries: "database/queries/*"
     schema: "database/migrations/"
     database:
       uri: postgres://postgres:password@localhost:40801/postgres

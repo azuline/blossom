@@ -1,7 +1,12 @@
-from foundation.rpc.catalog import RPCCatalog
-from foundation.webserver import create_app_from_catalog
+from foundation.rpc import RPCRouter
+from foundation.webserver import create_app_from_router
 
 
-async def create_app():
-    catalog = RPCCatalog(global_errors=[], rpcs=[], raw_routes=[])
-    return await create_app_from_catalog(catalog)
+def create_router_panopticon() -> RPCRouter:
+    router = RPCRouter()
+
+    return router
+
+
+def create_app():
+    return create_app_from_router(create_router_panopticon())

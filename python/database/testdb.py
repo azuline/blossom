@@ -4,8 +4,8 @@ import secrets
 import yoyo
 from psycopg.sql import SQL, Identifier
 
-from database.access.conn import connect_db_admin_nopool
-from database.access.lock import lock
+from database.conn import connect_db_admin_nopool
+from database.lock import lock
 from foundation.env import ENV
 from foundation.logs import get_logger
 from foundation.paths import PYTHON_ROOT

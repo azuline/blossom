@@ -1,5 +1,5 @@
-from database.access.xact import DBQuerier
 from database.codegen import models
+from database.xact import DBQuerier
 from foundation.crypt import decrypt_symmetric, encrypt_symmetric
 from foundation.types import cast_notnull
 

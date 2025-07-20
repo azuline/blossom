@@ -1,5 +1,5 @@
-from database.access.conn import connect_db_admin
-from foundation.testing.testdb import TestDB
+from database.conn import connect_db_admin
+from database.testdb import TestDB
 
 
 async def test_testdb():

@@ -1,12 +1,12 @@
-from database.access.xact import xact_admin
+from database.xact import xact_admin
 from foundation.identifiers import generate_email
-from foundation.rpc.route import SESSION_ID_KEY
 from product.authn.routes import (
     AuthOrganizationNotFoundError,
     InvalidCredentialsError,
     LoginIn,
 )
 from product.conftest import ProductFixture
+from product.foundation.rpc import SESSION_ID_KEY
 
 
 async def test_auth_login_success(t: ProductFixture) -> None:

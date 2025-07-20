@@ -3,17 +3,11 @@ from __future__ import annotations
 import dataclasses
 
 import pytest
-import quart
 
-from foundation.rpc.catalog import RPCCatalog
+from foundation.rpc import RPCRouter
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
 from foundation.testing.rpc import TestRPC
-from foundation.webserver import create_app_from_catalog
-
-
-async def _create_empty_app() -> quart.Quart:
-    return await create_app_from_catalog(RPCCatalog(global_errors=[], rpcs=[], raw_routes=[]))
 
 
 @dataclasses.dataclass
@@ -28,7 +22,7 @@ class FoundationFixture:
     def create(cls) -> FoundationFixture:
         factory = TestFactory()
         errors = TestErrors()
-        rpc = TestRPC(factory, _create_empty_app)
+        rpc = TestRPC(factory, RPCRouter())
         return cls(factory=factory, errors=errors, rpc=rpc)
 
 

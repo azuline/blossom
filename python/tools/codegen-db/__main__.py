@@ -1,19 +1,20 @@
 """Run SQLc codegen using a test database."""
 
+import asyncio
 import subprocess
 import tempfile
 from pathlib import Path
 
 import yaml
 
+from database.testdb import TestDB
 from foundation.logs import get_logger
 from foundation.paths import PYTHON_ROOT
-from foundation.testing.testdb import TestDB
 
 logger = get_logger()
 
 
-async def run_codegen():
+async def main():
     """Run SQLc codegen."""
     testdb = TestDB()
 
@@ -40,3 +41,7 @@ async def run_codegen():
             logger.info("schema.sql generated successfully")
     finally:
         await testdb.drop_db(db_name)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -3,7 +3,6 @@ import pytest
 from foundation.crypt import DecryptionFailedError, decrypt_symmetric, encrypt_symmetric, random_b64
 
 
-@pytest.mark.no_db
 def test_crypt() -> None:
     plaintext = "YELLOW SUBMARINE"
 
@@ -24,7 +23,6 @@ def test_crypt() -> None:
         decrypt_symmetric(ciphertext, None)
 
 
-@pytest.mark.no_db
 def test_random_b64() -> None:
     assert len(random_b64(16)) == 16
     assert len(random_b64(32)) == 32

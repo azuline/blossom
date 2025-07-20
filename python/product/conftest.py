@@ -4,10 +4,24 @@ import dataclasses
 
 import pytest
 
+from database.codegen import models
+from foundation.logs import get_logger
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
 from foundation.testing.rpc import TestRPC
-from product.app import create_app
+from product.app import create_router_product
+from product.foundation.rpc import SESSION_ID_KEY
+
+logger = get_logger()
+
+
+class TestRPCProduct(TestRPC):
+    async def login_as(self, user: models.User, organization: models.Organization | None = None) -> None:
+        # TODO: move to product
+        logger.debug(f"Setting session to user {user.id} - {user.email}.")
+        async with (await self.client()).session_transaction() as quart_sess:
+            session = await self._factory.session(user=user, organization=organization)
+            quart_sess[SESSION_ID_KEY] = session.id
 
 
 @dataclasses.dataclass
@@ -16,13 +30,13 @@ class ProductFixture:
 
     factory: TestFactory
     errors: TestErrors
-    rpc: TestRPC
+    rpc: TestRPCProduct
 
     @classmethod
     def create(cls) -> ProductFixture:
         factory = TestFactory()
         errors = TestErrors()
-        rpc = TestRPC(factory, create_app)
+        rpc = TestRPCProduct(factory, create_router_product())
         return cls(factory=factory, errors=errors, rpc=rpc)
 
 

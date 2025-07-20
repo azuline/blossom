@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import quart
 from werkzeug.security import check_password_hash
 
-from foundation.rpc.error import RPCError
-from foundation.rpc.route import SESSION_ID_KEY, Req, route
+from foundation.rpc import RPCError
+from product.foundation.rpc import SESSION_ID_KEY, ReqProduct, rpc_product
 
 BOGUS_PASSWORD_HASH = "pbkdf2:sha256:260000$HdBKH9zwdJpNsm8I$a0adb646f827525b478cc13db89e6ade694d2951987572edabf354b1821ae498"
 
@@ -27,8 +27,8 @@ class AuthOrganizationNotFoundError(RPCError):
     pass
 
 
-@route(authorization="public", errors=[InvalidCredentialsError, AuthOrganizationNotFoundError])
-async def login(req: Req[LoginIn]) -> None:
+@rpc_product("login", authorization="public", errors=[InvalidCredentialsError, AuthOrganizationNotFoundError])
+async def login(req: ReqProduct[LoginIn]) -> None:
     """
     Log a user in if their credentials are correct.
 
@@ -68,8 +68,8 @@ async def login(req: Req[LoginIn]) -> None:
     return None
 
 
-@route(authorization="user", errors=[])
-async def logout(req: Req[None]) -> None:
+@rpc_product("logout", authorization="user", errors=[])
+async def logout(req: ReqProduct[None]) -> None:
     """
     Expire the session cookie of the requesting user.
 

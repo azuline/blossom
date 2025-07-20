@@ -1,6 +1,6 @@
 import pytest
 
-from database.access.xact import xact_admin
+from database.xact import xact_admin
 from foundation.conftest import FoundationFixture
 from foundation.vault import (
     SecretNotFoundError,

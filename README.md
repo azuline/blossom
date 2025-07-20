@@ -5,24 +5,26 @@
 
 Blossom contains code patterns that I've accumulated between various projects. It serves as a
 template repository for my future projects (they _blossom_ out of this repository, get it? Ha ha!).
-Blossom is is a superset of features; most projects benefit from a trimming of features post-fork.
+These patterns are meant to be sensible for small-medium scale enterprise projects (think
+Seed/Series A startup codebases). Blossom is is a superset of features; most projects benefit from a
+trimming of features post-fork.
 
-The tooling and code structure reflect my personal preferences and taste in software. They are meant
-to be sensible for small-medium scale projects; think Seed-Series B startups.
-
-Please feel free to take inspiration and/or copy code. This repository contains code in Python and
-TypeScript. Many of the patterns here are translatable to other languages, but they are not provided
-in this repository.
+The code in this repository reflects my taste and preferences. Please feel free to take inspiration
+and/or copy code. These templates are implemented in Python and TypeScript, but many of the patterns
+here are translatable to other languages (and I have some translations squirrelled away!).
 
 The project is structured as a monorepo organized by `{language}/{project}`. Each `project`
-directory represents a deployed service, with the exception of the `foundation` directories, which
-contain shared abstractions that all other projects depend on. Each language and project contains a
-`README.md` with more description and a `CLAUDE.md` with programming guidelines.
+directory represents a deployed service, with the exception of the `foundation` directories. The
+`foundation` directories contain shared abstractions that all other projects depend on. Each
+language and project contains a `README.md` with more description and a `CLAUDE.md` with programming
+guidelines.
 
 I have found these `foundation` abstractions useful in constructing programs that are robust today
 and malleable tomorrow. All of them are coupled to integrate smoothly with each other, and they
 facade third-party libraries where beneficial to similarly integrate them smoothly with the other
-`foundation` abstractions.
+`foundation` abstractions. This coupling makes them ineligible to be independent libraries, yet
+greatly increases their ergonomics in this one codebase (i.e. they are tailored to this repository
+and therefore not general).
 
 ## Project Patterns
 
@@ -39,20 +41,34 @@ facade third-party libraries where beneficial to similarly integrate them smooth
 - [TypeScript/Web Frontend (Internal-Facing)](./typescript/panopticon)
 - [TypeScript/Web Frontend (Customer-Facing)](./typescript/product)
 
+## Vendors
+
+The third-party vendors that the repository integrates with are:
+
+- Source Code Manager: Github
+- Continuous Integration: Github Actions (+Cachix) (+Namespace)
+- Public Cloud: GCP
+- Virtual Private Network: Tailscale
+- Data Orchestrator: Dagster+
+- Infrastructure Observability: Datadog
+- Error Triage: Sentry
+- Product Observability & Feature Flags: PostHog
+- Email Sending: Postmark
+- Large Language Model: OpenAI
+
+Most of the paid vendors are optional or have substitutes; in my personal projects I deploy to my
+home tailnet and Nomad cluster without most of the observability tooling.
+
 ## Technologies & Dependencies
 
 - Infrastructure:
-  - Continuous Integration: Github Actions + Namespace
-  - Data Pipeline Orchestrator: Dagster
   - Database: Postgres
   - Dependency Management: Nix
-  - Private Network: Tailscale
-  - Service Orchestrator: Nomad
+  - Service Orchestrator: Nomad / GKE
 - Python:
   - Background Jobs: Procrastinate
   - Data Pipelines: Dagster
   - Data Validation: pydantic
-  - Error Triage: Sentry
   - Linter/Formatter: ruff + Semgrep + Tach
   - Logs: Structlog
   - Metrics: datadog

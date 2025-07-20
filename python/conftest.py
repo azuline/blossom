@@ -7,13 +7,13 @@ from typing import Any
 import pytest
 import pytest_asyncio
 
+from database.testdb import TestDB
 from foundation.env import ENV
 from foundation.external.external import EXT
 from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
 from foundation.logs import get_logger
-from foundation.testing.testdb import TestDB
 
 logger = get_logger()
 

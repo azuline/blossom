@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable
-from dataclasses import asdict
+import dataclasses
 from typing import TYPE_CHECKING, Any, TypeVar
 
 import quart
 from dacite import from_dict
 from quart import Quart, Response, json
 
-from database.codegen import models
 from foundation.logs import get_logger
-from foundation.rpc.catalog import Method, get_catalog
-from foundation.rpc.route import SESSION_ID_KEY
+from foundation.rpc import MethodEnum, RPCRoute, RPCRouter
 from foundation.testing.factory import TestFactory
+from foundation.webserver import create_app_from_router
 
 if TYPE_CHECKING:  # pragma: no cover
     from quart.typing import TestClientProtocol
@@ -41,16 +39,15 @@ class TestRPC:
     # which time we inject this value into the request headers.
     _logged_in_as_organization_external_id: str | None
 
-    def __init__(self, factory: TestFactory, create_app: Callable[[], Awaitable[quart.Quart]]) -> None:
+    def __init__(self, factory: TestFactory, router: RPCRouter) -> None:
         self._factory = factory
-        self._create_app = create_app
+        self._router = router
         self._app = None
         self._client = None
         self._logged_in_as_organization_external_id = None
-        self._catalog = get_catalog()
 
-    def _get_rpc_method(self, path: str) -> Method:
-        for rpc in self._catalog.rpcs:
+    def _get_rpc_method(self, path: str) -> MethodEnum:
+        for rpc in self._router.routes:
             if rpc.name == path:
                 return rpc.method
         return "POST"
@@ -58,20 +55,18 @@ class TestRPC:
     async def app(self) -> quart.Quart:
         if self._app is not None:
             return self._app
-        self._app = await self._create_app()
+        self._app = create_app_from_router(self._router)
         return self._app
+
+    async def add_route(self, route: RPCRoute) -> None:
+        app = await self.app()
+        route.mount(app)
 
     async def client(self) -> TestClientProtocol:
         if self._client is not None:
             return self._client
         self._client = (await self.app()).test_client()
         return self._client
-
-    async def login_as(self, user: models.User, organization: models.Organization | None = None) -> None:
-        logger.debug(f"Setting session to user {user.id} - {user.email}.")
-        async with (await self.client()).session_transaction() as quart_sess:
-            session = await self._factory.session(user=user, organization=organization)
-            quart_sess[SESSION_ID_KEY] = session.id
 
     async def execute(
         self,
@@ -81,17 +76,9 @@ class TestRPC:
     ) -> Response:
         logger.debug(f"Executing request to {path} with {data}.")
         method = self._get_rpc_method(path)
-        if method == "GET":
-            resp = await (await self.client()).get(
-                f"/api/{path}",
-                query_string=asdict(data) if data else None,
-            )
-        else:
-            resp = await (await self.client()).post(
-                f"/api/{path}",
-                json=asdict(data) if data else None,
-            )
-
+        query_string = dataclasses.asdict(data) if method == "GET" and data else None
+        json = dataclasses.asdict(data) if method != "GET" and data else None
+        resp = await (await self.client()).post(f"/api/{path}", query_string=query_string, json=json)
         logger.debug(f"Request completed with {resp.status_code=} {(await resp.get_data())=}.")
         return resp
 

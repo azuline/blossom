@@ -3,8 +3,8 @@ from dataclasses import dataclass
 
 import psycopg
 
-from database.access.conn import DBConn, _set_row_level_security, create_pg_pool
-from database.schema.migrate import migrate_database
+from database.conn import DBConn, _set_row_level_security, create_pg_pool
+from database.migrate import migrate_database
 from foundation.env import ENV
 
 

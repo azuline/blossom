@@ -4,7 +4,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
-from database.access.conn import DBConnPool, connect_db_admin
+from database.conn import DBConnPool, connect_db_admin
 from foundation.errors import BlossomError
 from foundation.logs import get_logger
 

@@ -7,7 +7,7 @@ import pytest
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
 from foundation.testing.rpc import TestRPC
-from panopticon.app import create_app
+from panopticon.app import create_router_panopticon
 
 
 @dataclasses.dataclass
@@ -22,7 +22,7 @@ class ProductFixture:
     def create(cls) -> ProductFixture:
         factory = TestFactory()
         errors = TestErrors()
-        rpc = TestRPC(factory, create_app)
+        rpc = TestRPC(factory, create_router_panopticon())
         return cls(factory=factory, errors=errors, rpc=rpc)
 
 

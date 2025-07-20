@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from database.access.xact import xact_admin
-from foundation.rpc.route import Req, route
+from database.xact import xact_admin
+from product.foundation.rpc import ReqProduct, rpc_product
 
 
 @dataclass
@@ -26,8 +26,8 @@ class GetPageLoadInfoOut:
     available_organizations: list[GetPageLoadInfoOrganization]
 
 
-@route(authorization="public", method="GET", errors=[])
-async def get_page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
+@rpc_product("init", authorization="public", method="GET", errors=[])
+async def init(req: ReqProduct[None]) -> GetPageLoadInfoOut:
     """
     Fetch the information needed at time of page load to identify the logged in user and
     display the application-wide page architecture.
@@ -39,6 +39,7 @@ async def get_page_load_info(req: Req[None]) -> GetPageLoadInfoOut:
     # drop to admin to read all available organizations.
     async with xact_admin() as q:
         available_organizations = [x async for x in q.orm.organization_fetch_all(user_id=req.user.id)]
+
     return GetPageLoadInfoOut(
         user=GetPageLoadInfoUser(id=req.user.id, name=req.user.name, email=req.user.email),
         organization=GetPageLoadInfoOrganization(id=req.organization.id, name=req.organization.name) if req.organization else None,

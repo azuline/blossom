@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 
-from database.access.xact import xact_admin
+from database.xact import xact_admin
 
 # TODO(md): Check for *_id which are not FK-ed; they should probably be _extid.
 

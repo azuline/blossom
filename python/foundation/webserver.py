@@ -9,12 +9,12 @@ from quart import Quart
 
 from foundation.env import ENV
 from foundation.logs import get_logger
-from foundation.rpc.catalog import RPCCatalog
+from foundation.rpc import RPCRouter
 
 logger = get_logger()
 
 
-async def create_app_from_catalog(catalog: RPCCatalog) -> quart.Quart:
+def create_app_from_router(router: RPCRouter) -> quart.Quart:
     """
     Create, set up, and return a new Quart application object. If a ``config``
     is passed in, it will be modified and used; however, if one is not passed
@@ -32,24 +32,18 @@ async def create_app_from_catalog(catalog: RPCCatalog) -> quart.Quart:
         SESSION_COOKIE_SAMESITE="Lax",
     )
     app.secret_key = ENV.quart_session_key
-    app.register_blueprint(_create_blueprint(catalog))
+    for r in router.routes:
+        r.mount(app)
+    for bp in router.raw_blueprints:
+        app.register_blueprint(bp)
     return app
 
 
-def _create_blueprint(catalog: RPCCatalog) -> quart.Blueprint:
-    bp = quart.Blueprint("api", __name__, url_prefix="/api")
-    for route in catalog.rpcs:
-        bp.route("/" + route.name, methods=[route.method])(route.handler)
-    for rawr in catalog.raw_routes:
-        bp.route("/" + rawr.name, methods=[rawr.method])(rawr.handler)
-    return bp
-
-
-def start_app(app: quart.Quart, host: str, port: int) -> None:  # pragma: no cover
+def start_app_prod(app: quart.Quart, host: str, port: int) -> None:  # pragma: no cover
     config = Config()
     config.bind = [f"{host}:{port}"]
-    # Run one worker per container.
-    config.workers = 1
+    # Run two workers per container.
+    config.workers = 2
 
     # https://hypercorn.readthedocs.io/en/latest/how_to_guides/api_usage.html#graceful-shutdown
     shutdown_event = asyncio.Event()
