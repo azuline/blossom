@@ -3,7 +3,8 @@ modules = [
     { path = "database", depends_on = ["foundation"] },
     { path = "pipeline", depends_on = ["foundation", "database"] },
     { path = "product", depends_on = ["foundation", "database"] },
-    { path = "panopticon", depends_on = ["foundation", "database", "product"] },
+    { path = "panopticon", depends_on = ["foundation", "database"] },
+    { path = "platform", depends_on = ["foundation", "database"] },
 ]
 
 exclude = [

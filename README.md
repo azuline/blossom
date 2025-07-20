@@ -38,6 +38,7 @@ that project template's design decisions and feature set.
   - [Python/Database Management](./python/database)
   - [Python/Web Backend (Customer-Facing)](./python/product)
   - [Python/Web Backend (Internal-Facing)](./python/panopticon)
+  - [Python/External API (Developer-Facing)](./python/platform)
   - [Python/Data Pipeline](./python/pipeline)
 - [TypeScript](./typescript)
   - [TypeScript/Foundation Libraries](./typescript/foundation)
@@ -73,20 +74,6 @@ home tailnet and Nomad cluster without most of the observability tooling.
   - Database: Postgres
   - Dependency Management: Nix
   - Service Orchestrator: Nomad / GKE
-- Python:
-  - Background Jobs: Procrastinate
-  - Data Pipelines: Dagster
-  - Data Validation: pydantic
-  - Linter/Formatter: ruff + Semgrep + Tach
-  - Logs: Structlog
-  - Metrics: datadog
-  - Migrations: yoyo-migrations
-  - ORM: sqlc + psycopg
-  - Package Manager: uv
-  - Test Runner: pytest
-  - Traces: ddtrace
-  - Type Checker: pyright
-  - Web Framework: Quart + Hypercorn
 - TypeScript:
   - Builds: Vite (SWC+esbuild)
   - CSS-in-JS: vanilla-extract
