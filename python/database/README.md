@@ -1,4 +1,4 @@
-# Database Layer
+# Database
 
 The `database` package provides a comprehensive PostgreSQL abstraction layer with advanced features including Row Level Security (RLS), custom ID generation, and type-safe query generation using SQLc.
 

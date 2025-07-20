@@ -108,3 +108,17 @@ reserved ports are noted here and can be grepped for and changed.
 - 40822: Web Frontend (Internal-Facing)
 - 40822: Ladle
 - 40823: Visual Tests
+
+## Developer Environment Setup
+
+Since we use Nix for our development environments:
+
+1. **Install Nix:** [Instructions](https://docs.determinate.systems/).
+2. **Install Direnv:** [Instructions](https://direnv.net/).
+3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima).
+Run `direnv allow` in the project's root directory. The developer environment should bootstrap
+automatically. Then run `docker compose up -d` to start the local infrastructure.
+
+## Deployment Setup
+
+todo, unsure if i want to put nomad homelab in this template or a gcp setup
