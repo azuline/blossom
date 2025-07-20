@@ -3,7 +3,6 @@
 The projects in this directory are:
 
 - [`shell` (Nix Dev Shell)](../flake.nix)
-- [`workflows` (Continuous Integration)](../.github/workflows)
 - [`deploys` (Continuous Deployment)](./deploys)
 - [`vpn` (Virtual Private Network)](./vpn)
 
@@ -15,17 +14,17 @@ todo, unsure if i want to put nomad homelab in this template or a GCP setup
 
 The vendors that this repository depends on for its infrastructure are:
 
-- Continuous Integration: Github Actions (+Cachix) (+Namespace)
-- Data Orchestrator: Dagster+
-- Database: PostgreSQL
-- Email Sending: Postmark
-- Error Triage: Sentry
-- Infrastructure Observability: Datadog
-- Large Language Model: OpenAI
-- Product Observability & Feature Flags: PostHog
-- Public Cloud: Google Cloud Platform
-- Source Code Management: Github
-- Virtual Private Network: Tailscale
+- Continuous Integration: [Github Actions](https://github.com/features/actions) (+[Cachix](https://www.cachix.org/)) (+[Namespace](https://namespace.so/))
+- Data Orchestrator: [Dagster+](https://dagster.io/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
+- Email Sending: [Postmark](https://postmarkapp.com/)
+- Error Triage: [Sentry](https://sentry.io/)
+- Infrastructure Observability: [Datadog](https://www.datadoghq.com/)
+- Large Language Model: [OpenAI](https://openai.com/)
+- Product Observability & Feature Flags: [PostHog](https://posthog.com/)
+- Public Cloud: [Google Cloud Platform](https://cloud.google.com/)
+- Source Code Management: [Github](https://github.com/)
+- Virtual Private Network: [Tailscale](https://tailscale.com/)
 
 Most of the paid vendors are optional or have substitutes; in my personal projects I deploy to my
 home tailnet and Nomad cluster without most of the observability tooling.
