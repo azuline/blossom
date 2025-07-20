@@ -1,5 +1,5 @@
 from foundation.rpc import RPCRouter
-from foundation.webserver import create_app_from_router
+from foundation.webserver import create_webserver
 from product.authn.routes import login, logout
 from product.users.routes import init
 
@@ -15,4 +15,4 @@ def create_router_product() -> RPCRouter:
 
 
 def create_app():
-    return create_app_from_router(create_router_product())
+    return create_webserver(create_router_product())

@@ -163,6 +163,7 @@ dependencies = [
     { name = "asyncpg" },
     { name = "cachetools" },
     { name = "click" },
+    { name = "colorama" },
     { name = "coolname" },
     { name = "cryptography" },
     { name = "dacite" },
@@ -173,6 +174,7 @@ dependencies = [
     { name = "filelock" },
     { name = "google-api-python-client" },
     { name = "google-auth" },
+    { name = "hypercorn", extra = ["uvloop"] },
     { name = "jinja2" },
     { name = "openai" },
     { name = "psycopg", extra = ["binary", "pool"] },
@@ -209,6 +211,7 @@ requires-dist = [
     { name = "asyncpg", specifier = ">=0.30.0" },
     { name = "cachetools", specifier = ">=5.5.2" },
     { name = "click", specifier = ">=8.1.0" },
+    { name = "colorama", specifier = ">=0.4.6" },
     { name = "coolname", specifier = ">=2.2.0" },
     { name = "cryptography", specifier = ">=45.0.5" },
     { name = "dacite", specifier = ">=1.9.2" },
@@ -219,6 +222,7 @@ requires-dist = [
     { name = "filelock", specifier = ">=3.18.0" },
     { name = "google-api-python-client", specifier = ">=2.154.0" },
     { name = "google-auth", specifier = ">=2.38.0" },
+    { name = "hypercorn", extras = ["uvloop"], specifier = ">=0.17.3" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "openai", specifier = ">=1.86.0" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.2.9" },
@@ -1096,6 +1100,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/7e/3a/df6c27642e0dcb7aff688ca4be982f0fb5d89f2afd3096dc75347c16140f/hypercorn-0.17.3.tar.gz", hash = "sha256:1b37802ee3ac52d2d85270700d565787ab16cf19e1462ccfa9f089ca17574165", size = 44409, upload-time = "2024-05-28T20:55:53.06Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0e/3b/dfa13a8d96aa24e40ea74a975a9906cfdc2ab2f4e3b498862a57052f04eb/hypercorn-0.17.3-py3-none-any.whl", hash = "sha256:059215dec34537f9d40a69258d323f56344805efb462959e727152b0aa504547", size = 61742, upload-time = "2024-05-28T20:55:48.829Z" },
+]
+
+[package.optional-dependencies]
+uvloop = [
+    { name = "uvloop", marker = "sys_platform != 'win32'" },
 ]
 
 [[package]]

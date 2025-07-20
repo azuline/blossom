@@ -1,11 +1,6 @@
-import asyncio
-import signal
-from typing import Any
+import subprocess
 
 import quart
-from hypercorn.asyncio import serve
-from hypercorn.config import Config
-from quart import Quart
 
 from foundation.env import ENV
 from foundation.logs import get_logger
@@ -14,7 +9,7 @@ from foundation.rpc import RPCRouter
 logger = get_logger()
 
 
-def create_app_from_router(router: RPCRouter) -> quart.Quart:
+def create_webserver(router: RPCRouter) -> quart.Quart:
     """
     Create, set up, and return a new Quart application object. If a ``config``
     is passed in, it will be modified and used; however, if one is not passed
@@ -25,13 +20,19 @@ def create_app_from_router(router: RPCRouter) -> quart.Quart:
     :return: The created Quart application.
     """
     logger.debug("creating quart app", num_routes=len(router.routes))
-    app = Quart(__name__)
+    app = quart.Quart(__name__)
+    app.secret_key = ENV.quart_session_key
     app.config.update(
         SESSION_COOKIE_SECURE=not app.debug,
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
     )
-    app.secret_key = ENV.quart_session_key
+
+    @app.route("/ping")
+    def _ping() -> quart.Response:
+        logger.info("received ping request")
+        return quart.jsonify({"ok": True, "version": ENV.commit})
+
     for r in router.routes:
         r.mount(app)
     for bp in router.raw_blueprints:
@@ -39,22 +40,5 @@ def create_app_from_router(router: RPCRouter) -> quart.Quart:
     return app
 
 
-def start_app_prod(app: quart.Quart, host: str, port: int) -> None:  # pragma: no cover
-    config = Config()
-    config.bind = [f"{host}:{port}"]
-    # Run two workers per container.
-    config.workers = 2
-
-    # https://hypercorn.readthedocs.io/en/latest/how_to_guides/api_usage.html#graceful-shutdown
-    shutdown_event = asyncio.Event()
-
-    def _signal_handler(*_: Any) -> None:
-        shutdown_event.set()
-
-    loop = asyncio.get_event_loop()
-    loop.add_signal_handler(signal.SIGTERM, _signal_handler)
-
-    async def run() -> None:
-        await serve(app, config, shutdown_trigger=shutdown_event.wait)  # type: ignore
-
-    loop.run_until_complete(run())
+def start_webserver(app: str, host: str, port: int) -> None:  # pragma: no cover
+    subprocess.run(["hypercorn", app, "--bind", f"{host}:{port}", "--graceful-timeout", "30", "--worker-class", "uvloop", "--workers", str(ENV.webserver_num_workers)], check=True)

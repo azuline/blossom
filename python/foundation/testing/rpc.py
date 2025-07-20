@@ -13,7 +13,7 @@ from foundation.parse import parse_dataclass
 from foundation.rpc import RPCRoute, RPCRouter
 from foundation.testing.factory import TestFactory
 from foundation.types import Unset
-from foundation.webserver import create_app_from_router
+from foundation.webserver import create_webserver
 
 Err = TypeVar("Err", bound=Exception)
 
@@ -45,7 +45,7 @@ class TestRPC:
     async def underlying_app(self) -> quart.Quart:
         if self._cached_app is not None:
             return self._cached_app
-        self._cached_app = create_app_from_router(self._router)
+        self._cached_app = create_webserver(self._router)
         return self._cached_app
 
     async def underlying_client(self) -> quart.typing.TestClientProtocol:

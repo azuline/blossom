@@ -13,6 +13,7 @@ from foundation.external.external import EXT
 from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
+from foundation.initialize import initialize_foundation
 from foundation.logs import get_logger
 
 logger = get_logger()
@@ -103,3 +104,9 @@ def fake_ext(request: pytest.FixtureRequest) -> Iterator[None]:
     for f in dataclasses.fields(EXT):
         if f.name.startswith("test_"):
             setattr(EXT, f.name, None)
+
+
+@pytest.fixture(autouse=True)
+def initialize(fake_settings) -> None:
+    del fake_settings
+    initialize_foundation()

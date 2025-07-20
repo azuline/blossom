@@ -3,16 +3,20 @@
 help:  ## Describe the available commands.
     @grep -E '^[a-z][^:]+:.*?## .*$$' justfile | sed 's/^/just /' | sed 's/ \*ARGS:/:/'
 
-# RUN PROGRAMS IN DEV.
+# RUN PROGRAMS.
 
 ipython *ARGS:  ## Start an interactive REPL for testing or running parts of the codebase.
     uv run -- ipython {{ARGS}}
-product *ARGS:  ## Interact with the chatbot project. Run `just chatbot` to see the available subcommands.
+product *ARGS:  ## Interact with the product project. Run `just product` to see the available subcommands.
     uv run -- python -m product {{ARGS}}
-panopticon *ARGS:  ## Interact with the chatbot project. Run `just chatbot` to see the available subcommands.
+panopticon *ARGS:  ## Interact with the panopticon project. Run `just panopticon` to see the available subcommands.
     uv run -- python -m panopticon {{ARGS}}
-pipeline *ARGS:  ## Start the Dagster developer webapp for the data ingestion pipeline..
+pipeline *ARGS:  ## Interact with the pipeline project. Run `just pipeline` to see the available subcommands.
     DAGSTER_HOME="$(pwd)/.dagster_cache" uv run -- dagster dev
+dev:  ## Run development servers for all Python projects in parallel.
+    #!/usr/bin/env -S parallel --shebang --ungroup --jobs 2
+    just product devserver
+    just panopticon devserver
 
 # DATABASE MANAGEMENT.
 
@@ -24,6 +28,7 @@ new-migration MSG:  ## Create a new migration file with the correct naming struc
     uv run -- yoyo new --sql --message "{{MSG}}"
 
 # CODEGEN.
+
 codegen-db:  ## Codegens the database queries from the `queries.sql` file using a test database. Updates `database/schema.sql` based on the migrations. Run this after every change to the migrations.
     uv run -- python -m tools.codegen-db
 codegen-rpc:  ## Codegens the frontend RPC routes and types from the defined product & panopticon routes.

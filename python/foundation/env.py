@@ -10,14 +10,8 @@ env: dict[str, str] = {
     **dotenv_values(".env"),  # type: ignore
     # The is not committed to git and contains sensitive overrides for development.
     **dotenv_values(".env.local"),  # type: ignore
+    **os.environ,
 }
-
-# Quart auto-loads .env into os.environ when dotenv is installed, so we will override .env.local
-# if we load in os.envion. However, in Production, we always want os.environ to be at the end.
-if os.environ.get("QUART_DEBUG", 0) != "1":  # pragma: no cover
-    env = {**env, **os.environ}
-# Remove os.environ from scope so that it doesn't accidentally get used.
-del os
 
 
 class EnvironmentVariableMissingError(Exception):
@@ -30,7 +24,7 @@ class InvalidConfigValueError(Exception):
 
 EnvironmentEnum = Literal["production", "development"]
 LogLevelEnum = Literal["debug", "info"]
-ServiceEnum = Literal["product", "panopticon", "pipeline"]
+ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
 
 
 @dataclasses.dataclass
@@ -46,20 +40,21 @@ class _Env:
     # - Product
     product_host: str | None
     product_port: int | None
-    product_public_url: str | None
+    product_public_url: str
     # - Panopticon
     panopticon_host: str | None
     panopticon_port: int | None
-    panopticon_public_url: str | None
+    panopticon_public_url: str
     # - Pipeline
     pipeline_host: str | None
     pipeline_port: int | None
-    pipeline_public_url: str | None
+    pipeline_public_url: str
 
     # Infra parameters.
     sentry_dsn: str | None
 
     # Configuration parameters (w/ defaults).
+    webserver_num_workers: int
     database_pool_size: int
     eval_concurrency: int
 
@@ -82,20 +77,21 @@ class _Env:
         c = cls(
             environment=cast(EnvironmentEnum, cls._required("ENVIRONMENT")),
             log_level=cast(LogLevelEnum, cls._optional("LOG_LEVEL") or "info"),
-            service=cast(ServiceEnum, cls._optional("SERVICE")),
+            service=cast(ServiceEnum, cls._optional("SERVICE") or "development"),
             testing=bool(cls._optional("TESTING") or False),
             commit=cls._optional("RENDER_GIT_COMMIT") or "development",
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),
-            product_host=cls._required("PRODUCT_HOST"),
-            product_port=int(cls._required("PRODUCT_PORT")),
+            product_host=cls._optional("PRODUCT_HOST"),
+            product_port=int(x) if (x := cls._optional("PRODUCT_PORT")) else None,
             product_public_url=cls._required("PRODUCT_PUBLIC_URL"),
-            panopticon_host=cls._required("PANOPTICON_HOST"),
-            panopticon_port=int(cls._required("PANOPTICON_PORT")),
+            panopticon_host=cls._optional("PANOPTICON_HOST"),
+            panopticon_port=int(x) if (x := cls._optional("PANOPTICON_PORT")) else None,
             panopticon_public_url=cls._required("PANOPTICON_PUBLIC_URL"),
-            pipeline_host=cls._required("PIPELINE_HOST"),
-            pipeline_port=int(cls._required("PIPELINE_PORT")),
+            pipeline_host=cls._optional("PIPELINE_HOST"),
+            pipeline_port=int(x) if (x := cls._optional("PIPELINE_PORT")) else None,
             pipeline_public_url=cls._required("PIPELINE_PUBLIC_URL"),
+            webserver_num_workers=int(cls._optional("WEBSERVER_NUM_WORKERS") or 2),
             database_pool_size=int(cls._optional("DATABASE_POOL_SIZE") or 5),
             eval_concurrency=int(cls._optional("EVAL_CONCURRENCY") or 25),
             quart_session_key=cls._required("QUART_SESSION_KEY"),
@@ -109,7 +105,8 @@ class _Env:
         )
         assert c.environment in get_args(EnvironmentEnum), f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(get_args(EnvironmentEnum))}"
         assert c.log_level in get_args(LogLevelEnum), f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(get_args(LogLevelEnum))}"
-        assert c.service is None or c.service in get_args(ServiceEnum), f"SERVICE is invalid: {c.service} not one of {', '.join(get_args(ServiceEnum))}"
+        assert c.service in get_args(ServiceEnum), f"SERVICE is invalid: {c.service} not one of {', '.join(get_args(ServiceEnum))}"
+        assert c.service != "development" or c.environment == "development", "SERVICE is invalid: must be set in production and value must not be `development`"
         return c
 
     @staticmethod

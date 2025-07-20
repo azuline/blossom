@@ -1,5 +1,5 @@
 from foundation.rpc import RPCRouter
-from foundation.webserver import create_app_from_router
+from foundation.webserver import create_webserver
 
 
 def create_router_panopticon() -> RPCRouter:
@@ -9,4 +9,4 @@ def create_router_panopticon() -> RPCRouter:
 
 
 def create_app():
-    return create_app_from_router(create_router_panopticon())
+    return create_webserver(create_router_panopticon())

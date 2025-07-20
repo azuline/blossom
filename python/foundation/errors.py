@@ -4,6 +4,9 @@ from types import TracebackType
 from typing import Any, ClassVar, Literal, get_args
 
 import sentry_sdk
+import sentry_sdk.integrations.asyncio
+import sentry_sdk.integrations.logging
+import sentry_sdk.types
 
 from foundation.env import ENV, EnvironmentEnum
 from foundation.logs import get_logger
@@ -92,3 +95,37 @@ def report_error(exc: BaseException) -> None:
     if ENV.testing:
         TESTING_CAPTURED_EXCEPTIONS.append(exc)
     sentry_sdk.capture_exception(exc)  # noqa: TID251
+
+
+def initialize_sentry():
+    if not ENV.sentry_dsn:
+        return
+    sentry_sdk.init(
+        dsn=ENV.sentry_dsn,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+        environment=ENV.environment,
+        release=ENV.commit,
+        server_name=ENV.service,
+        before_send=_sentry_before_send,
+        integrations=[
+            sentry_sdk.integrations.logging.LoggingIntegration(event_level=None, level=None),
+            sentry_sdk.integrations.asyncio.AsyncioIntegration(),
+        ],
+    )
+
+
+def _sentry_before_send(event: sentry_sdk.types.Event, hint: sentry_sdk.types.Hint) -> sentry_sdk.types.Event | None:
+    _exc_type, exc_value, _tb = hint.get("exc_info", [None])
+    if isinstance(exc_value, BlossomError):
+        # Do not report transient errors
+        if exc_value.transient:
+            return None
+        # Add custom error data to Sentry
+        event["extra"] = event.get("extra", {})
+        if hasattr(exc_value, "data"):
+            for k, v in exc_value.data.items():
+                event["extra"][k] = v
+        if dataclasses.is_dataclass(exc_value):
+            event["extra"].update(dataclasses.asdict(exc_value))
+    return event
