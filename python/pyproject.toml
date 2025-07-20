@@ -115,6 +115,7 @@ ban-relative-imports = "all"
 "datetime.datetime.now".msg = "Use the foundation.time:CLOCK.now method instead."
 "dagster.asset".msg = "Use the foundation.dag:asset facade instead."
 "sentry_sdk.capture_exception".msg = "Use the foundation.errors:report_error facade instead."
+"structlog.get_logger".msg = "Use the foundation.logs:get_logger facade instead."
 
 [tool.pyright]
 stubPath = "stubs"

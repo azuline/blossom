@@ -34,20 +34,16 @@ def initialize_logging() -> None:
     # Processors, assemble!
     common_processors = [
         structlog.processors.TimeStamper(fmt="iso"),
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.add_logger_name,
+        structlog.processors.add_log_level,
+        structlog.processors.format_exc_info,
         structlog.contextvars.merge_contextvars,
         _blossom_processor,
         structlog.stdlib.ExtraAdder(),
+        structlog.processors.EventRenamer("message"),
+        structlog.processors.CallsiteParameterAdder({structlog.processors.CallsiteParameter.MODULE, structlog.processors.CallsiteParameter.FUNC_NAME}),
     ]
     if ENV.environment == "production":
-        common_processors.extend([
-            structlog.processors.CallsiteParameterAdder({
-                structlog.processors.CallsiteParameter.FUNC_NAME,
-                structlog.processors.CallsiteParameter.PROCESS,
-                structlog.processors.CallsiteParameter.THREAD,
-            }),
-        ])
+        common_processors.extend([structlog.processors.CallsiteParameterAdder({structlog.processors.CallsiteParameter.PROCESS, structlog.processors.CallsiteParameter.THREAD})])
 
     # Configure structlog.
     structlog.configure_once(
@@ -65,7 +61,7 @@ def initialize_logging() -> None:
                 Column("timestamp", KeyValueColumnFormatter(key_style=None, value_style=Fore.LIGHTBLACK_EX, reset_style="", value_repr=_format_timestamp)),
                 Column("service", KeyValueColumnFormatter(key_style=None, value_style=Fore.YELLOW, reset_style=Style.RESET_ALL, value_repr=str)),
                 Column("level", LogLevelColumnFormatter(ConsoleRenderer.get_default_level_styles(), reset_style=Style.RESET_ALL, width=0)),
-                Column("logger", KeyValueColumnFormatter(key_style=None, value_style=Style.BRIGHT, reset_style=Style.RESET_ALL, value_repr=str, prefix="[", postfix="]")),
+                Column("module", KeyValueColumnFormatter(key_style=None, value_style=Style.BRIGHT, reset_style=Style.RESET_ALL, value_repr=str, prefix="[", postfix="]")),
                 Column("message", KeyValueColumnFormatter(key_style=None, value_style="", reset_style=Style.RESET_ALL, value_repr=str)),
                 Column("", KeyValueColumnFormatter(key_style=Fore.BLUE, value_style=Fore.CYAN, reset_style=Style.RESET_ALL, value_repr=str)),
             ],
@@ -80,7 +76,7 @@ def initialize_logging() -> None:
         foreign_pre_chain=common_processors,
         processors=[structlog.stdlib.ProcessorFormatter.remove_processors_meta, renderer],
     )
-    handler = StreamHandler()
+    handler = StreamHandler(sys.stderr)
     handler.setFormatter(formatter)
     root_logger.handlers = [handler]
 
@@ -100,9 +96,6 @@ def _blossom_processor(_: logging.Logger, _2: str, event_dict: EventDict) -> Eve
     for k, v in event_dict.items():
         if isinstance(v, datetime.datetime):
             event_dict[k] = v.isoformat()
-    # Normalize event -> message to bring it in line with other systems and languages.
-    if e := event_dict.pop("event"):
-        event_dict["message"] = e
     return event_dict
 
 

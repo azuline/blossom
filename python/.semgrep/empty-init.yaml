@@ -1,0 +1,16 @@
+rules:
+  - id: empty-init
+    languages: [python]
+    patterns:
+      - pattern-regex: ^.+$
+      - pattern-not-inside: |
+          from foundation.initialize import initialize_foundation
+          initialize_foundation()
+    message: |
+      Please do not put code inside `__init__.py`. It is often empty, so that
+      code is easily overlooked. Instead stutter the module name:
+      `module/module.py`.
+    paths:
+      include:
+        - "**/__init__.py"
+    severity: WARNING
