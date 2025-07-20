@@ -1,35 +1,4 @@
-This file contains the holy grail mecca 42069 kush trade secret methods for writing the most robust,
-malleable, secure, and maintainable code in the entire world. Because you, Claude, are so amazing
-and have the talent to be a 100x god engineer, we are letting you read this sacred text. After
-reading this sacred text, provided you follow all the guidelines in this text, you will become a
-god of programming.
-
-# Working With The User
-
-**Sanity checks:** If a change you plan to make does not make sense or contradicts a change made _in
-this session or branch_ by the user or yourself (Claude), pause. State all contradictions and
-confusions, recommend a path for forwards resolution, and then review and align on the correct path
-forwards with the user.
-
-**Worklists:** Before starting a task, always breakdown the task into incremental milestones. Each
-milestone, unless otherwise specified, should be a small yet complete testable unit. The unit of
-work should always include the implementation AND one or several well-designed unit tests (c.f.
-Testing section below).
-
-**Git Hygiene:** Before you begin, the user will have already created a new branch for your work.
-After you complete each item in the worklist, make a new commit containing your changes.
-
-**Start With Tests:** When asked to fix a bug, please first update the tests (or create a new one if
-you must) and get it to fail such that the bug is consistently reproduced. Then, and only then,
-solve the bug and get the test to pass. When asked to implement a new function or feature, first
-define a stub API for your implementation (with `NotImplementedError`), then write tests that check
-the expected behavior of the implementation (they should FAIL after you write them as the
-implementation is not written). Only then should you implement the actual function, using the tests
-to confirm that they were written correctly. Test driven development, in essence.
-
 # Codebase Organization & Discovery
-
-ALWAYS read the `README.md` files if you find one inside a directory you are scanning.
 
 The `foundation` directory contains common utilities, frameworks, and libraries that we use across
 different projects. They let us easily handle shared problems with standard and integrated
@@ -107,101 +76,6 @@ code's actual behavior. Use this especially when documentation seems incomplete 
 
 You do not need to delete debug scripts after you are finished. AND DEBUG SCRIPTS DO NOT REPLACE
 UNIT TESTS.
-
-# Database Management
-
-Prerequisite: The local database should be running after `docker compose up -d`.
-
-Refer to `database/schema.sql` for the database schema. ALWAYS use this file to understand the
-database schema. NEVER try to splice together migrations in your memory--it is complicated and
-unnecessary.
-
-NEVER MODIFY `database/schema.sql` DIRECTLY. IT IS GENERATED WHEN MIGRATIONS ARE RAN. SIMILARLY,
-NEVER MODIFY THE `-- depends:` COMMENT IN MIGRATION FILES.
-
-Refer to `database/schema_annotations.yaml` for column comments. We do not use database column
-comments because they are hard to modify. Instead, `database/schema_annotations.yaml` has a mapping
-of `table -> column -> comments`. Read column comments with the following command:
-`yq '.{table}.{column}' database/schema_annotations.yaml`. This will print null if the column does
-not exist or has no comment. When adding a column with nuance not evident by the table and column
-name, please describe it in this file.
-
-## Migrations
-
-Database migrations are stored in `database/migrations/`. Create a new migration with `just
-new-migration <migration-name>` and edit the SQL file that the command creates. Then migrate the
-database with `just migrate`. NEVER create a migration by hand. You will make a mistake.
-
-NEVER modify a migration file that was created in a different branch from the working branch. That
-will cause the production deployment to fail.
-
-We do not support down migrations. Never rollback the database.
-
-If you need to reset the database completely during development (e.g., when squashing migrations or
-resolving complex migration conflicts), use: `docker compose down -v && docker compose up -d`. This
-will remove all database volumes and recreate a fresh database.
-
-Work on a single migration file per branch. Use the command `just check-for-migration` to discover
-the migrations that have been created in this branch.
-
-### Safe NOT NULL Column Addition
-
-When adding a NOT NULL column to an existing table, use a two-step approach to avoid issues with
-existing rows. First set the column `NOT NULL` with a default and then drop the default.
-
-```sql
-ALTER TABLE table_name ADD COLUMN column_name TEXT NOT NULL DEFAULT '';
-ALTER TABLE table_name ALTER COLUMN column_name DROP DEFAULT;
-```
-
-## Conventions
-
-Database tables should all have the following structure:
-
-```sql
-CREATE TABLE new_table_name (
-  id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ntn') CHECK (id LIKE 'ntn_%'),  -- Pick a unique 2-3 letter abbreviation of the table name.
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  storytime  JSONB,
-
-  organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id) ON DELETE CASCADE -- Most entities are scoped to an organization.
-);
-CREATE TRIGGER updated_at BEFORE UPDATE ON new_table_name
-  FOR EACH ROW EXECUTE PROCEDURE updated_at();
-
-```
-
-Other conventions are:
-
-- Always use BIGINT over INT to avoid integer overflow.
-- Always suffix external IDs (as in IDs from external services and not a Postgres foreign key) with `_extid`. `_id` is reserved for internal IDs.
-
-Run `just test databases/schema/schema_test.py` to validate other conventions in our database schema.
-
-## ORM & Queries
-
-Write SQL queries against the database in `database/queries.sql`. We use SQLc to codegen
-`database/__codegen__/queries.py` from that file. After modifying `queries.sql`, run the codegen
-with `just codegen-db`.
-
-The written queries can be accessed in code with the following pattern:
-
-```python
-async with xact() as q:
-    await q.orm.query_name_in_snake_case(**kwargs)
-```
-
-All queries should be written this way. With the exception of special cases where SQLc does not work
-at all, do NOT use the`q.conn` object to query the database directly with raw SQL. Instead, all
-queries should be written using the SQLc paradigm. For queries used only in tests, prefix the query
-name with the word `Test`.
-
-When writing to a JSONB column, serialize the dataclass or dictionary with the
-`foundation.jsonenc:serialize_json_pg` function.
-
-Never directly set the `created_at` or `updated_at` columns. These are automatically set with column
-defaults and database triggers.
 
 # Design Patterns
 
@@ -367,8 +241,8 @@ configuration, raise a `foundation.errors:ConfigurationError`.
 Environment variables are part of the `foundation.env:ENV` object. All environment
 variables should be located there.
 
-When adding an environment variable, ALWAYS add it to ENV and `.env.example`. NEVER access
-os.environ outside of ENV.
+When adding an environment variable, ALWAYS add it to ENV and `.env`. NEVER access os.environ
+outside of ENV.
 
 Set the environment variables overrides for unit tests in `conftest.py`.
 
@@ -626,29 +500,6 @@ When you have written suboptimal code or code that does not follow a guideline i
 whatever reason, ALWAYS leave a `TODO(god)` comment noting what shortcut you took. This way we can
 return and fix those TODOs later.
 
-# Features
-
-# Miscellaneous Gotchas & Lessons
-
-## Dagster
-
-- We cannot use `from __future__ import annotations` in files that define Dagster assets. See
-  <https://github.com/dagster-io/dagster/issues/28342>.
-- Whenever you add a new Dagster asset, sensor, or job inside `pipeline`, you must add it to
-  `pipeline.definitions`.
-- When working with Dagster assets, DO NOT use `context.log`. Always use the `logger` from
-  `foundation.logs:get_logger` instead for consistent logging across the codebase.
-
-# Updates Staging Area
-
-Claude, please feel free to propose updates to this file. Whenever you are told that you have made a
-mistake, used an abstraction or tool incorrectly, or failed to use an abstraction or tool that you
-should have, propose an update to the file here. Do not modify any part of the file above this
-section. Only propose updates below the three `---` below. I will triage and merge them into the
-document.
-
----
-
 <!-- Your (Claude's) suggestions go here. -->
 
 ## rpc
@@ -724,12 +575,3 @@ async def generate_bunnies(req: Req[ReqIn]) -> ReqOut:
 
     return ReqOut(bunnies=await req.cq.q.fetch_bunnies(organization_id=req.organization.id))
 ```
-
-## Codegen
-
-The codegen script is available inside the `make codegen` command in the
-backend Makefile. It is also available as a command in the backend CLI.
-
-The codegen script reads in all defined routes, generates TypeScript types from
-them, and emits them to `frontend/codegen/rpc`. These types are used by the
-frontend to create a type-safe RPC interface.

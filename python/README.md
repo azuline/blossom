@@ -1,6 +1,30 @@
-# Blossom Python Backend
+# Python
 
-A modern, multi-tenant SaaS backend built with Python, featuring robust authentication, organization management, and a custom RPC framework with TypeScript code generation.
+Here lies our Python code. The projects in this directory are:
+
+- [`foundation` (Foundation Libraries)](./foundation)
+- [`database` (Database Management)](./database)
+- [`product` (Customer-Facing Web Backend)](./product)
+- [`panopticon` (Internal-Facing Web Backend)](./panopticon)
+- [`pipeline` (Data Pipeline)](./pipeline)
+
+
+- Multi-tenant account system.
+- [RPC framework](./backend/foundation/rpc) with TypeScript type codegen.
+- [Nix dependency management](./nix).
+- [Nix builds](./nix).
+- Ergonomic [test fixture system](./foundation/test) for concise and maintainable tests.
+- Highly performant parallelized tests that share a single database.
+- [Postgres Row Level Security](./backend/foundation/database) for secure
+  multi-tenancy.
+- [Secrets vault](./backend/foundation/vault) for secure encrypted secret storage.
+- [Database migrations](./backend/foundation/migrate) with yoyo-migrations.
+- [Database table conventions](./backend/foundation/migrate) and tests to enforce them.
+- [Database queries](./backend/codegen/sqlc) with the sqlc database ORM.
+- [Monolithic CLI](./backend/cli) for service operations and developer tooling.
+- [Quart webserver](./backend/foundation/webserver) served with Hypercorn.
+- [Configuration](./backend/foundation/config) via environment variables.
+- Linting with black, Ruff, and Semgrep.
 
 ## Overview
 

@@ -9,9 +9,10 @@ These patterns are meant to be sensible for small-medium scale enterprise projec
 Seed/Series A startup codebases). Blossom is is a superset of features; most projects benefit from a
 trimming of features post-fork.
 
-The code in this repository reflects my taste and preferences. Please feel free to take inspiration
-and/or copy code. These templates are implemented in Python and TypeScript, but many of the patterns
-here are translatable to other languages (and I have some translations squirrelled away!).
+The code patterns assume a multi-tenant organizations data model. This is because a multi-tenant
+organization model can be reduced down to a single-user model easily, but not vice versa. These
+templates are implemented in Python and TypeScript, but many of the patterns here are translatable
+to other languages (I have some translations squirrelled away!).
 
 The project is structured as a monorepo organized by `{language}/{project}`. Each `project`
 directory represents a deployed service, with the exception of the `foundation` directories. The
@@ -28,18 +29,25 @@ and therefore not general).
 
 ## Project Patterns
 
-- [Infrastructure/Dev Shell](./flake.nix)
-- [Infrastructure/Private Network](./infra/vpn)
-- [Infrastructure/Continuous Integration](./github/workflows)
-- [Infrastructure/Continuous Deployment](./infra/deploys)
-- [Python/Foundation Libraries](./python/foundation)
-- [Python/Database Management](./python/database)
-- [Python/Web Backend (Internal-Facing)](./python/panopticon)
-- [Python/Web Backend (Customer-Facing)](./python/product)
-- [Python/Data Pipeline](./python/pipeline)
-- [TypeScript/Foundation Libraries](./typescript/foundation)
-- [TypeScript/Web Frontend (Internal-Facing)](./typescript/panopticon)
-- [TypeScript/Web Frontend (Customer-Facing)](./typescript/product)
+Each top-level bullet point leads to a README that describes the technologies and dependencies
+chosen for that language or specialty. Each secondary bullet point leads to a README that describes
+that project template's design decisions and feature set.
+
+- [Python](./python)
+  - [Python/Foundation Libraries](./python/foundation)
+  - [Python/Database Management](./python/database)
+  - [Python/Web Backend (Customer-Facing)](./python/product)
+  - [Python/Web Backend (Internal-Facing)](./python/panopticon)
+  - [Python/Data Pipeline](./python/pipeline)
+- [TypeScript](./typescript)
+  - [TypeScript/Foundation Libraries](./typescript/foundation)
+  - [TypeScript/Web Frontend (Customer-Facing)](./typescript/product)
+  - [TypeScript/Web Frontend (Internal-Facing)](./typescript/panopticon)
+- [Infrastructure](./infra)
+  - [Infrastructure/Dev Shell](./flake.nix)
+  - [Infrastructure/Private Network](./infra/vpn)
+  - [Infrastructure/Continuous Integration](./github/workflows)
+  - [Infrastructure/Continuous Deployment](./infra/deploys)
 
 ## Vendors
 
@@ -116,9 +124,10 @@ Since we use Nix for our development environments:
 1. **Install Nix:** [Instructions](https://docs.determinate.systems/).
 2. **Install Direnv:** [Instructions](https://direnv.net/).
 3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima).
+
 Run `direnv allow` in the project's root directory. The developer environment should bootstrap
 automatically. Then run `docker compose up -d` to start the local infrastructure.
 
 ## Deployment Setup
 
-todo, unsure if i want to put nomad homelab in this template or a gcp setup
+todo, unsure if i want to put nomad homelab in this template or a GCP setup

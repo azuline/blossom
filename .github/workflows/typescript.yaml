@@ -23,21 +23,21 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
       - name: Typecheck
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just typecheck
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just typecheck
       - name: Test
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just test
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just test
       - name: Lintcheck
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just lintcheck
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just lintcheck
       - name: Build
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just build-app
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just build-app
   visual:
     runs-on: ubuntu-latest
     env:
@@ -50,12 +50,12 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
       - name: Visual Tests
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just test-visual
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just test-visual
   build-ladle:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -73,13 +73,13 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../\#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
       - name: Install Dependencies
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
       - name: Build Ladle
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command just build-stories
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just build-stories
       - name: Create Tarball
-        run: nix develop ../\#devShells.x86_64-linux.typescript --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
       - name: Create release and upload tarball
         id: upload
         run: |
@@ -125,11 +125,11 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
         run: |
-          nix build -j8 ../\#devShells.x86_64-linux.deployments
-          nix develop ../\#devShells.x86_64-linux.deployments --command echo
+          nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.deployments
+          nix develop ../infra/dev-shell/#devShells.x86_64-linux.deployments --command echo
       - name: Tailscale
         uses: tailscale/github-action@v3
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
       - name: Deploy
-        run: nix develop ../\#devShells.x86_64-linux.deployments --command levant deploy -log-level=debug -var "artifact_source_url=$ARTIFACT_SOURCE_URL" ladle.nomad
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.deployments --command levant deploy -log-level=debug -var "artifact_source_url=$ARTIFACT_SOURCE_URL" ladle.nomad
