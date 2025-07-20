@@ -43,4 +43,3 @@ async def test_async_retryer():
     with pytest.raises(RuntimeError, match="always fails"):
         await retryer.execute(always_fails_function)
     assert call_count == 3
-
