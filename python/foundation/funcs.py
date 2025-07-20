@@ -1,6 +1,7 @@
 import asyncio
 import functools
 import inspect
+from collections.abc import Callable
 
 from foundation.errors import suppress_error
 
@@ -35,5 +36,31 @@ def memoize(func):
             if args not in cache:
                 cache[args] = func(*args)
             return cache[args]
+
+        return sync_wrapper
+
+
+def run_once(func: Callable[..., None]):
+    has_run = False
+
+    if asyncio.iscoroutinefunction(func):
+
+        @functools.wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            nonlocal has_run
+            if not has_run:
+                has_run = True
+                await func(*args, **kwargs)
+
+        return async_wrapper
+
+    else:
+
+        @functools.wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            nonlocal has_run
+            if not has_run:
+                has_run = True
+                func(*args, **kwargs)
 
         return sync_wrapper

@@ -74,8 +74,8 @@
             ];
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ];
           };
-        toolchains = rec {
-          general = with pkgs; [
+        toolchains = with pkgs; rec {
+          general = [
             coreutils
             moreutils
             findutils
@@ -86,34 +86,29 @@
             ripgrep
             (lib.hiPrio parallel-full) # parallel is also part of moreutils; have GNU parallel take priority.
           ];
-          python =
-            general
-            ++ (with pkgs; [
-              pgmigrate
-              postgresql_16
-              pyright
-              python-pin
-              ruff
-              semgrep
-              sqlc
-              sqlc-gen-python
-              uv
-            ]);
-          typescript =
-            general
-            ++ (with pkgs; [
-              biome
-              nodejs_22
-              nodePackages.pnpm
-              semgrep
-            ]);
-          infra =
-            general
-            ++ (with pkgs; [
-              gnutar
-              nomad
-              levant
-            ]);
+          python = general ++ [
+            biome # For frontend codegen.
+            pgmigrate
+            postgresql_16
+            pyright
+            python-pin
+            ruff
+            semgrep
+            sqlc
+            sqlc-gen-python
+            uv
+          ];
+          typescript = general ++ [
+            biome
+            nodejs_22
+            nodePackages.pnpm
+            semgrep
+          ];
+          infra = general ++ [
+            gnutar
+            nomad
+            levant
+          ];
           all = general ++ python ++ typescript ++ infra;
         };
       in

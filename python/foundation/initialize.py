@@ -1,9 +1,11 @@
 from foundation.errors import initialize_sentry
+from foundation.funcs import run_once
 from foundation.logs import get_logger, initialize_logging
 
 logger = get_logger()
 
 
+@run_once
 def initialize_foundation() -> None:
     """Initialize the application foundation. Call this before running any commands."""
     initialize_logging()
