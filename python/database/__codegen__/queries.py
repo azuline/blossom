@@ -7,7 +7,7 @@ from typing import Any, AsyncIterator, Optional
 
 import psycopg
 
-from database.codegen import models
+from database.__codegen__ import models
 
 
 AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch \\:one

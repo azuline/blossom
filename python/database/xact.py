@@ -2,7 +2,7 @@ import contextlib
 import dataclasses
 from collections.abc import AsyncGenerator
 
-from database.codegen.queries import AsyncQuerier
+from database.__codegen__.queries import AsyncQuerier
 from database.conn import DBConn, DBConnPool, connect_db_admin, connect_db_customer
 from foundation.logs import get_logger
 

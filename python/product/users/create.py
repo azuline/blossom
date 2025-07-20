@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from database.codegen import models
+from database.__codegen__ import models
 from database.xact import DBQuerier
 from foundation.types import cast_notnull
 

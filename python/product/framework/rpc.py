@@ -10,7 +10,7 @@ from typing import Any, Literal
 
 import quart
 
-from database.codegen import models
+from database.__codegen__ import models
 from database.xact import DBQuerier, xact_admin, xact_customer
 from foundation.errors import ImpossibleError
 from foundation.logs import get_logger

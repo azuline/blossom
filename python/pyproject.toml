@@ -63,7 +63,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", "**/codegen", "**/*.ipynb", ".debug_scripts"]
+exclude = [".venv", "**/__codegen__", "**/*.ipynb", ".debug_scripts"]
 target-version = "py313"
 preview = true
 

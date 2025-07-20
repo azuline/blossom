@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from database.codegen import models
+from database.__codegen__ import models
 from database.enums import OrganizationsInboundSourceEnum, UserSignupStepEnum
 from database.xact import xact_admin
 from foundation.identifiers import generate_email, generate_name

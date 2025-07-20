@@ -1,4 +1,4 @@
-from database.codegen import models
+from database.__codegen__ import models
 from database.enums import OrganizationsInboundSourceEnum
 from database.xact import DBQuerier
 from foundation.types import cast_notnull

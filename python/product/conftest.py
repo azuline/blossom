@@ -4,7 +4,7 @@ import dataclasses
 
 import pytest
 
-from database.codegen import models
+from database.__codegen__ import models
 from foundation.logs import get_logger
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory

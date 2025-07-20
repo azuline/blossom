@@ -181,9 +181,9 @@ Run `just test databases/schema/schema_test.py` to validate other conventions in
 
 ## ORM & Queries
 
-Write SQL queries against the database in `database/queries.sql`. We use SQLc to codegen 
-`database/codegen/queries.py` from that file. After modifying `queries.sql`, run the codegen with
-`just codegen-db`.
+Write SQL queries against the database in `database/queries.sql`. We use SQLc to codegen
+`database/__codegen__/queries.py` from that file. After modifying `queries.sql`, run the codegen
+with `just codegen-db`.
 
 The written queries can be accessed in code with the following pattern:
 
@@ -569,7 +569,7 @@ When importing database models, always follow this convention of importing `mode
 model by property:
 
 ```python
-from database.codegen import models
+from database.__codegen__ import models
 models.Organization  # DO THIS
 ```
 
@@ -577,7 +577,7 @@ models.Organization  # DO THIS
 Do NOT do this:
 
 ```python
-from database.codegen.models import Organization  # DO NOT DO THIS.
+from database.__codegen__.models import Organization  # DO NOT DO THIS.
 ```
 
 Do NOT import modules within functions. Default to importing modules at module scope.
