@@ -25,7 +25,7 @@ def test_suppress_error():
         raise Test1Error
 
     # Test nothing happens when no error.
-    with pytest.raises(BlossomError):
+    with suppress_error(BlossomError):
         pass
 
     # Test error subclass filtering.

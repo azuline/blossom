@@ -1,7 +1,7 @@
 import dataclasses
 
 from foundation.conftest import FoundationFixture
-from foundation.rpc import DataMismatchError, InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
+from foundation.rpc import InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
 
 
 @dataclasses.dataclass
@@ -20,26 +20,25 @@ async def test_route(req: ReqCommon[SpecTestIn]) -> SpecTestOut:
 
 
 async def test_route_invalid_json_data(t: FoundationFixture) -> None:
-    await t.rpc.add_route(test_route)
-    resp = await (await t.rpc.client()).post("/api/Test", data="aaoejfawpokl")
-    await t.rpc.assert_error(resp, ServerJSONDeserializeError)
+    await t.rpc.manually_mount_route(test_route)
+    resp = await (await t.rpc.underlying_client()).post("/rpc/test", data="aaoejfawpokl")
+    await t.rpc.parse_error(resp, ServerJSONDeserializeError)
 
 
 async def test_route_different_input_schema(t: FoundationFixture) -> None:
-    await t.rpc.add_route(test_route)
-    resp = await (await t.rpc.client()).post("/api/Test", json={"strawberry": "blossoms"})
-    await t.rpc.assert_error(resp, InputValidationError)
+    await t.rpc.manually_mount_route(test_route)
+    resp = await t.rpc.call(test_route, {"strawberry": "blossom"})
+    await t.rpc.parse_error(resp, InputValidationError)
 
 
 async def test_route_data_wrong_type(t: FoundationFixture) -> None:
-    await t.rpc.add_route(test_route)
-    resp = await (await t.rpc.client()).post("/api/Test", json={"cherry": {"a": "b"}})
-    await t.rpc.assert_error(resp, InputValidationError)
+    await t.rpc.manually_mount_route(test_route)
+    resp = await t.rpc.call(test_route, {"cherry": {"a": "b"}})
     out = await t.rpc.parse_error(resp, InputValidationError)
     assert out.fields["cherry"] == "Input should be a valid string"
 
 
 async def test_route_no_data(t: FoundationFixture) -> None:
-    await t.rpc.add_route(test_route)
-    resp = await t.rpc.execute("Test")
-    await t.rpc.assert_error(resp, DataMismatchError)
+    await t.rpc.manually_mount_route(test_route)
+    resp = await t.rpc.call(test_route, None)
+    await t.rpc.parse_error(resp, InputValidationError)

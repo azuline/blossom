@@ -7,8 +7,8 @@ CREATE TABLE sessions (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
 
-    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    organization_id TEXT REFERENCES organizations(id) ON DELETE CASCADE,
+    user_id TEXT COLLATE "C" NOT NULL REFERENCES users(id),
+    organization_id TEXT COLLATE "C" REFERENCES organizations(id),
     last_seen_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     expired_at TIMESTAMPTZ
 );

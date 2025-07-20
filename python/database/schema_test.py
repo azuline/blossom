@@ -1,5 +1,4 @@
 import re
-from collections import defaultdict
 from dataclasses import dataclass
 
 from database.xact import xact_admin
@@ -33,7 +32,7 @@ Please update tables {", ".join(failing)} to have an `id` primary key column.
 
 Primary keys should be defined as:
 
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>_%'),
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
@@ -276,80 +275,6 @@ Fixes:
 """  # pragma: no cover
 
 
-@dataclass
-class FK:
-    src_table: str
-    src_column: str
-    dst_table: str
-    dst_column: str
-    cascade: str
-
-
-async def test_foreign_key_cascades():
-    root_tables = ["organizations", "conversations"]
-    whitelist = []
-
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
-            """
-                SELECT
-                    tc.table_name AS src_table,
-                    kcu.column_name AS src_column,
-                    ccu.table_name AS dst_table,
-                    ccu.column_name AS dst_column,
-                    rc.delete_rule = 'CASCADE' AS cascade
-                FROM information_schema.table_constraints AS tc
-                JOIN information_schema.key_column_usage AS kcu
-                    ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema AND tc.table_name = kcu.table_name
-                JOIN information_schema.referential_constraints AS rc
-                    ON tc.constraint_name = rc.constraint_name AND tc.constraint_schema = rc.constraint_schema
-                JOIN information_schema.constraint_column_usage AS ccu
-                    ON ccu.constraint_name = rc.unique_constraint_name AND ccu.constraint_schema = rc.unique_constraint_schema
-                WHERE tc.constraint_type = 'FOREIGN KEY'
-                ORDER BY tc.table_name
-                """
-        )
-        foreign_keys: dict[str, list[FK]] = defaultdict(list)
-        for x in await cursor.fetchall():
-            foreign_keys[x[0]].append(FK(src_table=x[0], src_column=x[1], dst_table=x[2], dst_column=x[3], cascade=x[4]))
-
-    # We put the cascade on the narrowest scoped object, essentially creating a hierarchy that goes
-    # from Organization -> Conversation. Each of these "core" entities has many attached tables that
-    # can conceptually be viewed as sub-tables. As long as each table belongs to one of the three
-    # core tables, all is well.
-    failing = []
-    for table, columns in foreign_keys.items():
-        # We don't want the important root tables to be cascade deleted at all.
-        if table in root_tables:
-            if all(not c.cascade for c in columns):
-                continue
-            assert not table, f"""\
-Please remove ON DELETE CASCADE from the following columns:
-
-{nl.join([f"- {table}.{c.src_column}" for c in columns])}
-"""  # pragma: no cover
-
-        # Check to see if the table has a direct FK to the three root tables.
-        for group in root_tables:
-            if c := next((x for x in columns if x.dst_table == group), None):
-                # The table should always be cascading on the lowest root table.
-                if not c.cascade:
-                    failing.append(f"{table}.{c.src_column}")
-                break
-        else:
-            # No direct FK to root tables; everything should cascade then.
-            failing.extend([f"{table}.{c.src_column}" for c in columns if not c.cascade])
-
-    failing = sorted(set(failing) - set(whitelist))
-    assert not failing, f"""\
-Please add ON DELETE CASCADE to the following columns:
-
-{nl.join([f"- {x}" for x in failing])}
-
-or whitelist them in database/schema/schema_test.py.
-"""  # pragma: no cover
-
-
 async def test_id_columns_have_check_constraint():
     async with xact_admin() as q:
         cursor = await q.conn.execute(
@@ -403,7 +328,8 @@ The following ID columns must use COLLATE "C":
 {nl.join(f"- {x[0]}.{x[1]} (current collation: {x[2]})" for x in failing)}
 
 ID columns should be defined as:
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>')
+
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>_%'),
 
 Foreign key columns referencing ID columns should be defined as:
     other_id TEXT COLLATE "C" REFERENCES other_table(id)

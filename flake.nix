@@ -4,20 +4,20 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    pgmigrate = {
+    pgmigrate-src = {
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, pgmigrate }: flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs, flake-utils, pgmigrate-src }: flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
         overlays = [
           (self: super: {
-            pgmigrate = pgmigrate.packages.${system}.default;
+            pgmigrate = pgmigrate-src.packages.${system}.default;
             python-pin = super.python313;
             # Fork of sqlc-gen-python.
             sqlc-gen-python =
@@ -79,7 +79,6 @@
           semgrep
           sqlc
           sqlc-gen-python
-          ty
           uv
         ]);
         typescript = general ++ (with pkgs; [

@@ -1,5 +1,6 @@
 import inspect
 import logging
+import sys
 from dataclasses import asdict, is_dataclass
 from datetime import datetime
 from logging import StreamHandler
@@ -133,6 +134,7 @@ _initialize_logging()
 
 def get_logger(debug: bool = False) -> BoundLogger:
     logger = structlog.stdlib.get_logger()
+    debug = debug or "pytest" in sys.modules
 
     if debug and DEFAULT_LOG_LEVEL == logging.INFO:
         # Get the module __name__ of the caller

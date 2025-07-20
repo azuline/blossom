@@ -1,4 +1,4 @@
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE OR REPLACE FUNCTION public.b58_encode(num bigint)
  RETURNS text
@@ -210,15 +210,15 @@ CREATE TRIGGER updated_at BEFORE UPDATE ON public.organizations_users FOR EACH R
 
 ALTER TABLE public.organizations_users
 ADD CONSTRAINT organizations_users_organization_id_fkey
-FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
+FOREIGN KEY (organization_id) REFERENCES organizations(id);
 
 ALTER TABLE public.organizations_users
 ADD CONSTRAINT organizations_users_removed_by_user_fkey
-FOREIGN KEY (removed_by_user) REFERENCES users(id) ON DELETE SET NULL;
+FOREIGN KEY (removed_by_user) REFERENCES users(id);
 
 ALTER TABLE public.organizations_users
 ADD CONSTRAINT organizations_users_user_id_fkey
-FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+FOREIGN KEY (user_id) REFERENCES users(id);
 
 CREATE TABLE public.sessions (
   id text PRIMARY KEY NOT NULL DEFAULT generate_id('ses'::text),
@@ -243,11 +243,11 @@ CREATE TRIGGER updated_at BEFORE UPDATE ON public.sessions FOR EACH ROW EXECUTE 
 
 ALTER TABLE public.sessions
 ADD CONSTRAINT sessions_organization_id_fkey
-FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
+FOREIGN KEY (organization_id) REFERENCES organizations(id);
 
 ALTER TABLE public.sessions
 ADD CONSTRAINT sessions_user_id_fkey
-FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+FOREIGN KEY (user_id) REFERENCES users(id);
 
 CREATE TABLE public.user_signup_step_enum (
   value text PRIMARY KEY NOT NULL
@@ -276,7 +276,7 @@ CREATE TRIGGER updated_at BEFORE UPDATE ON public.vaulted_secrets FOR EACH ROW E
 
 ALTER TABLE public.vaulted_secrets
 ADD CONSTRAINT vaulted_secrets_organization_id_fkey
-FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE;
+FOREIGN KEY (organization_id) REFERENCES organizations(id);
 
 CREATE TABLE public.yoyo_lock (
   locked integer PRIMARY KEY NOT NULL DEFAULT 1,

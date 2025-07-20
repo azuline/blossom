@@ -24,7 +24,7 @@ def create_app_from_router(router: RPCRouter) -> quart.Quart:
 
     :return: The created Quart application.
     """
-    logger.debug("Creating Quart app.")
+    logger.debug("creating quart app", num_routes=len(router.routes))
     app = Quart(__name__)
     app.config.update(
         SESSION_COOKIE_SECURE=not app.debug,

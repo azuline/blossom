@@ -83,7 +83,7 @@
         "type": "github"
       }
     },
-    "pgmigrate": {
+    "pgmigrate-src": {
       "inputs": {
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils_2",
@@ -110,7 +110,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "pgmigrate": "pgmigrate"
+        "pgmigrate-src": "pgmigrate-src"
       }
     },
     "systems": {

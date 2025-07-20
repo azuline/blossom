@@ -7,7 +7,7 @@ CREATE TABLE vaulted_secrets (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
 
-    organization_id TEXT NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id),
     ciphertext TEXT NOT NULL
 );
 CREATE TRIGGER updated_at BEFORE UPDATE ON vaulted_secrets

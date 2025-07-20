@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from database.xact import xact_admin
-from product.foundation.rpc import ReqProduct, rpc_product
+from product.framework.rpc import ReqProduct, rpc_product
 
 
 @dataclass

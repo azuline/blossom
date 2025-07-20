@@ -1,3 +1,6 @@
+from collections.abc import Callable
+from typing import cast
+
 import dagster
 import pytest
 
@@ -14,15 +17,8 @@ def test_asset_decorator_creates_dagster_asset():
     assert isinstance(my_asset, dagster.AssetsDefinition)
     assert my_asset.key.to_user_string() == "my_asset"
 
-
-def test_asset_decorator_preserves_function_behavior():
-    """Test that the asset decorator preserves the original function behavior."""
-
-    @dag_asset()
-    def compute_value():
-        return 42
-
-    assert isinstance(compute_value, dagster.AssetsDefinition)
+    with dagster.build_asset_context() as context:
+        assert cast(Callable, my_asset(context)) == "data"
 
 
 def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
@@ -35,7 +31,7 @@ def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
     def failing_asset():
         raise TestAssetError("test error")
 
-    with pytest.raises(TestAssetError):
-        failing_asset(dagster.build_asset_context())
+    with dagster.build_asset_context() as context, pytest.raises(TestAssetError):
+        failing_asset(context)
 
     t.errors.assert_reported(TestAssetError)

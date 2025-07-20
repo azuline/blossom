@@ -16,26 +16,23 @@ DEFAULT_PASSWORD_HASH = "pbkdf2:sha256:260000$q7moIpBgn1qWGg6Q$110299a9e14a5d29d
 class TestFactory:
     __test__ = False
 
-    async def organization(
-        self,
-        *,
-        name: str | None = None,
-        inbound_source: OrganizationsInboundSourceEnum = "organic",
-    ) -> models.Organization:
+    @staticmethod
+    async def organization(*, name: str | None = None, inbound_source: OrganizationsInboundSourceEnum = "organic") -> models.Organization:
         name = name or generate_name()
         async with xact_admin() as q:
             return cast_notnull(await q.orm.test_organization_create(name=name, inbound_source=inbound_source))
 
+    @staticmethod
     async def user(
-        self,
+        *,
         name: str | None = None,
         email: str | None = None,
-        password_hash: str | Unset = UNSET,
+        password_hash: str | Unset | None = UNSET,
         signup_step: UserSignupStepEnum = "complete",
         is_enabled: bool = True,
     ) -> models.User:
         if isinstance(password_hash, Unset):
-            password_hash = DEFAULT_PASSWORD_HASH
+            password_hash = DEFAULT_PASSWORD_HASH if signup_step == "complete" else None
         async with xact_admin() as q:
             return cast_notnull(
                 await q.orm.test_user_create(
@@ -47,19 +44,21 @@ class TestFactory:
                 )
             )
 
-    async def customer(self) -> tuple[models.User, models.Organization]:
+    @staticmethod
+    async def customer() -> tuple[models.User, models.Organization]:
         """A convenience function for creating a user, organization, and user_organization."""
-        organization = await self.organization()
-        user = await self.user()
-        await self.organization_user_create(user_id=user.id, organization_id=organization.id)
+        organization = await TestFactory.organization()
+        user = await TestFactory.user()
+        await TestFactory.organization_user_create(user_id=user.id, organization_id=organization.id)
         return user, organization
 
-    async def organization_user_create(self, *, user_id: str, organization_id: str) -> models.OrganizationsUser:
+    @staticmethod
+    async def organization_user_create(*, user_id: str, organization_id: str) -> models.OrganizationsUser:
         async with xact_admin() as q:
             return cast_notnull(await q.orm.test_organization_user_create(user_id=user_id, organization_id=organization_id))
 
+    @staticmethod
     async def session(
-        self,
         *,
         user: models.User,
         organization: models.Organization | None = None,

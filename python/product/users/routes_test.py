@@ -1,5 +1,5 @@
 from product.conftest import ProductFixture
-from product.users.routes import GetPageLoadInfoOrganization, GetPageLoadInfoOut, GetPageLoadInfoUser
+from product.users.routes import GetPageLoadInfoOrganization, GetPageLoadInfoOut, GetPageLoadInfoUser, init
 
 
 async def test_page_load_info_logged_in_with_organization(t: ProductFixture) -> None:
@@ -10,8 +10,8 @@ async def test_page_load_info_logged_in_with_organization(t: ProductFixture) -> 
     # Make a third organization that the user does not belong to.
     await t.factory.organization()
     await t.rpc.login_as(user, organization)
-    resp = await t.rpc.execute("GetPageLoadInfo")
-    t.rpc.assert_success(resp)
+    resp = await t.rpc.call(init, None)
+    await t.rpc.assert_success(resp)
 
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
     assert out == GetPageLoadInfoOut(
@@ -27,8 +27,8 @@ async def test_page_load_info_logged_in_with_organization(t: ProductFixture) -> 
 async def test_page_load_info_logged_in_without_organization(t: ProductFixture) -> None:
     user = await t.factory.user()
     await t.rpc.login_as(user)
-    resp = await t.rpc.execute("GetPageLoadInfo")
-    t.rpc.assert_success(resp)
+    resp = await t.rpc.call(init, None)
+    await t.rpc.assert_success(resp)
 
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
     assert out == GetPageLoadInfoOut(
@@ -39,7 +39,7 @@ async def test_page_load_info_logged_in_without_organization(t: ProductFixture) 
 
 
 async def test_page_load_info_not_logged_in(t: ProductFixture) -> None:
-    resp = await t.rpc.execute("GetPageLoadInfo")
-    t.rpc.assert_success(resp)
+    resp = await t.rpc.call(init, None)
+    await t.rpc.assert_success(resp)
     out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
     assert out == GetPageLoadInfoOut(user=None, organization=None, available_organizations=[])

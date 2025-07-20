@@ -27,12 +27,12 @@ CREATE TABLE organizations_users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
 
-    user_id TEXT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    organization_id TEXT NOT NULL DEFAULT current_organization_id() REFERENCES organizations (id) ON DELETE CASCADE,
+    user_id TEXT COLLATE "C" NOT NULL REFERENCES users(id),
+    organization_id TEXT COLLATE "C" NOT NULL DEFAULT current_organization_id() REFERENCES organizations(id),
 
     -- If this is not null, it means the user was removed from the organization at this time.
     removed_at TIMESTAMPTZ,
-    removed_by_user TEXT REFERENCES users (id) ON DELETE SET NULL
+    removed_by_user TEXT REFERENCES users(id)
 );
 CREATE TRIGGER updated_at BEFORE UPDATE ON organizations_users
 FOR EACH ROW EXECUTE PROCEDURE updated_at ();

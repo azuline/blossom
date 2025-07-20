@@ -38,10 +38,10 @@ async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
     return cast(DBConnPool, pool)
 
 
-if "pytest" in sys.modules:  # pragma: no cover
+# Enable this when debugging DB connection quirks.
+if 1 == 2 and "pytest" in sys.modules:  # pragma: no cover
     logging.getLogger("psycopg").setLevel(logging.DEBUG)  # noqa: TID251
     logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)  # noqa: TID251
-
 
 _cached_db_uri: str = ENV.database_uri
 _cached_db_pool: DBConnPool | None = None

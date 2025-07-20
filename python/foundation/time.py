@@ -1,6 +1,6 @@
 import contextlib
 import datetime
-from collections.abc import Generator
+from collections.abc import Iterator
 
 from foundation.env import ENV
 
@@ -24,15 +24,19 @@ class Clock:
         """Get the current time as a Unix timestamp."""
         return self.now().timestamp()
 
-    def TESTING_set(self, time: datetime.datetime) -> None:
-        """Adjust the "current time" of the clock. The clock will continue ticking."""
+    @contextlib.contextmanager
+    def TESTING_set(self, time: datetime.datetime) -> Iterator[None]:
+        """A context manager that sets the "current time" of the clock. The clock will continue ticking."""
         assert ENV.testing
         self._TESTING_base_time = time
         self._TESTING_base_time_set_at = datetime.datetime.now(datetime.UTC)  # noqa: TID251
+        yield
+        self._TESTING_base_time = None
+        self._TESTING_base_time_set_at = None
 
     @contextlib.contextmanager
-    def TESTING_freeze(self, time: datetime.datetime) -> Generator[None]:
-        """Freeze the clock so it always returns the value of the `time` parameter from `now()`."""
+    def TESTING_freeze(self, time: datetime.datetime) -> Iterator[None]:
+        """A contextmanager that freezes the clock so it always returns the value of the `time` parameter from `now()`."""
         assert ENV.testing
         self._TESTING_frozen_time = time
         yield

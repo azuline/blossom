@@ -32,15 +32,13 @@ async def test_db(request: pytest.FixtureRequest) -> AsyncIterator[None]:
     try:
         yield
     finally:
-        ENV.database_uri = original_database_uri
         if request.session.testsfailed > 0:
-            logger.error("test session failed: database preserved for debugging", test_database_uri=ENV.database_uri, test_db_name=test_db_name)
-            print("=" * 80)  # noqa: T201
-            print("TEST DATABASE PRESERVED FOR DEBUGGING")  # noqa: T201
+            print("TEST DATABASE PRESERVED FOR DEBUGGING. CONNECT WITH:")  # noqa: T201
             print(f"$ psql {ENV.database_uri}")  # noqa: T201
-            print("=" * 80)  # noqa: T201
+            ENV.database_uri = original_database_uri
         else:
             logger.info("test session passed: cleaning up test database", db_name=test_db_name)
+            ENV.database_uri = original_database_uri
             await testdb.drop_db(test_db_name)
 
 

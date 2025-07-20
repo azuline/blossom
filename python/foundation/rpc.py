@@ -96,11 +96,6 @@ class ServerJSONDeserializeError(RPCError):
 
 
 @dataclasses.dataclass
-class DataMismatchError(RPCError):
-    message: str
-
-
-@dataclasses.dataclass
 class InputValidationError(RPCError):
     message: str
     fields: dict[str, Any] = dataclasses.field(default_factory=dict)
@@ -119,10 +114,12 @@ class RPCRoute[In, Out]:
     out: type[Out]
     errors: list[type[RPCError]] = dataclasses.field(compare=False)
     method: MethodEnum
-    handler: Callable[[quart.Request], Awaitable[quart.Response]] = dataclasses.field(compare=False)
+    handler: Callable[[], Awaitable[quart.Response]] = dataclasses.field(compare=False)
 
     def mount(self, app: quart.Quart) -> None:
-        app.route(f"/rpc/{self.name}", methods=[self.method], name=self.name, route=self.handler)
+        path = f"/rpc/{self.name}"
+        logger.debug("mounting route", path=path, name=self.name, method=self.method)
+        app.route(path, methods=[self.method])(self.handler)
 
 
 def rpc_common(
@@ -172,8 +169,9 @@ def rpc_common(
         in_spec = make_pydantic_validator(in_) if in_.__name__ != "NoneType" else None
 
         @functools.wraps(func)
-        async def common_wrapper(raw_req: quart.Request) -> quart.Response:
+        async def common_wrapper() -> quart.Response:
             tag_current_span(route=name)
+            raw_req = quart.request
 
             try:
                 data = await _parse_request(in_spec, raw_req)
@@ -242,7 +240,9 @@ async def _parse_request[T](spec: Callable[[Any], T] | None, req: quart.Request)
         logger.warning(f"Input pydantic validation failure: {e}")
         fields = {}
         for field_error in e.errors():
-            fields[str(field_error["loc"][0])] = field_error["msg"]
+            loc = field_error.get("loc", [])
+            key = ".".join(map(str, loc)) or "__root__"
+            fields[key] = field_error["msg"]
         raise InputValidationError(message="Failed to validate request data.", fields=fields) from e
 
 
@@ -257,7 +257,7 @@ RouteFlag = Literal[
 
 class RPCRouter:
     def __init__(self) -> None:
-        self.global_errors: list[type[RPCError]] = [UnauthorizedError, ServerJSONDeserializeError, DataMismatchError, InputValidationError]
+        self.global_errors: list[type[RPCError]] = [UnauthorizedError, ServerJSONDeserializeError, InputValidationError]
         self.routes: list[RPCRoute] = []
         self.route_flags: dict[RPCRoute, list[RouteFlag]] = defaultdict(list)
         self._route_name_set: set[str] = set()
