@@ -2,10 +2,10 @@ name: python
 on: 
   push:
     paths:
-      - .github/workflows/python.yaml
-      - flake.*
       - python/**
-      - infra/deploys/**
+      - infra/deploy/**
+      - infra/shell/**
+      - .github/workflows/python.yaml
       - '!**/*.md'
 defaults:
   run:
@@ -23,22 +23,22 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.python
+        run: nix build -j8 ../infra/shell/#devShells.x86_64-linux.python
       - name: Start Postgres
         run: docker compose up postgres -d
       - name: Install dependencies
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just install
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.python --command just install
       - name: Lint
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just lint
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.python --command just lint
       - name: Test
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just test
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.python --command just test
       - name: Migrate & Codegen
         if: success() || failure()
         run: |
-          nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just codegen-db
-          nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just codegen-rpc
+          nix develop ../infra/shell/#devShells.x86_64-linux.python --command just codegen-db
+          nix develop ../infra/shell/#devShells.x86_64-linux.python --command just codegen-rpc
       - name: Diff
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.python --command just diff
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.python --command just diff

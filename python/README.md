@@ -33,7 +33,7 @@ Refer to [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 - Data Validation: [pydantic](https://github.com/pydantic/pydantic)
 - Linter/Formatter: [ruff](https://github.com/astral-sh/ruff) + [semgrep](https://github.com/semgrep/semgrep) + [tach](https://github.com/gauge-sh/tach)
 - Logs: [structlog](https://github.com/hynek/structlog)
-- Metrics: [datadog](https://www.datadoghq.com/)
+- Metrics: [datadog](https://github.com/DataDog/datadogpy)
 - Migrations: [yoyo-migrations](https://sr.ht/~olly/yoyo/)
 - ORM: [sqlc](https://github.com/sqlc-dev/sqlc) + [psycopg](https://github.com/psycopg/psycopg)
 - Package Manager: [uv](https://github.com/astral-sh/uv)

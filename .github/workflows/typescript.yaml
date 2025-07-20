@@ -2,10 +2,10 @@ name: typescript
 on: 
   push:
     paths:
-      - .github/workflows/typescript.yaml
-      - flake.*
       - typescript/**
-      - infra/deploys/**
+      - infra/deploy/**
+      - infra/shell/**
+      - .github/workflows/typescript.yaml
       - '!**/*.md'
 defaults:
   run:

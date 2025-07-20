@@ -46,34 +46,12 @@ that project template's design decisions and feature set.
   - [TypeScript/Web Frontend (Internal-Facing)](./typescript/panopticon)
 - [Infrastructure](./infra)
   - [Infrastructure/Dev Shell](./flake.nix)
-  - [Infrastructure/Private Network](./infra/vpn)
+  - [Infrastructure/Virtual Private Network](./infra/vpn)
   - [Infrastructure/Continuous Integration](./github/workflows)
   - [Infrastructure/Continuous Deployment](./infra/deploys)
 
-## Vendors
-
-The third-party vendors that the repository integrates with are:
-
-- Source Code Manager: Github
-- Continuous Integration: Github Actions (+Cachix) (+Namespace)
-- Public Cloud: GCP
-- Virtual Private Network: Tailscale
-- Data Orchestrator: Dagster+
-- Infrastructure Observability: Datadog
-- Error Triage: Sentry
-- Product Observability & Feature Flags: PostHog
-- Email Sending: Postmark
-- Large Language Model: OpenAI
-
-Most of the paid vendors are optional or have substitutes; in my personal projects I deploy to my
-home tailnet and Nomad cluster without most of the observability tooling.
-
 ## Technologies & Dependencies
 
-- Infrastructure:
-  - Database: Postgres
-  - Dependency Management: Nix
-  - Service Orchestrator: Nomad / GKE
 - TypeScript:
   - Builds: Vite (SWC+esbuild)
   - CSS-in-JS: vanilla-extract
@@ -113,8 +91,4 @@ Since we use Nix for our development environments:
 3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima).
 
 Run `direnv allow` in the project's root directory. The developer environment should bootstrap
-automatically. Then run `docker compose up -d` to start the local infrastructure.
-
-## Deployment Setup
-
-todo, unsure if i want to put nomad homelab in this template or a GCP setup
+automatically.

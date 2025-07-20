@@ -2,42 +2,30 @@
 
 The projects in this directory are:
 
-- [`vpn` (Private Network)](./vpn)
+- [`shell` (Nix Dev Shell)](../flake.nix)
+- [`workflows` (Continuous Integration)](../.github/workflows)
 - [`deploys` (Continuous Deployment)](./deploys)
+- [`vpn` (Virtual Private Network)](./vpn)
 
-Refer to each project for its feature list.
+## Deployment Setup
 
-## Developer Loop
+todo, unsure if i want to put nomad homelab in this template or a GCP setup
 
-Run `direnv allow` in the project's root directory to bootstrap the developer environment. The infrastructure setup includes:
+## Vendors
 
-```bash
-$ direnv allow          # Bootstrap Nix development environment
-$ docker compose up -d  # Start local infrastructure (Postgres)
-```
+The vendors that this repository depends on for its infrastructure are:
 
-## Major Dependencies
+- Continuous Integration: Github Actions (+Cachix) (+Namespace)
+- Data Orchestrator: Dagster+
+- Database: PostgreSQL
+- Email Sending: Postmark
+- Error Triage: Sentry
+- Infrastructure Observability: Datadog
+- Large Language Model: OpenAI
+- Product Observability & Feature Flags: PostHog
+- Public Cloud: Google Cloud Platform
+- Source Code Management: Github
+- Virtual Private Network: Tailscale
 
-- Continuous Integration: [Github Actions](https://github.com/features/actions) + [Cachix](https://www.cachix.io/) + [Namespace](https://namespace.so/)
-- Data Orchestrator: [Dagster+](https://dagster.io/)
-- Database: [Postgres](https://www.postgresql.org/)
-- Dependency Management: [Nix](https://nixos.org/)
-- Dev Shell: [flake.nix](../flake.nix)
-- Error Triage: [Sentry](https://sentry.io/)
-- Infrastructure Observability: [Datadog](https://www.datadoghq.com/)
-- Product Observability & Feature Flags: [PostHog](https://posthog.com/)
-- Public Cloud: [GCP](https://cloud.google.com/)
-- Service Orchestrator: [Nomad](https://www.nomadproject.io/) / [GKE](https://cloud.google.com/kubernetes-engine)
-- Virtual Private Network: [Tailscale](https://tailscale.com/)
-
-## Developer Environment Setup
-
-1. **Install Nix:** [Instructions](https://docs.determinate.systems/)
-2. **Install Direnv:** [Instructions](https://direnv.net/)
-3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima)
-
-## Port Space
-
-Infrastructure services use ports in the `408XX` range:
-
-- 40801: Postgres
+Most of the paid vendors are optional or have substitutes; in my personal projects I deploy to my
+home tailnet and Nomad cluster without most of the observability tooling.
