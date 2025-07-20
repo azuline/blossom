@@ -47,9 +47,10 @@ async def test_db(request: pytest.FixtureRequest) -> AsyncIterator[None]:
 @pytest.fixture(autouse=True, scope="session")
 def clear_llmcache_locks() -> None:
     # Maybe left over from a previous test run.
-    for f in DEFAULT_LLM_CACHE_DIR.iterdir():
-        if f.suffix == ".lock":
-            f.unlink()
+    if DEFAULT_LLM_CACHE_DIR.exists():
+        for f in DEFAULT_LLM_CACHE_DIR.iterdir():
+            if f.suffix == ".lock":
+                f.unlink()
 
 
 @pytest.fixture(autouse=True)

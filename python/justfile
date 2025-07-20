@@ -23,9 +23,12 @@ migrate:  ## Runs the database migrations. Only run this command once a migratio
 new-migration MSG:  ## Create a new migration file with the correct naming structure and dependencies. ALWAYS use this tool to create a new migration.
     uv run -- yoyo new --sql --message "{{MSG}}"
 
-# CODEGEN RPC.
-codegen-db:  ## Codegens the database queries from the `queries.sql` file using a test database. Updates `schema.sql` based on the migrations. Run this after every change to the migrations.
+# CODEGEN.
+codegen-db:  ## Codegens the database queries from the `queries.sql` file using a test database. Updates `database/schema.sql` based on the migrations. Run this after every change to the migrations.
     uv run -- python -m database codegen
+codegen-rpc:  ## Codegens the frontend RPC routes and types from the defined product & panopticon routes.
+    echo "NotImplementedError"
+    exit 1
 
 # DEPENDENCY MANAGEMENT.
 

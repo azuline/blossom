@@ -30,13 +30,15 @@ jobs:
         run: nix develop ../\#devShells.x86_64-linux.python --command just install
       - name: Lint
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command just lintcheck
+        run: nix develop ../\#devShells.x86_64-linux.python --command just lint
       - name: Test
         if: success() || failure()
         run: nix develop ../\#devShells.x86_64-linux.python --command just test
       - name: Migrate & Codegen
         if: success() || failure()
-        run: nix develop ../\#devShells.x86_64-linux.python --command just codegen
+        run: |
+          nix develop ../\#devShells.x86_64-linux.python --command just codegen-db
+          nix develop ../\#devShells.x86_64-linux.python --command just codegen-rpc
       - name: Diff
         if: success() || failure()
         run: nix develop ../\#devShells.x86_64-linux.python --command just diff
