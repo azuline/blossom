@@ -1,0 +1,13 @@
+rules:
+  - id: dagster-context
+    languages: [python]
+    patterns:
+      - pattern: |
+          dagster.build_asset_context()
+      - pattern-not-inside: |
+          with dagster.build_asset_context() as ...:
+            ...
+    message: |
+      Please use `dagster.build_asset_context()` as a context manager to ensure
+      that resources are cleaned up.
+    severity: WARNING

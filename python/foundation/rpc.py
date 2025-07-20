@@ -10,10 +10,10 @@ from typing import Any, Literal, TypeVar, cast, get_args, get_type_hints
 import pydantic
 import quart
 
-from foundation import metrics
 from foundation.env import ENV
 from foundation.errors import ConfigurationError, ImpossibleError, report_error
 from foundation.logs import get_logger
+from foundation.metrics import metric_increment_abnormal
 from foundation.parse import make_pydantic_validator
 from foundation.span import tag_current_span
 from foundation.types import Unset
@@ -189,7 +189,7 @@ def rpc_common(
             except RPCError as e:
                 tag_current_span(status_code=400)
                 logger.debug("rpc endpoint returned error", error=e.__class__.__name__, data=e.serialize())
-                metrics.increment("rpc.error", rpc=name, method=method, error=e.__class__.__name__)
+                metric_increment_abnormal("rpc.error", rpc=name, method=method, error=e.__class__.__name__)
                 return quart.Response(response=jsonify_output(e), status=400, headers={"Content-Type": "application/json"})
             except TimeoutError as e:
                 tag_current_span(status_code=504)
