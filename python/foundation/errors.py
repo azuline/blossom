@@ -73,6 +73,8 @@ class suppress_error(contextlib.AbstractContextManager):
         exc_value: BaseException | None,
         _traceback: TracebackType | None,
     ) -> Literal[True]:
+        if not exc_value:
+            return True
         if isinstance(exc_value, self.errors) and ENV.environment in self.environments:
             logger.exception("suppressing error", exc_info=self.print_traceback)
             return True

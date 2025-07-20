@@ -54,8 +54,8 @@ async def _default_pool() -> DBConnPool:
     global _cached_db_pool, _cached_db_uri, _cached_db_event_loop
     loop = asyncio.get_running_loop()
     if not _cached_db_pool or ENV.database_uri != _cached_db_uri or _cached_db_event_loop != loop:
-        if _cached_db_pool:
-            await _cached_db_pool.close()
+        # Yes, we do not clean up the pre-existing pool. No, I don't think it matters. This should
+        # only happen in test.
         _cached_db_pool = await create_pg_pool()
         _cached_db_uri = ENV.database_uri
         _cached_db_event_loop = loop

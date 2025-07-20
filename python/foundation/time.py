@@ -28,7 +28,7 @@ class Clock:
         """Adjust the "current time" of the clock. The clock will continue ticking."""
         assert ENV.testing
         self._TESTING_base_time = time
-        self._TESTING_base_time_set_at = CLOCK.now()
+        self._TESTING_base_time_set_at = datetime.datetime.now(datetime.UTC)  # noqa: TID251
 
     @contextlib.contextmanager
     def TESTING_freeze(self, time: datetime.datetime) -> Generator[None]:

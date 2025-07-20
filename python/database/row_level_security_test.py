@@ -1,27 +1,23 @@
 import asyncio
-from dataclasses import dataclass
 
 import psycopg
 
 from database.conn import DBConn, _set_row_level_security, create_pg_pool
-from database.migrate import migrate_database
+from database.testdb import TestDB
 from foundation.env import ENV
+from foundation.identifiers import generate_id
 
 
-@dataclass
-class FakeUser:
-    id: int
-
-
-async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
+async def test_row_level_security_in_connection_pool() -> None:
     """
     This test checks whether the Connection Pool is correctly scrubbing app.current_user_id and
     app.current_organization_id from the connections in the pool upon their return into the pool.
     """
+    testdb = TestDB()
+    db_uri = testdb.database_uri(await testdb.create_db())
+    user_id = generate_id("usr")
 
-    migrate_database(ENV.database_uri + "/" + isolated_db)
-
-    async def get_user_id(c: DBConn) -> int | None:
+    async def get_user_id(c: DBConn) -> str | None:
         try:
             cur = await c.execute("SHOW app.current_user_id")
         except psycopg.errors.UndefinedObject:
@@ -29,16 +25,16 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
         row = await cur.fetchone()
         if not row or not row[0]:
             return None
-        return int(row[0])
+        return row[0]
 
-    async with await create_pg_pool(ENV.database_uri + "/" + isolated_db) as pg_pool:
+    async with await create_pg_pool(db_uri) as pg_pool:
         connections: list[DBConn] = []
 
         async def create_conn(rls: bool) -> DBConn:
             c = await pg_pool.getconn(timeout=5)
             if rls:
                 # Fake user with a fake ID.
-                await _set_row_level_security(c, FakeUser(id=1), None)  # type: ignore
+                await _set_row_level_security(c, user_id, None)  # type: ignore
             connections.append(c)
             return c
 
@@ -52,7 +48,7 @@ async def test_row_level_security_in_connection_pool(isolated_db: str) -> None:
 
         # Check that they all have a user ID.
         for c in connections:
-            assert await get_user_id(c) == 1
+            assert await get_user_id(c) == user_id
 
         # Setup tasks that create new connections. These connections wait for a released connection
         # from the pool. Do not give these connections a user ID; this way they would re-use the old

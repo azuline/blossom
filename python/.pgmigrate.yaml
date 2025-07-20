@@ -1,7 +1,0 @@
-# This is for development use only.
-database: "postgres://postgres:password@localhost:40852/postgres"
-migrations: "./migrations"
-table_name: "migrations"
-schema:
-  name: "public"
-  file: "./schema.sql"
