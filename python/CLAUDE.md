@@ -52,12 +52,8 @@ and you should treat all changes as intentional unless otherwise stated.
 Run the lint commands with `just lint`. Run the codebase tests with `just test`. Always run the
 above two commands after each change and make sure they pass.
 
-Run the evaluation suite with `just chatbot eval`. Always run the above command after modifying the
-prompting systems or system prompts.
-
-If the Dagster DAG has been modified, check that the pipeline configuration remains valid with the
-`just check-pipeline` command. This will load the entire Dagster configuration and run some basic
-sanity and consistency checks.
+If the `pipeline` DAG has been modified, check that the pipeline configuration remains valid with
+the `just dag-check` command. This loads the Dagster configuration and checks its consistency.
 
 In general the `justfile` contains many common commands which we use in development. Please make
 use of them! Please also propose additions if you find yourself using a non-standard command
@@ -109,19 +105,26 @@ example, on July 14th, 2025 on branch `cereal` with script `check_parsing`, the 
 When you do not understand how some code behaves, favor writing a debug script to understand the
 code's actual behavior. Use this especially when documentation seems incomplete or incorrect.
 
-You do not need to delete debug scripts after you are finished.
-
-DEBUG SCRIPTS DO NOT REPLACE UNIT TESTS.
+You do not need to delete debug scripts after you are finished. AND DEBUG SCRIPTS DO NOT REPLACE
+UNIT TESTS.
 
 # Database Management
 
 Prerequisite: The local database should be running after `docker compose up -d`.
 
-Refer to `schema.sql` for the database schema. ALWAYS use this file to understand the database
-schema. NEVER try to splice together migrations in your memory--it is complicated and unnecessary.
+Refer to `database/schema.sql` for the database schema. ALWAYS use this file to understand the
+database schema. NEVER try to splice together migrations in your memory--it is complicated and
+unnecessary.
 
-NEVER MODIFY `schema.sql` DIRECTLY. IT IS GENERATED WHEN MIGRATIONS ARE RAN. SIMILARLY, NEVER MODIFY
-THE `-- depends:` COMMENT IN MIGRATION FILES.
+NEVER MODIFY `database/schema.sql` DIRECTLY. IT IS GENERATED WHEN MIGRATIONS ARE RAN. SIMILARLY,
+NEVER MODIFY THE `-- depends:` COMMENT IN MIGRATION FILES.
+
+Refer to `database/schema_annotations.yaml` for column comments. We do not use database column
+comments because they are hard to modify. Instead, `database/schema_annotations.yaml` has a mapping
+of `table -> column -> comments`. Read column comments with the following command:
+`yq '.{table}.{column}' database/schema_annotations.yaml`. This will print null if the column does
+not exist or has no comment. When adding a column with nuance not evident by the table and column
+name, please describe it in this file.
 
 ## Migrations
 

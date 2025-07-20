@@ -2,6 +2,8 @@ import asyncio
 import functools
 import inspect
 
+from foundation.errors import suppress_error
+
 
 def memoize(func):
     cache_by_loop = {}
@@ -24,7 +26,9 @@ def memoize(func):
 
         @functools.wraps(func)
         def sync_wrapper(*args):
-            loop = asyncio.get_running_loop()
+            loop = "no-loop"
+            with suppress_error(RuntimeError):
+                loop = asyncio.get_running_loop()
             if loop not in cache_by_loop:
                 cache_by_loop[loop] = {}
             cache = cache_by_loop[loop]

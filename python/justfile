@@ -46,10 +46,8 @@ test *ARGS:  ## Run the Python test suite. Pass filename(s) like `just test file
     uv run -- pytest {{ARGS}}
 test-snapshot *ARGS:  ## Update the cached LLM data in the Python test suite. Pass filename(s) like `just test-snapshot file.py [file2.py::test_name]` to just update those files or tests.
     UPDATE_SNAPSHOT=1 uv run -- pytest {{ARGS}}
-dg-check:  ## Check that the Dagster configuration is valid.
-    uv run -- dg check defs
-tach-update:  ## Sync Tach dependencies after making module structure changes.
-    uv run -- tach sync
+dag-check:  ## Check that the Dagster configuration is valid.
+    dg check defs
 diff:
     git status
     git diff

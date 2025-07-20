@@ -4,28 +4,29 @@ import logging
 import re
 import sys
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import Any, cast
 
 import psycopg
 from psycopg import AsyncConnection
 from psycopg.sql import SQL, Identifier
-from psycopg_pool import AsyncConnectionPool, AsyncNullConnectionPool
+from psycopg_pool import AsyncNullConnectionPool
 
 from foundation.env import ENV
 
 # Type aliases for everyone.
 DBConn = AsyncConnection[Any]
 # Unsure why I'm getting type errors if it's only AsyncNullConnectionPool.
-DBConnPool = AsyncNullConnectionPool | AsyncConnectionPool
+DBConnPool = AsyncNullConnectionPool
 
 USER_ID_SAFETY_REGEX = re.compile(r"usr_[A-Za-z0-9]+$")
 ORGANIZATION_ID_SAFETY_REGEX = re.compile(r"org_[A-Za-z0-9]+$")
 
 
 async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
-    return AsyncNullConnectionPool(
+    pool = AsyncNullConnectionPool(
         conninfo=database_uri or ENV.database_uri,
         max_size=ENV.database_pool_size,
+        open=False,
         # We turn autocommit on so that by default, queries can run outside of
         # a transaction. When a connection desires to run a series of queries
         # in a single transaction, they can explicitly start a transaction with BEGIN.
@@ -33,6 +34,8 @@ async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
         reset=_clean_up_row_level_security,
         timeout=3,
     )
+    await pool.open()
+    return cast(DBConnPool, pool)
 
 
 if "pytest" in sys.modules:  # pragma: no cover
