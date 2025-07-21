@@ -73,6 +73,28 @@ await EXT.slack.send_message(...)
 
 Do **not** instantiate new clients.
 
+## Environment variables
+
+Access variables exclusively through `foundation.env:ENV`, and declare them in `.env`. Test overrides live in `conftest.py`.
+
+## Errors
+
+First-party errors subclass `foundation.errors:BlossomError`. Messages are lowercase phrases separated by colons:
+
+```python
+raise CustomError("failed to read file: file not found", path=path)
+```
+
+Fail fast. Do not silently skip, fallback, or continue unless instructed. For ambiguous fallback behaviors, add a `TODO(god)` comment and ask.
+
+Use `foundation.errors:suppress_error` when intentionally ignoring specific errors.
+
+## Retries
+
+- TODO: retry network requests with exponential backoff and jitter with retryer
+
+# Observability
+
 ## Logging
 
 Use structured logging:
@@ -89,21 +111,14 @@ Follow these logging conventions:
 - Context: pass as keyword arguments, not embedded in the text.
 - Use `logger.exception` **only** when you swallow the exception. Otherwise the error will be dual-reported.
 
-## Errors
+## Traces & Spans
 
-First-party errors subclass `foundation.errors:BlossomError`. Messages are lowercase phrases separated by colons:
+- TODO: api
 
-```python
-raise CustomError("failed to read file: file not found", path=path)
-```
+## Metrics
 
-Fail fast. Do not silently skip, fallback, or continue unless instructed. For ambiguous fallback behaviors, add a `TODO(god)` comment and ask.
-
-Use `foundation.errors:suppress_error` when intentionally ignoring specific errors.
-
-## Environment variables
-
-Access variables exclusively through `foundation.env:ENV`, and declare them in `.env`. Test overrides live in `conftest.py`.
+- TODO: where to read API - list-symbols filter
+- TODO: restrict cardinality heuristics
 
 # Testing
 
@@ -122,6 +137,8 @@ Prefer a few high‑value tests over many redundant ones. Combine related assert
 ## Fixtures
 
 Run `just list-fixtures` to see available helpers. They are available as properties on the `t: TFix` fixture. Add optional fixtures to this system (`foundation/testing/`). Do not define new fixtures in `conftest` unless they are `autouse=True`.
+
+TODO: fixture is directory dependent, no tfix anymore
 
 The fixtures which are automatically ran in test setup are:
 

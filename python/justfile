@@ -51,7 +51,9 @@ lint *ARGS:  ## Run the configured Python linters. Pass filename(s) like `just l
     uv run -- tach check
 test *ARGS:  ## Run the Python test suite. Pass filename(s) like `just test file.py [file2.py::test_name]` to just test those files or tests.
     uv run -- pytest {{ARGS}}
-test-snapshot *ARGS:  ## Update the cached LLM data in the Python test suite. Pass filename(s) like `just test-snapshot file.py [file2.py::test_name]` to just update those files or tests.
+test-parallel *ARGS:  ## Run the Python test suite in parallel. Supports filename(s) parameters like in `just test`.
+    uv run -- pytest -n 2 {{ARGS}}
+test-snapshot *ARGS:  ## Update the cached LLM data in the Python test suite. Supports filename(s) parameters like in `just test`.
     UPDATE_SNAPSHOT=1 uv run -- pytest {{ARGS}}
 dag-check:  ## Check that the Dagster configuration is valid.
     dg check defs

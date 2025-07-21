@@ -92,3 +92,4 @@ Follow these conventions:
 - Prefix test‑only query names with `Test`.
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
+- TODO: naming guidelines
