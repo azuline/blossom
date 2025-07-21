@@ -34,4 +34,4 @@ def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
     with dagster.build_asset_context() as context, pytest.raises(TestAssetError):
         failing_asset(context)
 
-    t.errors.assert_reported(TestAssetError)
+    t.error.assert_reported(TestAssetError)

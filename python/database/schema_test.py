@@ -55,7 +55,7 @@ async def test_id_prefix_validation():
                 AND t.table_name NOT LIKE '%yoyo%'
             """)
 
-        id_prefix_regex = re.compile(r"^[a-z]{2,}$")
+        id_prefix_regex = re.compile(r"^[a-z]{2,3}$")
 
         seen_prefixes = set()
         for table, column, default in await cursor.fetchall():
@@ -64,7 +64,7 @@ async def test_id_prefix_validation():
             prefix = m[1]
             ok = id_prefix_regex.match(prefix) is not None
             assert ok, f"""\
-Table {table} has an invalid `{column}` column prefix. Prefixes must be at least 2 lowercase characters.
+Table {table} has an invalid `{column}` column prefix. Prefixes must be 2-3 lowercase characters.
 """
             ok = prefix not in seen_prefixes
             assert ok, f"""\

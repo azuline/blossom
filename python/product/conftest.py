@@ -3,12 +3,14 @@ from __future__ import annotations
 import dataclasses
 
 import pytest
+from syrupy.assertion import SnapshotAssertion
 
 from database.__codegen__ import models
 from foundation.logs import get_logger
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
 from foundation.testing.rpc import TestRPC
+from foundation.testing.snapshots import TestSnapshots
 from product.app import create_router_product
 from product.framework.rpc import SESSION_ID_KEY
 
@@ -29,19 +31,21 @@ class TestRPCProduct(TestRPC):
 class ProductFixture:
     """Big object that contains all our optional testing fixtures and utilities."""
 
+    error: TestErrors
     factory: TestFactory
-    errors: TestErrors
     rpc: TestRPCProduct
+    snapshot: TestSnapshots
 
     @classmethod
-    def create(cls) -> ProductFixture:
+    def create(cls, snapshot_fixture: SnapshotAssertion) -> ProductFixture:
+        error = TestErrors()
         factory = TestFactory()
-        errors = TestErrors()
         rpc = TestRPCProduct(factory, create_router_product())
-        return cls(factory=factory, errors=errors, rpc=rpc)
+        snapshot = TestSnapshots(snapshot_fixture)
+        return cls(error, factory, rpc, snapshot)
 
 
 @pytest.fixture
-def t() -> ProductFixture:
+def t(snapshot: SnapshotAssertion) -> ProductFixture:
     """Global test fixture with factory methods."""
-    return ProductFixture.create()
+    return ProductFixture.create(snapshot)

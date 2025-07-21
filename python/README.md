@@ -13,9 +13,7 @@ Refer to each project for its feature list.
 
 ## Developer Loop
 
-Run `docker compose up -d` to start the local database. Refer to the [`justfile`](./justfile) (or
-run `just help`) for the remaining commands for entering the developer loop. A typical loop goes
-something like:
+Run `docker compose up -d` to start the local database. Refer to the [`justfile`](./justfile) for the remaining commands for entering the developer loop. A typical loop goes something like:
 
 ```bash
 $ docker compose up -d  # Start local database.
@@ -23,6 +21,8 @@ $ just install          # Install python dependencies.
 $ just migrate          # Migrate local database.
 $ just dev              # Run the development servers.
 ```
+
+Environment variables default to the values in `.env`, which is checked into git. Add your overrides to `.env.local`.
 
 Refer to [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 

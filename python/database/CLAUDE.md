@@ -25,8 +25,7 @@ just migrate                       # apply
 - Never change a migration from another branch.
 - We do **not** support down‑migrations.
 
-Create at most one migration per branch. Find migrations created in the current branch with `just
-check-for-migration`.
+Create at most one migration per branch. Find migrations created in the current branch with `just check-for-migration`.
 
 ## Table conventions
 
@@ -34,7 +33,7 @@ Create tables using the following template:
 
 ```sql
 CREATE TABLE new_table (
-  id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ntn') CHECK (id LIKE 'ntn_%'), -- ntn = 2–3 letter prefix
+  id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ntn') CHECK (id LIKE 'ntn_%'), -- ntn = 2–3 lowercase letter prefix
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   storytime JSONB,
@@ -43,9 +42,20 @@ CREATE TABLE new_table (
 CREATE TRIGGER updated_at BEFORE UPDATE ON new_table FOR EACH ROW EXECUTE PROCEDURE updated_at();
 ```
 
-Other rules:
+Express enums as enum tables:
 
-- Use BIGINT instead of INT.
+```sql
+CREATE TABLE new_enum (value TEXT PRIMARY KEY);
+INSERT INTO new_enum (value) VALUES ('value1'), ('value2');
+-- Usage: new_column TEXT REFERENCES new_enum(value)
+```
+
+Follow these column conventions:
+
+- Use `BIGINT` instead of `INT`.
+- Use `TIMESTAMPTZ` instead of `TIMESTAMP`.
+- All ID columns must be `COLLATE "C"`.
+- All foreign keys must have an index.
 - Third-party IDs end with `_extid`; `_id` is reserved for first-party foreign key IDs.
 
 Validate these rules with:

@@ -1,25 +1,20 @@
+__pycache__
 _build/
 tags
 *.swp
 
 .DS_Store
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .vscode
 .vim
 
+.venv
 .direnv
 .cache
 
-__pycache__
-*.egg-info
-*.sqlite3*
 .coverage
+.coverage.*
 htmlcov
-.venv
-*.log*
 
 result
-.coverage.*
+*.log*
