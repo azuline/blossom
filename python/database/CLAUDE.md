@@ -42,6 +42,8 @@ CREATE TABLE new_table (
 CREATE TRIGGER updated_at BEFORE UPDATE ON new_table FOR EACH ROW EXECUTE PROCEDURE updated_at();
 ```
 
+- TODO: row level security
+
 Express enums as enum tables:
 
 ```sql
@@ -93,3 +95,5 @@ Follow these conventions:
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
 - TODO: naming guidelines
+
+TODO: Row level security

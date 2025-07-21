@@ -35,7 +35,8 @@ async def main():
             logger.info("validating database queries")
             subprocess.run(["sqlc", "vet", "-f", tmp_config.name], check=True)
             logger.info("generating python bindings")
-            shutil.rmtree(out_dir)
+            if out_dir.exists():
+                shutil.rmtree(out_dir)
             out_dir.mkdir()
             (out_dir / "__init__.py").touch()
             subprocess.run(["sqlc", "generate", "-f", tmp_config.name], check=True)

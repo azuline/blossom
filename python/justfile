@@ -67,7 +67,7 @@ diff:
 list-symbols *ARGS:  ## List all public functions, classes, methods, and literals in the codebase.
     uv run -- python -m tools.list-symbols {{ARGS}}
 list-fixtures:  ## List all symbols related to the `t` testing fixture.
-    uv run -- python -m tools.list-symbols | grep '^foundation.testing'
+    uv run -- python -m tools.list-symbols | grep '^foundation.testing\|:Fixture'
 check-for-migration:  ## List any migration files which have been created or modified in the current branch.
     #!/usr/bin/env bash
     if [[ "$(git branch --show-current)" = "master" ]]; then

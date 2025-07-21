@@ -140,5 +140,4 @@ ENVIRONMENT = "testing"
 [tool.coverage.run]
 omit = ["*/__snapshots__/*", "*/__llmshots__/*"]
 [tool.coverage.report]
-include_namespace_packages = true
 omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*"]

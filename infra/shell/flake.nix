@@ -8,6 +8,10 @@
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sqlc-gen-python-src = {
+      url = "github:azuline/sqlc-gen-python";
+      flake = false;
+    };
   };
 
   outputs =
@@ -15,6 +19,7 @@
     , nixpkgs
     , flake-utils
     , pgmigrate-src
+    , sqlc-gen-python-src
     ,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -33,13 +38,9 @@
                   module = super.buildGoModule {
                     pname = "sqlc-gen-python";
                     version = "1.0.0";
-                    src = super.fetchFromGitHub {
-                      owner = "azuline";
-                      repo = "sqlc-gen-python";
-                      rev = "6ff33dbf7603b5646bf288161fed47a1432cdb57";
-                      sha256 = "sha256-f/mgrWdpkZjAI5MpmuHdcT6R2XspLKqPvTdvpz3tY5c=";
-                    };
-                    vendorHash = "sha256-fXmdjclFzxhv5EhP1OYi9Ek0ZrSGt6ETsLrka+N4M1c=";
+                    src = sqlc-gen-python-src;
+                    doCheck = false;
+                    vendorHash = "sha256-DAN8sOoG16+NvPy8u7B9MBRlNqfFKW3ZH4mqBnG8RCw=";
                   };
                 in
                 super.writeShellScriptBin "sqlc-gen-python" ''
