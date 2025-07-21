@@ -1,97 +1,84 @@
-# Database
-
 > [!NOTE]
-> All paths in this file are written assuming that the cwd is `python/`.
+> All paths assume `cwd == python/`.
 
-Prerequisite: The local database should be running after `docker compose up -d`.
+# Schema sources
 
-Refer to `database/schema.sql` for the database schema. ALWAYS use this file to understand the
-database schema. NEVER try to splice together migrations in your memory--it is complicated and
-unnecessary.
+- **`database/schema.sql`:** definitive schema snapshot. *Read, never edit.*
+- **`database/schema_annotations.yaml`:** — table / column comments. Query a comment:
 
-NEVER MODIFY `database/schema.sql` DIRECTLY. IT IS GENERATED WHEN MIGRATIONS ARE RAN. SIMILARLY,
-NEVER MODIFY THE `-- depends:` COMMENT IN MIGRATION FILES.
+  ```bash
+  yq '.{table}.{column}' database/schema_annotations.yaml
+  ```
 
-Refer to `database/schema_annotations.yaml` for column comments. We do not use database column
-comments because they are hard to modify. Instead, `database/schema_annotations.yaml` has a mapping
-of `table -> column -> comments`. Read column comments with the following command:
-`yq '.{table}.{column}' database/schema_annotations.yaml`. This will print null if the column does
-not exist or has no comment. When adding a column with nuance not evident by the table and column
-name, please describe it in this file.
+Add a comment whenever a column’s purpose is not obvious.
 
-## Migrations
+# Migrations
 
-Database migrations are stored in `database/migrations/`. Create a new migration with `just
-new-migration <migration-name>` and edit the SQL file that the command creates. Then migrate the
-database with `just migrate`. NEVER create a migration by hand. You will make a mistake.
-
-NEVER modify a migration file that was created in a different branch from the working branch. That
-will cause the production deployment to fail.
-
-We do not support down migrations. Never rollback the database.
-
-If you need to reset the database completely during development (e.g., when squashing migrations or
-resolving complex migration conflicts), use: `docker compose down -v && docker compose up -d`. This
-will remove all database volumes and recreate a fresh database.
-
-Work on a single migration file per branch. Use the command `just check-for-migration` to discover
-the migrations that have been created in this branch.
-
-### Safe NOT NULL Column Addition
-
-When adding a NOT NULL column to an existing table, use a two-step approach to avoid issues with
-existing rows. First set the column `NOT NULL` with a default and then drop the default.
-
-```sql
-ALTER TABLE table_name ADD COLUMN column_name TEXT NOT NULL DEFAULT '';
-ALTER TABLE table_name ALTER COLUMN column_name DROP DEFAULT;
+```bash
+just new-migration <name>          # scaffold
+just test database/schema_test.py  # test
+just migrate                       # apply
 ```
 
-## Conventions
+- Never create a migration file by hand, always use `just new-migrate`.
+- Never modify the `-- depends:` header in migration files.
+- Never change a migration from another branch.
+- We do **not** support down‑migrations.
 
-Database tables should all have the following structure:
+Create at most one migration per branch. Find migrations created in the current branch with `just
+check-for-migration`.
+
+## Table conventions
+
+Create tables using the following template:
 
 ```sql
-CREATE TABLE new_table_name (
-  id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ntn') CHECK (id LIKE 'ntn_%'),  -- Pick a unique 2-3 letter abbreviation of the table name.
+CREATE TABLE new_table (
+  id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ntn') CHECK (id LIKE 'ntn_%'), -- ntn = 2–3 letter prefix
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  storytime  JSONB,
-
-  organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id) ON DELETE CASCADE -- Most entities are scoped to an organization.
+  storytime JSONB,
+  organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id) ON DELETE CASCADE -- Scope data to organizations.
 );
-CREATE TRIGGER updated_at BEFORE UPDATE ON new_table_name
-  FOR EACH ROW EXECUTE PROCEDURE updated_at();
-
+CREATE TRIGGER updated_at BEFORE UPDATE ON new_table FOR EACH ROW EXECUTE PROCEDURE updated_at();
 ```
 
-Other conventions are:
+Other rules:
 
-- Always use BIGINT over INT to avoid integer overflow.
-- Always suffix external IDs (as in IDs from external services and not a Postgres foreign key) with `_extid`. `_id` is reserved for internal IDs.
+- Use BIGINT instead of INT.
+- Third-party IDs end with `_extid`; `_id` is reserved for first-party foreign key IDs.
 
-Run `just test databases/schema/schema_test.py` to validate other conventions in our database schema.
+Validate these rules with:
 
-## ORM & Queries
+```bash
+just test database/schema_test.py
+```
 
-Write SQL queries against the database in `database/queries.sql`. We use SQLc to codegen
-`database/__codegen__/queries.py` from that file. After modifying `queries.sql`, run the codegen
-with `just codegen-db`.
+## Safe NOT NULL column addition
 
-The written queries can be accessed in code with the following pattern:
+```sql
+ALTER TABLE tbl ADD COLUMN col TEXT NOT NULL DEFAULT '';
+ALTER TABLE tbl ALTER COLUMN col DROP DEFAULT;
+```
+
+# ORM & queries (SQLC)
+
+Write SQL queries in `database/queries.sql`, then regenerate the ORM:
+
+```bash
+just codegen-db
+```
+
+Access the queries with:
 
 ```python
 async with xact() as q:
-    await q.orm.query_name_in_snake_case(**kwargs)
+    await q.orm.query_name(**kwargs)
 ```
 
-All queries should be written this way. With the exception of special cases where SQLc does not work
-at all, do NOT use the`q.conn` object to query the database directly with raw SQL. Instead, all
-queries should be written using the SQLc paradigm. For queries used only in tests, prefix the query
-name with the word `Test`.
+Follow these conventions:
 
-When writing to a JSONB column, serialize the dataclass or dictionary with the
-`foundation.jsonenc:serialize_json_pg` function.
-
-Never directly set the `created_at` or `updated_at` columns. These are automatically set with column
-defaults and database triggers.
+- Avoid `q.conn` raw SQL except in SQLc edge cases.
+- Prefix test‑only query names with `Test`.
+- Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
+- Never set `created_at` or `updated_at` in code; DB triggers handle them.

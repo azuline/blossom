@@ -15,3 +15,5 @@ ensure it fails. Only then fix the code and make the test pass. For a new featur
 `NotImplementedError`, write failing tests that capture the required behaviour, then implement the
 code until all tests pass.
 
+**Out-of-band changes:** Never revert a user‑driven refactor that the user changed in the current
+session. Assume recent moves and renames are deliberate unless told otherwise.
