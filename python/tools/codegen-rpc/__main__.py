@@ -302,14 +302,14 @@ Failed to convert type {t=} {t_name=} {t_qualname=} {origin=} {origin_name=} {ar
 def codegen_product() -> None:
     dst = MONOREPO_ROOT / "typescript/product/src/z-rpc/types.ts"
     codegen_rpc_models(create_router_product(), dst)
-    subprocess.run(["pnpm", "biome", "format", "--write", str(dst)], check=False)
+    subprocess.run(["biome", "format", "--write", str(dst)], check=False)
     # TODO: god mode
 
 
 def codegen_panopticon() -> None:
     dst = MONOREPO_ROOT / "typescript/panopticon/src/z-rpc/types.ts"
     codegen_rpc_models(create_router_panopticon(), dst)
-    subprocess.run(["pnpm", "biome", "format", "--write", str(dst)], check=False)
+    subprocess.run(["biome", "format", "--write", str(dst)], check=False)
 
 
 if __name__ == "__main__":

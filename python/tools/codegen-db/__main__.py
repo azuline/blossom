@@ -1,6 +1,7 @@
 """Run SQLc codegen using a test database."""
 
 import asyncio
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -17,6 +18,7 @@ logger = get_logger()
 async def main():
     """Run SQLc codegen."""
     testdb = TestDB()
+    out_dir = PYTHON_ROOT / "database/__codegen__"
 
     db_name = await testdb.create_db()
     try:
@@ -33,6 +35,9 @@ async def main():
             logger.info("validating database queries")
             subprocess.run(["sqlc", "vet", "-f", tmp_config.name], check=True)
             logger.info("generating python bindings")
+            shutil.rmtree(out_dir)
+            out_dir.mkdir()
+            (out_dir / "__init__.py").touch()
             subprocess.run(["sqlc", "generate", "-f", tmp_config.name], check=True)
             logger.info("codegen completed successfully")
 
