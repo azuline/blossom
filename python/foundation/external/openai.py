@@ -163,10 +163,8 @@ class OpenAICache:
         )
         # Atomic write to cache file.
         with filelock.FileLock(cache_file_lock):
-            if cache_file.exists():
-                with contextlib.suppress(OSError, json.JSONDecodeError), cache_file.open("r") as f:
-                    cache_data = json.load(f)
             cache_data[cache_key] = response.model_dump()
+            cache_file.unlink(missing_ok=True)
             with cache_file.open("w") as f:
                 json.dump(cache_data, f, indent=2, sort_keys=True)
         logger.info("cached llm response", test=test_name, cache_key=cache_key[:50])
