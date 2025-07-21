@@ -38,7 +38,7 @@ that project template's design decisions and feature set.
   - [Python/Database Management](./python/database)
   - [Python/Web Backend (Customer-Facing)](./python/product)
   - [Python/Web Backend (Internal-Facing)](./python/panopticon)
-  - [Python/External API (Developer-Facing)](./python/platform)
+  - [Python/Public API (Developer-Facing)](./publicapi/)
   - [Python/Data Pipeline](./python/pipeline)
 - [TypeScript](./typescript)
   - [TypeScript/Foundation Libraries](./typescript/foundation)
@@ -50,22 +50,16 @@ that project template's design decisions and feature set.
   - [Infrastructure/Continuous Integration](./github/workflows)
   - [Infrastructure/Continuous Deployment](./infra/deploys)
 
-## Technologies & Dependencies
+## Developer Environment Setup
 
-- TypeScript:
-  - Builds: Vite (SWC+esbuild)
-  - CSS-in-JS: vanilla-extract
-  - Component Stories: Ladle
-  - E2E Test Runner: Playwright
-  - Headless Components: React Aria
-  - Linter/Formatter: Biome + ESLint + Semgrep
-  - Module State Management: Jotai + valtio
-  - Package Manager: pnpm
-  - Router: Tanstack Router
-  - Server State Management: Tanstack Query
-  - Test Runner: Vitest
-  - UI Framework: React
-  - Visual Test Runner: Playwright + Ladle
+Since we use Nix for our development environments:
+
+1. **Install Nix:** [Instructions](https://docs.determinate.systems/).
+2. **Install Direnv:** [Instructions](https://direnv.net/).
+3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima).
+
+Run `direnv allow` in the project's root directory. The developer environment should bootstrap
+automatically.
 
 ## Port Space
 
@@ -81,14 +75,3 @@ reserved ports are noted here and can be grepped for and changed.
 - 40822: Web Frontend (Internal-Facing)
 - 40822: Ladle
 - 40823: Visual Tests
-
-## Developer Environment Setup
-
-Since we use Nix for our development environments:
-
-1. **Install Nix:** [Instructions](https://docs.determinate.systems/).
-2. **Install Direnv:** [Instructions](https://direnv.net/).
-3. **Install Docker:** [Linux](https://docs.docker.com/engine/install/) / [MacOS](https://github.com/abiosoft/colima).
-
-Run `direnv allow` in the project's root directory. The developer environment should bootstrap
-automatically.

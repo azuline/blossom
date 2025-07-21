@@ -27,3 +27,19 @@ tool. For the best developer experience:
 # Stories
 
 The frontend stories are hosted with Ladle at https://celestial.sunsetglow.net.
+
+# Major Dependencies
+
+- Builds: Vite + SWC + esbuild
+- CSS-in-JS: vanilla-extract
+- Component Stories: Ladle
+- E2E Test Runner: Playwright
+- Headless Components: React Aria
+- Linter/Formatter: Biome + ESLint + Semgrep
+- Module State Management: Jotai + valtio
+- Package Manager: pnpm
+- Router: Tanstack Router
+- Server State Management: Tanstack Query
+- Test Runner: Vitest
+- UI Framework: React
+- Visual Test Runner: Playwright + Ladle

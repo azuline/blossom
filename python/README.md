@@ -6,7 +6,7 @@ The projects in this directory are:
 - [`database` (Database Management)](./database)
 - [`product` (Customer-Facing Web Backend)](./product)
 - [`panopticon` (Internal-Facing Web Backend)](./panopticon)
-- [`platform` (Developer-Facing External API)](./panopticon)
+- [`publicapi` (Developer-Facing Public API)](./publicapi)
 - [`pipeline` (Data Pipeline)](./pipeline)
 
 Refer to each project for its feature list.
