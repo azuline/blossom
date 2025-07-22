@@ -11,6 +11,7 @@ tags
 .venv
 .direnv
 .cache
+.*_cache
 
 .coverage
 .coverage.*

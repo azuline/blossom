@@ -20,46 +20,40 @@ class TestDB:
         base_uri, _ = ENV.database_uri.rsplit("/", 1)
         return f"{base_uri}/{db_name}"
 
-    def _schema_version(self) -> str:
-        """Calculate a hash of the database schema files."""
+    def _compute_template_name(self) -> str:
+        """Compute the template database name for the current schema version."""
         migrations_dir = PYTHON_ROOT / "database" / "migrations"
         hasher = hashlib.sha256()
         if migrations_dir.exists():
             for migration_file in sorted(migrations_dir.glob("*.sql")):
                 hasher.update(migration_file.name.encode())
                 hasher.update(migration_file.read_bytes())
-        return hasher.hexdigest()[:8]
-
-    def _tmpl_db_name(self) -> str:
-        """Get the template database name for the current schema version."""
-        version = self._schema_version()
+        version = hasher.hexdigest()[:8]
         return f"test_template_{version}"
 
-    async def _ensure_template(self) -> str:
-        """Ensure the template database exists for the current schema version."""
-        async with lock("testdb"), connect_db_admin_nopool() as conn:
-            tmpl_name = self._tmpl_db_name()
+    async def create_template(self) -> str:
+        """Create a template database for the current schema version."""
+        tmpl_name = self._compute_template_name()
 
+        async with lock("testdb"), connect_db_admin_nopool() as conn:
             cursor = await conn.execute("SELECT 1 FROM pg_database WHERE datname = %s", (tmpl_name,))
             if await cursor.fetchone():
-                logger.debug("template database already exists", tmpl_name=tmpl_name)
+                logger.debug("template database already exists, reusing it", tmpl_name=tmpl_name)
                 return tmpl_name
 
             logger.info("creating template database", tmpl_name=tmpl_name)
             await conn.execute(SQL("CREATE DATABASE {}").format(Identifier(tmpl_name)))
-
             migrations = yoyo.read_migrations(str(PYTHON_ROOT / "database/migrations"))
             db_uri_yoyo = self.database_uri(tmpl_name).replace("postgresql://", "postgresql+psycopg://")
             with yoyo.get_backend(db_uri_yoyo) as backend, backend.lock():
                 backend.apply_migrations(backend.to_apply(migrations))
-
             await conn.execute("UPDATE pg_database SET datistemplate = true WHERE datname = %s", (tmpl_name,))
 
         logger.info("created template database", tmpl_name=tmpl_name)
         return tmpl_name
 
     async def create_db(self) -> str:
-        tmpl_name = await self._ensure_template()
+        tmpl_name = await self.create_template()
         db_name = f"test_{secrets.token_hex(8)}"
         async with connect_db_admin_nopool() as conn:
             await conn.execute(SQL("CREATE DATABASE {} WITH TEMPLATE {}").format(Identifier(db_name), Identifier(tmpl_name)))

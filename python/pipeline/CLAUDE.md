@@ -6,4 +6,3 @@
   `pipeline.definitions`.
 - When working with Dagster assets, DO NOT use `context.log`. Always use the `logger` from
   `foundation.logs:get_logger` instead for consistent logging across the codebase.
-

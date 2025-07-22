@@ -88,6 +88,11 @@ WHERE tu.user_id = %(p1)s
 """
 
 
+PIPELINE_ORGANIZATION_ID_FETCH_ALL = """-- name: pipeline_organization_id_fetch_all \\:many
+SELECT id FROM organizations ORDER BY id
+"""
+
+
 RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch \\:one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
@@ -293,6 +298,11 @@ class AsyncQuerier:
                 name=row[4],
                 inbound_source=row[5],
             )
+
+    async def pipeline_organization_id_fetch_all(self) -> AsyncIterator[str]:
+        cursor = await self._conn.execute(PIPELINE_ORGANIZATION_ID_FETCH_ALL)
+        async for row in cursor:
+            yield row[0]
 
     async def rpc_unexpired_session_fetch(self, *, id: str) -> Optional[models.Session]:
         row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, {"p1": id})).fetchone()

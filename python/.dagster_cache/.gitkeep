@@ -1,1 +1,0 @@
-This directory needs to exist for the dagster local cache. Dagster won't auto-create it.
