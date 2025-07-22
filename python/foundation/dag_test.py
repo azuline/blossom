@@ -6,7 +6,7 @@ import pytest
 
 from foundation.conftest import FoundationFixture
 from foundation.dag import dag_asset
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 
 
 def test_asset_decorator_creates_dagster_asset():
@@ -24,7 +24,7 @@ def test_asset_decorator_creates_dagster_asset():
 def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
     """Test that errors raised inside asset functions are reported to Sentry."""
 
-    class TestAssetError(BlossomError):
+    class TestAssetError(BaseError):
         pass
 
     @dag_asset()

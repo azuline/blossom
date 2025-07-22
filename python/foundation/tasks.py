@@ -7,7 +7,7 @@ from collections.abc import Callable, Coroutine
 from functools import partial
 from typing import LiteralString, TypeVar
 
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 from foundation.logs import get_logger
 
 logger = get_logger()
@@ -16,7 +16,7 @@ logger = get_logger()
 T = TypeVar("T")
 
 
-class UnsupervisedTasksTimeoutError(BlossomError):
+class UnsupervisedTasksTimeoutError(BaseError):
     pass
 
 

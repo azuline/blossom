@@ -4,10 +4,10 @@ import pytest
 import structlog.testing
 
 from foundation.env import ENV
-from foundation.errors import BlossomError, _sentry_before_send, suppress_error
+from foundation.errors import BaseError, _sentry_before_send, suppress_error
 
 
-class Test1Error(BlossomError):
+class Test1Error(BaseError):
     __test__ = False
 
 
@@ -15,20 +15,20 @@ class Test1ChildError(Test1Error):
     __test__ = False
 
 
-class Test2Error(BlossomError):
+class Test2Error(BaseError):
     __test__ = False
 
 
 def test_suppress_error():
     assert ENV.environment == "development", "this test only works in development"
 
-    with suppress_error(BlossomError):
-        raise BlossomError
-    with suppress_error(BlossomError):
+    with suppress_error(BaseError):
+        raise BaseError
+    with suppress_error(BaseError):
         raise Test1Error
 
     # Test nothing happens when no error.
-    with suppress_error(BlossomError):
+    with suppress_error(BaseError):
         pass
 
     # Test error subclass filtering.
@@ -42,20 +42,20 @@ def test_suppress_error():
         raise Test1Error
 
     # Test environment filtering.
-    with suppress_error(BlossomError, environments=("development",)):
-        raise BlossomError
-    with suppress_error(BlossomError, environments=("production", "development")):
-        raise BlossomError
+    with suppress_error(BaseError, environments=("development",)):
+        raise BaseError
+    with suppress_error(BaseError, environments=("production", "development")):
+        raise BaseError
 
     # Test environment non-filtering.
-    with pytest.raises(BlossomError), suppress_error(BlossomError, environments=("production",)):
-        raise BlossomError
+    with pytest.raises(BaseError), suppress_error(BaseError, environments=("production",)):
+        raise BaseError
 
 
 def test_sentry_before_send_filters_transient_errors():
     """Test that transient errors are not sent to Sentry."""
 
-    class TransientError(BlossomError):
+    class TransientError(BaseError):
         transient = True
 
     # Create a mock event and hint
@@ -70,7 +70,7 @@ def test_sentry_before_send_filters_transient_errors():
 def test_sentry_before_send_adds_custom_error_data():
     """Test that custom error data is added to Sentry events."""
 
-    class CustomError(BlossomError):
+    class CustomError(BaseError):
         pass
 
     error = CustomError("test error", user_id="123", org_id="456")

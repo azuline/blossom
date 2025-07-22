@@ -15,7 +15,7 @@ from foundation.logs import get_logger
 logger = get_logger()
 
 
-class BlossomError(Exception):
+class BaseError(Exception):
     """
     A base first-party error class. All of our internal errors should subclass from this error in
     order to distinguish first-party and third-party errors.
@@ -44,14 +44,14 @@ class BlossomError(Exception):
         return super().__str__()
 
 
-class ImpossibleError(BlossomError):
+class ImpossibleError(BaseError):
     """
     Errors that are used to indicate an impossible code path. Always indicates a mistaken assumption
     and subsequent bug.
     """
 
 
-class ConfigurationError(BlossomError):
+class ConfigurationError(BaseError):
     """
     This error is raised when something is wrong with the configuration.
     """
@@ -124,7 +124,7 @@ def initialize_sentry():
 
 def _sentry_before_send(event: sentry_sdk.types.Event, hint: sentry_sdk.types.Hint) -> sentry_sdk.types.Event | None:
     _exc_type, exc_value, _tb = hint.get("exc_info", [None])
-    if isinstance(exc_value, BlossomError):
+    if isinstance(exc_value, BaseError):
         # Do not report transient errors
         if exc_value.transient:
             return None

@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
 from database.conn import DBConnPool, connect_db_admin
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 from foundation.logs import get_logger
 
 logger = get_logger()
@@ -18,12 +18,12 @@ def _stable_hash(string: str) -> int:
 
 
 @dataclass
-class LockAlreadyHeld(BlossomError):
+class LockAlreadyHeld(BaseError):
     name: str
     lock_id: int
 
 
-class LockTimeoutError(BlossomError, TimeoutError):
+class LockTimeoutError(BaseError, TimeoutError):
     pass
 
 

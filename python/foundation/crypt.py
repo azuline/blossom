@@ -17,7 +17,7 @@ from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 from foundation.env import ENV
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 
 
 def random_b64(length: int) -> str:
@@ -33,7 +33,7 @@ def encrypt_symmetric(data: str, associated_data: bytes | None = None, *, encryp
     return base64.b64encode(nonce + ciphertext).decode("utf-8")
 
 
-class DecryptionFailedError(BlossomError):
+class DecryptionFailedError(BaseError):
     pass
 
 

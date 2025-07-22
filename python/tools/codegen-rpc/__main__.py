@@ -10,7 +10,7 @@ from typing import Any, Literal, TypeVar, get_args, get_origin, get_type_hints
 from jinja2 import BaseLoader, Environment
 from pydantic import BaseModel
 
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 from foundation.logs import get_logger
 from foundation.paths import MONOREPO_ROOT
 from foundation.rpc import RPCError, RPCRouter
@@ -164,11 +164,11 @@ class _GenerationCache:
     type_names: dict[str, str] = field(default_factory=dict)
 
 
-class UnsupportedTypeError(BlossomError):
+class UnsupportedTypeError(BaseError):
     pass
 
 
-class NameCollisionError(BlossomError):
+class NameCollisionError(BaseError):
     pass
 
 

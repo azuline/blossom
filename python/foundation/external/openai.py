@@ -15,7 +15,7 @@ from openai.types.chat.chat_completion_message_param import ChatCompletionMessag
 from openai.types.shared_params.response_format_json_schema import ResponseFormatJSONSchema
 
 from foundation.env import ENV
-from foundation.errors import BlossomError, ConfigurationError
+from foundation.errors import BaseError, ConfigurationError
 from foundation.logs import get_logger
 
 logger = get_logger()
@@ -81,7 +81,7 @@ class FakeOpenAIClient:
         self.chat = FakeOpenAIClient.FakeOpenAIChat()
 
 
-class LLMTestCacheError(BlossomError):
+class LLMTestCacheError(BaseError):
     pass
 
 

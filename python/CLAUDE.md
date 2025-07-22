@@ -81,7 +81,7 @@ Access variables exclusively through `foundation.env:ENV`, and declare them in `
 
 ## Errors
 
-First-party errors subclass `foundation.errors:BlossomError`. Messages are lowercase phrases separated by colons:
+First-party errors subclass `foundation.errors:BaseError`. Messages are lowercase phrases separated by colons:
 
 ```python
 raise CustomError("failed to read file: file not found", path=path)

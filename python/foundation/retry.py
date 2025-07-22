@@ -4,7 +4,7 @@ import random
 from collections.abc import Awaitable, Callable
 from typing import Any, LiteralString, ParamSpec, TypeVar
 
-from foundation.errors import BlossomError
+from foundation.errors import BaseError
 from foundation.logs import get_logger
 from foundation.metrics import metric_distribution
 
@@ -14,7 +14,7 @@ T = TypeVar("T")
 P = ParamSpec("P")
 
 
-class MaxRetriesExceededError(BlossomError):
+class MaxRetriesExceededError(BaseError):
     pass
 
 
