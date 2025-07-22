@@ -9,6 +9,7 @@ from openai.types.chat.chat_completion import Choice
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from openai.types.completion_usage import CompletionUsage
 
+from foundation.errors import ImpossibleError
 from foundation.external.openai import OpenAICache
 
 
@@ -38,10 +39,21 @@ async def test_basic_caching():
         response1 = _create_mock_response("first", " ".join(coolname.generate_slug(4)))
         response2 = _create_mock_response("second", " ".join(coolname.generate_slug(4)))
 
+        # Test that the cache replays duplicate completions.
         cache = OpenAICache(cache_dir=Path(tmpdir))
         cache.real_client = AsyncMock()
         cache.real_client.chat.completions.create = AsyncMock(side_effect=[response1, response2])
+        result1 = await cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Hello"}])
+        assert result1 == response1
+        result2 = await cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Hello"}])
+        assert result2 == response1
+        result3 = await cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Goodbye"}])
+        assert result3 == response2
 
+        # Test that the cache persists across instantiations (i.e. test runs).
+        cache = OpenAICache(cache_dir=Path(tmpdir))
+        cache.real_client = AsyncMock()
+        cache.real_client.chat.completions.create = AsyncMock(side_effect=ImpossibleError())
         result1 = await cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Hello"}])
         assert result1 == response1
         result2 = await cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Hello"}])
@@ -59,12 +71,15 @@ async def test_concurrent_caching():
         cache = OpenAICache(cache_dir=Path(tmpdir))
         cache.real_client = AsyncMock()
         cache.real_client.chat.completions.create = AsyncMock(side_effect=[response1, response2, response3])
-
         results1 = await asyncio.gather(
             cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Message 0"}]),
             cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Message 1"}]),
             cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Message 2"}]),
         )
+
+        cache = OpenAICache(cache_dir=Path(tmpdir))
+        cache.real_client = AsyncMock()
+        cache.real_client.chat.completions.create = AsyncMock(side_effect=ImpossibleError())
         results2 = await asyncio.gather(
             cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Message 0"}]),
             cache.complete(model="gpt-4", messages=[{"role": "user", "content": "Message 1"}]),

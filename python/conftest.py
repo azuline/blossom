@@ -11,7 +11,7 @@ from database.testdb import TestDB
 from foundation.env import ENV
 from foundation.errors import TESTING_CAPTURED_EXCEPTIONS
 from foundation.external.external import EXT
-from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenAIClient
+from foundation.external.openai import COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
 from foundation.initialize import initialize_foundation
@@ -42,15 +42,6 @@ async def test_db(request: pytest.FixtureRequest) -> AsyncIterator[None]:
             logger.info("test session passed: cleaning up test database", db_name=test_db_name)
             ENV.database_uri = original_database_uri
             await testdb.drop_db(test_db_name)
-
-
-@pytest.fixture(autouse=True, scope="session")
-def clear_globals_session() -> None:
-    # Maybe left over from a previous test run.
-    if DEFAULT_LLM_CACHE_DIR.exists():
-        for f in DEFAULT_LLM_CACHE_DIR.iterdir():
-            if f.suffix == ".lock":
-                f.unlink()
 
 
 @pytest.fixture(autouse=True)
