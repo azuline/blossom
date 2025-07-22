@@ -33,11 +33,11 @@ def initialize_logging() -> None:
 
     # Processors, assemble!
     common_processors = [
+        _blossom_processor,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.add_log_level,
         structlog.processors.format_exc_info,
         structlog.contextvars.merge_contextvars,
-        _blossom_processor,
         structlog.stdlib.ExtraAdder(),
         structlog.processors.EventRenamer("message"),
         structlog.processors.CallsiteParameterAdder({structlog.processors.CallsiteParameter.MODULE, structlog.processors.CallsiteParameter.FUNC_NAME}),
@@ -87,6 +87,8 @@ def initialize_logging() -> None:
 
 
 def _blossom_processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
+    from foundation.errors import report_error
+
     # Add custom keys.
     event_dict["service"] = ENV.service
     if ENV.environment != "development":
@@ -96,6 +98,11 @@ def _blossom_processor(_: logging.Logger, _2: str, event_dict: EventDict) -> Eve
     for k, v in event_dict.items():
         if isinstance(v, datetime.datetime):
             event_dict[k] = v.isoformat()
+    # Report errors to sentry.
+    if exc_info := event_dict.get("exc_info"):
+        if exc_info is True:
+            _3, exc_info, _4 = sys.exc_info()
+        report_error(cast(BaseException, exc_info))
     return event_dict
 
 

@@ -9,6 +9,7 @@ import pytest_asyncio
 
 from database.testdb import TestDB
 from foundation.env import ENV
+from foundation.errors import TESTING_CAPTURED_EXCEPTIONS
 from foundation.external.external import EXT
 from foundation.external.openai import DEFAULT_LLM_CACHE_DIR, COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
@@ -44,12 +45,17 @@ async def test_db(request: pytest.FixtureRequest) -> AsyncIterator[None]:
 
 
 @pytest.fixture(autouse=True, scope="session")
-def clear_llmcache_locks() -> None:
+def clear_globals_session() -> None:
     # Maybe left over from a previous test run.
     if DEFAULT_LLM_CACHE_DIR.exists():
         for f in DEFAULT_LLM_CACHE_DIR.iterdir():
             if f.suffix == ".lock":
                 f.unlink()
+
+
+@pytest.fixture(autouse=True)
+def clear_globals_function() -> None:
+    TESTING_CAPTURED_EXCEPTIONS.clear()
 
 
 @pytest.fixture(autouse=True)
