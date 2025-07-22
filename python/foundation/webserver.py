@@ -28,11 +28,7 @@ def create_webserver(router: RPCRouter) -> quart.Quart:
         SESSION_COOKIE_SAMESITE="Lax",
     )
 
-    @app.route("/ping")
-    def _ping() -> quart.Response:
-        logger.info("received ping request")
-        return quart.jsonify({"ok": True, "version": ENV.commit})
-
+    app.route("/ping")(_ping_handler)
     for r in router.routes:
         r.mount(app)
     for bp in router.raw_blueprints:
@@ -42,3 +38,8 @@ def create_webserver(router: RPCRouter) -> quart.Quart:
 
 def start_webserver(app: str, host: str, port: int) -> None:  # pragma: no cover
     subprocess.run(["hypercorn", app, "--bind", f"{host}:{port}", "--graceful-timeout", "30", "--worker-class", "uvloop", "--workers", str(ENV.webserver_num_workers)], check=True)
+
+
+def _ping_handler() -> quart.Response:
+    logger.info("received ping request")
+    return quart.jsonify({"ok": True, "version": ENV.commit})

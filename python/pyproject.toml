@@ -66,7 +66,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", "**/__codegen__", "**/*.ipynb", ".debug_scripts"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen__", ".debug_scripts"]
 target-version = "py313"
 preview = true
 
@@ -119,12 +119,44 @@ ban-relative-imports = "all"
 "structlog.get_logger".msg = "Use the foundation.logs:get_logger facade instead."
 
 [tool.pyright]
-stubPath = "stubs"
-reportPrivateImportUsage = false
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+# Environment options.
+exclude = [".venv"]
+norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
+venvPath = "."
+venv = ".venv"
+pythonPlatform = "Linux"
+executionEnvironments = [{ root = "." }]
+# Type evaluation settings.
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+analyzeUnannotatedFunctions = true
+strictParameterNoneValue = true
+enableTypeIgnoreComments = true
+deprecateTypingAliases = true
+enableReachabilityAnalysis = true
+# Type check diagnostics settings.
+typeCheckingMode = "standard"
 reportMissingModuleSource = false
+# Type check rule overrides.
+reportUnusedClass = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedClassDecorator = "warning"
+reportUntypedBaseClass = "warning"
+reportUntypedNamedTuple = "warning"
+reportTypeCommentUsage = "error"
+reportConstantRedefinition = "error"
+reportUnnecessaryIsInstance = "warning"
+reportUnnecessaryCast = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
+reportUnusedCoroutine = "error"
 
 [tool.pytest.ini_options]
-norecursedirs = [".pytest_cache", ".ruff_cache", "__pycache__", ".direnv"]
+norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 # Logs are emitted to stderr in a formatted way. When pytest captures logs,

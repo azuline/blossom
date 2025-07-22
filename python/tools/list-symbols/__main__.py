@@ -28,7 +28,7 @@ def _get_docstring(node: ast.AST) -> str | None:
 
 
 def _extract_from_ast(module_path: str, content: str) -> list[CodeEntity]:
-    entities = []
+    entities: list[CodeEntity] = []
 
     try:
         tree = ast.parse(content)
@@ -94,7 +94,7 @@ def _path_to_module(file_path: Path, root_dir: Path) -> str:
 
 
 def inspect_codebase(root_dir: Path) -> list[CodeEntity]:
-    entities = []
+    entities: list[CodeEntity] = []
     for file_path in _get_python_files(root_dir):
         module_path = _path_to_module(file_path, root_dir)
         with contextlib.suppress(Exception):
@@ -107,7 +107,7 @@ def inspect_codebase(root_dir: Path) -> list[CodeEntity]:
 def _format_output(entities: list[CodeEntity], format: str) -> str:
     if format == "json":
         return json.dumps([{"name": e.name, "type": e.type, "module": e.module, "docstring": e.docstring} for e in entities], indent=2)
-    lines = []
+    lines: list[str] = []
     for entity in sorted(entities, key=lambda e: (e.module, e.type, e.name)):
         if entity.docstring:
             first_line = entity.docstring.split("\n")[0].strip()

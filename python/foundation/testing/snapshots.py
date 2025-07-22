@@ -1,6 +1,6 @@
 from typing import Any
 
-from syrupy import SnapshotAssertion
+from syrupy.assertion import SnapshotAssertion
 from syrupy.types import PropertyFilter, PropertyMatcher
 
 

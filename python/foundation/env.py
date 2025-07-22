@@ -65,7 +65,7 @@ class _Env:
     # Third-party API keys.
     slack_token: str | None
     slack_signing_secret: str | None
-    openai_api_key: str
+    openai_api_key: str | None
     google_sheets_credentials_json: str | None
 
     # Integrations
@@ -98,7 +98,7 @@ class _Env:
             vault_encryption_key=bytes.fromhex(cls._required("VAULT_ENCRYPTION_KEY")),
             slack_token=cls._optional("SLACK_TOKEN"),
             slack_signing_secret=cls._optional("SLACK_SIGNING_SECRET"),
-            openai_api_key=cls._required("OPENAI_API_KEY"),
+            openai_api_key=cls._optional("OPENAI_API_KEY"),
             google_sheets_credentials_json=cls._optional("GOOGLE_SHEETS_CREDENTIALS_JSON"),
             brex_token=cls._optional("BREX_TOKEN"),
             ramp_token=cls._optional("RAMP_TOKEN"),

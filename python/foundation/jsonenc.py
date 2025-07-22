@@ -11,9 +11,9 @@ from typing import Any
 class PostgresJSONDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
         def object_hook(obj: dict[str, Any]):
-            if isinstance(obj, dict) and "__sentinel" in obj and obj["__sentinel"] == "timestamp":
+            if "__sentinel" in obj and obj["__sentinel"] == "timestamp":
                 return datetime.fromisoformat(obj["value"])
-            if isinstance(obj, dict) and "__sentinel" in obj and obj["__sentinel"] == "date":
+            if "__sentinel" in obj and obj["__sentinel"] == "date":
                 return date.fromisoformat(obj["value"])
             return obj
 

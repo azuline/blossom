@@ -16,7 +16,7 @@ async def test_memoize():
     assert await notsync() == await notsync()
 
 
-async def run_once():
+async def test_run_once():
     sync_ctr = 0
     async_ctr = 0
 

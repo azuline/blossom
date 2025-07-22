@@ -21,8 +21,8 @@ def _convert_dataclass(dc: type) -> dict[str, Any]:
         field_schema = _convert_type(hints[field.name])
         if field.metadata.get("description"):
             field_schema["description"] = field.metadata["description"]
-        schema["properties"][field.name] = field_schema
-        schema["required"].append(field.name)
+        schema["properties"][field.name] = field_schema  # type: ignore
+        schema["required"].append(field.name)  # type: ignore
     return schema
 
 

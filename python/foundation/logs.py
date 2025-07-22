@@ -15,8 +15,6 @@ from foundation.env import ENV
 
 
 def get_logger(force_debug: bool = False) -> BoundLogger:
-    logger = structlog.stdlib.get_logger()
-
     if force_debug or "pytest" in sys.modules:
         # Get the module __name__ of the caller
         frm = inspect.stack()[1]
@@ -24,7 +22,7 @@ def get_logger(force_debug: bool = False) -> BoundLogger:
         if mod is not None:
             logging.getLogger(mod.__name__).setLevel(logging.DEBUG)  # noqa: TID251
 
-    return cast(BoundLogger, logger)
+    return structlog.stdlib.get_logger()
 
 
 def initialize_logging() -> None:
@@ -79,11 +77,6 @@ def initialize_logging() -> None:
     handler = StreamHandler(sys.stderr)
     handler.setFormatter(formatter)
     root_logger.handlers = [handler]
-
-    for name in ("hypercorn.error",):
-        module_logger = logging.getLogger(name)  # noqa: TID251
-        module_logger.handlers.clear()
-        module_logger.propagate = True
 
 
 def _blossom_processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:

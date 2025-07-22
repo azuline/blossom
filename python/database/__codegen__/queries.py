@@ -14,7 +14,7 @@ AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch \\
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
-WHERE tu.user_id = %s AND t.id = %s
+WHERE tu.user_id = %(p1)s AND t.id = %(p2)s
 """
 
 
@@ -23,7 +23,7 @@ SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
 LEFT JOIN sessions s ON s.organization_id = t.id AND s.user_id = tu.user_id
-WHERE tu.user_id = %s
+WHERE tu.user_id = %(p1)s
 ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
 """
@@ -31,7 +31,7 @@ LIMIT 1
 
 AUTHN_SESSION_CREATE = """-- name: authn_session_create \\:one
 INSERT INTO sessions (user_id, organization_id)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
@@ -39,14 +39,14 @@ RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_
 AUTHN_SESSION_EXPIRE = """-- name: authn_session_expire \\:exec
 UPDATE sessions
 SET expired_at = NOW() 
-WHERE id = %s
+WHERE id = %(p1)s
 """
 
 
 AUTHN_SESSION_FETCH_BY_USER = """-- name: authn_session_fetch_by_user \\:one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
-WHERE user_id = %s
+WHERE user_id = %(p1)s
 ORDER BY last_seen_at DESC
 LIMIT 1
 """
@@ -55,20 +55,20 @@ LIMIT 1
 AUTHN_USER_FETCH_BY_EMAIL = """-- name: authn_user_fetch_by_email \\:one
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
-WHERE email = %s
+WHERE email = %(p1)s
 """
 
 
 ORGANIZATION_ADD_USER = """-- name: organization_add_user \\:one
 INSERT INTO organizations_users (organization_id, user_id)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
 
 ORGANIZATION_CREATE = """-- name: organization_create \\:one
 INSERT INTO organizations (name, inbound_source)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
@@ -76,7 +76,7 @@ RETURNING id, created_at, updated_at, storytime, name, inbound_source
 ORGANIZATION_FETCH = """-- name: organization_fetch \\:one
 SELECT id, created_at, updated_at, storytime, name, inbound_source
 FROM organizations
-WHERE id = %s
+WHERE id = %(p1)s
 """
 
 
@@ -84,14 +84,14 @@ ORGANIZATION_FETCH_ALL = """-- name: organization_fetch_all \\:many
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
-WHERE tu.user_id = %s
+WHERE tu.user_id = %(p1)s
 """
 
 
 RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch \\:one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
-WHERE id = %s
+WHERE id = %(p1)s
 AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
@@ -99,21 +99,21 @@ AND last_seen_at > NOW() - '14 days'::INTERVAL
 
 TEST_ORGANIZATION_CREATE = """-- name: test_organization_create \\:one
 INSERT INTO organizations (name, inbound_source)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
 
 TEST_ORGANIZATION_USER_CREATE = """-- name: test_organization_user_create \\:one
 INSERT INTO organizations_users (user_id, organization_id)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
 
 TEST_SESSION_CREATE = """-- name: test_session_create \\:one
 INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
-VALUES (%s, %s, %s, %s)
+VALUES (%(p1)s, %(p2)s, %(p3)s, %(p4)s)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
@@ -121,14 +121,14 @@ RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_
 TEST_USER_CREATE = """-- name: test_user_create \\:one
 
 INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
-VALUES (%s, %s, %s, %s, %s)
+VALUES (%(p1)s, %(p2)s, %(p3)s, %(p4)s, %(p5)s)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
 
 USER_CREATE = """-- name: user_create \\:one
 INSERT INTO users (name, email, password_hash, signup_step)
-VALUES (%s, %s, %s, %s)
+VALUES (%(p1)s, %(p2)s, %(p3)s, %(p4)s)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
@@ -136,13 +136,13 @@ RETURNING id, created_at, updated_at, storytime, name, email, password_hash, sig
 USER_FETCH = """-- name: user_fetch \\:one
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
-WHERE id = %s
+WHERE id = %(p1)s
 """
 
 
 VAULT_SECRET_CREATE = """-- name: vault_secret_create \\:one
 INSERT INTO vaulted_secrets (organization_id, ciphertext)
-VALUES (%s, %s)
+VALUES (%(p1)s, %(p2)s)
 RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
 """
 
@@ -150,14 +150,14 @@ RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
 VAULT_SECRET_DELETE = """-- name: vault_secret_delete \\:exec
 DELETE
 FROM vaulted_secrets
-WHERE id = %s
+WHERE id = %(p1)s
 """
 
 
 VAULT_SECRET_FETCH = """-- name: vault_secret_fetch \\:one
 SELECT id, created_at, updated_at, storytime, organization_id, ciphertext
 FROM vaulted_secrets
-WHERE id = %s
+WHERE id = %(p1)s
 """
 
 
@@ -166,7 +166,7 @@ class AsyncQuerier:
         self._conn = conn
 
     async def authn_linked_organization_fetch(self, *, user_id: str, id: str) -> Optional[models.Organization]:
-        row = await (await self._conn.execute(AUTHN_LINKED_ORGANIZATION_FETCH, (user_id, id))).fetchone()
+        row = await (await self._conn.execute(AUTHN_LINKED_ORGANIZATION_FETCH, {"p1": user_id, "p2": id})).fetchone()
         if row is None:
             return None
         return models.Organization(
@@ -179,7 +179,7 @@ class AsyncQuerier:
         )
 
     async def authn_most_recently_accessed_organization_fetch(self, *, user_id: str) -> Optional[models.Organization]:
-        row = await (await self._conn.execute(AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH, (user_id, ))).fetchone()
+        row = await (await self._conn.execute(AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH, {"p1": user_id})).fetchone()
         if row is None:
             return None
         return models.Organization(
@@ -192,7 +192,7 @@ class AsyncQuerier:
         )
 
     async def authn_session_create(self, *, user_id: str, organization_id: Optional[str]) -> Optional[models.Session]:
-        row = await (await self._conn.execute(AUTHN_SESSION_CREATE, (user_id, organization_id))).fetchone()
+        row = await (await self._conn.execute(AUTHN_SESSION_CREATE, {"p1": user_id, "p2": organization_id})).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -207,10 +207,10 @@ class AsyncQuerier:
         )
 
     async def authn_session_expire(self, *, id: str) -> None:
-        await self._conn.execute(AUTHN_SESSION_EXPIRE, (id, ))
+        await self._conn.execute(AUTHN_SESSION_EXPIRE, {"p1": id})
 
     async def authn_session_fetch_by_user(self, *, user_id: str) -> Optional[models.Session]:
-        row = await (await self._conn.execute(AUTHN_SESSION_FETCH_BY_USER, (user_id, ))).fetchone()
+        row = await (await self._conn.execute(AUTHN_SESSION_FETCH_BY_USER, {"p1": user_id})).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -225,7 +225,7 @@ class AsyncQuerier:
         )
 
     async def authn_user_fetch_by_email(self, *, email: str) -> Optional[models.User]:
-        row = await (await self._conn.execute(AUTHN_USER_FETCH_BY_EMAIL, (email, ))).fetchone()
+        row = await (await self._conn.execute(AUTHN_USER_FETCH_BY_EMAIL, {"p1": email})).fetchone()
         if row is None:
             return None
         return models.User(
@@ -242,7 +242,7 @@ class AsyncQuerier:
         )
 
     async def organization_add_user(self, *, organization_id: str, user_id: str) -> Optional[models.OrganizationsUser]:
-        row = await (await self._conn.execute(ORGANIZATION_ADD_USER, (organization_id, user_id))).fetchone()
+        row = await (await self._conn.execute(ORGANIZATION_ADD_USER, {"p1": organization_id, "p2": user_id})).fetchone()
         if row is None:
             return None
         return models.OrganizationsUser(
@@ -257,7 +257,7 @@ class AsyncQuerier:
         )
 
     async def organization_create(self, *, name: str, inbound_source: str) -> Optional[models.Organization]:
-        row = await (await self._conn.execute(ORGANIZATION_CREATE, (name, inbound_source))).fetchone()
+        row = await (await self._conn.execute(ORGANIZATION_CREATE, {"p1": name, "p2": inbound_source})).fetchone()
         if row is None:
             return None
         return models.Organization(
@@ -270,7 +270,7 @@ class AsyncQuerier:
         )
 
     async def organization_fetch(self, *, id: str) -> Optional[models.Organization]:
-        row = await (await self._conn.execute(ORGANIZATION_FETCH, (id, ))).fetchone()
+        row = await (await self._conn.execute(ORGANIZATION_FETCH, {"p1": id})).fetchone()
         if row is None:
             return None
         return models.Organization(
@@ -283,7 +283,7 @@ class AsyncQuerier:
         )
 
     async def organization_fetch_all(self, *, user_id: str) -> AsyncIterator[models.Organization]:
-        cursor = await self._conn.execute(ORGANIZATION_FETCH_ALL, (user_id, ))
+        cursor = await self._conn.execute(ORGANIZATION_FETCH_ALL, {"p1": user_id})
         async for row in cursor:
             yield models.Organization(
                 id=row[0],
@@ -295,7 +295,7 @@ class AsyncQuerier:
             )
 
     async def rpc_unexpired_session_fetch(self, *, id: str) -> Optional[models.Session]:
-        row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, (id, ))).fetchone()
+        row = await (await self._conn.execute(RPC_UNEXPIRED_SESSION_FETCH, {"p1": id})).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -310,7 +310,7 @@ class AsyncQuerier:
         )
 
     async def test_organization_create(self, *, name: str, inbound_source: str) -> Optional[models.Organization]:
-        row = await (await self._conn.execute(TEST_ORGANIZATION_CREATE, (name, inbound_source))).fetchone()
+        row = await (await self._conn.execute(TEST_ORGANIZATION_CREATE, {"p1": name, "p2": inbound_source})).fetchone()
         if row is None:
             return None
         return models.Organization(
@@ -323,7 +323,7 @@ class AsyncQuerier:
         )
 
     async def test_organization_user_create(self, *, user_id: str, organization_id: str) -> Optional[models.OrganizationsUser]:
-        row = await (await self._conn.execute(TEST_ORGANIZATION_USER_CREATE, (user_id, organization_id))).fetchone()
+        row = await (await self._conn.execute(TEST_ORGANIZATION_USER_CREATE, {"p1": user_id, "p2": organization_id})).fetchone()
         if row is None:
             return None
         return models.OrganizationsUser(
@@ -338,7 +338,12 @@ class AsyncQuerier:
         )
 
     async def test_session_create(self, *, user_id: str, organization_id: Optional[str], expired_at: Optional[datetime.datetime], last_seen_at: datetime.datetime) -> Optional[models.Session]:
-        row = await (await self._conn.execute(TEST_SESSION_CREATE, (user_id, organization_id, expired_at, last_seen_at))).fetchone()
+        row = await (await self._conn.execute(TEST_SESSION_CREATE, {
+            "p1": user_id,
+            "p2": organization_id,
+            "p3": expired_at,
+            "p4": last_seen_at,
+        })).fetchone()
         if row is None:
             return None
         return models.Session(
@@ -353,7 +358,13 @@ class AsyncQuerier:
         )
 
     async def test_user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: str, is_enabled: bool) -> Optional[models.User]:
-        row = await (await self._conn.execute(TEST_USER_CREATE, (name, email, password_hash, signup_step, is_enabled))).fetchone()
+        row = await (await self._conn.execute(TEST_USER_CREATE, {
+            "p1": name,
+            "p2": email,
+            "p3": password_hash,
+            "p4": signup_step,
+            "p5": is_enabled,
+        })).fetchone()
         if row is None:
             return None
         return models.User(
@@ -370,7 +381,12 @@ class AsyncQuerier:
         )
 
     async def user_create(self, *, name: str, email: str, password_hash: Optional[str], signup_step: str) -> Optional[models.User]:
-        row = await (await self._conn.execute(USER_CREATE, (name, email, password_hash, signup_step))).fetchone()
+        row = await (await self._conn.execute(USER_CREATE, {
+            "p1": name,
+            "p2": email,
+            "p3": password_hash,
+            "p4": signup_step,
+        })).fetchone()
         if row is None:
             return None
         return models.User(
@@ -387,7 +403,7 @@ class AsyncQuerier:
         )
 
     async def user_fetch(self, *, id: str) -> Optional[models.User]:
-        row = await (await self._conn.execute(USER_FETCH, (id, ))).fetchone()
+        row = await (await self._conn.execute(USER_FETCH, {"p1": id})).fetchone()
         if row is None:
             return None
         return models.User(
@@ -404,7 +420,7 @@ class AsyncQuerier:
         )
 
     async def vault_secret_create(self, *, organization_id: str, ciphertext: str) -> Optional[models.VaultedSecret]:
-        row = await (await self._conn.execute(VAULT_SECRET_CREATE, (organization_id, ciphertext))).fetchone()
+        row = await (await self._conn.execute(VAULT_SECRET_CREATE, {"p1": organization_id, "p2": ciphertext})).fetchone()
         if row is None:
             return None
         return models.VaultedSecret(
@@ -417,10 +433,10 @@ class AsyncQuerier:
         )
 
     async def vault_secret_delete(self, *, id: str) -> None:
-        await self._conn.execute(VAULT_SECRET_DELETE, (id, ))
+        await self._conn.execute(VAULT_SECRET_DELETE, {"p1": id})
 
     async def vault_secret_fetch(self, *, id: str) -> Optional[models.VaultedSecret]:
-        row = await (await self._conn.execute(VAULT_SECRET_FETCH, (id, ))).fetchone()
+        row = await (await self._conn.execute(VAULT_SECRET_FETCH, {"p1": id})).fetchone()
         if row is None:
             return None
         return models.VaultedSecret(
