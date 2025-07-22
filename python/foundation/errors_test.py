@@ -1,6 +1,7 @@
 from typing import Any, cast
 
 import pytest
+import structlog.testing
 
 from foundation.env import ENV
 from foundation.errors import BlossomError, _sentry_before_send, suppress_error
@@ -81,3 +82,22 @@ def test_sentry_before_send_adds_custom_error_data():
     assert "extra" in result
     assert result["extra"]["user_id"] == "123"
     assert result["extra"]["org_id"] == "456"
+
+
+def test_suppress_error_logs_correct_kwargs():
+    with structlog.testing.capture_logs() as captured:
+
+        def example_function():
+            with suppress_error(ValueError):
+                raise ValueError("test error")
+
+        example_function()
+
+    assert len(captured) == 1
+    log = captured[0]
+    assert log["event"] == "suppressing error"
+    assert log["error"] == "ValueError"
+    assert log["module"] == "foundation.errors_test"
+    assert log["function"] == "example_function"
+    assert log["log_level"] == "error"  # exception logs at error level
+    assert "exc_info" in log

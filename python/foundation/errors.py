@@ -1,5 +1,6 @@
 import contextlib
 import dataclasses
+import inspect
 from types import TracebackType
 from typing import Any, ClassVar, Literal, get_args
 
@@ -61,7 +62,7 @@ class suppress_error(contextlib.AbstractContextManager):
     # `__exit__` return type to True, which indicates that the error was suppressed. This prevents
     # typecheckers from treating code written after a suppress_error block as impossible to reach.
 
-    def __init__(self, *errors: type[BaseException], environments: tuple[EnvironmentEnum, ...] | None = None, print_traceback: bool = False):
+    def __init__(self, *errors: type[BaseException], environments: tuple[EnvironmentEnum, ...] | None = None, print_traceback: bool = True):
         self.errors = errors
         self.environments = environments or get_args(EnvironmentEnum)
         self.print_traceback = print_traceback
@@ -79,10 +80,16 @@ class suppress_error(contextlib.AbstractContextManager):
         if not exc_value:
             return True
         if isinstance(exc_value, self.errors) and ENV.environment in self.environments:
+            frm = inspect.stack()[1]
+            mod = inspect.getmodule(frm[0])
+            tb = inspect.getframeinfo(frm[0])
+
+            modname = mod.__name__ if mod else None
+            funcname = tb.function
             if self.print_traceback:
-                logger.exception("suppressing error", error=exc_value.__class__.__name__, exc_info=True)
+                logger.exception("suppressing error", error=exc_value.__class__.__name__, module=modname, function=funcname, exc_info=True)
             else:
-                logger.debug("suppressing error", error=exc_value.__class__.__name__)
+                logger.debug("suppressing error", error=exc_value.__class__.__name__, module=modname, function=funcname)
             return True
         raise
 

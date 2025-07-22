@@ -28,7 +28,7 @@ def memoize(func):
         @functools.wraps(func)
         def sync_wrapper(*args):
             loop = "no-loop"
-            with suppress_error(RuntimeError):
+            with suppress_error(RuntimeError, print_traceback=False):
                 loop = asyncio.get_running_loop()
             if loop not in cache_by_loop:
                 cache_by_loop[loop] = {}
