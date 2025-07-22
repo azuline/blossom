@@ -3,6 +3,8 @@ import secrets
 import coolname
 from tsidpy import TSID
 
+from database.__codegen__.tables import DatabaseTablePrefixEnum
+
 
 def _pg_b58_encode(num: int) -> str:
     """Internal function, do NOT use outside of generate_id."""
@@ -22,8 +24,7 @@ def _pg_b58_encode(num: int) -> str:
     return encoded
 
 
-def generate_id(prefix: str) -> str:
-    """The prefix should be shortened (<5 chars) and concise abbreviation of the entity name."""
+def generate_id(prefix: DatabaseTablePrefixEnum) -> str:
     b = TSID.create().to_bytes()
     num = int.from_bytes(b, "big")
     return f"{prefix}_{_pg_b58_encode(num)}"
