@@ -8,7 +8,7 @@ RUN apt-get -qq update \
 ARG TAILSCALE_VERSION
 ENV TAILSCALE_VERSION=$TAILSCALE_VERSION
 
-COPY run-tailscale.sh .
+COPY run-tailscale.sh /app
 COPY install-tailscale.sh /tmp
-RUN /tmp/install-tailscale.sh && rm /tmp/install_tailscale.sh
+RUN /tmp/install-tailscale.sh
 CMD ./run-tailscale.sh
