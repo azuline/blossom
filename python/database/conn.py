@@ -7,23 +7,32 @@ from collections.abc import AsyncIterator
 from typing import Any, cast
 
 import psycopg
-from psycopg import AsyncConnection
+import psycopg.types.json
+import psycopg_pool
 from psycopg.sql import SQL, Identifier
-from psycopg_pool import AsyncNullConnectionPool
 
 from foundation.env import ENV
+from foundation.funcs import run_once
+from foundation.jsonenc import dump_json_pg, load_json_pg
 
 # Type aliases for everyone.
-DBConn = AsyncConnection[Any]
+DBConn = psycopg.AsyncConnection[Any]
 # Unsure why I'm getting type errors if it's only AsyncNullConnectionPool.
-DBConnPool = AsyncNullConnectionPool
+DBConnPool = psycopg_pool.AsyncNullConnectionPool
 
 USER_ID_SAFETY_REGEX = re.compile(r"usr_[A-Za-z0-9]+$")
 ORGANIZATION_ID_SAFETY_REGEX = re.compile(r"org_[A-Za-z0-9]+$")
 
 
+@run_once
+def _configure_psycopg() -> None:
+    psycopg.types.json.set_json_dumps(dump_json_pg)
+    psycopg.types.json.set_json_loads(load_json_pg)
+
+
 async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
-    pool = AsyncNullConnectionPool(
+    _configure_psycopg()
+    pool = psycopg_pool.AsyncNullConnectionPool(
         conninfo=database_uri or ENV.database_uri,
         max_size=ENV.database_pool_size,
         open=False,

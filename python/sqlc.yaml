@@ -8,7 +8,7 @@ sql:
     queries: "database/queries.sql"
     schema: "database/migrations/"
     database:
-      uri: postgres://postgres:password@localhost:40801/postgres
+      uri: postgresql://postgresql:password@localhost:40801/postgres
     rules:
       - sqlc/db-prepare
     codegen:

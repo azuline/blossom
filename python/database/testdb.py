@@ -49,7 +49,7 @@ class TestDB:
             await conn.execute(SQL("CREATE DATABASE {}").format(Identifier(tmpl_name)))
 
             migrations = yoyo.read_migrations(str(PYTHON_ROOT / "database/migrations"))
-            db_uri_yoyo = self.database_uri(tmpl_name).replace("postgres://", "postgresql+psycopg://")
+            db_uri_yoyo = self.database_uri(tmpl_name).replace("postgresql://", "postgresql+psycopg://")
             with yoyo.get_backend(db_uri_yoyo) as backend, backend.lock():
                 backend.apply_migrations(backend.to_apply(migrations))
 

@@ -21,7 +21,7 @@ dev:  ## Run development servers for all Python projects in parallel.
 # DATABASE MANAGEMENT.
 
 psql *ARGS:  ## Runs `psql` on the development database. Accepts `psql` arguments minus the database connection string (already supplied). Use this to run queries on the database.
-    psql "postgres://postgres:password@localhost:40801/postgres" {{ARGS}}
+    psql "postgresql://postgresql:password@localhost:40801/postgres" {{ARGS}}
 migrate:  ## Runs the database migrations. Only run this command once a migration has passed all the tests.
     uv run -- python -m database migrate
 new-migration MSG:  ## Create a new migration file with the correct naming structure and dependencies. ALWAYS use this tool to create a new migration.

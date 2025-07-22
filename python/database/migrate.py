@@ -14,7 +14,7 @@ def migrate_database(db_uri: str) -> None:
     logger.info("migrating database")
     migrations_path = PYTHON_ROOT / "database" / "migrations"
     migrations = yoyo.read_migrations(str(migrations_path.absolute()))
-    db_uri_yoyo = db_uri.replace("postgres://", "postgresql+psycopg://")
+    db_uri_yoyo = db_uri.replace("postgresql://", "postgresql+psycopg://")
     with cast(DatabaseBackend, yoyo.get_backend(db_uri_yoyo)) as backend, backend.lock():
         unapplied_migrations = backend.to_apply(migrations)
         logger.info("applying migrations", total_migrations=len(migrations), unapplied_migrations=len(unapplied_migrations))

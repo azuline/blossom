@@ -1,6 +1,6 @@
 import dataclasses
 import json
-from dataclasses import is_dataclass
+from dataclasses import asdict, is_dataclass
 from datetime import date, datetime
 from typing import Any
 
@@ -38,7 +38,13 @@ class PostgresJSONEncoder(json.JSONEncoder):
         return super().default(o)  # pragma: no cover
 
 
-def serialize_json_pg(x: Any, **kwargs) -> str:
+def dump_json_pg(x: Any, **kwargs) -> str:
     if dataclasses.is_dataclass(x):
         x = dataclasses.asdict(x)  # type: ignore
     return json.dumps(x, cls=PostgresJSONEncoder, **kwargs)
+
+
+def load_json_pg(x: str | bytes, **kwargs) -> dict[str, Any]:
+    if isinstance(x, bytes):
+        x = x.decode("utf-8")
+    return json.loads(x, cls=PostgresJSONDecoder, **kwargs)
