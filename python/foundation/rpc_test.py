@@ -42,3 +42,16 @@ async def test_route_no_data(t: FoundationFixture) -> None:
     await t.rpc.manually_mount_route(test_route)
     resp = await t.rpc.call(test_route, None)
     await t.rpc.parse_error(resp, InputValidationError)
+
+
+@rpc_common("test_error", errors=[])
+async def test_route_error(req: ReqCommon[SpecTestIn]) -> SpecTestOut:
+    del req
+    raise ValueError("Unhandled test error")
+
+
+async def test_route_unhandled_error_sentry(t: FoundationFixture) -> None:
+    await t.rpc.manually_mount_route(test_route_error)
+    resp = await t.rpc.call(test_route_error, {"cherry": "test"})
+    assert resp.status_code == 500
+    t.error.assert_reported(ValueError)
