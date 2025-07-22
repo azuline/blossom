@@ -2,7 +2,6 @@ import asyncio
 import contextlib
 import logging
 import re
-import sys
 from collections.abc import AsyncIterator
 from typing import Any, cast
 
@@ -48,7 +47,7 @@ async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
 
 
 # Enable this when debugging DB connection quirks.
-if 1 == 2 and "pytest" in sys.modules:  # pragma: no cover  # type: ignore
+if 1 == 2 and ENV.testing:  # pragma: no cover # type: ignore
     logging.getLogger("psycopg").setLevel(logging.DEBUG)  # noqa: TID251
     logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)  # noqa: TID251
 

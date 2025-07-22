@@ -15,7 +15,7 @@ from foundation.env import ENV
 
 
 def get_logger(force_debug: bool = False) -> BoundLogger:
-    if force_debug or "pytest" in sys.modules:
+    if force_debug:
         # Get the module __name__ of the caller
         frm = inspect.stack()[1]
         mod = inspect.getmodule(frm[0])
@@ -26,12 +26,12 @@ def get_logger(force_debug: bool = False) -> BoundLogger:
 
 
 def initialize_logging() -> None:
-    """Initialize structured logging with Sentry integration."""
-    level = logging.DEBUG if ENV.log_level == "debug" else logging.INFO
+    """Initialize structured logging configuration."""
+    level = logging.DEBUG if ENV.log_level == "debug" or ENV.testing else logging.INFO
 
     # Processors, assemble!
     common_processors = [
-        _blossom_processor,
+        _processor,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.add_log_level,
         structlog.processors.format_exc_info,
@@ -79,7 +79,7 @@ def initialize_logging() -> None:
     root_logger.handlers = [handler]
 
 
-def _blossom_processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
+def _processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
     from foundation.errors import report_error
 
     # Add custom keys.

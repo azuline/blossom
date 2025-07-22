@@ -24,6 +24,8 @@ just dag-check
 
 `just help` lists common commands. If you often repeat a shell snippet, propose adding it to the `justfile` with a concise description.
 
+Manage dependencies using `uv`.
+
 ## Bespoke tooling
 
 Add tools under `tools/` as Python packages:
@@ -92,6 +94,11 @@ Use `foundation.errors:suppress_error` when intentionally ignoring specific erro
 ## Retries
 
 - TODO: retry network requests with exponential backoff and jitter with retryer
+
+## Locks
+
+- TODO: db locks
+- TODO: aiorwlock
 
 # Observability
 
