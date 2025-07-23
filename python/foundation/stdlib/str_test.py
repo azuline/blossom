@@ -1,4 +1,4 @@
-from foundation.str import snake_case_to_pascal_case
+from foundation.stdlib.str import snake_case_to_pascal_case
 
 
 def test_snake_case_to_pascal_case() -> None:

@@ -10,10 +10,10 @@ from typing import Any, Literal, TypeVar, get_args, get_origin, get_type_hints
 from jinja2 import BaseLoader, Environment
 from pydantic import BaseModel
 
-from foundation.errors import BaseError
-from foundation.logs import get_logger
-from foundation.paths import MONOREPO_ROOT
-from foundation.rpc import RPCError, RPCRouter
+from foundation.observability.errors import BaseError
+from foundation.observability.logs import get_logger
+from foundation.stdlib.paths import MONOREPO_ROOT
+from foundation.webserver.rpc import RPCError, RPCRouter
 from panopticon.app import create_router_panopticon
 from product.app import create_router_product
 

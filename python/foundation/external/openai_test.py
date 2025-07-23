@@ -9,8 +9,8 @@ from openai.types.chat.chat_completion import Choice
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from openai.types.completion_usage import CompletionUsage
 
-from foundation.errors import ImpossibleError
 from foundation.external.openai import OpenAICache
+from foundation.observability.errors import ImpossibleError
 
 
 def _create_mock_response(id_suffix: str, content: str) -> ChatCompletion:

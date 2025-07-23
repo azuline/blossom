@@ -3,7 +3,7 @@ import subprocess
 
 import click
 
-from foundation.paths import PYTHON_ROOT
+from foundation.stdlib.paths import PYTHON_ROOT
 
 
 @click.group()

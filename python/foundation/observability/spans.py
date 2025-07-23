@@ -10,7 +10,7 @@ import sentry_sdk
 import structlog
 
 from foundation.env import ENV
-from foundation.logs import get_logger
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 
@@ -27,7 +27,7 @@ def initialize_tracing() -> None:
         psycopg=True,
         structlog=True,
     )
-    if not os.getenv("DD_AGENT_HOST") or not os.getenv("DD_API_KEY"):
+    if ENV.environment != "development" and not (os.getenv("DD_AGENT_HOST") and os.getenv("DD_API_KEY")):
         logger.warning("DD_AGENT_HOST/DD_API_KEY not set: not sending traces to datadog")
 
 

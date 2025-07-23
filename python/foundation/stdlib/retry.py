@@ -4,9 +4,9 @@ import random
 from collections.abc import Awaitable, Callable
 from typing import Any, LiteralString, ParamSpec, TypeVar
 
-from foundation.errors import BaseError
-from foundation.logs import get_logger
-from foundation.metrics import metric_distribution
+from foundation.observability.errors import BaseError
+from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_distribution
 
 logger = get_logger()
 

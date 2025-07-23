@@ -5,11 +5,11 @@ import dataclasses
 import pytest
 from syrupy.assertion import SnapshotAssertion
 
-from foundation.rpc import RPCRouter
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
 from foundation.testing.rpc import TestRPC
 from foundation.testing.snapshots import TestSnapshots
+from foundation.webserver.rpc import RPCRouter
 
 
 @dataclasses.dataclass

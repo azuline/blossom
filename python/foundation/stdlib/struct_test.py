@@ -3,7 +3,7 @@
 import dataclasses
 from typing import Any, Literal
 
-from foundation.struct import dataclass_to_jsonschema
+from foundation.stdlib.struct import dataclass_to_jsonschema
 
 
 @dataclasses.dataclass

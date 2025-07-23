@@ -7,8 +7,8 @@ from collections.abc import Callable, Coroutine
 from functools import partial
 from typing import LiteralString, TypeVar
 
-from foundation.errors import BaseError
-from foundation.logs import get_logger
+from foundation.observability.errors import BaseError
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

@@ -6,7 +6,7 @@ from sqlalchemy.exc import ProgrammingError
 from database.conn import DBConn, _set_row_level_security, create_pg_pool
 from database.testdb import TestDB
 from foundation.env import ENV
-from foundation.identifiers import generate_id
+from foundation.stdlib.identifiers import generate_id
 
 
 async def test_row_level_security_in_connection_pool() -> None:

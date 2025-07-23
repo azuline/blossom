@@ -8,8 +8,8 @@ from typing import Literal
 from slack_sdk.web.async_client import AsyncWebClient
 
 from foundation.env import ENV
-from foundation.errors import ConfigurationError
-from foundation.logs import get_logger
+from foundation.observability.errors import ConfigurationError
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

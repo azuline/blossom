@@ -3,7 +3,7 @@ import functools
 import inspect
 from collections.abc import Callable
 
-from foundation.errors import suppress_error
+from foundation.observability.errors import suppress_error
 
 
 def memoize(func):

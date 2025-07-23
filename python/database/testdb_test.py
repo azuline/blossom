@@ -2,7 +2,7 @@ from sqlalchemy import text
 
 from database.conn import connect_db_admin
 from database.testdb import TestDB
-from foundation.logs import get_logger
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

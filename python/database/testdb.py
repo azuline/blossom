@@ -7,8 +7,8 @@ from sqlalchemy import text
 from database.conn import connect_db_admin
 from database.lock import lock
 from foundation.env import ENV
-from foundation.logs import get_logger
-from foundation.paths import PYTHON_ROOT
+from foundation.observability.logs import get_logger
+from foundation.stdlib.paths import PYTHON_ROOT
 
 logger = get_logger()
 

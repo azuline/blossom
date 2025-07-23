@@ -12,10 +12,10 @@ import quart
 
 from database.__codegen__ import models
 from database.xact import DBQuerier, xact_admin, xact_customer
-from foundation.errors import ImpossibleError
-from foundation.logs import get_logger
-from foundation.rpc import MethodEnum, ReqCommon, RPCError, RPCRoute, rpc_common
-from foundation.spans import tag_current_span
+from foundation.observability.errors import ImpossibleError
+from foundation.observability.logs import get_logger
+from foundation.observability.spans import tag_current_span
+from foundation.webserver.rpc import MethodEnum, ReqCommon, RPCError, RPCRoute, rpc_common
 
 logger = get_logger()
 

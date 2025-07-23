@@ -1,5 +1,5 @@
-from foundation.rpc import RPCRouter
-from foundation.webserver import create_webserver
+from foundation.webserver.rpc import RPCRouter
+from foundation.webserver.webserver import create_webserver
 
 
 def create_router_panopticon() -> RPCRouter:

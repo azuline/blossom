@@ -1,7 +1,7 @@
 import dagster
 
-from foundation.dag import dag_asset
-from foundation.logs import get_logger
+from foundation.data.dag import dag_asset
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

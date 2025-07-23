@@ -4,7 +4,7 @@ import pytest
 import structlog.testing
 
 from foundation.env import ENV
-from foundation.errors import BaseError, _sentry_before_send, suppress_error
+from foundation.observability.errors import BaseError, _sentry_before_send, suppress_error
 
 
 class Test1Error(BaseError):

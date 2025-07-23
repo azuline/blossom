@@ -1,5 +1,5 @@
 from database.xact import xact_admin
-from foundation.identifiers import generate_email
+from foundation.stdlib.identifiers import generate_email
 from product.authn.routes import (
     AuthOrganizationNotFoundError,
     InvalidCredentialsError,

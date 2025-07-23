@@ -1,4 +1,4 @@
-from foundation.bytes import int_to_bytes
+from foundation.stdlib.bytes import int_to_bytes
 
 
 def test_int_to_bytes_positive():

@@ -8,7 +8,7 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 from foundation.env import ENV
-from foundation.errors import ConfigurationError
+from foundation.observability.errors import ConfigurationError
 
 
 class CSheets:

@@ -7,8 +7,8 @@ from contextlib import asynccontextmanager
 from sqlalchemy import text
 
 from database.conn import DBConnPool, connect_db_admin
-from foundation.errors import BaseError
-from foundation.logs import get_logger
+from foundation.observability.errors import BaseError
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

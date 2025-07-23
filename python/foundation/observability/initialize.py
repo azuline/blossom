@@ -1,13 +1,13 @@
-from foundation.errors import initialize_sentry
-from foundation.funcs import run_once
-from foundation.logs import get_logger, initialize_logging
-from foundation.spans import initialize_tracing, set_tracing_envvars
+from foundation.observability.errors import initialize_sentry
+from foundation.observability.logs import get_logger, initialize_logging
+from foundation.observability.spans import initialize_tracing, set_tracing_envvars
+from foundation.stdlib.funcs import run_once
 
 logger = get_logger()
 
 
 @run_once
-def initialize_foundation() -> None:
+def initialize_instrumentation() -> None:
     """Initialize the application foundation. Call this before running any commands."""
     initialize_logging()
     logger.debug("initialized foundation: logging")

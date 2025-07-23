@@ -1,4 +1,4 @@
-from foundation.errors import TESTING_CAPTURED_EXCEPTIONS
+from foundation.observability.errors import TESTING_CAPTURED_EXCEPTIONS
 
 
 class TestErrors:

@@ -1,8 +1,8 @@
 import dataclasses
 from datetime import timedelta
 
-from foundation.rpc import RPCRoute, UnauthorizedError
-from foundation.time import CLOCK
+from foundation.stdlib.time import CLOCK
+from foundation.webserver.rpc import RPCRoute, UnauthorizedError
 from product.conftest import ProductFixture
 from product.framework.rpc import SESSION_ID_KEY, Authorization, ReqProduct, rpc_product
 

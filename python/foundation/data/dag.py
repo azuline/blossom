@@ -4,8 +4,8 @@ from typing import Any, LiteralString
 
 import dagster
 
-from foundation.errors import report_error
-from foundation.spans import span
+from foundation.observability.errors import report_error
+from foundation.observability.spans import span
 
 ORG_PARTITION = dagster.DynamicPartitionsDefinition(name="organizations")
 DEFAULT_POOL = "default"

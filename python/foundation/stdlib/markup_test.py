@@ -1,4 +1,4 @@
-from foundation.markup import markdown_to_slack_markup
+from foundation.stdlib.markup import markdown_to_slack_markup
 
 
 def test_markdown_to_slack_markup():

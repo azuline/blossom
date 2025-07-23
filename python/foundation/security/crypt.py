@@ -17,7 +17,7 @@ from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 
 from foundation.env import ENV
-from foundation.errors import BaseError
+from foundation.observability.errors import BaseError
 
 
 def random_b64(length: int) -> str:

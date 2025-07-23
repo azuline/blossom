@@ -1,7 +1,7 @@
 import dataclasses
 
 from foundation.conftest import FoundationFixture
-from foundation.rpc import InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
+from foundation.webserver.rpc import InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
 
 
 @dataclasses.dataclass(slots=True)

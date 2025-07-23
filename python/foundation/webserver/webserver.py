@@ -5,8 +5,8 @@ import quart
 from ddtrace.contrib.asgi import TraceMiddleware
 
 from foundation.env import ENV, ServiceEnum
-from foundation.logs import get_logger
-from foundation.rpc import RPCRouter
+from foundation.observability.logs import get_logger
+from foundation.webserver.rpc import RPCRouter
 
 logger = get_logger()
 

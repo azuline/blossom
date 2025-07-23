@@ -3,7 +3,7 @@ import asyncio
 import dagster
 
 from database.xact import xact_admin
-from foundation.dag import ORG_PARTITION
+from foundation.data.dag import ORG_PARTITION
 from pipeline.analytics import impressions_asset
 from pipeline.product import datasource_ext_asset, datasource_raw_asset, ext_datasource_sensor
 

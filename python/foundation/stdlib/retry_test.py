@@ -1,6 +1,6 @@
 import pytest
 
-from foundation.retry import AsyncRetryer
+from foundation.stdlib.retry import AsyncRetryer
 
 
 async def test_async_retryer():

@@ -3,8 +3,8 @@ from typing import Any
 
 import pydantic
 
-from foundation.errors import BaseError
-from foundation.funcs import memoize
+from foundation.observability.errors import BaseError
+from foundation.stdlib.funcs import memoize
 
 
 def parse_dataclass[T](dc: type[T] | Any, data: dict[str, Any]) -> T:

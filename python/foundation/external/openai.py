@@ -15,8 +15,8 @@ from openai.types.chat.chat_completion_message_param import ChatCompletionMessag
 from openai.types.shared_params.response_format_json_schema import ResponseFormatJSONSchema
 
 from foundation.env import ENV
-from foundation.errors import BaseError, ConfigurationError
-from foundation.logs import get_logger
+from foundation.observability.errors import BaseError, ConfigurationError
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

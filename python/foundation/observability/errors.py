@@ -10,7 +10,7 @@ import sentry_sdk.integrations.asyncio
 import sentry_sdk.types
 
 from foundation.env import ENV, EnvironmentEnum
-from foundation.logs import get_logger
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

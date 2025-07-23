@@ -1,8 +1,8 @@
 import dataclasses
 import datetime
 
-from foundation.jsonenc import dump_json_pg, load_json_pg
-from foundation.parse import parse_dataclass
+from foundation.stdlib.jsonenc import dump_json_pg, load_json_pg
+from foundation.stdlib.parse import parse_dataclass
 
 
 def test_postgres_json_serde():

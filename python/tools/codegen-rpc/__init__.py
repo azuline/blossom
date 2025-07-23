@@ -1,3 +1,3 @@
-from foundation.initialize import initialize_foundation
+from foundation.observability.initialize import initialize_instrumentation
 
-initialize_foundation()
+initialize_instrumentation()

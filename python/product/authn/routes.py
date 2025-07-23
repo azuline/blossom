@@ -3,7 +3,7 @@ import dataclasses
 import quart
 from werkzeug.security import check_password_hash
 
-from foundation.rpc import RPCError
+from foundation.webserver.rpc import RPCError
 from product.framework.rpc import SESSION_ID_KEY, ReqProduct, rpc_product
 
 BOGUS_PASSWORD_HASH = "pbkdf2:sha256:260000$HdBKH9zwdJpNsm8I$a0adb646f827525b478cc13db89e6ade694d2951987572edabf354b1821ae498"

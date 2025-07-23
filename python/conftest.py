@@ -9,13 +9,13 @@ import pytest_asyncio
 
 from database.testdb import TestDB
 from foundation.env import ENV
-from foundation.errors import TESTING_CAPTURED_EXCEPTIONS
 from foundation.external.external import EXT
 from foundation.external.openai import COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
-from foundation.initialize import initialize_foundation
-from foundation.logs import get_logger
+from foundation.observability.errors import TESTING_CAPTURED_EXCEPTIONS
+from foundation.observability.initialize import initialize_instrumentation
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 
@@ -106,4 +106,4 @@ def fake_ext(request: pytest.FixtureRequest) -> Iterator[None]:
 @pytest.fixture(autouse=True)
 def initialize(fake_settings) -> None:
     del fake_settings
-    initialize_foundation()
+    initialize_instrumentation()

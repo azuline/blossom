@@ -3,8 +3,8 @@ import subprocess
 import click
 
 from foundation.env import ENV
-from foundation.errors import ConfigurationError
-from foundation.webserver import set_webserver_devserver_envvars, start_webserver
+from foundation.observability.errors import ConfigurationError
+from foundation.webserver.webserver import set_webserver_devserver_envvars, start_webserver
 
 
 @click.group()

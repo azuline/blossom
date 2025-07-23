@@ -80,8 +80,8 @@ def initialize_logging() -> None:
 
 
 def _processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
-    from foundation.errors import report_error
-    from foundation.spans import current_span
+    from foundation.observability.errors import report_error
+    from foundation.observability.spans import current_span
 
     # Add custom keys.
     event_dict["service"] = ENV.service

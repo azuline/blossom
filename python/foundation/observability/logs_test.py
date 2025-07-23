@@ -1,7 +1,7 @@
 """Tests for the logging module to ensure logger.exception reports to Sentry."""
 
 from foundation.conftest import FoundationFixture
-from foundation.logs import get_logger
+from foundation.observability.logs import get_logger
 
 logger = get_logger()
 

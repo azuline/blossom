@@ -175,7 +175,7 @@ just test-snapshot <test>
 
 Each top‑level module exposes a `__main__.py` Click CLI. Keep `__init__.py` empty. put module‑level code in a file that matches the package name, e.g. `cookies/cookies.py`.
 
-In modules with `__main__.py`, add an `initialize_foundation()` call to the `__init__.py` to set up the infrastructure first thing.
+In modules with `__main__.py`, add an `initialize_instrumentation()` call to the `__init__.py` to set up the infrastructure first thing.
 
 Place public exports at the top of the file; helpers go at the bottom.
 
