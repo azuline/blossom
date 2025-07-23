@@ -27,18 +27,16 @@ class InvalidConfigValueError(Exception):
 
 
 EnvironmentEnum = Literal["production", "development"]
-PlatformEnum = Literal["render", "dagster", "local"]
 LogLevelEnum = Literal["debug", "info"]
 ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class _Env:
     environment: EnvironmentEnum
-    platform: PlatformEnum
     log_level: LogLevelEnum
     service: ServiceEnum
-    commit: str
+    version: str
     testing: bool
 
     # Service references.
@@ -81,22 +79,12 @@ class _Env:
 
     @classmethod
     def initialize(cls) -> _Env:
-        platform: PlatformEnum = "local"
-        if commit := cls._optional("RENDER_GIT_COMMIT"):
-            platform = "render"
-        elif commit := cls._optional("DAGSTER_CLOUD_GIT_SHA"):
-            platform = "dagster"
-        else:
-            platform = "local"
-            commit = "development"
-
         c = cls(
             environment=cast(EnvironmentEnum, cls._required("ENVIRONMENT")),
-            platform=platform,
             log_level=cast(LogLevelEnum, cls._optional("LOG_LEVEL") or "info"),
             service=cast(ServiceEnum, cls._optional("SERVICE") or "development"),
             testing=bool(cls._optional("TESTING") or False),
-            commit=commit,
+            version="development",  # TODO: dependent on infra provider
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),
             product_host=cls._optional("PRODUCT_HOST"),

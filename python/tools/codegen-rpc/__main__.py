@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import dataclasses
 import os
 import re
 import subprocess
-from dataclasses import dataclass, field, fields, is_dataclass
 from pathlib import Path
 from typing import Any, Literal, TypeVar, get_args, get_origin, get_type_hints
 
@@ -133,7 +133,7 @@ def codegen_rpc_models(router: RPCRouter, dst: Path) -> None:
     os.chdir(MONOREPO_ROOT / "typescript")
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class RPCSchema:
     in_: str | None
     out: str | None
@@ -141,12 +141,12 @@ class RPCSchema:
     error_names: list[str]
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class ErrorSchema:
     data: str | None
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class CodegenSchema:
     errors: dict[str, ErrorSchema]
     rpcs: dict[str, RPCSchema]
@@ -156,12 +156,12 @@ class CodegenSchema:
     god_mode_rpcs: list[str]
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class _GenerationCache:
     # A cache of `module.type -> typename`.
-    type_cache: dict[str, str] = field(default_factory=dict)
+    type_cache: dict[str, str] = dataclasses.field(default_factory=dict)
     # A map of used type names to detect name collisions.
-    type_names: dict[str, str] = field(default_factory=dict)
+    type_names: dict[str, str] = dataclasses.field(default_factory=dict)
 
 
 class UnsupportedTypeError(BaseError):
@@ -213,7 +213,7 @@ def create_codegen_schema(router: RPCRouter) -> CodegenSchema:
 def dataclass_to_str(d: type[Any], out: CodegenSchema, cache: _GenerationCache, optional: bool = False) -> str:
     schema = {}
     type_hints = get_type_hints(d)
-    for f in fields(d):
+    for f in dataclasses.fields(d):
         schema[f.name] = type_to_str(type_hints[f.name], out, cache)
     if not schema:
         return "null"
@@ -229,7 +229,7 @@ def dataclass_to_str(d: type[Any], out: CodegenSchema, cache: _GenerationCache, 
 
 def type_to_str(t: Any, out: CodegenSchema, cache: _GenerationCache) -> str:
     # Nested types are split out into their own types. We compute and store their names here.
-    if isinstance(t, type) and (is_dataclass(t) or issubclass(t, BaseModel)):
+    if isinstance(t, type) and (dataclasses.is_dataclass(t) or issubclass(t, BaseModel)):
         t_cachekey = f"{t.__module__}:{t.__name__}"
         # Case 1: Already computed; reuse cached type name.
         if prev := cache.type_cache.get(t_cachekey):
@@ -242,7 +242,7 @@ def type_to_str(t: Any, out: CodegenSchema, cache: _GenerationCache) -> str:
         cache.type_names[t.__name__] = t_cachekey
         # Only compute the recursive dataclass after setting the cache values to solve for mutual
         # recursion. If we don't do this, it will infinitely recurse.
-        out.global_types[t.__name__] = dataclass_to_str(t, out, cache) if is_dataclass(t) else pydantic_to_str(t, out)
+        out.global_types[t.__name__] = dataclass_to_str(t, out, cache) if dataclasses.is_dataclass(t) else pydantic_to_str(t, out)
         return t.__name__
 
     t_name = getattr(t, "__name__", None)

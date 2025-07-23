@@ -1,8 +1,8 @@
 import asyncio
+import dataclasses
 import hashlib
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
 
 from sqlalchemy import text
 
@@ -19,7 +19,7 @@ def _stable_hash(string: str) -> int:
     return abs(hash_int)
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class LockAlreadyHeld(BaseError):
     name: str
     lock_id: int

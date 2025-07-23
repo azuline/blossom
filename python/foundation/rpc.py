@@ -15,7 +15,7 @@ from foundation.errors import ConfigurationError, ImpossibleError, report_error
 from foundation.logs import get_logger
 from foundation.metrics import metric_increment_abnormal
 from foundation.parse import make_pydantic_validator
-from foundation.span import tag_current_span
+from foundation.spans import tag_current_span
 from foundation.types import Unset
 
 # TODO: CORS
@@ -27,7 +27,7 @@ logger = get_logger()
 MethodEnum = Literal["GET", "POST"]
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class RPCError(Exception):
     def __init__(self) -> None:
         self.message = self.__class__.__name__
@@ -75,39 +75,39 @@ class InvalidRPCDefinitionError(Exception):
     pass
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class UnknownError(RPCError):
     pass
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class UnauthorizedError(RPCError):
     pass
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class RPCTimeoutError(RPCError):
     pass
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class ServerJSONDeserializeError(RPCError):
     message: str
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class InputValidationError(RPCError):
     message: str
     fields: dict[str, Any] = dataclasses.field(default_factory=dict)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class ReqCommon[In]:
     data: In
     raw: quart.Request
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, slots=True)
 class RPCRoute[In, Out]:
     name: str
     in_: type[In]
@@ -278,4 +278,4 @@ class RPCRouter:
 
 
 def ping_handler() -> dict[str, str | bool]:
-    return {"ok": True, "version": ENV.commit}
+    return {"ok": True, "version": ENV.version}

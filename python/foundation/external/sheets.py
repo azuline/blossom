@@ -97,7 +97,7 @@ class CSheets:
         return result
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class FakeSheetData:
     """Represents fake data for a sheet range."""
 

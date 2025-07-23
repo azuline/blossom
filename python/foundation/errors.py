@@ -4,6 +4,7 @@ import inspect
 from types import TracebackType
 from typing import Any, ClassVar, Literal, get_args
 
+import ddtrace
 import sentry_sdk
 import sentry_sdk.integrations.asyncio
 import sentry_sdk.types
@@ -101,6 +102,8 @@ def report_error(exc: BaseException) -> None:
     if ENV.testing:
         TESTING_CAPTURED_EXCEPTIONS.append(exc)
     sentry_sdk.capture_exception(exc)  # noqa: TID251
+    if span := ddtrace.tracer.current_span():
+        span.record_exception(exc)
 
 
 def initialize_sentry():
@@ -111,7 +114,7 @@ def initialize_sentry():
         traces_sample_rate=1.0,
         profiles_sample_rate=1.0,
         environment=ENV.environment,
-        release=ENV.commit,
+        release=ENV.version,
         server_name=ENV.service,
         before_send=_sentry_before_send,
         # Enables Quart, Aiohttp, etc..

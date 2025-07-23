@@ -3,9 +3,9 @@ This module contains various helper functions, endpoint decorators, and
 utilities for the web application package.
 """
 
+import dataclasses
 import functools
 from collections.abc import Awaitable, Callable
-from dataclasses import dataclass, field
 from typing import Any, Literal
 
 import quart
@@ -15,7 +15,7 @@ from database.xact import DBQuerier, xact_admin, xact_customer
 from foundation.errors import ImpossibleError
 from foundation.logs import get_logger
 from foundation.rpc import MethodEnum, ReqCommon, RPCError, RPCRoute, rpc_common
-from foundation.span import tag_current_span
+from foundation.spans import tag_current_span
 
 logger = get_logger()
 
@@ -32,7 +32,7 @@ Authorization = Literal[
 ]
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class ReqProduct[In](ReqCommon[In]):
     q: DBQuerier
     user: models.User | None
@@ -40,30 +40,30 @@ class ReqProduct[In](ReqCommon[In]):
     data: In
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class UnknownError(RPCError):
     pass
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class UnauthorizedError(RPCError):
     pass
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class ServerJSONDeserializeError(RPCError):
     message: str
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class DataMismatchError(RPCError):
     message: str
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class InputValidationError(RPCError):
     message: str
-    fields: dict[str, Any] = field(default_factory=dict)
+    fields: dict[str, Any] = dataclasses.field(default_factory=dict)
 
 
 def rpc_product[In, Out](

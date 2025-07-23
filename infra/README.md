@@ -14,7 +14,7 @@ todo, unsure if i want to put nomad homelab in this template or a GCP setup
 
 The vendors that this repository depends on for its infrastructure are:
 
-- Continuous Integration: [Github Actions](https://github.com/features/actions) (+[Cachix](https://www.cachix.org/)) (+[Namespace](https://namespace.so/))
+- Continuous Integration: [Github Actions](https://github.com/features/actions) (+[Namespace](https://namespace.so/))
 - Data Orchestrator: [Dagster+](https://dagster.io/)
 - Database: [PostgreSQL](https://www.postgresql.org/)
 - Email Sending: [Postmark](https://postmarkapp.com/)
@@ -28,3 +28,5 @@ The vendors that this repository depends on for its infrastructure are:
 
 Most of the paid vendors are optional or have substitutes; in my personal projects I deploy to my
 home tailnet and Nomad cluster without most of the observability tooling.
+
+TODO: namespace is commented out since GHA is free in the template, grep for `EXTENSION\(namespace\)`.

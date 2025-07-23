@@ -55,7 +55,7 @@ Place exploratory scripts in `.debug_scripts/` and name them `YYMMDD_branch__scr
 
 ## Dataclasses
 
-Use `@dataclass` for data containers. Reserve classic classes for third‑party interfaces or `abc.ABC` implementations.
+Use `@dataclass` for data containers. Reserve classic classes for third‑party interfaces or `abc.ABC` implementations. Enable `slots=True` for dataclasses unless `@cached_property` is needed.
 
 ## Literal enums
 

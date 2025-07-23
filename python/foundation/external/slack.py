@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import dataclasses
 import random
-from dataclasses import dataclass
 from http import HTTPStatus
 from typing import Literal
 
@@ -52,13 +52,13 @@ def link(url: str, text: str) -> str:
     return f"<{url}|{text}>"
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class FakeSlackMessage:
     channel: str
     text: str
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class FakeSlackResponse:
     status_code: HTTPStatus
 

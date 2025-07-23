@@ -81,12 +81,16 @@ def initialize_logging() -> None:
 
 def _processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
     from foundation.errors import report_error
+    from foundation.spans import current_span
 
     # Add custom keys.
     event_dict["service"] = ENV.service
     if ENV.environment != "development":
         event_dict["env"] = ENV.environment
-        event_dict["version"] = ENV.commit
+        event_dict["version"] = ENV.version
+    # Add span tags.
+    if span := current_span():
+        event_dict.update(span.tags)
     # Serialize special types to str.
     for k, v in event_dict.items():
         if isinstance(v, datetime.datetime):

@@ -1,10 +1,11 @@
 import inspect
 from collections.abc import Callable, Mapping, Sequence
-from typing import Any
+from typing import Any, LiteralString
 
 import dagster
 
 from foundation.errors import report_error
+from foundation.spans import span
 
 ORG_PARTITION = dagster.DynamicPartitionsDefinition(name="organizations")
 DEFAULT_POOL = "default"
@@ -12,7 +13,7 @@ DEFAULT_POOL = "default"
 
 def dag_asset(
     *,
-    name: str | None = None,
+    name: LiteralString,
     key_prefix: str | Sequence[str] | None = None,
     deps: Sequence[dagster.AssetDep | dagster.AssetsDefinition | dagster.SourceAsset | dagster.AssetKey | dagster.AssetSpec | str] | None = None,
     metadata: dict[str, Any] | None = None,
@@ -36,7 +37,8 @@ def dag_asset(
 
             async def wrapper(context: dagster.AssetExecutionContext):  # type: ignore
                 try:
-                    return await func(context) if has_args else func()
+                    with span(name, resource=name, span_type="asset"):
+                        return await func(context) if has_args else func()
                 except Exception as e:
                     report_error(e)
                     raise
@@ -45,7 +47,8 @@ def dag_asset(
 
             def wrapper(context: dagster.AssetExecutionContext):  # type: ignore
                 try:
-                    return func(context) if has_args else func()
+                    with span(name, resource=name, span_type="asset"):
+                        return func(context) if has_args else func()
                 except Exception as e:
                     report_error(e)
                     raise

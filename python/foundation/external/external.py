@@ -8,7 +8,7 @@ from foundation.external.sheets import CSheets
 from foundation.external.slack import CSlack
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class ExternalServicesClass:
     test_google_sheets: CSheets | None = None
     test_openai: COpenAI | None = None

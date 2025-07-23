@@ -12,7 +12,7 @@ from foundation.testing.snapshots import TestSnapshots
 from panopticon.app import create_router_panopticon
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class PanopticonFixture:
     """Big object that contains all our optional testing fixtures and utilities."""
 

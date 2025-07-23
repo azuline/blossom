@@ -1,13 +1,13 @@
 import ast
 import contextlib
+import dataclasses
 import json
-from dataclasses import dataclass
 from pathlib import Path
 
 import click
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class CodeEntity:
     name: str
     type: str

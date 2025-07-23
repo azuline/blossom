@@ -1,25 +1,25 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+import dataclasses
 
 from database.xact import xact_admin
 from product.framework.rpc import ReqProduct, rpc_product
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class GetPageLoadInfoUser:
     id: str
     name: str
     email: str
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class GetPageLoadInfoOrganization:
     id: str
     name: str
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class GetPageLoadInfoOut:
     user: GetPageLoadInfoUser | None
     organization: GetPageLoadInfoOrganization | None

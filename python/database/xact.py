@@ -9,7 +9,7 @@ from foundation.logs import get_logger
 logger = get_logger()
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class DBQuerier:
     orm: AsyncQuerier
     conn: DBConn

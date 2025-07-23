@@ -1,11 +1,10 @@
-import os
 import subprocess
 
 import click
 
 from foundation.env import ENV
 from foundation.errors import ConfigurationError
-from foundation.webserver import start_webserver
+from foundation.webserver import set_webserver_devserver_envvars, start_webserver
 
 
 @click.group()
@@ -16,10 +15,7 @@ def main() -> None:
 @main.command()
 def devserver():
     """Run the panopticon web application backend devserver."""
-    os.environ["QUART_DEBUG"] = "1"
-    os.environ["QUART_APP"] = "panopticon.app:create_app()"
-    os.environ["QUART_SKIP_DOTENV"] = "1"  # We handle it ourselves.
-    os.environ["SERVICE"] = "panopticon"
+    set_webserver_devserver_envvars(service="panopticon", app="panopticon.app:create_app()")
     subprocess.run(["quart", "run", "--port", str(ENV.panopticon_port)], check=True)
 
 

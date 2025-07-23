@@ -48,8 +48,9 @@ def test_inspect_codebase_extracts_entities():
     with tempfile.TemporaryDirectory() as tmpdir:
         root = Path(tmpdir)
 
-        test_code = '''from typing import Literal
-from dataclasses import dataclass
+        test_code = '''\
+from typing import Literal
+import dataclasses
 
 def regular_function():
     """A regular function."""
@@ -78,7 +79,7 @@ class MyClass:
         """Constructor should be included."""
         pass
 
-@dataclass
+@dataclasses.dataclass
 class MyDataclass:
     """A dataclass with properties."""
     name: str

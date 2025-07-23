@@ -10,7 +10,7 @@ from foundation.errors import BaseError
 
 
 def test_asset_decorator_creates_dagster_asset():
-    @dag_asset()
+    @dag_asset(name="my_asset")
     def my_asset():
         return "data"
 
@@ -27,7 +27,7 @@ def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
     class TestAssetError(BaseError):
         pass
 
-    @dag_asset()
+    @dag_asset(name="failing_asset")
     def failing_asset():
         raise TestAssetError("test error")
 

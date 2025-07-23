@@ -1,16 +1,16 @@
+import dataclasses
 import datetime
-from dataclasses import dataclass
 
 from foundation.jsonenc import dump_json_pg, load_json_pg
 from foundation.parse import parse_dataclass
 
 
 def test_postgres_json_serde():
-    @dataclass
+    @dataclasses.dataclass(slots=True)
     class Nested:
         test_dict: dict
 
-    @dataclass
+    @dataclasses.dataclass(slots=True)
     class Event:
         test_str: str
         test_datetime: datetime.datetime

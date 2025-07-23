@@ -1,5 +1,5 @@
+import dataclasses
 import re
-from dataclasses import dataclass
 
 from sqlalchemy import text
 
@@ -229,7 +229,7 @@ Failing columns:
 """  # pragma: no cover
 
 
-@dataclass
+@dataclasses.dataclass(slots=True)
 class MissingFK:
     table: str
     columns: list[str]

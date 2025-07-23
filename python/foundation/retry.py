@@ -18,7 +18,7 @@ class MaxRetriesExceededError(BaseError):
     pass
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class AsyncRetryer:
     """
     Allows retrying asynchronous coroutines with exponential backoff and jitter.

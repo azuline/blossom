@@ -4,12 +4,12 @@ from foundation.conftest import FoundationFixture
 from foundation.rpc import InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class SpecTestIn:
     cherry: str
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class SpecTestOut:
     data: SpecTestIn
 

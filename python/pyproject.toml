@@ -156,6 +156,7 @@ reportUnnecessaryCast = "warning"
 reportUnnecessaryComparison = "warning"
 reportUnnecessaryContains = "warning"
 reportUnusedCoroutine = "error"
+reportPrivateImportUsage = "none"
 
 [tool.pytest.ini_options]
 norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]

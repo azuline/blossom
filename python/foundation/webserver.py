@@ -1,8 +1,10 @@
+import os
 import subprocess
 
 import quart
+from ddtrace.contrib.asgi import TraceMiddleware
 
-from foundation.env import ENV
+from foundation.env import ENV, ServiceEnum
 from foundation.logs import get_logger
 from foundation.rpc import RPCRouter
 
@@ -27,6 +29,7 @@ def create_webserver(router: RPCRouter) -> quart.Quart:
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
     )
+    app.asgi_app = TraceMiddleware(app.asgi_app)
 
     app.route("/ping")(_ping_handler)
     for r in router.routes:
@@ -42,4 +45,11 @@ def start_webserver(app: str, host: str, port: int) -> None:  # pragma: no cover
 
 def _ping_handler() -> quart.Response:
     logger.info("received ping request")
-    return quart.jsonify({"ok": True, "version": ENV.commit})
+    return quart.jsonify({"ok": True, "version": ENV.version})
+
+
+def set_webserver_devserver_envvars(*, service: ServiceEnum, app: str) -> None:
+    os.environ["QUART_DEBUG"] = "1"
+    os.environ["QUART_SKIP_DOTENV"] = "1"  # We handle it ourselves.
+    os.environ["SERVICE"] = service
+    os.environ["QUART_APP"] = app
