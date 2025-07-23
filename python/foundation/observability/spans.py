@@ -11,13 +11,14 @@ import sentry_sdk
 import structlog
 
 from foundation.env import ENV
+from foundation.observability.errors import ConfigurationError
 from foundation.observability.logs import get_logger
 
 logger = get_logger()
 
 
 def initialize_tracing() -> None:
-    if os.getenv("DD_TRACE_ENABLED") == "false":
+    if not ENV.datadog_enabled:
         ddtrace.tracer.enabled = False
         # The atexit handler slows down termination and is unnecessary if there is no agent.
         atexit.unregister(ddtrace.tracer._atexit)  # noqa: SLF001
@@ -33,8 +34,8 @@ def initialize_tracing() -> None:
         structlog=True,
     )
     ddtrace.tracer.set_tags({"service": ENV.service, "env": ENV.environment, "version": ENV.version})
-    if not os.getenv("DD_AGENT_HOST") or not os.getenv("DD_API_KEY"):
-        logger.warning("DD_AGENT_HOST/DD_API_KEY not set: not sending traces to datadog")
+    if not ENV.datadog_agent_host or not ENV.datadog_api_key:
+        raise ConfigurationError("DD_AGENT_HOST/DD_API_KEY not set: provision these keys or set DD_TRACE_ENABLED to false")
 
 
 def set_tracing_envvars() -> None:

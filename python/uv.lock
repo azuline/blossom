@@ -202,7 +202,7 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "quart" },
-    { name = "sentry-sdk" },
+    { name = "sentry-sdk", extra = ["quart"] },
     { name = "slack-sdk" },
     { name = "sqlalchemy", extra = ["asyncio"] },
     { name = "structlog" },
@@ -254,7 +254,7 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.1.0" },
     { name = "pyyaml", specifier = ">=6.0.0" },
     { name = "quart", specifier = ">=0.20.0" },
-    { name = "sentry-sdk", specifier = ">=2.22.0" },
+    { name = "sentry-sdk", extras = ["quart"], specifier = ">=2.22.0" },
     { name = "slack-sdk", specifier = ">=3.35.0" },
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.41" },
     { name = "structlog", specifier = ">=25.4.0" },
@@ -2158,6 +2158,12 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/09/0b/6139f589436c278b33359845ed77019cd093c41371f898283bbc14d26c02/sentry_sdk-2.33.0.tar.gz", hash = "sha256:cdceed05e186846fdf80ceea261fe0a11ebc93aab2f228ed73d076a07804152e", size = 335233, upload-time = "2025-07-15T12:07:42.413Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/93/e5/f24e9f81c9822a24a2627cfcb44c10a3971382e67e5015c6e068421f5787/sentry_sdk-2.33.0-py2.py3-none-any.whl", hash = "sha256:a762d3f19a1c240e16c98796f2a5023f6e58872997d5ae2147ac3ed378b23ec2", size = 356397, upload-time = "2025-07-15T12:07:40.729Z" },
+]
+
+[package.optional-dependencies]
+quart = [
+    { name = "blinker" },
+    { name = "quart" },
 ]
 
 [[package]]

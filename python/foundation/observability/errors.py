@@ -7,6 +7,7 @@ from typing import Any, ClassVar, Literal, get_args
 import ddtrace
 import sentry_sdk
 import sentry_sdk.integrations.asyncio
+import sentry_sdk.integrations.quart
 import sentry_sdk.types
 
 from foundation.env import ENV, EnvironmentEnum
@@ -120,6 +121,7 @@ def initialize_sentry():
         # Enables Quart, Aiohttp, etc..
         default_integrations=True,
         integrations=[
+            sentry_sdk.integrations.quart.QuartIntegration(),
             sentry_sdk.integrations.asyncio.AsyncioIntegration(),
         ],
     )

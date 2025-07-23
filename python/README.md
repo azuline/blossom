@@ -26,6 +26,16 @@ Environment variables default to the values in `.env.example`, which is checked 
 
 Refer to [`foundation`](./foundation) and [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 
+## Vendors
+
+- Data Orchestrator: [Dagster+](https://dagster.io/)
+- Database: [PostgreSQL](https://www.postgresql.org/)
+- Email Sending: [Postmark](https://postmarkapp.com/)
+- Error Triage: [Sentry](https://sentry.io/)
+- Feature Flags: [PostHog](https://posthog.com/)
+- Large Language Model: [OpenAI](https://openai.com/)
+- Observability: [Datadog](https://www.datadoghq.com/)
+
 ## Major Dependencies
 
 - Background Jobs: [dramatiq](https://github.com/Bogdanp/dramatiq)

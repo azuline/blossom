@@ -90,6 +90,7 @@ blinker==1.9.0 \
     # via
     #   flask
     #   quart
+    #   sentry-sdk
 bytecode==0.16.2 \
     --hash=sha256:0a7dea0387ec5cae5ec77578690c5ca7470c8a202c50ce64a426d86380cddd7f \
     --hash=sha256:f05020b6dc1f48cdadd946f7c3a03131ba0f312bd103767c5d75559de5c308f8
@@ -977,7 +978,9 @@ pyyaml==6.0.2 \
 quart==0.20.0 \
     --hash=sha256:003c08f551746710acb757de49d9b768986fd431517d0eb127380b656b98b8f1 \
     --hash=sha256:08793c206ff832483586f5ae47018c7e40bdd75d886fee3fabbdaa70c2cf505d
-    # via blossom
+    # via
+    #   blossom
+    #   sentry-sdk
 questionary==2.1.0 \
     --hash=sha256:44174d237b68bc828e4878c763a9ad6790ee61990e0ae72927694ead57bab8ec \
     --hash=sha256:6302cdd645b19667d8f6e6634774e9538bfcd1aad9be287e743d96cacaf95587

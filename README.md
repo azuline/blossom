@@ -5,7 +5,7 @@
 
 Blossom contains code patterns that I've accumulated between various projects. It serves as a template repository for my future projects (they _blossom_ out of this repository, get it? Ha ha!). These patterns are meant to be sensible for small-medium scale enterprise projects (think Seed/Series A startup codebases). Blossom is is a superset of features; most projects benefit from a trimming of features post-fork.
 
-The code patterns assume a multi-tenant organizations data model. This is because a multi-tenant organization model can be reduced down to a single-user model easily, but not vice versa. These templates are implemented in Python and TypeScript, but many of the patterns here are translatable to other languages (I have some translations squirrelled away!).
+The code patterns assume a multi-tenant organizations data model. This is because a multi-tenant organization model can be reduced down to a single-user model easily, but not vice versa. These templates are implemented in Python and TypeScript, but many of the patterns here are translatable to other languages. A lot of these patterns were initially explored in Go.
 
 The project is structured as a monorepo organized by `{language}/{project}`. Each `project` directory represents a deployed service, with the exception of the `foundation` directories. The `foundation` directories contain shared abstractions that all other projects depend on. Each language and project contains a `README.md` with more description and a `CLAUDE.md` with programming guidelines.
 

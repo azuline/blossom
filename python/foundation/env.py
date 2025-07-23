@@ -57,6 +57,9 @@ class _Env:
 
     # Infra parameters.
     sentry_dsn: str | None
+    datadog_enabled: bool
+    datadog_agent_host: str | None
+    datadog_api_key: str | None
 
     # Configuration parameters (w/ defaults).
     webserver_num_workers: int
@@ -88,6 +91,9 @@ class _Env:
             version="development",  # TODO: dependent on infra provider
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),
+            datadog_enabled=cls._optional("DD_TRACE_ENABLED") != "false",
+            datadog_agent_host=cls._optional("DD_AGENT_HOST"),
+            datadog_api_key=cls._optional("DD_API_KEY"),
             product_host=cls._optional("PRODUCT_HOST"),
             product_port=int(x) if (x := cls._optional("PRODUCT_PORT")) else None,
             product_public_url=cls._required("PRODUCT_PUBLIC_URL"),
