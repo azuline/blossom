@@ -31,9 +31,9 @@ new-migration MSG:  ## Create a new migration file with the correct naming struc
 # CODEGEN.
 
 codegen-db:  ## Codegens the database queries from the `queries.sql` file using a test database. Updates `database/schema.sql` based on the migrations. Run this after every change to the migrations.
-    uv run -- python -m tools.codegen-db
+    uv run -- python -m tools.codegen_db
 codegen-rpc:  ## Codegens the frontend RPC routes and types from the defined product & panopticon routes.
-    uv run -- python -m tools.codegen-rpc
+    uv run -- python -m tools.codegen_rpc
 
 # DEPENDENCY MANAGEMENT.
 
@@ -70,9 +70,9 @@ diff:
 # LLM TOOLS.
 
 list-symbols *ARGS:  ## List all public functions, classes, methods, and literals in the codebase.
-    uv run -- python -m tools.list-symbols {{ARGS}}
+    uv run -- python -m tools.list_symbols {{ARGS}}
 list-fixtures:  ## List all symbols related to the `t` testing fixture.
-    uv run -- python -m tools.list-symbols | grep '^foundation.testing\|:Fixture'
+    uv run -- python -m tools.list_symbols | grep '^foundation.testing\|:Fixture'
 check-for-migration:  ## List any migration files which have been created or modified in the current branch.
     #!/usr/bin/env bash
     if [[ "$(git branch --show-current)" = "master" ]]; then

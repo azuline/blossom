@@ -1,17 +1,7 @@
-import importlib.util
 import tempfile
 from pathlib import Path
 
-# Import from __main__ in the same directory
-spec = importlib.util.spec_from_file_location("code_inspector", Path(__file__).parent / "__main__.py")
-assert spec is not None
-assert spec.loader is not None
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
-
-_get_python_files = module._get_python_files  # noqa: SLF001
-_path_to_module = module._path_to_module  # noqa: SLF001
-inspect_codebase = module.inspect_codebase
+from tools.list_symbols.__main__ import _get_python_files, _path_to_module, inspect_codebase
 
 
 def test_path_to_module():

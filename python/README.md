@@ -24,7 +24,7 @@ $ just dev              # Run the development servers.
 
 Environment variables default to the values in `.env.example`, which is checked into git. Add your overrides to `.env.local`.
 
-Refer to [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
+Refer to [`foundation`](./foundation) and [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 
 ## Major Dependencies
 
