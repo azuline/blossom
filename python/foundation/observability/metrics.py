@@ -19,7 +19,7 @@ logger = get_logger()
 MetricTagValue = int | float | str | bool | None
 MetricTagDict = dict[str, MetricTagValue]
 
-SAMPLE_RATE = 1
+DEFAULT_SAMPLE_RATE = 1
 
 
 def initialize_metrics():
@@ -32,7 +32,7 @@ def initialize_metrics():
     datadog.initialize(host_name=socket.gethostname(), api_key=ENV.datadog_api_key, statsd_host=ENV.datadog_agent_host)
 
 
-def metric_increment(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
+def metric_increment(name: LiteralString, value: int = 1, sample_rate: float = DEFAULT_SAMPLE_RATE, **kwargs: MetricTagValue):
     """Increment a counter metric."""
     if ENV.datadog_enabled:
         statsd.increment(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
@@ -44,7 +44,7 @@ def metric_increment_abnormal(name: LiteralString, value: int = 1, **kwargs: Met
         statsd.increment(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=1)
 
 
-def metric_decrement(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
+def metric_decrement(name: LiteralString, value: int = 1, sample_rate: float = DEFAULT_SAMPLE_RATE, **kwargs: MetricTagValue):
     """Decrement a counter metric."""
     if ENV.datadog_enabled:
         statsd.decrement(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
@@ -56,19 +56,19 @@ def metric_decrement_abnormal(name: LiteralString, value: int = 1, **kwargs: Met
         statsd.decrement(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=1)
 
 
-def metric_gauge(name: LiteralString, value: int, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
+def metric_gauge(name: LiteralString, value: int, sample_rate: float = DEFAULT_SAMPLE_RATE, **kwargs: MetricTagValue):
     """Set a gauge metric value."""
     if ENV.datadog_enabled:
         statsd.gauge(f"{name}.gauge", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_timing(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
+def metric_timing(name: LiteralString, value: float, sample_rate: float = DEFAULT_SAMPLE_RATE, **kwargs: MetricTagValue):
     """Record a timing metric."""
     if ENV.datadog_enabled:
         statsd.timing(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_distribution(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
+def metric_distribution(name: LiteralString, value: float, sample_rate: float = DEFAULT_SAMPLE_RATE, **kwargs: MetricTagValue):
     """Record a distribution metric."""
     if ENV.datadog_enabled:
         statsd.distribution(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)

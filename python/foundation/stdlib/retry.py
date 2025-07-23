@@ -6,7 +6,7 @@ from typing import LiteralString, ParamSpec, TypeVar
 
 from foundation.observability.errors import BaseError
 from foundation.observability.logs import get_logger
-from foundation.observability.metrics import MetricTagDict, metric_distribution
+from foundation.observability.metrics import DEFAULT_SAMPLE_RATE, MetricTagDict, metric_distribution
 
 logger = get_logger()
 
@@ -57,4 +57,4 @@ class AsyncRetryer:
                     await asyncio.sleep(self.backoff_unit_sec * (2**num_try) + self.backoff_unit_sec * random.random())
                     logger.warning("retrying coroutine", **log_fields)
         finally:
-            metric_distribution(f"{self.name}.retry", num_try, **(self.metric_tags or {}))
+            metric_distribution(f"{self.name}.retry", num_try, sample_rate=DEFAULT_SAMPLE_RATE, **(self.metric_tags or {}))
