@@ -9,6 +9,8 @@ from typing import LiteralString, TypeVar
 
 from foundation.observability.errors import BaseError
 from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_increment, metric_timing
+from foundation.observability.spans import span_dump, span_restore
 
 logger = get_logger()
 
@@ -35,10 +37,7 @@ async def wait_for_unsupervised_tasks(*names: str, timeout: float = 10) -> None:
     try:
         await asyncio.wait_for(asyncio.wait(tasks), timeout=timeout)
     except TimeoutError as e:
-        raise UnsupervisedTasksTimeoutError(
-            "timed out waiting for unsupervised tasks",
-            tasks=[t.get_name() for t in _unsupervised_tasks],
-        ) from e
+        raise UnsupervisedTasksTimeoutError("timed out waiting for unsupervised tasks", tasks=[t.get_name() for t in _unsupervised_tasks]) from e
 
 
 def create_unsupervised_task[T, **P](
@@ -47,21 +46,27 @@ def create_unsupervised_task[T, **P](
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> Task[T]:
+    sdump = span_dump()
+
     async def wrapper() -> T:
-        try:
-            return await fn(*args, **kwargs)
-        except Exception as e:
-            logger.exception("async task failed", name=name)
-            raise e
+        with span_restore(name, sdump):
+            try:
+                return await fn(*args, **kwargs)
+            except Exception:
+                logger.exception("async task failed", name=name)
+                raise
 
     t = asyncio.create_task(wrapper(), name=name)
-    t.add_done_callback(partial(_handle_unsupervised_error_cb, name=name, started_at=time.time()))
     _unsupervised_tasks.add(t)
+    t.add_done_callback(partial(_unsupervised_task_done_callback, name=name, started_at=time.time()))
     t.add_done_callback(_unsupervised_tasks.discard)
     return t
 
 
-def _handle_unsupervised_error_cb[T](future: asyncio.Future[T], name: str, started_at: float) -> None:
-    e = future.exception()
-    if e is not None:
-        logger.exception("async task failed", name=name, started_at=started_at)
+def _unsupervised_task_done_callback[T](future: asyncio.Future[T], name: str, started_at: float) -> None:
+    exc = future.exception()
+    success = exc is not None
+    if not success:
+        logger.exception("async task failed", name=name, started_at=started_at, exc_info=exc)
+    metric_increment("tasks.unsupervised_task", task=name, success=success)
+    metric_timing("tasks.unsupervised_task.duration", time.time() - started_at, task=name, success=success)

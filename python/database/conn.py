@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, create_async_en
 
 from foundation.env import ENV
 from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_increment
 from foundation.stdlib.jsonenc import dump_json_pg, load_json_pg
 from foundation.stdlib.tasks import create_unsupervised_task
 
@@ -66,6 +67,7 @@ async def connect_db_admin(*, pg_pool: DBConnPool | None = None, isolation_level
     async with pg_pool.connect() as conn:
         conn = await conn.execution_options(isolation_level=isolation_level)
         await _unset_row_level_security(conn)
+        metric_increment("database.connect", isolation_level=isolation_level, role="admin")
         yield conn
 
 
@@ -74,6 +76,7 @@ async def connect_db_customer(user_id: str, organization_id: str | None, *, pg_p
     pg_pool = pg_pool or await _default_pool()
     async with pg_pool.execution_options(isolation_level=isolation_level).connect() as conn:
         await _set_row_level_security(conn, user_id, organization_id)
+        metric_increment("database.connect", isolation_level=isolation_level, role="customer")
         yield conn
 
 

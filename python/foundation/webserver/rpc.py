@@ -11,10 +11,10 @@ import pydantic
 import quart
 
 from foundation.env import ENV
-from foundation.observability.errors import ConfigurationError, ImpossibleError, report_error
+from foundation.observability.errors import ConfigurationError, ImpossibleError
 from foundation.observability.logs import get_logger
-from foundation.observability.metrics import metric_increment_abnormal
-from foundation.observability.spans import tag_current_span
+from foundation.observability.metrics import metric_count_and_time
+from foundation.observability.spans import span, tag_current_span
 from foundation.stdlib.parse import make_pydantic_validator
 from foundation.stdlib.types import Unset
 
@@ -170,36 +170,36 @@ def rpc_common(
 
         @functools.wraps(func)
         async def common_wrapper() -> quart.Response:
-            tag_current_span(route=name)
             raw_req = quart.request
-
-            try:
-                data = await _parse_request(in_spec, raw_req)
-                logger.debug("entering request handler function in common decorator")
-                req = ReqCommon(data=data, raw=raw_req)
-                # Set up a 30 second timeout for the request handler.
-                func_out = await asyncio.wait_for(func(req), timeout=timeout)
-                logger.debug("completed request handler function in common decorator")
-                if not isinstance(func_out, quart.Response):
+            with span("webserver.rpc", rpc=name, method=method), metric_count_and_time("webserver.rpc", rpc=name, method=method) as ctags:
+                try:
+                    data = await _parse_request(in_spec, raw_req)
+                    logger.debug("entering request handler function in common decorator")
+                    req = ReqCommon(data=data, raw=raw_req)
+                    # Set up a 30 second timeout for the request handler.
+                    func_out = await asyncio.wait_for(func(req), timeout=timeout)
+                    logger.debug("completed request handler function in common decorator")
                     tag_current_span(status_code=200)
-                    logger.debug("converting response data into fastapi Response object")
-                    return quart.Response(response=jsonify_output(func_out), status=200, headers={"Content-Type": "application/json"})
-                return func_out
-            # Metrics for error status codes are captured in the Middleware.
-            except RPCError as e:
-                tag_current_span(status_code=400)
-                logger.debug("rpc endpoint returned error", error=e.__class__.__name__, data=e.serialize())
-                metric_increment_abnormal("rpc.error", rpc=name, method=method, error=e.__class__.__name__)
-                return quart.Response(response=jsonify_output(e), status=400, headers={"Content-Type": "application/json"})
-            except TimeoutError as e:
-                tag_current_span(status_code=504)
-                logger.exception("request handler timed out")
-                report_error(e)
-                return quart.Response(response=jsonify_output(RPCTimeoutError()), status=504, headers={"Content-Type": "application/json"})
-            except Exception:  # pragma: no cover
-                tag_current_span(status_code=500)
-                logger.exception("unhandled exception in endpoint handler")
-                return quart.Response(response=jsonify_output(UnknownError()), status=500, headers={"Content-Type": "application/json"})
+                    ctags.tag(status_code=200)
+                    if not isinstance(func_out, quart.Response):
+                        logger.debug("converting response data into fastapi Response object")
+                        return quart.Response(response=jsonify_output(func_out), status=200, headers={"Content-Type": "application/json"})
+                    return func_out
+                except RPCError as e:
+                    tag_current_span(status_code=400, error=e.__class__.__name__)
+                    ctags.tag(status_code=400, error=e.__class__.__name__)
+                    logger.debug("rpc endpoint returned error", error=e.__class__.__name__, data=e.serialize())
+                    return quart.Response(response=jsonify_output(e), status=400, headers={"Content-Type": "application/json"})
+                except TimeoutError as e:
+                    tag_current_span(status_code=504, error=e.__class__.__name__)
+                    ctags.tag(status_code=504, error=e.__class__.__name__)
+                    logger.exception("request handler timed out")
+                    return quart.Response(response=jsonify_output(RPCTimeoutError()), status=504, headers={"Content-Type": "application/json"})
+                except Exception as e:  # pragma: no cover
+                    tag_current_span(status_code=500, error=e.__class__.__name__)
+                    ctags.tag(status_code=500, error=e.__class__.__name__)
+                    logger.exception("unhandled exception in endpoint handler")
+                    return quart.Response(response=jsonify_output(UnknownError()), status=500, headers={"Content-Type": "application/json"})
 
         # We don't support codegen types for raw responses.
         if issubclass(out, quart.Response):

@@ -17,6 +17,7 @@ from openai.types.shared_params.response_format_json_schema import ResponseForma
 from foundation.env import ENV
 from foundation.observability.errors import BaseError, ConfigurationError
 from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_count_and_time
 
 logger = get_logger()
 
@@ -40,13 +41,14 @@ class COpenAI:
         seed: int | None = None,
         response_format: ResponseFormatJSONSchema | None = None,
     ) -> ChatCompletion:
-        return await self.client.chat.completions.create(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            seed=seed,
-            response_format=response_format if response_format is not None else NOT_GIVEN,
-        )
+        with metric_count_and_time("external.openai.complete", model=model):
+            return await self.client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                seed=seed,
+                response_format=response_format if response_format is not None else NOT_GIVEN,
+            )
 
 
 class FakeOpenAIClient:

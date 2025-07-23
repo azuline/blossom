@@ -5,6 +5,7 @@ from typing import Any, LiteralString
 import dagster
 
 from foundation.observability.errors import report_error
+from foundation.observability.metrics import metric_count_and_time
 from foundation.observability.spans import span
 
 ORG_PARTITION = dagster.DynamicPartitionsDefinition(name="organizations")
@@ -33,11 +34,12 @@ def dag_asset(
 
     def decorator(func: Callable[..., Any]) -> Any:
         has_args = bool(inspect.signature(func).parameters)
+        instrumentation_name = f"dagster.asset.{name}"
         if inspect.iscoroutinefunction(func):
 
             async def wrapper(context: dagster.AssetExecutionContext):  # type: ignore
                 try:
-                    with span(name, resource=name, span_type="asset"):
+                    with span(instrumentation_name, resource=name, span_type="asset"), metric_count_and_time(instrumentation_name):
                         return await func(context) if has_args else func()
                 except Exception as e:
                     report_error(e)
@@ -47,7 +49,7 @@ def dag_asset(
 
             def wrapper(context: dagster.AssetExecutionContext):  # type: ignore
                 try:
-                    with span(name, resource=name, span_type="asset"):
+                    with span(instrumentation_name, resource=name, span_type="asset"), metric_count_and_time(instrumentation_name):
                         return func(context) if has_args else func()
                 except Exception as e:
                     report_error(e)

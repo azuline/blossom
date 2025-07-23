@@ -4,6 +4,7 @@ import dagster
 
 from database.xact import xact_admin
 from foundation.data.dag import ORG_PARTITION
+from foundation.observability.metrics import metric_count_and_time
 from pipeline.analytics import impressions_asset
 from pipeline.product import datasource_ext_asset, datasource_raw_asset, ext_datasource_sensor
 
@@ -17,7 +18,8 @@ def dynamic_partition_sensor() -> dagster.SensorResult:
             organization_ids = [x async for x in q.orm.pipeline_organization_id_fetch_all()]
         return dagster.SensorResult(dynamic_partitions_requests=[ORG_PARTITION.build_add_request(organization_ids)])
 
-    return asyncio.run(_dynamic_partition_sensor_coro())
+    with metric_count_and_time("pipeline.org_partition.sensor"):
+        return asyncio.run(_dynamic_partition_sensor_coro())
 
 
 @dagster.definitions

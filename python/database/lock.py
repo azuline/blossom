@@ -9,6 +9,7 @@ from sqlalchemy import text
 from database.conn import DBConnPool, connect_db_admin
 from foundation.observability.errors import BaseError
 from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_increment
 
 logger = get_logger()
 
@@ -47,8 +48,10 @@ async def lock(
             locked = row[0] if row else False
             if not locked:
                 logger.info("failed to acquire advisory lock (nonblocking)", id=id_, name=name)
+                metric_increment("database.lock", success=False)
                 raise LockAlreadyHeld(name=name, lock_id=id_)
             logger.info("acquired advisory lock (nonblocking)", id=id_, name=name)
+            metric_increment("database.lock", success=True)
         try:
             if block:
                 logger.info("trying to acquire advisory lock (blocking)", id=id_, name=name)
@@ -58,9 +61,11 @@ async def lock(
                     await asyncio.wait_for(c.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": id_}), timeout=block_timeout)
                 except TimeoutError as e:
                     logger.info("failed to acquire advisory lock (blocking)", id=id_, name=name)
+                    metric_increment("database.lock", success=False)
                     await c.rollback()
                     raise LockTimeoutError from e
                 logger.info("acquired advisory lock (blocking)", id=id_, name=name)
+                metric_increment("database.lock", success=True)
             yield
         finally:
             logger.info("releasing advisory lock", id=id_, name=name)

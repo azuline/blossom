@@ -10,6 +10,7 @@ from slack_sdk.web.async_client import AsyncWebClient
 from foundation.env import ENV
 from foundation.observability.errors import ConfigurationError
 from foundation.observability.logs import get_logger
+from foundation.observability.metrics import metric_count_and_time
 
 logger = get_logger()
 
@@ -35,17 +36,18 @@ class CSlack:
         text: str,
         thread_ts: str | None = None,
     ) -> str | None:
-        resp = await self.client.chat_postMessage(
-            channel=channel,
-            text=text,
-            unfurl_links=False,
-            unfurl_media=False,
-            thread_ts=thread_ts,
-        )
-        if resp.status_code != HTTPStatus.OK:
-            logger.error("slack post failed", channel=channel, text=text)
+        with metric_count_and_time("external.slack.send_message"):
+            resp = await self.client.chat_postMessage(
+                channel=channel,
+                text=text,
+                unfurl_links=False,
+                unfurl_media=False,
+                thread_ts=thread_ts,
+            )
+            if resp.status_code != HTTPStatus.OK:
+                logger.error("slack post failed", channel=channel, text=text)
 
-        return resp["ts"]
+            return resp["ts"]
 
 
 def link(url: str, text: str) -> str:

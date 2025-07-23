@@ -16,8 +16,8 @@ from foundation.observability.logs import get_logger
 
 logger = get_logger()
 
-TagValue = int | float | str | bool | None
-TagDict = dict[str, TagValue]
+MetricTagValue = int | float | str | bool | None
+MetricTagDict = dict[str, MetricTagValue]
 
 SAMPLE_RATE = 1
 
@@ -32,43 +32,43 @@ def initialize_metrics():
     datadog.initialize(host_name=socket.gethostname(), api_key=ENV.datadog_api_key, statsd_host=ENV.datadog_agent_host)
 
 
-def metric_increment(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: TagValue):
+def metric_increment(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
     """Increment a counter metric."""
     if ENV.datadog_enabled:
-        statsd.increment(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
+        statsd.increment(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_increment_abnormal(name: LiteralString, value: int = 1, **kwargs: TagValue):
+def metric_increment_abnormal(name: LiteralString, value: int = 1, **kwargs: MetricTagValue):
     """Increment a counter metric without sampling."""
     if ENV.datadog_enabled:
-        statsd.increment(name, value, tags=_construct_tags(kwargs), sample_rate=1)
+        statsd.increment(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=1)
 
 
-def metric_decrement(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: TagValue):
+def metric_decrement(name: LiteralString, value: int = 1, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
     """Decrement a counter metric."""
     if ENV.datadog_enabled:
-        statsd.decrement(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
+        statsd.decrement(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_decrement_abnormal(name: LiteralString, value: int = 1, **kwargs: TagValue):
+def metric_decrement_abnormal(name: LiteralString, value: int = 1, **kwargs: MetricTagValue):
     """Decrement a counter metric without sampling."""
     if ENV.datadog_enabled:
-        statsd.decrement(name, value, tags=_construct_tags(kwargs), sample_rate=1)
+        statsd.decrement(f"{name}.count", value, tags=_construct_tags(kwargs), sample_rate=1)
 
 
-def metric_gauge(name: LiteralString, value: int, sample_rate: float = SAMPLE_RATE, **kwargs: TagValue):
+def metric_gauge(name: LiteralString, value: int, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
     """Set a gauge metric value."""
     if ENV.datadog_enabled:
-        statsd.gauge(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
+        statsd.gauge(f"{name}.gauge", value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_timing(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: TagValue):
+def metric_timing(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
     """Record a timing metric."""
     if ENV.datadog_enabled:
         statsd.timing(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
 
 
-def metric_distribution(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: TagValue):
+def metric_distribution(name: LiteralString, value: float, sample_rate: float = SAMPLE_RATE, **kwargs: MetricTagValue):
     """Record a distribution metric."""
     if ENV.datadog_enabled:
         statsd.distribution(name, value, tags=_construct_tags(kwargs), sample_rate=sample_rate)
@@ -76,14 +76,15 @@ def metric_distribution(name: LiteralString, value: float, sample_rate: float = 
 
 @dataclasses.dataclass(slots=True)
 class TagAccumulator:
-    accumulated_tags: TagDict
+    accumulated_tags: MetricTagDict
 
-    def tag(self, key: LiteralString, value: TagValue) -> None:
-        self.accumulated_tags[key] = value
+    def tag(self, **kwargs: MetricTagValue) -> None:
+        for key, value in kwargs.items():
+            self.accumulated_tags[key] = value
 
 
 @contextlib.contextmanager
-def metric_count_and_time(name: LiteralString, **kwargs: TagValue) -> Generator[TagAccumulator]:
+def metric_count_and_time(name: LiteralString, **kwargs: MetricTagValue) -> Generator[TagAccumulator]:
     """Context manager that counts invocations and times duration. Use the yielded accumulator to add tags during execution."""
     start_time = time.time()
     acc = TagAccumulator(accumulated_tags=kwargs)
@@ -105,7 +106,7 @@ def _sanitize_tag(tag: str) -> str:
     return tag[:200]
 
 
-def _construct_tags(kwargs: TagDict) -> list[str]:
+def _construct_tags(kwargs: MetricTagDict) -> list[str]:
     tags = [f"env:{ENV.environment}", f"service:{ENV.service}", f"version:{ENV.version}"]
     tags.extend(_sanitize_tag(f"{k}:{v}") for k, v in kwargs.items() if v is not None)
     return tags

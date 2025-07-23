@@ -2,11 +2,11 @@ import asyncio
 import dataclasses
 import random
 from collections.abc import Awaitable, Callable
-from typing import Any, LiteralString, ParamSpec, TypeVar
+from typing import LiteralString, ParamSpec, TypeVar
 
 from foundation.observability.errors import BaseError
 from foundation.observability.logs import get_logger
-from foundation.observability.metrics import metric_distribution
+from foundation.observability.metrics import MetricTagDict, metric_distribution
 
 logger = get_logger()
 
@@ -33,7 +33,7 @@ class AsyncRetryer:
     name: LiteralString
     max_retries: int = 3
     backoff_unit_sec: float = 2
-    metric_tags: dict[str, Any] | None = None
+    metric_tags: MetricTagDict | None = None
 
     async def execute(self, fn: Callable[P, Awaitable[T]], *args: P.args, **kwargs: P.kwargs) -> T:
         num_try = 0
