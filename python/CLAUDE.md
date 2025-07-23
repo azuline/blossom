@@ -77,7 +77,7 @@ Do **not** instantiate new clients.
 
 ## Environment variables
 
-Access variables exclusively through `foundation.env:ENV`, and declare them in `.env`. Test overrides live in `conftest.py`.
+Access variables exclusively through `foundation.env:ENV`, and declare them in `.env.example`. Test overrides live in `conftest.py`.
 
 ## Errors
 

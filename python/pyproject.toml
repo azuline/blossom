@@ -16,6 +16,7 @@ dependencies = [
     "dagster>=1.10.14",
     "dagster-webserver>=1.10.14",
     "datadog>=0.52.0",
+    "ddtrace>=3.10.2",
     "filelock>=3.18.0",
     "google-api-python-client>=2.154.0",
     "google-auth>=2.38.0",

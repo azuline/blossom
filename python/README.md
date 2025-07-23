@@ -22,7 +22,7 @@ $ just migrate          # Migrate local database.
 $ just dev              # Run the development servers.
 ```
 
-Environment variables default to the values in `.env`, which is checked into git. Add your overrides to `.env.local`.
+Environment variables default to the values in `.env.example`, which is checked into git. Add your overrides to `.env.local`.
 
 Refer to [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 

@@ -6,8 +6,12 @@ from typing import Literal, cast, get_args
 
 from dotenv import dotenv_values
 
+defaults = {}
+if os.getenv("ENVIRONMENT") != "production":
+    defaults = dotenv_values(".env.example")
+
 env: dict[str, str] = {
-    **dotenv_values(".env"),  # type: ignore
+    **defaults,  # type: ignore
     # The is not committed to git and contains sensitive overrides for development.
     **dotenv_values(".env.local"),  # type: ignore
     **os.environ,
