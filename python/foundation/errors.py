@@ -6,7 +6,6 @@ from typing import Any, ClassVar, Literal, get_args
 
 import sentry_sdk
 import sentry_sdk.integrations.asyncio
-import sentry_sdk.integrations.logging
 import sentry_sdk.types
 
 from foundation.env import ENV, EnvironmentEnum
@@ -115,8 +114,9 @@ def initialize_sentry():
         release=ENV.commit,
         server_name=ENV.service,
         before_send=_sentry_before_send,
+        # Enables Quart, Aiohttp, etc..
+        default_integrations=True,
         integrations=[
-            sentry_sdk.integrations.logging.LoggingIntegration(event_level=None, level=None),
             sentry_sdk.integrations.asyncio.AsyncioIntegration(),
         ],
     )

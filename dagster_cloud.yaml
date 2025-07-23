@@ -1,7 +1,0 @@
-locations:
-  - location_name: pipeline
-    code_source:
-      python_file: pipeline/definitions.py
-    working_directory: ./python
-    build:
-      directory: ./python
