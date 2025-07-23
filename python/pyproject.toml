@@ -16,7 +16,6 @@ dependencies = [
     "dagster>=1.10.14",
     "dagster-webserver>=1.10.14",
     "datadog>=0.52.0",
-    "ddtrace>=3.10.2",
     "filelock>=3.18.0",
     "google-api-python-client>=2.154.0",
     "google-auth>=2.38.0",
@@ -30,6 +29,7 @@ dependencies = [
     "quart>=0.20.0",
     "sentry-sdk>=2.22.0",
     "slack-sdk>=3.35.0",
+    "sqlalchemy[asyncio]>=2.0.41",
     "structlog>=25.4.0",
     "structlog-sentry>=2.1.0",
     "tsidpy>=1.1.5",
@@ -163,7 +163,7 @@ asyncio_default_fixture_loop_scope = "function"
 # Logs are emitted to stderr in a formatted way. When pytest captures logs,
 # they emit as hard-to-read JSON.
 addopts = "-p no:logging"
-timeout = 60
+timeout = 15
 markers = [
     "live: marks tests that require live services (deselect with '-m \"not live\"')",
 ]

@@ -17,7 +17,7 @@ class DBQuerier:
 
 @contextlib.asynccontextmanager
 async def xact_admin(pg_pool: DBConnPool | None = None) -> AsyncGenerator[DBQuerier]:
-    async with connect_db_admin(pg_pool=pg_pool) as c:
+    async with connect_db_admin(pg_pool=pg_pool, isolation_level="READ COMMITTED") as c:
         try:
             yield DBQuerier(orm=AsyncQuerier(c), conn=c)
             await c.commit()
@@ -28,7 +28,7 @@ async def xact_admin(pg_pool: DBConnPool | None = None) -> AsyncGenerator[DBQuer
 
 @contextlib.asynccontextmanager
 async def xact_customer(user_id: str, organization_id: str | None, pg_pool: DBConnPool | None = None) -> AsyncGenerator[DBQuerier]:
-    async with connect_db_customer(user_id, organization_id, pg_pool=pg_pool) as c:
+    async with connect_db_customer(user_id, organization_id, pg_pool=pg_pool, isolation_level="READ COMMITTED") as c:
         try:
             yield DBQuerier(orm=AsyncQuerier(c), conn=c)
             await c.commit()

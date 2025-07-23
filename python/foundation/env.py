@@ -57,7 +57,8 @@ class _Env:
 
     # Configuration parameters (w/ defaults).
     webserver_num_workers: int
-    database_pool_size: int
+    database_pool_min_size: int
+    database_pool_max_size: int
     eval_concurrency: int
 
     # First-party secrets.
@@ -104,7 +105,8 @@ class _Env:
             pipeline_port=int(x) if (x := cls._optional("PIPELINE_PORT")) else None,
             pipeline_public_url=cls._required("PIPELINE_PUBLIC_URL"),
             webserver_num_workers=int(cls._optional("WEBSERVER_NUM_WORKERS") or 2),
-            database_pool_size=int(cls._optional("DATABASE_POOL_SIZE") or 5),
+            database_pool_min_size=int(cls._optional("DATABASE_POOL_MIN_SIZE") or 5),
+            database_pool_max_size=int(cls._optional("DATABASE_POOL_MAX_SIZE") or 25),
             eval_concurrency=int(cls._optional("EVAL_CONCURRENCY") or 25),
             quart_session_key=cls._required("QUART_SESSION_KEY"),
             vault_encryption_key=bytes.fromhex(cls._required("VAULT_ENCRYPTION_KEY")),

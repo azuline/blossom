@@ -4,6 +4,8 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
+from sqlalchemy import text
+
 from database.conn import DBConnPool, connect_db_admin
 from foundation.errors import BaseError
 from foundation.logs import get_logger
@@ -37,11 +39,12 @@ async def lock(
 ) -> AsyncGenerator[None]:
     id_ = _stable_hash(name)
 
-    async with connect_db_admin(pool) as c:
+    async with connect_db_admin(pg_pool=pool) as c:
         if not block:
             logger.info("trying to acquire advisory lock (nonblocking)", id=id_, name=name)
-            result = await c.execute("SELECT pg_try_advisory_xact_lock(%s)", (id_,))
-            locked = await result.fetchone()
+            result = await c.execute(text("SELECT pg_try_advisory_xact_lock(:id)"), {"id": id_})
+            row = result.first()
+            locked = row[0] if row else False
             if not locked:
                 logger.info("failed to acquire advisory lock (nonblocking)", id=id_, name=name)
                 raise LockAlreadyHeld(name=name, lock_id=id_)
@@ -52,7 +55,7 @@ async def lock(
                 try:
                     # We must always call the pg_advisory_unlock no matter what in case we secured
                     # the lock in the DB and timed out in the response I/O.
-                    await asyncio.wait_for(c.execute("SELECT pg_advisory_xact_lock(%s)", (id_,)), timeout=block_timeout)
+                    await asyncio.wait_for(c.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": id_}), timeout=block_timeout)
                 except TimeoutError as e:
                     logger.info("failed to acquire advisory lock (blocking)", id=id_, name=name)
                     await c.rollback()
@@ -61,5 +64,5 @@ async def lock(
             yield
         finally:
             logger.info("releasing advisory lock", id=id_, name=name)
-            await c.execute("SELECT pg_advisory_unlock(%s)", (id_,))
+            await c.execute(text("SELECT pg_advisory_unlock(:id)"), {"id": id_})
             await c.commit()

@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 import yaml
+from sqlalchemy import text
 
 from database.conn import connect_db_admin
 from database.testdb import TestDB
@@ -57,7 +58,8 @@ async def main():
         defaults: list[tuple[str, str]] = []
         async with connect_db_admin() as conn:
             cursor = await conn.execute(
-                """
+                text(
+                    """
                 SELECT c.table_name, c.column_default
                 FROM information_schema.columns c
                 JOIN information_schema.tables t
@@ -68,9 +70,10 @@ async def main():
                 AND t.table_name NOT LIKE '%yoyo%'
                 AND c.column_default LIKE  'generate_id(%'
                 """
+                )
             )
             pattern = re.compile(r"generate_id\('([^']+)'::text\)")
-            async for row in cursor:
+            for row in cursor:
                 table = row[0]
                 m = pattern.match(row[1])
                 assert m is not None

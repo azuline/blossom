@@ -1,55 +1,45 @@
 import asyncio
 import contextlib
-import logging
 import re
 from collections.abc import AsyncIterator
-from typing import Any, cast
 
-import psycopg
-import psycopg.types.json
-import psycopg_pool
-from psycopg.sql import SQL, Identifier
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, create_async_engine
 
 from foundation.env import ENV
-from foundation.funcs import run_once
 from foundation.jsonenc import dump_json_pg, load_json_pg
+from foundation.logs import get_logger
+from foundation.tasks import create_unsupervised_task
 
-# Type aliases for everyone.
-DBConn = psycopg.AsyncConnection[Any]
-# Unsure why I'm getting type errors if it's only AsyncNullConnectionPool.
-DBConnPool = psycopg_pool.AsyncNullConnectionPool
+logger = get_logger()
+
+DBConn = AsyncConnection
+DBConnPool = AsyncEngine
 
 USER_ID_SAFETY_REGEX = re.compile(r"usr_[A-Za-z0-9]+$")
 ORGANIZATION_ID_SAFETY_REGEX = re.compile(r"org_[A-Za-z0-9]+$")
 
 
-@run_once
-def _configure_psycopg() -> None:
-    psycopg.types.json.set_json_dumps(dump_json_pg)
-    psycopg.types.json.set_json_loads(load_json_pg)
-
-
-async def create_pg_pool(database_uri: str | None = None) -> DBConnPool:
-    _configure_psycopg()
-    pool = psycopg_pool.AsyncNullConnectionPool(
-        conninfo=database_uri or ENV.database_uri,
-        max_size=ENV.database_pool_size,
-        open=False,
-        # We turn autocommit on so that by default, queries can run outside of
-        # a transaction. When a connection desires to run a series of queries
-        # in a single transaction, they can explicitly start a transaction with BEGIN.
-        kwargs={"autocommit": True},
-        reset=_clean_up_row_level_security,
-        timeout=3,
+async def create_pg_pool(
+    database_uri: str | None = None,
+    *,
+    TESTING_min_size: int | None = None,
+    TESTING_max_size: int | None = None,
+) -> DBConnPool:
+    min_size = TESTING_min_size or ENV.database_pool_min_size
+    max_size = TESTING_max_size or ENV.database_pool_max_size
+    return create_async_engine(
+        url=(database_uri or ENV.database_uri).replace("postgresql://", "postgresql+psycopg://"),
+        echo=ENV.testing,
+        pool_size=min_size,
+        max_overflow=max_size - min_size,
+        pool_pre_ping=True,
+        pool_recycle=300,  # 5 minutes
+        connect_args={"connect_timeout": 3},
+        json_deserializer=load_json_pg,
+        json_serializer=dump_json_pg,
     )
-    await pool.open()
-    return cast(DBConnPool, pool)
 
-
-# Enable this when debugging DB connection quirks.
-if 1 == 2 and ENV.testing:  # pragma: no cover # type: ignore
-    logging.getLogger("psycopg").setLevel(logging.DEBUG)  # noqa: TID251
-    logging.getLogger("psycopg.pool").setLevel(logging.DEBUG)  # noqa: TID251
 
 _cached_db_uri: str = ENV.database_uri
 _cached_db_pool: DBConnPool | None = None
@@ -62,8 +52,8 @@ async def _default_pool() -> DBConnPool:
     global _cached_db_pool, _cached_db_uri, _cached_db_event_loop
     loop = asyncio.get_running_loop()
     if not _cached_db_pool or ENV.database_uri != _cached_db_uri or _cached_db_event_loop != loop:
-        # Yes, we do not clean up the pre-existing pool. No, I don't think it matters. This should
-        # only happen in test.
+        if _cached_db_pool:
+            create_unsupervised_task("cached_pg_pool_cleanup", _cached_db_pool.dispose)
         _cached_db_pool = await create_pg_pool()
         _cached_db_uri = ENV.database_uri
         _cached_db_event_loop = loop
@@ -71,24 +61,25 @@ async def _default_pool() -> DBConnPool:
 
 
 @contextlib.asynccontextmanager
-async def connect_db_admin(pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
+async def connect_db_admin(*, pg_pool: DBConnPool | None = None, isolation_level: str = "AUTOCOMMIT") -> AsyncIterator[DBConn]:
     pg_pool = pg_pool or await _default_pool()
-    async with pg_pool.connection() as conn:
+    async with pg_pool.connect() as conn:
+        conn = await conn.execution_options(isolation_level=isolation_level)
+        await _unset_row_level_security(conn)
         yield conn
 
 
 @contextlib.asynccontextmanager
-async def connect_db_admin_nopool() -> AsyncIterator[DBConn]:
-    async with await psycopg.AsyncConnection.connect(ENV.database_uri, autocommit=True) as conn:
-        yield conn
-
-
-@contextlib.asynccontextmanager
-async def connect_db_customer(user_id: str, organization_id: str | None, pg_pool: DBConnPool | None = None) -> AsyncIterator[DBConn]:
+async def connect_db_customer(user_id: str, organization_id: str | None, *, pg_pool: DBConnPool | None = None, isolation_level: str = "AUTOCOMMIT") -> AsyncIterator[DBConn]:
     pg_pool = pg_pool or await _default_pool()
-    async with pg_pool.connection() as conn:
+    async with pg_pool.execution_options(isolation_level=isolation_level).connect() as conn:
         await _set_row_level_security(conn, user_id, organization_id)
         yield conn
+
+
+async def _unset_row_level_security(conn: DBConn) -> None:
+    """Reset connection to clean state."""
+    await conn.execute(text("SET ROLE postgres; RESET app.current_user_id; RESET app.current_organization_id;"))
 
 
 async def _set_row_level_security(conn: DBConn, user_id: str, organization_id: str | None) -> None:
@@ -96,25 +87,8 @@ async def _set_row_level_security(conn: DBConn, user_id: str, organization_id: s
     assert USER_ID_SAFETY_REGEX.match(user_id)
     assert not organization_id or ORGANIZATION_ID_SAFETY_REGEX.match(organization_id)
 
-    # A pipeline runs all the following commands in sequence without waiting for the previous
-    # roundtrip to finish. Since we aren't reading the results, this is more performant.
-    async with conn.pipeline():
-        # We need to make sure that this role is unset at the end of the connection. We do
-        # this in the create_pg_pool function, where all connections are cleaned up by
-        # calling SET ROLE postgres.
-        #
-        # We do this with the reset function of the conn pool.
-        await conn.execute("SET ROLE customer")
-
-        await conn.execute(SQL("SET app.current_user_id = {}").format(Identifier(str(user_id))))
-        if organization_id:
-            await conn.execute(SQL("SET app.current_organization_id = {}").format(Identifier(str(organization_id))))
-
-
-async def _clean_up_row_level_security(conn: DBConn) -> None:
-    # A pipeline runs all the following commands in sequence without waiting for the previous
-    # roundtrip to finish. Since we aren't reading the results, this is more performant.
-    async with conn.pipeline():
-        await conn.execute("SET ROLE postgres")
-        await conn.execute("RESET app.current_user_id")
-        await conn.execute("RESET app.current_organization_id")
+    # Execute multiple SET commands in a single statement for efficiency
+    if organization_id:
+        await conn.execute(text(f"SET ROLE customer; SET app.current_user_id = '{user_id}'; SET app.current_organization_id = '{organization_id}';"))
+    else:
+        await conn.execute(text(f"SET ROLE customer; SET app.current_user_id = '{user_id}'; RESET app.current_organization_id;"))

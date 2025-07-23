@@ -2,7 +2,6 @@ from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any
 
-import ddtrace
 import sentry_sdk
 import structlog
 
@@ -20,5 +19,5 @@ def tag_current_span(**kwargs: Any) -> None:
     """Add tags to the current span."""
     scope = sentry_sdk.get_current_scope()
     scope.set_tags(kwargs)
-    if span := ddtrace.tracer.current_span():  # type: ignore
-        span.set_tags(kwargs)  # type: ignore
+    # if span := ddtrace.tracer.current_span():  # type: ignore
+    #     span.set_tags(kwargs)  # type: ignore

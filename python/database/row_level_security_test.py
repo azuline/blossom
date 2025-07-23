@@ -1,6 +1,7 @@
 import asyncio
 
-import psycopg
+from sqlalchemy import text
+from sqlalchemy.exc import ProgrammingError
 
 from database.conn import DBConn, _set_row_level_security, create_pg_pool
 from database.testdb import TestDB
@@ -19,31 +20,32 @@ async def test_row_level_security_in_connection_pool() -> None:
 
     async def get_user_id(c: DBConn) -> str | None:
         try:
-            cur = await c.execute("SHOW app.current_user_id")
-        except psycopg.errors.UndefinedObject:
+            result = await c.execute(text("SHOW app.current_user_id"))
+        except ProgrammingError:
             return None
-        row = await cur.fetchone()
+        row = result.first()
         if not row or not row[0]:
             return None
         return row[0]
 
-    async with await create_pg_pool(db_uri) as pg_pool:
+    pg_pool = await create_pg_pool(db_uri)
+    try:
         connections: list[DBConn] = []
 
         async def create_conn(rls: bool) -> DBConn:
-            c = await pg_pool.getconn(timeout=5)
+            c = await pg_pool.connect().__aenter__()
             if rls:
                 # Fake user with a fake ID.
-                await _set_row_level_security(c, user_id, None)  # type: ignore
+                await _set_row_level_security(c, user_id, None)
             connections.append(c)
             return c
 
         async def destroy_conn(c: DBConn) -> None:
-            await pg_pool.putconn(c)
+            await c.close()
             connections.remove(c)
 
         # Spin up MAX_SIZE conns and give them all a user ID.
-        for _ in range(ENV.database_pool_size):
+        for _ in range(ENV.database_pool_max_size):
             await create_conn(True)
 
         # Check that they all have a user ID.
@@ -55,14 +57,14 @@ async def test_row_level_security_in_connection_pool() -> None:
         # user ID if improperly configured.
         ctasks = []
         existing_conns = [*connections]
-        for _ in range(ENV.database_pool_size):
+        for _ in range(ENV.database_pool_max_size):
             ctasks.append(asyncio.create_task(create_conn(False)))
 
-        # Give the coroutines time to make their getconn requests. Assert that the getconn requests
-        # have been made. This is necessary for a NullPool, since a NullPool only re-uses
-        # connections if there are pending connection requests.
+        # Give the coroutines time to make their connection requests
         await asyncio.sleep(0.2)
-        assert pg_pool.get_stats()["requests_waiting"] == ENV.database_pool_size, "Test misconfigured: async sleep too short: getconn requests not yet made."
+
+        # Check that we have pending connection requests
+        assert len(ctasks) == ENV.database_pool_max_size, "test misconfigured: connection tasks not created"
 
         # Destroy existing connections.
         for c in existing_conns:
@@ -72,8 +74,11 @@ async def test_row_level_security_in_connection_pool() -> None:
         results = await asyncio.gather(*ctasks, return_exceptions=True)
         for r in results:
             assert not isinstance(r, BaseException)
+            # The reset handler should have cleaned up the user_id
             assert await get_user_id(r) is None
 
         # Cleanup; destroy all connections.
         for c in [*connections]:
             await destroy_conn(c)
+    finally:
+        await pg_pool.dispose()

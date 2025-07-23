@@ -28,14 +28,14 @@ Refer to [CLAUDE.md](./CLAUDE.md) for best practices and patterns.
 
 ## Major Dependencies
 
-- Background Jobs: [procrastinate](https://github.com/procrastinate-org/procrastinate)
+- Background Jobs: [dramatiq](https://github.com/Bogdanp/dramatiq)
 - Data Pipelines: [dagster](https://dagster.io/)
 - Data Validation: [pydantic](https://github.com/pydantic/pydantic)
 - Linter/Formatter: [ruff](https://github.com/astral-sh/ruff) + [semgrep](https://github.com/semgrep/semgrep) + [tach](https://github.com/gauge-sh/tach)
 - Logs: [structlog](https://github.com/hynek/structlog)
 - Metrics: [datadog](https://github.com/DataDog/datadogpy)
 - Migrations: [yoyo-migrations](https://sr.ht/~olly/yoyo/)
-- ORM: [sqlc](https://github.com/sqlc-dev/sqlc) + [psycopg](https://github.com/psycopg/psycopg)
+- ORM: [sqlc](https://github.com/sqlc-dev/sqlc) + [sqlalchemy](https://www.sqlalchemy.org/) + [psycopg](https://github.com/psycopg/psycopg)
 - Package Manager: [uv](https://github.com/astral-sh/uv)
 - Test Runner: [pytest](https://github.com/pytest-dev/pytest)
 - Traces: [ddtrace](https://github.com/DataDog/dd-trace-py)

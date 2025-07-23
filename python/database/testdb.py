@@ -2,9 +2,9 @@ import hashlib
 import secrets
 
 import yoyo
-from psycopg.sql import SQL, Identifier
+from sqlalchemy import text
 
-from database.conn import connect_db_admin_nopool
+from database.conn import connect_db_admin
 from database.lock import lock
 from foundation.env import ENV
 from foundation.logs import get_logger
@@ -35,19 +35,20 @@ class TestDB:
         """Create a template database for the current schema version."""
         tmpl_name = self._compute_template_name()
 
-        async with lock("testdb"), connect_db_admin_nopool() as conn:
-            cursor = await conn.execute("SELECT 1 FROM pg_database WHERE datname = %s", (tmpl_name,))
-            if await cursor.fetchone():
+        async with lock("testdb"), connect_db_admin() as conn:
+            cursor = await conn.execute(text("SELECT 1 FROM pg_database WHERE datname = :name"), {"name": tmpl_name})
+            if cursor.first():
                 logger.debug("template database already exists, reusing it", tmpl_name=tmpl_name)
                 return tmpl_name
 
             logger.info("creating template database", tmpl_name=tmpl_name)
-            await conn.execute(SQL("CREATE DATABASE {}").format(Identifier(tmpl_name)))
+            # Use raw SQL for CREATE DATABASE as it cannot be parameterized
+            await conn.execute(text(f'CREATE DATABASE "{tmpl_name}"'))
             migrations = yoyo.read_migrations(str(PYTHON_ROOT / "database/migrations"))
             db_uri_yoyo = self.database_uri(tmpl_name).replace("postgresql://", "postgresql+psycopg://")
             with yoyo.get_backend(db_uri_yoyo) as backend, backend.lock():
                 backend.apply_migrations(backend.to_apply(migrations))
-            await conn.execute("UPDATE pg_database SET datistemplate = true WHERE datname = %s", (tmpl_name,))
+            await conn.execute(text("UPDATE pg_database SET datistemplate = true WHERE datname = :name"), {"name": tmpl_name})
 
         logger.info("created template database", tmpl_name=tmpl_name)
         return tmpl_name
@@ -55,21 +56,15 @@ class TestDB:
     async def create_db(self) -> str:
         tmpl_name = await self.create_template()
         db_name = f"test_{secrets.token_hex(8)}"
-        async with connect_db_admin_nopool() as conn:
-            await conn.execute(SQL("CREATE DATABASE {} WITH TEMPLATE {}").format(Identifier(db_name), Identifier(tmpl_name)))
+        async with connect_db_admin() as conn:
+            # Use raw SQL for CREATE DATABASE as it cannot be parameterized
+            await conn.execute(text(f'CREATE DATABASE "{db_name}" WITH TEMPLATE "{tmpl_name}"'))
         logger.debug("created test database from template", db_name=db_name, template=tmpl_name)
         return db_name
 
     async def drop_db(self, db_name: str):
-        async with connect_db_admin_nopool() as conn:
-            await conn.execute(
-                """
-                    SELECT pg_terminate_backend(pg_stat_activity.pid)
-                    FROM pg_stat_activity
-                    WHERE pg_stat_activity.datname = %s
-                        AND pid <> pg_backend_pid()
-                """,
-                (db_name,),
-            )
-            await conn.execute(SQL("DROP DATABASE IF EXISTS {}").format(Identifier(db_name)))
-        logger.debug("dropped test database", db_name=db_name)
+        async with connect_db_admin() as conn:
+            logger.debug("dropping testdb", db_name=db_name)
+            # Use raw SQL for DROP DATABASE as it cannot be parameterized
+            await conn.execute(text(f'DROP DATABASE IF EXISTS "{db_name}" WITH (FORCE)'))
+            logger.debug("dropped testdb", db_name=db_name)
