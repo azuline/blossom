@@ -48,7 +48,7 @@ def initialize_logging() -> None:
         processors=[*common_processors, structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
-        cache_logger_on_first_use=True,
+        cache_logger_on_first_use=not ENV.testing,
     )
 
     # Define renderer.

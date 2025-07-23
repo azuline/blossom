@@ -2,7 +2,7 @@ import pytest
 
 from database.xact import xact_admin
 from foundation.conftest import FoundationFixture
-from foundation.security.vault import (
+from foundation.crypto.vault import (
     SecretNotFoundError,
     delete_vaulted_secret,
     fetch_vaulted_secret,

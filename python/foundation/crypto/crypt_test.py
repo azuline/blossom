@@ -1,6 +1,6 @@
 import pytest
 
-from foundation.security.crypt import DecryptionFailedError, decrypt_symmetric, encrypt_symmetric, random_b64
+from foundation.crypto.crypt import DecryptionFailedError, decrypt_symmetric, encrypt_symmetric, random_b64
 
 
 def test_crypt() -> None:

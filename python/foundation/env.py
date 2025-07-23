@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import os
+import sys
 from typing import Literal, cast, get_args
 
 from dotenv import dotenv_values
@@ -83,7 +84,7 @@ class _Env:
             environment=cast(EnvironmentEnum, cls._required("ENVIRONMENT")),
             log_level=cast(LogLevelEnum, cls._optional("LOG_LEVEL") or "info"),
             service=cast(ServiceEnum, cls._optional("SERVICE") or "development"),
-            testing=bool(cls._optional("TESTING") or False),
+            testing="pytest" in sys.modules,
             version="development",  # TODO: dependent on infra provider
             database_uri=cls._required("DATABASE_URI"),
             sentry_dsn=cls._optional("SENTRY_DSN"),

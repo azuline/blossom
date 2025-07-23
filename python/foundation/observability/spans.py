@@ -1,3 +1,4 @@
+import atexit
 import contextlib
 import dataclasses
 import os
@@ -16,7 +17,11 @@ logger = get_logger()
 
 
 def initialize_tracing() -> None:
-    ddtrace.tracer.set_tags({"service": ENV.service, "env": ENV.environment, "version": ENV.version})
+    if os.getenv("DD_TRACE_ENABLED") == "false":
+        ddtrace.tracer.enabled = False
+        # The atexit handler slows down termination and is unnecessary if there is no agent.
+        atexit.unregister(ddtrace.tracer._atexit)  # noqa: SLF001
+        return
     ddtrace.patch(
         aiohttp=True,
         anthropic=True,
@@ -27,7 +32,8 @@ def initialize_tracing() -> None:
         psycopg=True,
         structlog=True,
     )
-    if ENV.environment != "development" and not (os.getenv("DD_AGENT_HOST") and os.getenv("DD_API_KEY")):
+    ddtrace.tracer.set_tags({"service": ENV.service, "env": ENV.environment, "version": ENV.version})
+    if not os.getenv("DD_AGENT_HOST") or not os.getenv("DD_API_KEY"):
         logger.warning("DD_AGENT_HOST/DD_API_KEY not set: not sending traces to datadog")
 
 

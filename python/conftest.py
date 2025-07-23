@@ -1,3 +1,9 @@
+# flake8: noqa: E402
+
+from foundation.observability.initialize import initialize_instrumentation
+
+initialize_instrumentation()
+
 import dataclasses
 import json
 import secrets
@@ -14,7 +20,6 @@ from foundation.external.openai import COpenAI, FakeOpenAIClient
 from foundation.external.sheets import CSheets, FakeGoogleSheetsService
 from foundation.external.slack import CSlack, FakeSlackClient
 from foundation.observability.errors import TESTING_CAPTURED_EXCEPTIONS
-from foundation.observability.initialize import initialize_instrumentation
 from foundation.observability.logs import get_logger
 
 logger = get_logger()
@@ -101,9 +106,3 @@ def fake_ext(request: pytest.FixtureRequest) -> Iterator[None]:
     for f in dataclasses.fields(EXT):
         if f.name.startswith("test_"):
             setattr(EXT, f.name, None)
-
-
-@pytest.fixture(autouse=True)
-def initialize(fake_settings) -> None:
-    del fake_settings
-    initialize_instrumentation()

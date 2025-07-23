@@ -25,6 +25,7 @@ dependencies = [
     "openai>=1.86.0",
     "psycopg[binary,pool]>=3.2.9",
     "pydantic>=2.11.7",
+    "pytest-env>=1.1.5",
     "python-dotenv>=1.1.0",
     "pyyaml>=6.0.0",
     "quart>=0.20.0",
@@ -169,9 +170,8 @@ timeout = 15
 markers = [
     "live: marks tests that require live services (deselect with '-m \"not live\"')",
 ]
-
 [tool.pytest_env]
-ENVIRONMENT = "testing"
+DD_TRACE_ENABLED = "false"
 
 [tool.coverage.run]
 omit = ["*/__snapshots__/*", "*/__llmshots__/*"]

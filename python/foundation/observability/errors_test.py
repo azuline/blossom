@@ -97,7 +97,7 @@ def test_suppress_error_logs_correct_kwargs():
     log = captured[0]
     assert log["event"] == "suppressing error"
     assert log["error"] == "ValueError"
-    assert log["module"] == "foundation.errors_test"
+    assert log["module"] == "foundation.observability.errors_test"
     assert log["function"] == "example_function"
     assert log["log_level"] == "error"  # exception logs at error level
     assert "exc_info" in log
