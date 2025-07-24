@@ -1,6 +1,6 @@
 # Foundation
 
-The `foundation` package provides an integrated set of utilities and library facades for building robust programs.
+The `foundation` package provides an integrated set of utilities and library facades for building robust and observable programs.
 
 See [CLAUDE.md](./CLAUDE.md) for best practices and conventions.
 
@@ -75,7 +75,7 @@ The `webserver/` package provides a high-level abstraction for building a backen
 
 ```python
 @rpc_x("list_bunnies", errors=[BunniesAreAsleep])  # Errors is used in the generated TypeScript bindings.
-def list_bunnies(req: ReqX[InputDataclassType]) -> OutputDataclassType:
+async def list_bunnies(req: ReqX[InputDataclassType]) -> OutputDataclassType:
     ...
     if ...:
         raise BunniesAreAsleep
@@ -103,11 +103,38 @@ def create_x_app() -> quart.Quart:
 
 # External
 
-The `external/` package centralizes all third-party integrations. The `EXT` global in [`external/external.py`](./external/external.py) lazily initializes each integration on first access
-Third-party integrations are
-`EXT` globals
+The `external/` package centralizes all third-party integrations. The `EXT` global in [`external/external.py`](./external/external.py) lazily initializes each integration on first access. In tests, `EXT` allows substituting fakes. For example:
 
-Fakes pattern, responsibility split.
+```python
+completion = await EXT.openai.complete(...)
+```
+
+Each external integration is implemented in the following pattern:
+
+```python
+# A facade over the third-party's SDK or HTTP requests.
+class CService:
+    def __init__(self, *, _fake_client: FakeServiceClient | None = None):
+        self.client = _fake_client or service_sdk_client
+
+    async def list_bunnies(self, ...) -> ...:
+        ...
+        return await self.client.x.y.list_bunnies(...)
+
+
+# A fake that matches the API of the third-party's SDK API with stub behavior.
+class FakeServiceClient:
+    ...
+
+
+# A test that uses the FakeServiceClient.
+def test_functionality_that_depends_on_service():
+    client = cast(FakeServiceClient, EXT.service.client)
+    client.TEST_add_bunnies(...)
+    bunnies = await EXT.service.list_bunnies(...)
+```
+
+A [`../conftest.py`](../conftest.py) fixture substitutes the fake clients before tests run.
 
 # Testing
 
