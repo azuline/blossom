@@ -88,6 +88,6 @@ We spin up a new Test DB for each test session and share it between every test r
 [Advisory locks](https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS) can be taken out with the `lock` context manager, like so:
 
 ```python
-async with lock("lock_name"):
+async with database.lock.lock("lock_name"):
     ...
 ```
