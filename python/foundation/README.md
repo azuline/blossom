@@ -1,41 +1,59 @@
 # Foundation
 
-The `foundation` package provides an integrated set of utilities and library facades for building robust programs. 
+The `foundation` package provides an integrated set of utilities and library facades for building robust programs.
 
 See [CLAUDE.md](./CLAUDE.md) for best practices and conventions.
 
 # Environment
 
-The [`env.py`](./env.py) file loads configuration parameters, first looking at environment variables, then the `.env.local` file, and then the `.env.example` file. It makes all the configuration parameters available through the `ENV` export, which can be used like so:
+[`env.py`](./env.py) loads all environment variables for configuration. For each expected variable, it first searches in the environment variables, then the `.env.local` file, and then the `.env.example` file. All variables are exposed on `ENV`, which can be used like so:
 
 ```python
-if foundatione.env.ENV.environment == "production":
+if foundation.env.ENV.environment == "production":
     print(ENV.slack_token)
 ```
 
 # Standard Library
 
-The `stdlib` package contains pure functions related to standard types and standard library functions.
+The `stdlib` package extends the standard types and Python standard library.
 
-Modules which require little description are:
+[`stdlib/convert.py`](./stdlib/convert.py) has data conversions and type casts for native types. [`stdlib/decorators.py`](./stdlib/decorators.py) has the useful decorators `@memoize` and `@run_once`. [`stdlib/identifiers.py`](./stdlib/identifiers.py) generates random IDs, emails, and strings. [`stdlib/paths.py`](./stdlib/paths.py) provides references to the paths of other projects in the monorepo.
 
-- [`convert.py`](./convert.py) has data conversions and type casts for native types.
-- [`decorators.py`](./decorators.py) has the useful decorators `@memoize` and `@run_once`.
-- [`identifiers.py`](./identifiers.py) has functions that generate random IDs, emails, and strings.
+[`stdlib/clock.py`](./stdlib/clock.py) provides a `CLOCK` for getting the current time, replacing use of `datetime.now`. The clock can be set or frozen. Use it like so:
 
-## JSON Serde
+```python
+time = foundation.stdlib.clock.CLOCK.now()
+# Testing utilities:
+foundation.stdlib.clock.CLOCK.TESTING_set(time)  # Clock will keep on ticking.
+foundation.stdlib.clock.CLOCK.TESTING_freeze(time)  # Clock will stop ticking.
+```
 
-## JSON Schemas
+[`stdlib/parse.py`](./stdlib/parse.py) parses dictionaries into Python dataclasses with Pydantic. We encapsulate Pydantic inside this file.
 
-## Data Parsing & Validation
+```python
+dc = foundation.stdlib.parse.parse_dataclass(DataclassType, data_dict)
+```
 
-## Unset
+[`stdlib/jsonschema.py`](./stdlib/jsonschema.py) converts dataclass types to OpenAI structured responses-compliant JSONSchema:
 
-## Network Retries
+```python
+jsonschema = foundation.stdlib.jsonschema.dataclass_to_jsonschema(DataclassType, "schema_name")
+```
 
-## Asynchronous Tasks
+[`stdlib/retry.py`](./stdlib/retry.py) is a higher order function that retries asynchronous functions with backoff and jitter:
 
-## Clock
+```python
+retryer = foundation.stdlib.retry.AsyncRetryer(name="get_external_data")  # Parametrize the executor here.
+await retryer.execute(get_external_data_fn, arg1, arg2=val2)
+```
+
+[`stdlib/tasks.py`](./stdlib/tasks.py) provides a supervisor for structured concurrency and a fire-and-forget unsupervised task tracker. Each task starts a child span in the active trace.
+
+```python
+foundation.stdlib.tasks.create_unsupervised_task("task_name", task_function)
+# Testing utilities:
+await foundation.stdlib.tasks.wait_for_unsupervised_tasks()
+```
 
 # Crypto
 

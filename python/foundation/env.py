@@ -7,6 +7,12 @@ from typing import Literal, cast, get_args
 
 from dotenv import dotenv_values
 
+
+def initialize_env() -> None:
+    # TODO: Don't load in global scope.
+    pass
+
+
 defaults = {}
 if os.getenv("ENVIRONMENT") != "production":
     defaults = dotenv_values(".env.example")

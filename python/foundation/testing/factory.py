@@ -7,7 +7,7 @@ from database.enums import OrganizationsInboundSourceEnum, UserSignupStepEnum
 from database.xact import xact_admin
 from foundation.stdlib.convert import cast_notnull
 from foundation.stdlib.identifiers import generate_email, generate_name
-from foundation.stdlib.time import CLOCK
+from foundation.stdlib.clock import CLOCK
 from foundation.stdlib.unset import UNSET, Unset
 
 # password='password'

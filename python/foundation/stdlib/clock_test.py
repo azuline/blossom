@@ -1,7 +1,7 @@
 import asyncio
 from datetime import UTC, date, datetime
 
-from foundation.stdlib.time import CLOCK
+from foundation.stdlib.clock import CLOCK
 
 
 async def test_clock():

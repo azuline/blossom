@@ -78,6 +78,13 @@ async with database.xact.xact_admin() as q:  # or `xact_customer`
 
 All static queries are managed by `sqlc`. Dynamic queries can be built using [SQLAlchemy core](https://docs.sqlalchemy.org/en/20/core/).
 
+### JSON Serialization
+
+We preserve semantic type information when [serializing to JSON](./jsonenc.py) by:
+
+- Serializing `datetime.datetime` to `{ "__sentinel": "timestamp", "value": "<isoformat>" }`.
+- Serializing `datetime.date` to `{ "__sentinel": "date", "value": "<isoformat>" }`.
+
 ## Test DB
 
 [`testdb.py`](./testdb.py) efficiently creates a new database for tests and codegen. This allows migrations to be tested without affecting the local database. This also allows working on multiple migrations simultaneously (e.g. with Claude).

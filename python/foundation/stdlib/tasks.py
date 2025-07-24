@@ -25,7 +25,7 @@ class UnsupervisedTasksTimeoutError(BaseError):
 _unsupervised_tasks: set[Task] = set()
 
 
-async def wait_for_unsupervised_tasks(*names: str, timeout: float = 10) -> None:
+async def wait_for_unsupervised_tasks(*names: str, timeout: float = 5) -> None:
     # Since these are being tracked in a global set, we need to filter out tasks that are not
     # running in the current loop. Otherwise, we'll see the following error on CI:
     # > ValueError: The future belongs to a different loop than the one specified as the loop argument

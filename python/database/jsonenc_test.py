@@ -1,7 +1,7 @@
 import dataclasses
 import datetime
 
-from foundation.stdlib.jsonenc import dump_json_pg, load_json_pg
+from database.conn import dump_json_pg, load_json_pg
 from foundation.stdlib.parse import parse_dataclass
 
 
