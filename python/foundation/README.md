@@ -69,14 +69,42 @@ await foundation.stdlib.tasks.wait_for_unsupervised_tasks()
 
 # Webserver
 
-Quart
+The `webserver/` package provides a high-level abstraction for building a backend API for a web application. It follows the Backend-For-Frontend pattern, where each endpoint is tailored made for a specific frontend feature.
 
-Observability pieces
+[`webserver/rpc.py`](./webserver/rpc.py) provides `RPCRouter` and `rpc_common` for defining RPCs. Each application (e.g. product and panopticon) extends `rpc_common` with application-specific logic. So for an application `x`:
 
-RPCs (use case)
+```python
+@rpc_x("list_bunnies", errors=[BunniesAreAsleep])  # Errors is used in the generated TypeScript bindings.
+def list_bunnies(req: ReqX[InputDataclassType]) -> OutputDataclassType:
+    ...
+    if ...:
+        raise BunniesAreAsleep
+    return OutputDataclassType(...)
+
+
+def create_x_router() -> RPCRouter:
+    router = RPCRouter()
+    router.add_route(list_bunnies)
+    return router
+```
+
+`rpc_common` handles parsing the input data into `InputDataclassType` and makes it available on `req.data`. The raw request is available on `req.raw`. `rpc_common` also instruments the request with a trace and an `X-Request-ID` header,
+
+The [`../tools/codegen_rpc`](../tools/codegen_rpc) script uses the Router's metadata to generate TypeScript type bindings for each RPC.
+
+The `RPCRouter` can be converted into a [Quart](https://github.com/pallets/quart) app with [`webserver/webserver.py`](./webserver/webserver.py) like so:
+
+```python
+def create_x_app() -> quart.Quart:
+    router = create_x_router()
+    app = foundation.webserver.webserver.create_webserver(router)
+    return app
+```
 
 # External
 
+The `external/` package centralizes all third-party integrations. The `EXT` global in [`external/external.py`](./external/external.py) lazily initializes each integration on first access
+Third-party integrations are
 `EXT` globals
 
 Fakes pattern, responsibility split.
