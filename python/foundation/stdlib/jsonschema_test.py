@@ -1,9 +1,7 @@
-"""Test for struct.py dataclass to JSON schema conversion."""
-
 import dataclasses
 from typing import Any, Literal
 
-from foundation.stdlib.struct import dataclass_to_jsonschema
+from foundation.stdlib.jsonschema import dataclass_to_jsonschema
 
 
 @dataclasses.dataclass

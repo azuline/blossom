@@ -17,7 +17,13 @@ if foundation.env.ENV.environment == "production":
 
 The `stdlib` package extends the standard types and Python standard library.
 
-[`stdlib/convert.py`](./stdlib/convert.py) has data conversions and type casts for native types. [`stdlib/decorators.py`](./stdlib/decorators.py) has the useful decorators `@memoize` and `@run_once`. [`stdlib/identifiers.py`](./stdlib/identifiers.py) generates random IDs, emails, and strings. [`stdlib/paths.py`](./stdlib/paths.py) provides references to the paths of other projects in the monorepo.
+[`stdlib/convert.py`](./stdlib/convert.py) has data conversions and type casts for native types.
+
+[`stdlib/decorators.py`](./stdlib/decorators.py) has the useful decorators `@memoize` and `@run_once`.
+
+[`stdlib/identifiers.py`](./stdlib/identifiers.py) generates random IDs, emails, and strings.
+
+[`stdlib/paths.py`](./stdlib/paths.py) provides references to the paths of other projects in the monorepo.
 
 [`stdlib/clock.py`](./stdlib/clock.py) provides a `CLOCK` for getting the current time, replacing use of `datetime.now`. The clock can be set or frozen. Use it like so:
 
@@ -57,9 +63,9 @@ await foundation.stdlib.tasks.wait_for_unsupervised_tasks()
 
 # Crypto
 
-Secrets
+[`crypto/crypt.py`](./crypto/crypt.py) provides `encrypt_symmetric` and `decrypt_symmetric` functions for symmetric AEAD.
 
-Vault
+[`crypto/vault.py`](./crypto/vault.py) provides the `vault_secret`, `fetch_vaulted_secret`, and `delete_vaulted_secret` functions for storing encrypted secrets in the database.
 
 # Webserver
 
