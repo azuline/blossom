@@ -16,7 +16,7 @@ from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_count_and_time
 from foundation.observability.spans import span, tag_current_span
 from foundation.stdlib.parse import make_pydantic_validator
-from foundation.stdlib.types import Unset
+from foundation.stdlib.convert import Unset
 
 # TODO: CORS
 # TODO: Metrics

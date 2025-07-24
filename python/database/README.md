@@ -71,11 +71,12 @@ As working with raw database connections is unwieldy, we have the `xact` context
 
 ```python
 async with database.xact.xact_admin() as q:  # or `xact_customer`
-    cursor = await q.orm.organizations_list()
-    cursor = await q.conn.execute(text("SELECT * FROM organizations"))
+    cursor = await q.orm.organizations_list()   # Raw connection is available on `q.conn`, but use is discouraged.
 ```
 
-`xact` exposes our [sqlc](https://sqlc.dev/) ORM on `q.orm`. The ORM is generated from the [`queries.sql`](./queries.sql) file with the `just codegen-db` command. The ORM contains of a type-safe Python binding for each query in [`queries.sql`](./queries.sql). `sqlc` connects to the local Postgres instance to validate each query. We spin up and migrate an ephemeral database for each invocation of `just codegen-db` using [`testdb.py`](./testdb.py).
+`xact` exposes our [sqlc](https://sqlc.dev/) ORM on `q.orm`. The ORM is generated from the [`queries.sql`](./queries.sql) file with the `just codegen-db` command. The ORM contains one type-safe Python function for each query in [`queries.sql`](./queries.sql). `sqlc` connects to the local Postgres instance to validate each query. We spin up and migrate an ephemeral database for each invocation of `just codegen-db` using [`testdb.py`](./testdb.py).
+
+All static queries are managed by `sqlc`. Dynamic queries can be built using [SQLAlchemy core](https://docs.sqlalchemy.org/en/20/core/).
 
 ## Test DB
 

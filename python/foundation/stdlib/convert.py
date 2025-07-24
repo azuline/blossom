@@ -19,3 +19,8 @@ def markdown_to_slack_markup(text: str) -> str:
     for src, dst in replacements:
         text = text.replace(src, dst)
     return text
+
+
+def cast_notnull[T](x: T | None) -> T:
+    assert x is not None
+    return x

@@ -3,7 +3,7 @@ from sqlalchemy import text
 from database.conn import connect_db_admin, connect_db_customer, create_pg_pool
 from database.testdb import TestDB
 from foundation.env import ENV
-from foundation.stdlib.types import cast_notnull
+from foundation.stdlib.convert import cast_notnull
 
 
 async def test_connection_pool_reuses_connections() -> None:

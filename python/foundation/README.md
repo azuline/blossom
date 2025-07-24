@@ -17,18 +17,19 @@ if foundatione.env.ENV.environment == "production":
 
 The `stdlib` package contains pure functions related to standard types and standard library functions.
 
-The unobtrusive and simple modules are:
+Modules which require little description are:
 
-- [`convert.py`](./convert.py) has data conversions for native types.
+- [`convert.py`](./convert.py) has data conversions and type casts for native types.
 - [`decorators.py`](./decorators.py) has the useful decorators `@memoize` and `@run_once`.
-- identifiers
-- types
+- [`identifiers.py`](./identifiers.py) has functions that generate random IDs, emails, and strings.
 
 ## JSON Serde
 
 ## JSON Schemas
 
 ## Data Parsing & Validation
+
+## Unset
 
 ## Network Retries
 

@@ -1,7 +1,7 @@
 from database.__codegen__ import models
 from database.enums import OrganizationsInboundSourceEnum
 from database.xact import DBQuerier
-from foundation.stdlib.types import cast_notnull
+from foundation.stdlib.convert import cast_notnull
 
 
 class OrganizationNotFoundError(Exception):
