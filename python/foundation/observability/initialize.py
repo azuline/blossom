@@ -4,7 +4,7 @@ from foundation.observability.errors import initialize_sentry
 from foundation.observability.logs import get_logger, initialize_logging
 from foundation.observability.metrics import initialize_metrics, metric_timing
 from foundation.observability.spans import initialize_tracing, set_tracing_envvars
-from foundation.stdlib.funcs import run_once
+from foundation.stdlib.decorators import run_once
 
 logger = get_logger()
 

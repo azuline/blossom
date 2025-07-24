@@ -1,7 +1,7 @@
 import dagster
 
-from foundation.data.dag import ORG_PARTITION, dag_asset
 from foundation.observability.logs import get_logger
+from pipeline.framework.dag import ORG_PARTITION, dag_asset
 
 logger = get_logger()
 

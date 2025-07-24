@@ -1,5 +1,14 @@
 import re
 
+
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, "big")
+
+
+def snake_case_to_pascal_case(s: str) -> str:
+    return "".join([x.title() for x in s.split("_")])
+
+
 MARKDOWN_LINK_REGEX = re.compile(r"\[([^\]]+)\]\((https://[^\)]+)\)")
 
 

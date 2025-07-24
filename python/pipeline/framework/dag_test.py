@@ -4,9 +4,9 @@ from typing import cast
 import dagster
 import pytest
 
-from foundation.conftest import FoundationFixture
-from foundation.data.dag import dag_asset
 from foundation.observability.errors import BaseError
+from pipeline.conftest import PipelineFixture
+from pipeline.framework.dag import dag_asset
 
 
 def test_asset_decorator_creates_dagster_asset():
@@ -21,7 +21,7 @@ def test_asset_decorator_creates_dagster_asset():
         assert cast(Callable, my_asset(context)) == "data"
 
 
-def test_asset_decorator_reports_errors_to_sentry(t: FoundationFixture):
+def test_asset_decorator_reports_errors_to_sentry(t: PipelineFixture):
     """Test that errors raised inside asset functions are reported to Sentry."""
 
     class TestAssetError(BaseError):
