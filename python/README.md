@@ -28,7 +28,6 @@ Refer to [`foundation`](./foundation) and [CLAUDE.md](./CLAUDE.md) for best prac
 
 ## Vendors
 
-- Data Orchestrator: [Dagster+](https://dagster.io/)
 - Database: [PostgreSQL](https://www.postgresql.org/)
 - Email Sending: [Postmark](https://postmarkapp.com/)
 - Error Triage: [Sentry](https://sentry.io/)

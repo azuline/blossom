@@ -13,7 +13,7 @@ from foundation.webserver.rpc import RPCRouter
 
 
 @dataclasses.dataclass
-class FoundationFixture:
+class PipelineFixture:
     """Big object that contains all our optional testing fixtures and utilities."""
 
     error: TestErrors
@@ -22,7 +22,7 @@ class FoundationFixture:
     snapshot: TestSnapshots
 
     @classmethod
-    def create(cls, snapshot_fixture: SnapshotAssertion) -> FoundationFixture:
+    def create(cls, snapshot_fixture: SnapshotAssertion) -> PipelineFixture:
         error = TestErrors()
         factory = TestFactory()
         rpc = TestRPC(factory, RPCRouter([]))
@@ -31,6 +31,6 @@ class FoundationFixture:
 
 
 @pytest.fixture
-def t(snapshot: SnapshotAssertion) -> FoundationFixture:
+def t(snapshot: SnapshotAssertion) -> PipelineFixture:
     """Global test fixture with factory methods."""
-    return FoundationFixture.create(snapshot)
+    return PipelineFixture.create(snapshot)

@@ -13,7 +13,7 @@ async def test_page_load_info_logged_in_with_organization(t: ProductFixture) -> 
     resp = await t.rpc.call(init, None)
     await t.rpc.assert_success(resp)
 
-    out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
+    out = await t.rpc.parse_response(resp)
     assert out == GetPageLoadInfoOut(
         user=GetPageLoadInfoUser(id=user.id, name=user.name, email=user.email),
         organization=GetPageLoadInfoOrganization(id=organization.id, name=organization.name),
@@ -30,7 +30,7 @@ async def test_page_load_info_logged_in_without_organization(t: ProductFixture) 
     resp = await t.rpc.call(init, None)
     await t.rpc.assert_success(resp)
 
-    out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
+    out = await t.rpc.parse_response(resp)
     assert out == GetPageLoadInfoOut(
         user=GetPageLoadInfoUser(id=user.id, name=user.name, email=user.email),
         organization=None,
@@ -41,5 +41,5 @@ async def test_page_load_info_logged_in_without_organization(t: ProductFixture) 
 async def test_page_load_info_not_logged_in(t: ProductFixture) -> None:
     resp = await t.rpc.call(init, None)
     await t.rpc.assert_success(resp)
-    out = await t.rpc.parse_response(resp, GetPageLoadInfoOut)
+    out = await t.rpc.parse_response(resp)
     assert out == GetPageLoadInfoOut(user=None, organization=None, available_organizations=[])

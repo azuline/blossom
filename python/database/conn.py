@@ -6,10 +6,10 @@ from collections.abc import AsyncIterator
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, create_async_engine
 
+from database.jsonenc import dump_json_pg, load_json_pg
 from foundation.env import ENV
 from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_increment
-from foundation.stdlib.jsonenc import dump_json_pg, load_json_pg
 from foundation.stdlib.tasks import create_unsupervised_task
 
 logger = get_logger()

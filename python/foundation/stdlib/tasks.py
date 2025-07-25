@@ -1,4 +1,5 @@
 from __future__ import annotations
+import traceback
 
 import asyncio
 import time
@@ -25,7 +26,7 @@ class UnsupervisedTasksTimeoutError(BaseError):
 _unsupervised_tasks: set[Task] = set()
 
 
-async def wait_for_unsupervised_tasks(*names: str, timeout: float = 10) -> None:
+async def wait_for_unsupervised_tasks(*names: str, timeout: float = 5) -> None:
     # Since these are being tracked in a global set, we need to filter out tasks that are not
     # running in the current loop. Otherwise, we'll see the following error on CI:
     # > ValueError: The future belongs to a different loop than the one specified as the loop argument
@@ -65,7 +66,7 @@ def create_unsupervised_task[T, **P](
 
 def _unsupervised_task_done_callback[T](future: asyncio.Future[T], name: str, started_at: float) -> None:
     exc = future.exception()
-    success = exc is not None
+    success = exc is None
     if not success:
         logger.exception("async task failed", name=name, started_at=started_at, exc_info=exc)
     metric_increment("tasks.unsupervised_task", task=name, success=success)

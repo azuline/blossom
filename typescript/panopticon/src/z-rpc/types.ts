@@ -7,19 +7,18 @@ import type { Dayjs } from "dayjs";
  */
 
 export type RPCErrors = {
-	UnauthorizedError: null;
-	ServerJSONDeserializeError: {
-		message: string;
-	};
 	InputValidationError: {
 		message: string;
 		fields: Record<string, unknown>;
 	};
+	ServerJSONDeserializeError: {
+		message: string;
+	};
 	// These are errors that the frontend RPC executor can raise.
-	NetworkError: null;
-	InternalServerError: null;
-	RPCNotFoundError: null;
 	ClientJSONDecodeError: null;
+	InternalServerError: null;
+	NetworkError: null;
+	RPCNotFoundError: null;
 	UncaughtRPCError: null;
 };
 
@@ -28,14 +27,13 @@ export type RPCErrors = {
  */
 
 export type RPCSystemErrors =
-	| "NetworkError"
-	| "InternalServerError"
-	| "RPCNotFoundError"
-	| "ClientJSONDecodeError"
-	| "UncaughtRPCError"
-	| "UnauthorizedError"
+	| "InputValidationError"
 	| "ServerJSONDeserializeError"
-	| "InputValidationError";
+	| "ClientJSONDecodeError"
+	| "InternalServerError"
+	| "NetworkError"
+	| "RPCNotFoundError"
+	| "UncaughtRPCError";
 
 /**
  * Nested & Common

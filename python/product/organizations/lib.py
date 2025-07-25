@@ -1,14 +1,15 @@
 from database.__codegen__ import models
 from database.enums import OrganizationsInboundSourceEnum
 from database.xact import DBQuerier
-from foundation.stdlib.types import cast_notnull
+from foundation.observability.errors import BaseError
+from foundation.stdlib.convert import cast_notnull
 
 
-class OrganizationNotFoundError(Exception):
+class OrganizationNotFoundError(BaseError):
     pass
 
 
-class UserNotFoundError(Exception):
+class UserNotFoundError(BaseError):
     pass
 
 

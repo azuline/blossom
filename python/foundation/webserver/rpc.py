@@ -11,12 +11,12 @@ import pydantic
 import quart
 
 from foundation.env import ENV
-from foundation.observability.errors import ConfigurationError, ImpossibleError
+from foundation.observability.errors import BaseError, ConfigurationError, ImpossibleError
 from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_count_and_time
 from foundation.observability.spans import span, tag_current_span
 from foundation.stdlib.parse import make_pydantic_validator
-from foundation.stdlib.types import Unset
+from foundation.stdlib.unset import Unset
 
 # TODO: CORS
 # TODO: Metrics
@@ -28,7 +28,7 @@ MethodEnum = Literal["GET", "POST"]
 
 
 @dataclasses.dataclass(slots=True)
-class RPCError(Exception):
+class RPCError(BaseError):
     def __init__(self) -> None:
         self.message = self.__class__.__name__
 
@@ -71,17 +71,12 @@ def jsonify_output(d: Any) -> str:
     return json.dumps(data, cls=RPCOutputJSONEncoder)
 
 
-class InvalidRPCDefinitionError(Exception):
+class InvalidRPCDefinitionError(BaseError):
     pass
 
 
 @dataclasses.dataclass(slots=True)
 class UnknownError(RPCError):
-    pass
-
-
-@dataclasses.dataclass(slots=True)
-class UnauthorizedError(RPCError):
     pass
 
 
@@ -256,8 +251,8 @@ RouteFlag = Literal[
 
 
 class RPCRouter:
-    def __init__(self) -> None:
-        self.global_errors: list[type[RPCError]] = [UnauthorizedError, ServerJSONDeserializeError, InputValidationError]
+    def __init__(self, product_specific_standard_errors: list[type[RPCError]]) -> None:
+        self.standard_errors: list[type[RPCError]] = [ServerJSONDeserializeError, InputValidationError, *product_specific_standard_errors]
         self.routes: list[RPCRoute] = []
         self.route_flags: dict[RPCRoute, list[RouteFlag]] = defaultdict(list)
         self._route_name_set: set[str] = set()

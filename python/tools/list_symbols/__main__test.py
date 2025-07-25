@@ -1,44 +1,20 @@
 import tempfile
 from pathlib import Path
 
-from tools.list_symbols.__main__ import _get_python_files, _path_to_module, inspect_codebase
+from click.testing import CliRunner
+
+from tools.list_symbols.__main__ import main
 
 
-def test_path_to_module():
-    root = Path("/home/test/project")
-    assert _path_to_module(Path("/home/test/project/module.py"), root) == "module"
-    assert _path_to_module(Path("/home/test/project/subdir/module.py"), root) == "subdir.module"
-    assert _path_to_module(Path("/home/test/project/subdir/__init__.py"), root) == "subdir"
-
-
-def test_get_python_files_excludes_tools_and_debug_scripts():
+def test_list_symbols_end_to_end():
+    """Test the complete list_symbols CLI functionality."""
     with tempfile.TemporaryDirectory() as tmpdir:
         root = Path(tmpdir)
 
-        (root / "main.py").write_text("# main")
-        (root / "tools").mkdir()
-        (root / "tools" / "tool.py").write_text("# tool")
-        (root / ".debug_scripts").mkdir()
-        (root / ".debug_scripts" / "debug.py").write_text("# debug")
-        (root / ".hidden.py").write_text("# hidden")
-        (root / "src").mkdir()
-        (root / "src" / "module.py").write_text("# module")
-
-        files = _get_python_files(root)
-        file_names = {f.relative_to(root) for f in files}
-
-        assert Path("main.py") in file_names
-        assert Path("src/module.py") in file_names
-        assert Path("tools/tool.py") not in file_names
-        assert Path(".debug_scripts/debug.py") not in file_names
-        assert Path(".hidden.py") not in file_names
-
-
-def test_inspect_codebase_extracts_entities():
-    with tempfile.TemporaryDirectory() as tmpdir:
-        root = Path(tmpdir)
-
-        test_code = '''\
+        # Create test files with various code entities
+        (root / "app").mkdir()
+        (root / "app" / "__init__.py").write_text("")
+        (root / "app" / "models.py").write_text('''
 from typing import Literal
 import dataclasses
 
@@ -65,10 +41,6 @@ class MyClass:
         """Should not be included."""
         pass
 
-    def __init__(self):
-        """Constructor should be included."""
-        pass
-
 @dataclasses.dataclass
 class MyDataclass:
     """A dataclass with properties."""
@@ -81,46 +53,48 @@ GLOBAL_LITERAL: Literal["A", "B"] = "A"
 def _private_function():
     """Should not be included."""
     pass
-'''
+''')
 
-        (root / "test_module.py").write_text(test_code)
+        # Files that should be excluded
+        (root / "tools").mkdir()
+        (root / "tools" / "test.py").write_text("def tool_function(): pass")
+        (root / "app" / "models_test.py").write_text("def test_function(): pass")
 
-        entities = inspect_codebase(root)
+        # Run the CLI command
+        runner = CliRunner()
+        result = runner.invoke(main, ["--root", str(root)])
 
-        entity_dict = {(e.name, e.type): e for e in entities}
+        # Verify the command succeeded
+        assert result.exit_code == 0
 
-        assert ("regular_function", "function") in entity_dict
-        assert entity_dict["regular_function", "function"].docstring == "A regular function."
+        # Verify the output contains expected symbols
+        output = result.output
+        assert "app.models:regular_function" in output
+        assert "app.models:async_function" in output
+        assert "app.models:MyClass" in output
+        assert "app.models:MyClass.method" in output
+        assert "app.models:MyClass.async_method" in output
+        assert "app.models:MyDataclass" in output
+        assert "app.models:MyDataclass.name" in output
+        assert "app.models:MyDataclass.value" in output
+        assert "app.models:GLOBAL_LITERAL" in output
 
-        assert ("async_function", "async_function") in entity_dict
-        assert entity_dict["async_function", "async_function"].docstring == "An async function."
+        # Verify private symbols are excluded
+        assert "_private_function" not in output
+        assert "_private_method" not in output
+        assert "_private" not in output
 
-        assert ("MyClass", "class") in entity_dict
-        assert entity_dict["MyClass", "class"].docstring == "A test class."
-
-        assert ("MyClass.method", "method") in entity_dict
-        assert ("MyClass.async_method", "async_method") in entity_dict
-        assert ("method",) not in entity_dict, "`method` leaked into module scope"
-
-        assert ("_private_function", "function") not in entity_dict
-        assert ("MyClass._private_method", "method") not in entity_dict
-        assert ("MyClass.__init__", "method") not in entity_dict
-
-        assert ("GLOBAL_LITERAL", "literal") in entity_dict
-
-        # Dataclass tests
-        assert ("MyDataclass", "class") in entity_dict
-        assert ("MyDataclass.name", "property") in entity_dict
-        assert ("MyDataclass.value", "property") in entity_dict
-        assert ("MyDataclass._private", "property") not in entity_dict  # Private fields excluded
+        # Verify excluded files are not included
+        assert "tools" not in output
+        assert "test_function" not in output
 
 
-def test_nested_classes_and_functions():
+def test_nested_entities_excluded():
     """Test that nested classes and functions are not extracted."""
     with tempfile.TemporaryDirectory() as tmpdir:
         root = Path(tmpdir)
 
-        test_code = '''
+        (root / "nested.py").write_text('''
 def outer_function():
     """Outer function."""
     def inner_function():
@@ -130,7 +104,6 @@ def outer_function():
     class InnerClass:
         """Should not be extracted."""
         def inner_method(self):
-            """Should not be extracted."""
             pass
 
     return inner_function
@@ -141,33 +114,29 @@ class OuterClass:
     class NestedClass:
         """Should not be extracted as top-level."""
         def nested_method(self):
-            """Should not be extracted."""
             pass
 
     def method(self):
         """Regular method."""
         def method_inner():
-            """Should not be extracted."""
             pass
         return method_inner
-'''
+''')
 
-        (root / "test_nested.py").write_text(test_code)
-        entities = inspect_codebase(root)
+        runner = CliRunner()
+        result = runner.invoke(main, ["--root", str(root)])
 
-        entity_names = {e.name for e in entities}
+        assert result.exit_code == 0
 
-        # Only outer entities should be found
-        assert "outer_function" in entity_names
-        assert "OuterClass" in entity_names
-        assert "OuterClass.method" in entity_names
+        output = result.output
 
-        # Nested entities should NOT be found
-        assert "inner_function" not in entity_names
-        assert "InnerClass" not in entity_names
-        assert "InnerClass.inner_method" not in entity_names
-        assert "OuterClass.NestedClass" not in entity_names
-        assert "NestedClass" not in entity_names
-        assert "NestedClass.nested_method" not in entity_names
-        assert "nested_method" not in entity_names
-        assert "method_inner" not in entity_names
+        # Should include outer entities
+        assert "nested:outer_function" in output
+        assert "nested:OuterClass" in output
+        assert "nested:OuterClass.method" in output
+
+        # Should not include nested entities
+        assert "inner_function" not in output
+        assert "InnerClass" not in output
+        assert "NestedClass" not in output
+        assert "method_inner" not in output

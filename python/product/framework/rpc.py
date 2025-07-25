@@ -6,7 +6,7 @@ utilities for the web application package.
 import dataclasses
 import functools
 from collections.abc import Awaitable, Callable
-from typing import Any, Literal
+from typing import Literal
 
 import quart
 
@@ -41,29 +41,8 @@ class ReqProduct[In](ReqCommon[In]):
 
 
 @dataclasses.dataclass(slots=True)
-class UnknownError(RPCError):
-    pass
-
-
-@dataclasses.dataclass(slots=True)
 class UnauthorizedError(RPCError):
     pass
-
-
-@dataclasses.dataclass(slots=True)
-class ServerJSONDeserializeError(RPCError):
-    message: str
-
-
-@dataclasses.dataclass(slots=True)
-class DataMismatchError(RPCError):
-    message: str
-
-
-@dataclasses.dataclass(slots=True)
-class InputValidationError(RPCError):
-    message: str
-    fields: dict[str, Any] = dataclasses.field(default_factory=dict)
 
 
 def rpc_product[In, Out](

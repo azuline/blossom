@@ -110,24 +110,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "pgmigrate-src": "pgmigrate-src",
-        "sqlc-gen-python-src": "sqlc-gen-python-src"
-      }
-    },
-    "sqlc-gen-python-src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1753120163,
-        "narHash": "sha256-foGVX09zSndpSUyRLWN6CLqh5DLo3lkUkvUni+PiIMA=",
-        "owner": "azuline",
-        "repo": "sqlc-gen-python",
-        "rev": "62d4b57ead4fd16be2a883c263f1ecd0925b5265",
-        "type": "github"
-      },
-      "original": {
-        "owner": "azuline",
-        "repo": "sqlc-gen-python",
-        "type": "github"
+        "pgmigrate-src": "pgmigrate-src"
       }
     },
     "systems": {

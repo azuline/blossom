@@ -2,7 +2,7 @@ from werkzeug.security import generate_password_hash
 
 from database.__codegen__ import models
 from database.xact import DBQuerier
-from foundation.stdlib.types import cast_notnull
+from foundation.stdlib.convert import cast_notnull
 
 
 async def user_create(*, q: DBQuerier, email: str, name: str, password: str | None) -> models.User:

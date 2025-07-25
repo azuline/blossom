@@ -34,6 +34,7 @@ Add tools under `tools/` as Python packages:
 tools/my_tool/
   __init__.py
   __main__.py
+  __main__test.py  # Contains one comprehensive end-to-end test using Click testing utilities.
   ...
 ```
 
@@ -181,7 +182,7 @@ Place public exports at the top of the file; helpers go at the bottom.
 
 ## Function size
 
-Inline private helpers used once. Favor a few well‑named functions over many noisy trivial ones.
+Inline private helper functions that are only used once to keep code readable. FAVOR A FEW WELL‑NAMED FUNCTIONS, EVEN IF LARGE, OVER MANY NOISY TRIVIAL SMALL ONES. DO NOT CREATE SMALL FUNCTIONS FOR THE SAKE OF CREATING SMALL FUNCTIONS.
 
 ## Docstrings
 

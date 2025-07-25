@@ -4,7 +4,7 @@ from typing import Any
 import pydantic
 
 from foundation.observability.errors import BaseError
-from foundation.stdlib.funcs import memoize
+from foundation.stdlib.decorators import memoize
 
 
 def parse_dataclass[T](dc: type[T] | Any, data: dict[str, Any]) -> T:

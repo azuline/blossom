@@ -1,6 +1,6 @@
 import random
 
-from foundation.stdlib.funcs import memoize
+from foundation.stdlib.decorators import memoize
 
 
 async def test_memoize():
