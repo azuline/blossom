@@ -12,21 +12,21 @@ defaults:
     working-directory: python/
 jobs:
   check:
-    # EXTENSION(namespace): add
+    # EXTENSION(namespace): replace runs-on
     # runs-on: namespace-profile-python
     runs-on: ubuntu-latest
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - uses: actions/checkout@v4
-      # EXTENSION(namespace): add
+      # EXTENSION(namespace): addQ step
       # - uses: namespacelabs/nscloud-cache-action@v1
       #   with:
       #     path: |
       #       /nix
       #       /home/runner/.cache/uv
       - uses: cachix/install-nix-action@v31
-      # EXTENSION(namespace): delete
+      # EXTENSION(namespace): delete next step
       - uses: cachix/cachix-action@v15
         with:
           name: blossom

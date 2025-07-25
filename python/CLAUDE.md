@@ -44,9 +44,10 @@ Tools should follow the Unix philosophy: do one thing well and emit grep/sed/awk
 
 Existing tools are:
 
-- `just list-symbols` prints one line per symbol as `module:name # docstring`. Combine it with shell filters to explore the codebase.
-- `just check-for-migration` List migration files touched in the current branch.
 - `just branch-changes` — Diff the current branch against `master`.
+- `just check-for-migration` List migration files touched in the current branch.
+- `just list-errors` prints a tree of the first-party error taxonomy.
+- `just list-symbols` prints one line per symbol as `module:name # docstring`. Combine it with shell filters to explore the codebase.
 
 ## Debug scripts
 

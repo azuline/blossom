@@ -7,7 +7,7 @@ Blossom contains code patterns that I've accumulated between various projects. I
 
 The code patterns assume a multi-tenant organizations data model. This is because a multi-tenant organization model can be reduced down to a single-user model easily, but not vice versa. These templates are implemented in Python and TypeScript, but many of the patterns here are translatable to other languages. A lot of these patterns were initially explored in Go.
 
-The project is structured as a monorepo organized by `{language}/{project}`. Each `project` directory represents a deployed service, with the exception of the `foundation` directories. The `foundation` directories contain shared abstractions that all other projects depend on. Each language and project contains a `README.md` with more description and a `CLAUDE.md` with programming guidelines.
+The project is structured as a monorepo organized by `{language}/{project}`. Each `project` directory represents a deployed service, with the exception of the `tools` and `foundation` directories. The `foundation` directories contain shared abstractions that all other projects depend on. Each language and project contains a `README.md` with more description and a `CLAUDE.md` with programming guidelines.
 
 I have found these `foundation` abstractions useful in constructing programs that are robust today and malleable tomorrow. All of them are coupled to integrate smoothly with each other, and they facade third-party libraries where beneficial to similarly integrate them smoothly with the other `foundation` abstractions. This coupling makes them ineligible to be independent libraries, yet greatly increases their ergonomics in this one codebase (i.e. they are tailored to this repository and therefore not general).
 
