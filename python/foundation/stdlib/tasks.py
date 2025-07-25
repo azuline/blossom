@@ -1,4 +1,5 @@
 from __future__ import annotations
+import traceback
 
 import asyncio
 import time
@@ -65,7 +66,7 @@ def create_unsupervised_task[T, **P](
 
 def _unsupervised_task_done_callback[T](future: asyncio.Future[T], name: str, started_at: float) -> None:
     exc = future.exception()
-    success = exc is not None
+    success = exc is None
     if not success:
         logger.exception("async task failed", name=name, started_at=started_at, exc_info=exc)
     metric_increment("tasks.unsupervised_task", task=name, success=success)
