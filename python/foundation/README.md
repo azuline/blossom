@@ -4,7 +4,7 @@ The `foundation` package provides an integrated set of high-level utilities and 
 
 See [CLAUDE.md](./CLAUDE.md) for best practices and conventions.
 
-# Environment
+## Environment
 
 [`env.py`](./env.py) loads all environment variables for configuration. For each expected variable, it first searches in the environment variables, then the `.env.local` file, and then the `.env.example` file. All variables are exposed on `ENV`, which can be used like so:
 
@@ -13,7 +13,7 @@ if foundation.env.ENV.environment == "production":
     print(ENV.slack_token)
 ```
 
-# Standard Library
+## Standard Library
 
 The `stdlib` package extends the standard types and Python standard library.
 
@@ -29,7 +29,7 @@ The `stdlib` package extends the standard types and Python standard library.
 
 ```python
 time = foundation.stdlib.clock.CLOCK.now()
-# Testing utilities:
+## Testing utilities:
 with foundation.stdlib.clock.CLOCK.TESTING_set(time):  # Clock will keep on ticking.
     ...
 with foundation.stdlib.clock.CLOCK.TESTING_freeze(time):  # Clock will stop ticking.
@@ -62,17 +62,17 @@ await retryer.execute(get_external_data_fn, arg1, arg2=val2)
 
 ```python
 foundation.stdlib.tasks.create_unsupervised_task("task_name", task_function)
-# Testing utilities:
+## Testing utilities:
 await foundation.stdlib.tasks.wait_for_unsupervised_tasks()
 ```
 
-# Crypto
+## Crypto
 
 [`crypto/crypt.py`](./crypto/crypt.py) provides `encrypt_symmetric` and `decrypt_symmetric` functions for symmetric AEAD.
 
 [`crypto/vault.py`](./crypto/vault.py) provides the `vault_secret`, `fetch_vaulted_secret`, and `delete_vaulted_secret` functions for storing encrypted secrets in the database.
 
-# Webserver
+## Webserver
 
 The `webserver/` package provides a high-level abstraction for building a backend API for a web application. It follows the Backend-For-Frontend pattern, where each endpoint is tailored made for a specific frontend feature.
 
@@ -106,7 +106,7 @@ def create_x_app() -> quart.Quart:
     return app
 ```
 
-# External
+## External
 
 The `external/` package centralizes all third-party integrations. The `EXT` global in [`external/external.py`](./external/external.py) lazily initializes each integration on first access. In tests, `EXT` allows substituting fakes. For example:
 
@@ -119,7 +119,7 @@ TODO: list of external services bundled in the template
 Each external integration is implemented in the following pattern:
 
 ```python
-# A facade over the third-party's SDK or HTTP requests.
+## A facade over the third-party's SDK or HTTP requests.
 class CService:
     def __init__(self, *, _fake_client: FakeServiceClient | None = None):
         self.client = _fake_client or service_sdk_client
@@ -129,12 +129,12 @@ class CService:
         return await self.client.x.y.list_bunnies(...)
 
 
-# A fake that matches the API of the third-party's SDK API with stub behavior.
+## A fake that matches the API of the third-party's SDK API with stub behavior.
 class FakeServiceClient:
     ...
 
 
-# A test that uses the FakeServiceClient.
+## A test that uses the FakeServiceClient.
 def test_functionality_that_depends_on_service():
     client = cast(FakeServiceClient, EXT.service.client)
     client.TEST_add_bunnies(...)
@@ -143,7 +143,7 @@ def test_functionality_that_depends_on_service():
 
 A [`../conftest.py`](../conftest.py) fixture substitutes the fake clients before tests run.
 
-# Testing
+## Testing
 
 The `testing/` package provides test fixtures. By convention, each project has a `conftest.py` (e.g. [`conftest.py`](./conftest.py) that provides a project-specific `t` pytest fixture, upon which every optional fixture and test utility is available as a typed property. In comparison to pytest fixtures, this pattern improves discoverability, typo resistance, and repeated type annotations. So:
 
@@ -179,15 +179,15 @@ parsed_out_data = await t.rpc.parse_response(resp)  # or t.rpc.parse_error(resp,
 t.snapshot.assert_snapshot(value)
 ```
 
-# Feature Flags
+## Feature Flags
 
 TODO:
 
-# Observability
+## Observability
 
 We send logs, metrics, and traces to [Datadog](https://www.datadoghq.com/).
 
-## Logging
+### Logging
 
 [`observability/logs.py`](./observability/logs.py) configures a structured logger which can be fetched like so:
 
@@ -203,7 +203,7 @@ The logger integrates with error handling: `logger.exception()`, `logger.error(.
 
 The logger also integrates with tracing: tags on the active span are inherited in log fields.
 
-## Error Handling
+### Error Handling
 
 [`observability/errors.py`](./observability/errors.py) defines an error taxonomy starting with `BaseError`. All first-party errors defined in the codebase subclass from `BaseError` like so:
 
@@ -216,30 +216,34 @@ class BunnyOverflowError(BaseError):
 
 ```python
 raise BunnyOverflowError("too many bunnies", last_bunny="Minji")
-# Traceback (most recent call last):
-#   BunnyOverflowError: too many bunnies
-# 
-#   Data:
-#   - last_bunny: Minji
+## Traceback (most recent call last):
+##   BunnyOverflowError: too many bunnies
+## 
+##   Data:
+##   - last_bunny: Minji
 ```
+
+Error classes can specify expected fields by becoming a dataclass:
+
+```python
+@dataclasses.dataclass
+class BunnyOverflowErrorTyped(BaseError):
+    last_bunny: str
+```
+
+All RPC errors must be dataclasses and type their fields for TypeScript codegen.
+
+#### Error Triage
 
 [Sentry](https://sentry.io/) .
 
-errors - taxonomy
-
-sentry
+sentry & transience & suppression
 
 raising errors practices
 
 suppressing and reporting errors
 
-logger.exception as reporting alias (how exc_info works)
-
-extra data on errors
-
-dataclass errors, namely for rpcs
-
-## Metrics
+### Metrics
 
 metrics - statsd through datadog
 
@@ -249,7 +253,7 @@ abnormal pattern
 
 count_and_time special - tag accumulation
 
-## Traces
+### Traces
 
 traces & spans - ddtrace
 
