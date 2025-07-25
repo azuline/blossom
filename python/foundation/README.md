@@ -235,21 +235,21 @@ All RPC errors must be dataclasses and type their fields for TypeScript codegen.
 
 #### Error Triage
 
-[Sentry](https://sentry.io/) .
+[Sentry](https://sentry.io/)
 
-sentry & transience & suppression
+report error
 
-raising errors practices
+transience & suppression
 
-suppressing and reporting errors
+logger exception dedup
 
 ### Metrics
 
 metrics - statsd through datadog
 
-cardinality reduction
+api / abnormal pattern
 
-abnormal pattern
+cardinality reduction
 
 count_and_time special - tag accumulation
 
@@ -264,6 +264,3 @@ spans parent nesting
 span tagging
 
 span context passing
-
-places that start a span: transaction (todo move to count and time), web request. generally aim for
-sensible instrumentation across the foundation so that product code is in the green on the 80/20.
