@@ -29,10 +29,6 @@ class EnvironmentVariableMissingError(Exception):
     pass
 
 
-class InvalidConfigValueError(Exception):
-    pass
-
-
 EnvironmentEnum = Literal["production", "development"]
 LogLevelEnum = Literal["debug", "info"]
 ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]

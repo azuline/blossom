@@ -1,6 +1,7 @@
 from database.__codegen__ import models
 from database.xact import DBQuerier
 from foundation.crypto.crypt import decrypt_symmetric, encrypt_symmetric
+from foundation.observability.errors import BaseError
 from foundation.stdlib.convert import cast_notnull
 
 Secret = str
@@ -12,7 +13,7 @@ async def vault_secret(q: DBQuerier, organization_id: str, secret: Secret) -> mo
     return cast_notnull(await q.orm.vault_secret_create(organization_id=organization_id, ciphertext=ciphertext))
 
 
-class SecretNotFoundError(Exception):
+class SecretNotFoundError(BaseError):
     pass
 
 

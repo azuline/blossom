@@ -111,8 +111,10 @@ def create_x_app() -> quart.Quart:
 The `external/` package centralizes all third-party integrations. The `EXT` global in [`external/external.py`](./external/external.py) lazily initializes each integration on first access. In tests, `EXT` allows substituting fakes. For example:
 
 ```python
-completion = await EXT.openai.complete(...)
+completion = await foundation.external.external.EXT.openai.complete(...)
 ```
+
+TODO: list of external services bundled in the template
 
 Each external integration is implemented in the following pattern:
 
@@ -150,7 +152,7 @@ def test_something(t: FoundationFixture):  # or ProductFixture, PanopticonFixtur
     ...
 ```
 
-[`testing/errors.py`](./testing/errors.py) contains assertions on errors that were reported. By example:
+[`testing/errors.py`](./testing/errors.py) contains assertions on errors that were reported to Sentry. By example:
 
 ```python
 t.errors.assert_reported(CustomError)
@@ -179,19 +181,49 @@ t.snapshot.assert_snapshot(value)
 
 # Feature Flags
 
-Todo
+TODO:
 
 # Observability
 
-datadog & sentry
+We send logs, metrics, and traces to [Datadog](https://www.datadoghq.com/).
 
 ## Logging
 
-logs - structlog
+[`observability/logs.py`](./observability/logs.py) configures a structured logger which can be fetched like so:
 
-log level setting
+```python
+logger = foundation.observability.logs.get_logger()
+```
+
+The structured logger emits JSON in production and a human-readable console output in development.
+
+The logger defaults to the `DEBUG` level in tests and the `INFO` level in development and production. The `LOG_LEVEL` keyword parameter overrides this. `get_logger(debug=True)` sets a single module's logger to always log in debug level.
+
+The logger integrates with error handling: `logger.exception()`, `logger.error(..., exc_info=True)`, and `logger.error(..., exc_info=exc)` call `report_error` during log processing.
+
+The logger also integrates with tracing: tags on the active span are inherited in log fields.
 
 ## Error Handling
+
+[`observability/errors.py`](./observability/errors.py) defines an error taxonomy starting with `BaseError`. All first-party errors defined in the codebase subclass from `BaseError` like so:
+
+```python
+class BunnyOverflowError(BaseError):
+    pass
+```
+
+`BaseError` and its subclasses support arbitrary keyword arguments that are printed to console and/or reported to Sentry as extra data. By example:
+
+```python
+raise BunnyOverflowError("too many bunnies", last_bunny="Minji")
+# Traceback (most recent call last):
+#   BunnyOverflowError: too many bunnies
+# 
+#   Data:
+#   - last_bunny: Minji
+```
+
+[Sentry](https://sentry.io/) .
 
 errors - taxonomy
 

@@ -11,7 +11,7 @@ import pydantic
 import quart
 
 from foundation.env import ENV
-from foundation.observability.errors import ConfigurationError, ImpossibleError
+from foundation.observability.errors import BaseError, ConfigurationError, ImpossibleError
 from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_count_and_time
 from foundation.observability.spans import span, tag_current_span
@@ -28,7 +28,7 @@ MethodEnum = Literal["GET", "POST"]
 
 
 @dataclasses.dataclass(slots=True)
-class RPCError(Exception):
+class RPCError(BaseError):
     def __init__(self) -> None:
         self.message = self.__class__.__name__
 
@@ -71,7 +71,7 @@ def jsonify_output(d: Any) -> str:
     return json.dumps(data, cls=RPCOutputJSONEncoder)
 
 
-class InvalidRPCDefinitionError(Exception):
+class InvalidRPCDefinitionError(BaseError):
     pass
 
 
