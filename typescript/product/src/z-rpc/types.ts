@@ -7,21 +7,21 @@ import type { Dayjs } from "dayjs";
  */
 
 export type RPCErrors = {
-	UnauthorizedError: null;
-	ServerJSONDeserializeError: {
-		message: string;
-	};
+	AuthOrganizationNotFoundError: null;
 	InputValidationError: {
 		message: string;
 		fields: Record<string, unknown>;
 	};
 	InvalidCredentialsError: null;
-	AuthOrganizationNotFoundError: null;
+	ServerJSONDeserializeError: {
+		message: string;
+	};
+	UnauthorizedError: null;
 	// These are errors that the frontend RPC executor can raise.
-	NetworkError: null;
-	InternalServerError: null;
-	RPCNotFoundError: null;
 	ClientJSONDecodeError: null;
+	InternalServerError: null;
+	NetworkError: null;
+	RPCNotFoundError: null;
 	UncaughtRPCError: null;
 };
 
@@ -30,28 +30,28 @@ export type RPCErrors = {
  */
 
 export type RPCSystemErrors =
-	| "NetworkError"
-	| "InternalServerError"
-	| "RPCNotFoundError"
-	| "ClientJSONDecodeError"
-	| "UncaughtRPCError"
-	| "UnauthorizedError"
+	| "InputValidationError"
 	| "ServerJSONDeserializeError"
-	| "InputValidationError";
+	| "UnauthorizedError"
+	| "ClientJSONDecodeError"
+	| "InternalServerError"
+	| "NetworkError"
+	| "RPCNotFoundError"
+	| "UncaughtRPCError";
 
 /**
  * Nested & Common
  */
 
+export type GetPageLoadInfoOrganization = {
+	id: string;
+	name: string;
+};
+
 export type GetPageLoadInfoUser = {
 	id: string;
 	name: string;
 	email: string;
-};
-
-export type GetPageLoadInfoOrganization = {
-	id: string;
-	name: string;
 };
 
 /**
@@ -76,7 +76,7 @@ export type RPCs = {
 			organization_id: string | null;
 		};
 		out: null;
-		errors: "InvalidCredentialsError" | "AuthOrganizationNotFoundError";
+		errors: "AuthOrganizationNotFoundError" | "InvalidCredentialsError";
 	};
 	logout: {
 		in: null;

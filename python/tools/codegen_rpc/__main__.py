@@ -38,10 +38,10 @@ export type RPCErrors = {
   {% endif %}
   {% endfor %}
   // These are errors that the frontend RPC executor can raise.
-  NetworkError: null;
-  InternalServerError: null;
-  RPCNotFoundError: null;
   ClientJSONDecodeError: null;
+  InternalServerError: null;
+  NetworkError: null;
+  RPCNotFoundError: null;
   UncaughtRPCError: null;
 };
 
@@ -50,14 +50,14 @@ export type RPCErrors = {
  */
 
 export type RPCSystemErrors =
-  | "NetworkError"
-  | "InternalServerError"
-  | "RPCNotFoundError"
-  | "ClientJSONDecodeError"
-  | "UncaughtRPCError"
   {% for errname in catalog.global_error_names %}
   | "{{ errname }}"
   {% endfor %}
+  | "ClientJSONDecodeError"
+  | "InternalServerError"
+  | "NetworkError"
+  | "RPCNotFoundError"
+  | "UncaughtRPCError"
   ;
 
 /**
@@ -202,10 +202,16 @@ def create_codegen_schema(router: RPCRouter) -> CodegenSchema:
             in_=dataclass_to_str(r.in_, schema, cache, optional=True) if r.in_.__name__ != "NoneType" else "null",
             out=dataclass_to_str(r.out, schema, cache) if r.out.__name__ != "NoneType" else "null",
             method=r.method,
-            error_names=[e.__name__ for e in r.errors],
+            error_names=sorted([e.__name__ for e in r.errors]),
         )
         if "god_mode" in router.route_flags[r]:
             schema.god_mode_rpcs.append(r.name)
+
+    schema.errors = dict(sorted(schema.errors.items()))
+    schema.rpcs = dict(sorted(schema.rpcs.items()))
+    schema.god_mode_rpcs = sorted(schema.god_mode_rpcs)
+    schema.global_error_names = sorted(schema.global_error_names)
+    schema.global_types = dict(sorted(schema.global_types.items()))
 
     return schema
 
