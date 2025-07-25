@@ -1,6 +1,5 @@
 {
   description = "blossom development environment";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
@@ -8,19 +7,13 @@
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sqlc-gen-python-src = {
-      url = "github:azuline/sqlc-gen-python";
-      flake = false;
-    };
   };
-
   outputs =
-    { self
-    , nixpkgs
-    , flake-utils
-    , pgmigrate-src
-    , sqlc-gen-python-src
-    ,
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      pgmigrate-src,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -28,97 +21,86 @@
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
-          overlays = [
-            (self: super: {
-              pgmigrate = pgmigrate-src.packages.${system}.default;
-              python-pin = super.python313;
-              # Fork of sqlc-gen-python.
-              sqlc-gen-python =
-                let
-                  module = super.buildGoModule {
-                    pname = "sqlc-gen-python";
-                    version = "1.0.0";
-                    src = sqlc-gen-python-src;
-                    doCheck = false;
-                    vendorHash = "sha256-DAN8sOoG16+NvPy8u7B9MBRlNqfFKW3ZH4mqBnG8RCw=";
-                  };
-                in
-                super.writeShellScriptBin "sqlc-gen-python" ''
-                  #!/usr/bin/env sh
-                  ${module}/bin/plugin
-                '';
-            })
-          ];
+          overlays = [ (self: super: { pgmigrate = pgmigrate-src.packages.${system}.default; }) ];
         };
-        shellHook = ''
-          find-up () {
-            path=$(pwd)
-            while [[ "$path" != "" && ! -e "$path/$1" ]]; do
-              path=''${path%/*}
-            done
-            echo "$path"
-          }
-          export BLOSSOM_ROOT="$(find-up flake.nix)"
-          # Default biome binary is dynamically linked.
-          export BIOME_BINARY="${pkgs.biome}/bin/biome"
-          export UV_PYTHON="${pkgs.python-pin}/bin/python"
-        '';
         makeDevShell =
-          name: chain:
+          {
+            name,
+            packages,
+            shellHook ? "",
+          }:
           pkgs.mkShell {
-            inherit shellHook;
-            buildInputs = [
-              (pkgs.buildEnv {
-                name = "blossom-" + name;
-                paths = chain;
-              })
-            ];
+            inherit name packages;
+            shellHook = ''
+              find-up () {
+                path=$(pwd)
+                while [[ "$path" != "" && ! -e "$path/$1" ]]; do
+                  path=''${path%/*}
+                done
+                echo "$path"
+              }
+              export BLOSSOM_ROOT="$(find-up flake.nix)"
+              # Default biome binary is dynamically linked.
+              export BIOME_BINARY="${pkgs.biome}/bin/biome"
+              export UV_PYTHON="${pkgs.python313}/bin/python"
+              ${shellHook}
+            '';
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ];
           };
-        toolchains = with pkgs; rec {
+        toolchains = with pkgs; {
           general = [
             coreutils
             moreutils
             findutils
             docker
             fd
+            gnutar
             jq
             just
             ripgrep
             (lib.hiPrio parallel-full) # parallel is also part of moreutils; have GNU parallel take priority.
           ];
-          python = general ++ [
+          python = [
             biome # For frontend codegen.
             pgmigrate
             postgresql_16
             pyright
-            python-pin
+            python313
             ruff
             semgrep
             sqlc
-            sqlc-gen-python
             uv
           ];
-          typescript = general ++ [
+          typescript = [
             biome
             nodejs_22
             nodePackages.pnpm
             semgrep
           ];
-          infra = general ++ [
-            gnutar
+          infra = [
             nomad
             levant
           ];
-          all = general ++ python ++ typescript ++ infra;
         };
       in
       {
         devShells = {
-          default = makeDevShell "default" toolchains.all;
-          python = makeDevShell "python" toolchains.python;
-          typescript = makeDevShell "typescript" toolchains.typescript;
-          infra = makeDevShell "infra" toolchains.infra;
+          default = makeDevShell {
+            name = "blossom-default";
+            packages = with toolchains; general ++ python ++ typescript ++ infra;
+          };
+          python = makeDevShell {
+            name = "blossom-python";
+            packages = with toolchains; general ++ python;
+          };
+          typescript = makeDevShell {
+            name = "blossom-typescript";
+            packages = with toolchains; general ++ typescript;
+          };
+          infra = makeDevShell {
+            name = "blossom-infra";
+            packages = with toolchains; general ++ infra;
+          };
         };
       }
     );
