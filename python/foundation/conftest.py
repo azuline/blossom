@@ -25,7 +25,7 @@ class FoundationFixture:
     def create(cls, snapshot_fixture: SnapshotAssertion) -> FoundationFixture:
         error = TestErrors()
         factory = TestFactory()
-        rpc = TestRPC(factory, RPCRouter())
+        rpc = TestRPC(factory, RPCRouter([]))
         snapshot = TestSnapshots(snapshot_fixture)
         return cls(error, factory, rpc, snapshot)
 

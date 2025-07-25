@@ -2,9 +2,9 @@ import dataclasses
 from datetime import timedelta
 
 from foundation.stdlib.clock import CLOCK
-from foundation.webserver.rpc import RPCRoute, UnauthorizedError
+from foundation.webserver.rpc import RPCRoute
 from product.conftest import ProductFixture
-from product.framework.rpc import SESSION_ID_KEY, Authorization, ReqProduct, rpc_product
+from product.framework.rpc import SESSION_ID_KEY, Authorization, ReqProduct, UnauthorizedError, rpc_product
 
 
 @dataclasses.dataclass
@@ -36,7 +36,7 @@ async def test_route_auth_public(t: ProductFixture) -> None:
     await t.rpc.manually_mount_route(route)
 
     resp = await t.rpc.call(route, SpecTestIn(cherry="blossom"))
-    out = await t.rpc.parse_response(resp, SpecTestOut)
+    out = await t.rpc.parse_response(resp)
 
     assert out.data.cherry == "blossom"
     assert out.user_id is None
@@ -50,7 +50,7 @@ async def test_route_auth_organization(t: ProductFixture) -> None:
 
     await t.rpc.login_as(user, organization)
     resp = await t.rpc.call(route, SpecTestIn(cherry="blossom"))
-    out = await t.rpc.parse_response(resp, SpecTestOut)
+    out = await t.rpc.parse_response(resp)
 
     assert out.data.cherry == "blossom"
     assert out.user_id == user.id
@@ -64,7 +64,7 @@ async def test_route_auth_user(t: ProductFixture) -> None:
 
     await t.rpc.login_as(user)
     resp = await t.rpc.call(route, SpecTestIn(cherry="blossom"))
-    out = await t.rpc.parse_response(resp, SpecTestOut)
+    out = await t.rpc.parse_response(resp)
 
     assert out.data.cherry == "blossom"
     assert out.user_id == user.id

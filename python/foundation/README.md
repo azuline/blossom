@@ -1,6 +1,6 @@
 # Foundation
 
-The `foundation` package provides an integrated set of utilities and library facades for building robust and observable programs.
+The `foundation` package provides an integrated set of high-level utilities and library facades for all projects.
 
 See [CLAUDE.md](./CLAUDE.md) for best practices and conventions.
 
@@ -30,8 +30,10 @@ The `stdlib` package extends the standard types and Python standard library.
 ```python
 time = foundation.stdlib.clock.CLOCK.now()
 # Testing utilities:
-foundation.stdlib.clock.CLOCK.TESTING_set(time)  # Clock will keep on ticking.
-foundation.stdlib.clock.CLOCK.TESTING_freeze(time)  # Clock will stop ticking.
+with foundation.stdlib.clock.CLOCK.TESTING_set(time):  # Clock will keep on ticking.
+    ...
+with foundation.stdlib.clock.CLOCK.TESTING_freeze(time):  # Clock will stop ticking.
+    ...
 ```
 
 [`stdlib/parse.py`](./stdlib/parse.py) parses dictionaries into Python dataclasses with Pydantic. We encapsulate Pydantic inside this file.
@@ -43,7 +45,10 @@ dc = foundation.stdlib.parse.parse_dataclass(DataclassType, data_dict)
 [`stdlib/jsonschema.py`](./stdlib/jsonschema.py) converts dataclass types to OpenAI structured responses-compliant JSONSchema:
 
 ```python
-jsonschema = foundation.stdlib.jsonschema.dataclass_to_jsonschema(DataclassType, "schema_name")
+completion = await EXT.openai.complete(
+    ...,
+    response_format=foundation.stdlib.jsonschema.dataclass_to_jsonschema(DataclassType, "schema_name"),
+)
 ```
 
 [`stdlib/retry.py`](./stdlib/retry.py) is a higher order function that retries asynchronous functions with backoff and jitter:
@@ -138,11 +143,39 @@ A [`../conftest.py`](../conftest.py) fixture substitutes the fake clients before
 
 # Testing
 
-t fixture philosophy
+The `testing/` package provides test fixtures. By convention, each project has a `conftest.py` (e.g. [`conftest.py`](./conftest.py) that provides a project-specific `t` pytest fixture, upon which every optional fixture and test utility is available as a typed property. In comparison to pytest fixtures, this pattern improves discoverability, typo resistance, and repeated type annotations. So:
 
-conftest
+```python
+def test_something(t: FoundationFixture):  # or ProductFixture, PanopticonFixture, PipelineFixture.
+    ...
+```
 
-each testing class
+[`testing/errors.py`](./testing/errors.py) contains assertions on errors that were reported. By example:
+
+```python
+t.errors.assert_reported(CustomError)
+t.errors.assert_not_reported(CustomError)
+```
+
+[`testing/factory.py`](./testing/factory.py) provides methods for generating database rows for test setup. By example:
+
+```python
+org = await t.factory.organization()  # or any other table in the database.
+```
+
+[`testing/rpc.py`](./testing/rpc.py) provides methods for testing RPC endpoints. By example:
+
+```python
+resp = await t.rpc.call(rpc_function, DataIn(...))
+await t.rpc.assert_success(resp)  # or t.rpc.assert_failed(resp)
+parsed_out_data = await t.rpc.parse_response(resp)  # or t.rpc.parse_error(resp, ExpectedRPCErrorType)
+```
+
+[`testing/snapshots.py`](./testing/snapshots.py) is a straight wrapper over [syrupy](https://github.com/syrupy-project/syrupy) for convenience.
+
+```python
+t.snapshot.assert_snapshot(value)
+```
 
 # Feature Flags
 

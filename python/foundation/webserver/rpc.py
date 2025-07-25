@@ -81,11 +81,6 @@ class UnknownError(RPCError):
 
 
 @dataclasses.dataclass(slots=True)
-class UnauthorizedError(RPCError):
-    pass
-
-
-@dataclasses.dataclass(slots=True)
 class RPCTimeoutError(RPCError):
     pass
 
@@ -256,8 +251,8 @@ RouteFlag = Literal[
 
 
 class RPCRouter:
-    def __init__(self) -> None:
-        self.global_errors: list[type[RPCError]] = [UnauthorizedError, ServerJSONDeserializeError, InputValidationError]
+    def __init__(self, product_specific_standard_errors: list[type[RPCError]]) -> None:
+        self.standard_errors: list[type[RPCError]] = [ServerJSONDeserializeError, InputValidationError, *product_specific_standard_errors]
         self.routes: list[RPCRoute] = []
         self.route_flags: dict[RPCRoute, list[RouteFlag]] = defaultdict(list)
         self._route_name_set: set[str] = set()

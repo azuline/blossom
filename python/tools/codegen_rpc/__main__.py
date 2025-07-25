@@ -188,7 +188,7 @@ def create_codegen_schema(router: RPCRouter) -> CodegenSchema:
             raise NameCollisionError(f"the error name {name} has multiple definitions with different schemas")
         schema.errors[name] = esch
 
-    for e in router.global_errors:
+    for e in router.standard_errors:
         logger.debug("Adding global error to schema", error=e, name=e.__name__)
         add_error_to_schema(e)
         schema.global_error_names.append(e.__name__)

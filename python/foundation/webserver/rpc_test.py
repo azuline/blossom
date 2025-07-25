@@ -1,6 +1,7 @@
 import dataclasses
 
 from foundation.conftest import FoundationFixture
+from foundation.testing.rpc import TestRPCResponse
 from foundation.webserver.rpc import InputValidationError, ReqCommon, ServerJSONDeserializeError, rpc_common
 
 
@@ -22,7 +23,7 @@ async def test_route(req: ReqCommon[SpecTestIn]) -> SpecTestOut:
 async def test_route_invalid_json_data(t: FoundationFixture) -> None:
     await t.rpc.manually_mount_route(test_route)
     resp = await (await t.rpc.underlying_client()).post("/rpc/test", data="aaoejfawpokl")
-    await t.rpc.parse_error(resp, ServerJSONDeserializeError)
+    await t.rpc.parse_error(TestRPCResponse(raw=resp, route=test_route), ServerJSONDeserializeError)
 
 
 async def test_route_different_input_schema(t: FoundationFixture) -> None:
@@ -53,5 +54,5 @@ async def test_route_error(req: ReqCommon[SpecTestIn]) -> SpecTestOut:
 async def test_route_unhandled_error_sentry(t: FoundationFixture) -> None:
     await t.rpc.manually_mount_route(test_route_error)
     resp = await t.rpc.call(test_route_error, {"cherry": "test"})
-    assert resp.status_code == 500
+    assert resp.raw.status_code == 500
     t.error.assert_reported(ValueError)

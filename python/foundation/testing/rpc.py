@@ -31,6 +31,14 @@ class RPCInputJSONEncoder(json.JSONEncoder):
         return super().default(o)  # pragma: no cover
 
 
+@dataclasses.dataclass
+class TestRPCResponse[In, Out]:
+    __test__ = False
+
+    raw: quart.Response
+    route: RPCRoute[In, Out]
+
+
 class TestRPC:
     """These fixtures make it easy to spin up a webapp for testing, send requests, and parse their output."""
 
@@ -58,34 +66,37 @@ class TestRPC:
         logger.debug("mounting route onto app", route=route.name)
         route.mount(await self.underlying_app())
 
-    async def call[In, Out](self, route: RPCRoute[In, Out], in_: In, *, headers: dict[str, Any] | None = None) -> quart.Response:
+    async def call[In, Out](self, route: RPCRoute[In, Out], in_: In, *, headers: dict[str, Any] | None = None) -> TestRPCResponse[In, Out]:
         client = await self.underlying_client()
         logger.debug("executing request", route=route.name, in_=in_, headers=headers)
         query_string = self.jsonify_input(in_) if in_ and route.method == "GET" else None
         json_ = self.jsonify_input(in_) if in_ and route.method != "GET" else None
-        resp = await asyncio.wait_for(client.open(f"/rpc/{route.name}", method=route.method, query_string=query_string, json=json_, headers=headers), timeout=5)
-        logger.debug("request completed", status_code=resp.status_code, text=await resp.get_data())
-        return resp
+        raw_resp = await asyncio.wait_for(client.open(f"/rpc/{route.name}", method=route.method, query_string=query_string, json=json_, headers=headers), timeout=5)
+        logger.debug("request completed", status_code=raw_resp.status_code, text=await raw_resp.get_data())
+        return TestRPCResponse(raw=raw_resp, route=route)
 
-    async def assert_success(self, resp: quart.Response) -> None:
+    async def assert_success[In, Out](self, resp: TestRPCResponse[In, Out]) -> None:
         __tracebackhide__ = True
-        assert resp.status_code == 200, await resp.get_data()
+        assert resp.raw.status_code == 200, await resp.raw.get_data()
 
-    async def assert_failed(self, resp: quart.Response) -> None:
+    async def assert_failed[In, Out](self, resp: TestRPCResponse[In, Out]) -> None:
         __tracebackhide__ = True
-        assert resp.status_code == 400, await resp.get_data()
+        assert resp.raw.status_code == 400, await resp.raw.get_data()
 
-    async def parse_response[Out](self, resp: quart.Response, out: type[Out]) -> Out:
-        text = await resp.get_data()
+    async def parse_response[In, Out](self, resp: TestRPCResponse[In, Out]) -> Out:
+        text = await resp.raw.get_data()
         logger.debug("attemping to parse response", text=text)
-        return parse_dataclass(out, self.parse_output(json.loads(text)))
+        return parse_dataclass(resp.route.out, self.parse_output(json.loads(text)))
 
-    async def parse_error(self, resp: quart.Response, out: type[Err]) -> Err:
+    async def parse_error[In, Out, Err](self, resp: TestRPCResponse[In, Out], out: type[Err]) -> Err:
         # E is both a dataclass and an exception. Errors are returned as {"name": "ErrorName", "data": {errordata}}.
-        text = await resp.get_data()
+        text = await resp.raw.get_data()
         logger.debug("attemping to parse error", text=text)
         data = json.loads(text)
         assert out.__name__ == data["error"], f"returned error is {data['error']} not {out.__name__}"
+        assert out in resp.route.errors + self._router.standard_errors, (
+            f"error type {out} is not recorded in {resp.route.name}'s expected `errors` array: {resp.route.errors + self._router.standard_errors}"
+        )
         return parse_dataclass(out, self.parse_output(data["data"]))
 
     @staticmethod
