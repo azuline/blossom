@@ -143,42 +143,6 @@ def test_functionality_that_depends_on_service():
 
 A [`../conftest.py`](../conftest.py) fixture substitutes the fake clients before tests run.
 
-## Testing
-
-The `testing/` package provides test fixtures. By convention, each project has a `conftest.py` (e.g. [`conftest.py`](./conftest.py) that provides a project-specific `t` pytest fixture, upon which every optional fixture and test utility is available as a typed property. In comparison to pytest fixtures, this pattern improves discoverability, typo resistance, and repeated type annotations. So:
-
-```python
-def test_something(t: FoundationFixture):  # or ProductFixture, PanopticonFixture, PipelineFixture.
-    ...
-```
-
-[`testing/errors.py`](./testing/errors.py) contains assertions on errors that were reported to Sentry. By example:
-
-```python
-t.errors.assert_reported(CustomError)
-t.errors.assert_not_reported(CustomError)
-```
-
-[`testing/factory.py`](./testing/factory.py) provides methods for generating database rows for test setup. By example:
-
-```python
-org = await t.factory.organization()  # or any other table in the database.
-```
-
-[`testing/rpc.py`](./testing/rpc.py) provides methods for testing RPC endpoints. By example:
-
-```python
-resp = await t.rpc.call(rpc_function, DataIn(...))
-await t.rpc.assert_success(resp)  # or t.rpc.assert_failed(resp)
-parsed_out_data = await t.rpc.parse_response(resp)  # or t.rpc.parse_error(resp, ExpectedRPCErrorType)
-```
-
-[`testing/snapshots.py`](./testing/snapshots.py) is a straight wrapper over [syrupy](https://github.com/syrupy-project/syrupy) for convenience.
-
-```python
-t.snapshot.assert_snapshot(value)
-```
-
 ## Feature Flags
 
 TODO:
@@ -231,36 +195,115 @@ class BunnyOverflowErrorTyped(BaseError):
     last_bunny: str
 ```
 
-All RPC errors must be dataclasses and type their fields for TypeScript codegen.
+All RPC errors must be dataclasses, so that their fields are typed for TypeScript codegen.
 
 #### Error Triage
 
-[Sentry](https://sentry.io/)
+Unhandled errors are reported to [Sentry](https://sentry.io/). Handled errors can be reported in two ways:
 
-report error
+```python
+foundation.errors.report_error(exc)  # Just report the error.
+# Or...
+logger.exception("log message", exc_info=exc)  # Report the error with a log line.
+# Inside a except block, the `exc_info` can be omitted:
+try:
+    ...
+except ...:
+    logger.exception("log message")
+```
 
-transience & suppression
+Error classes can be marked transient like so:
 
-logger exception dedup
+```python
+class BunnyExpectedlyHiccuppedError(BaseError):
+    transient: ClassVar[bool] = False
+```
+
+Transient errors are never reported to Sentry, even when unhandled.
+
+Non-transient errors can be suppressed like so:
+
+```python
+with suppress_error(BunnyFellOverError, environments=("production",)):  # Omit environments to suppress in every environment.
+    ...
+```
 
 ### Metrics
 
-metrics - statsd through datadog
+[`observability/metrics.py`](./observability/metrics.py) provides metric functions which forward to the statsd agent. The available metric functions are:
 
-api / abnormal pattern
+- Count Metric: `metric_increment`, `metric_increment_abnormal`, `metric_decrement`, `metric_decrement_abnormal`
+- Gauge Metric: `metric_gauge`
+- Timing Metric: `metric_timing`
+- Distribution Metric: `metric_distribution`
 
-cardinality reduction
+Each metric accepts a `LiteralString` metric name and tags. Metric names should be static and tag keys should be of low cardinality to keep costs under control. The `_abnormal` variants of count metrics force the sample rate to 1 and so are always captured.
 
-count_and_time special - tag accumulation
+The `metric_count_and_time` context manager makes it easy to count and time a block of code:
 
-### Traces
+```python
+with count_and_time("name", **tags) as ct:
+    ...
+    ct.tag(name=value, **kwargs)  # Add tags to the count and time metrics during execution.
+    ...
+```
 
-traces & spans - ddtrace
+### Traces & Spans
 
-same cardinality reduction applies
+[`observability/spans.py`](./observability/spans.py) provides functions for managing traces & spans. A root span begins a trace; child spans are nested within. Like metrics, each span has a name and tags. Like metrics, the cardinality should be minimized to keep costs under control. Begin a span like so:
 
-spans parent nesting
+```python
+with span("span_name", **tags) as cspan:  # The resource and span_type params have special meanings in Datadog APM.
+    ...
+    cspan = current_span()  # Access the current span object. Useful in nested functions.
+    tag_current_span(key=value, **kwargs)  # Add tags to the current span during execution.
+```
 
-span tagging
+When working with code that spans contextual boundaries (e.g. processes, threads, asynchronous tasks), preserve trace context like so:
 
-span context passing
+```python
+sdump = span_dump()  # This is serializable.
+...
+# In the new context, restore the span:
+with span_restore("name_of_child_span", sdump):
+    ...
+```
+
+Context passing is handled for you in the asynchronous task abstractions provided in [`stdlib/tasks.py`](./stdlib/tasks.py).
+
+## Testing
+
+The `testing/` package provides test fixtures. By convention, each project has a `conftest.py` (e.g. [`conftest.py`](./conftest.py) that provides a project-specific `t` pytest fixture, upon which every optional fixture and test utility is available as a typed property. In comparison to pytest fixtures, this pattern improves discoverability, typo resistance, and repeated type annotations. So:
+
+```python
+def test_something(t: FoundationFixture):  # or ProductFixture, PanopticonFixture, PipelineFixture.
+    ...
+```
+
+[`testing/errors.py`](./testing/errors.py) contains assertions on errors that were reported to Sentry. By example:
+
+```python
+t.errors.assert_reported(CustomError)
+t.errors.assert_not_reported(CustomError)
+```
+
+[`testing/factory.py`](./testing/factory.py) provides methods for generating database rows for test setup. By example:
+
+```python
+org = await t.factory.organization()  # or any other table in the database.
+```
+
+[`testing/rpc.py`](./testing/rpc.py) provides methods for testing RPC endpoints. By example:
+
+```python
+resp = await t.rpc.call(rpc_function, DataIn(...))
+await t.rpc.assert_success(resp)  # or t.rpc.assert_failed(resp)
+parsed_out_data = await t.rpc.parse_response(resp)  # or t.rpc.parse_error(resp, ExpectedRPCErrorType)
+```
+
+[`testing/snapshots.py`](./testing/snapshots.py) is a straight wrapper over [syrupy](https://github.com/syrupy-project/syrupy) for convenience.
+
+```python
+t.snapshot.assert_snapshot(value)
+```
+
