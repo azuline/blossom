@@ -68,9 +68,24 @@ await foundation.stdlib.tasks.wait_for_unsupervised_tasks()
 
 ## Crypto
 
-[`crypto/crypt.py`](./crypto/crypt.py) provides `encrypt_symmetric` and `decrypt_symmetric` functions for symmetric AEAD.
+[`crypto/crypt.py`](./crypto/crypt.py) provides `encrypt_symmetric` and `decrypt_symmetric` functions for symmetric AEAD. They use the XSalsa20-Poly1305 cipher:
+
+```python
+plaintext = "YELLOW SUBMARINE"
+associated_data = "belongs to organization X"
+ciphertext = encrypt_symmetric(plaintext, associated_data)
+assert decrypt_symmetric(ciphertext, associated_data) == plaintext
+```
 
 [`crypto/vault.py`](./crypto/vault.py) provides the `vault_secret`, `fetch_vaulted_secret`, and `delete_vaulted_secret` functions for storing encrypted secrets in the database.
+
+```python
+async with xact() as q:
+    vs = await vault_secret(q, organization_id, plaintext)
+    recv = await fetch_vaulted_secret(q, organization_id, vs.id)
+    assert recv == plaintext
+    await delete_vaulted_secret(q, vs.id)
+```
 
 ## Webserver
 
