@@ -1,4 +1,5 @@
 import re
+from typing import Any, Literal, TypeAliasType, get_args, get_origin
 
 
 def int_to_bytes(x: int) -> bytes:
@@ -24,3 +25,12 @@ def markdown_to_slack_markup(text: str) -> str:
 def cast_notnull[T](x: T | None) -> T:
     assert x is not None
     return x
+
+
+def enum_type_to_values(x: Any) -> list[str]:
+    """Given a Literal type or type alias of strings, return all the values."""
+    while isinstance(x, TypeAliasType):
+        x = x.__value__
+    if get_origin(x) is Literal:
+        return list(get_args(x))
+    raise TypeError(f"{x} is not a Literal[...]")

@@ -3,9 +3,11 @@ from __future__ import annotations
 import dataclasses
 import os
 import sys
-from typing import Literal, cast, get_args
+from typing import Literal, cast
 
 from dotenv import dotenv_values
+
+from foundation.stdlib.convert import enum_type_to_values
 
 
 def initialize_env() -> None:
@@ -30,8 +32,11 @@ class EnvironmentVariableMissingError(Exception):
 
 
 type EnvironmentEnum = Literal["production", "development"]
+ENVIRONMENT_VALUES = enum_type_to_values(EnvironmentEnum)
 type LogLevelEnum = Literal["debug", "info"]
+LOG_LEVEL_VALUES = enum_type_to_values(LogLevelEnum)
 type ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
+SERVICE_VALUES = enum_type_to_values(ServiceEnum)
 
 
 @dataclasses.dataclass(slots=True)
@@ -118,9 +123,9 @@ class _Env:
             brex_token=cls._optional("BREX_TOKEN"),
             ramp_token=cls._optional("RAMP_TOKEN"),
         )
-        assert c.environment in get_args(EnvironmentEnum), f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(get_args(EnvironmentEnum))}"
-        assert c.log_level in get_args(LogLevelEnum), f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(get_args(LogLevelEnum))}"
-        assert c.service in get_args(ServiceEnum), f"SERVICE is invalid: {c.service} not one of {', '.join(get_args(ServiceEnum))}"
+        assert c.environment in ENVIRONMENT_VALUES, f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(ENVIRONMENT_VALUES)}"
+        assert c.log_level in LOG_LEVEL_VALUES, f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(LOG_LEVEL_VALUES)}"
+        assert c.service in SERVICE_VALUES, f"SERVICE is invalid: {c.service} not one of {', '.join(SERVICE_VALUES)}"
         assert c.service != "development" or c.environment == "development", "SERVICE is invalid: must be set in production and value must not be `development`"
         return c
 
