@@ -31,7 +31,7 @@ class LockTimeoutError(BaseError, TimeoutError):
 
 
 @asynccontextmanager
-async def lock(
+async def pg_advisory_lock(
     name: str,
     pool: DBConnPool | None = None,
     block: bool = True,

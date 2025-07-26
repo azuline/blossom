@@ -4,11 +4,76 @@ import re
 from sqlalchemy import text
 
 from database.conn import connect_db_admin
-from database.xact import xact_admin
-
-# TODO(md): Check for *_id which are not FK-ed; they should probably be _extid.
 
 nl = "\n"  # can't put backslash in f-string expression
+
+
+async def test_id_columns_foreign_key_requirements():
+    async with connect_db_admin() as conn:
+        # Get all _id columns (excluding 'id' primary key columns) that are NOT foreign keys
+        cursor = await conn.execute(
+            text("""
+                SELECT c.table_name, c.column_name
+                FROM information_schema.columns c
+                JOIN information_schema.tables t
+                    ON c.table_name = t.table_name
+                LEFT JOIN information_schema.key_column_usage kcu
+                    ON c.table_name = kcu.table_name
+                    AND c.column_name = kcu.column_name
+                LEFT JOIN information_schema.table_constraints tc
+                    ON kcu.constraint_name = tc.constraint_name
+                    AND kcu.table_schema = tc.table_schema
+                    AND tc.constraint_type = 'FOREIGN KEY'
+                WHERE c.column_name LIKE '%_id'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND t.table_name NOT LIKE '%_enum'
+                    AND tc.constraint_name IS NULL
+            """)
+        )
+        non_fk_id_columns = [(row[0], row[1]) for row in cursor.fetchall()]
+
+        # Get all _extid columns that ARE foreign keys (they shouldn't be)
+        cursor = await conn.execute(
+            text("""
+                SELECT c.table_name, c.column_name
+                FROM information_schema.columns c
+                JOIN information_schema.tables t
+                    ON c.table_name = t.table_name
+                JOIN information_schema.key_column_usage kcu
+                    ON c.table_name = kcu.table_name
+                    AND c.column_name = kcu.column_name
+                JOIN information_schema.table_constraints tc
+                    ON kcu.constraint_name = tc.constraint_name
+                    AND kcu.table_schema = tc.table_schema
+                    AND tc.constraint_type = 'FOREIGN KEY'
+                WHERE c.column_name LIKE '%_extid'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND t.table_name NOT LIKE '%_enum'
+            """)
+        )
+        fk_extid_columns = [(row[0], row[1]) for row in cursor.fetchall()]
+
+        # Check that all _id columns are foreign keys
+        assert not non_fk_id_columns, f"""\\
+Columns ending in '_id' should reference other tables primary keys. If they store external system IDs, rename them to '_extid'.
+
+The following *_id columns should be foreign keys (or renamed to *_extid if they are third-party external IDs):
+
+{nl.join(f"- {table}.{col}" for table, col in non_fk_id_columns)}
+"""
+
+        # Check that no _extid columns are foreign keys
+        assert not fk_extid_columns, f"""\\
+Columns ending in '_extid' should store third-party external system IDs, not reference other tables in this database.
+
+The following *_extid columns should NOT be foreign keys (rename to *_id if they reference other tables):
+
+{nl.join(f"- {table}.{col}" for table, col in fk_extid_columns)}
+"""
 
 
 async def test_all_tables_have_primary_keys():

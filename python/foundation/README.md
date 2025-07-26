@@ -165,7 +165,7 @@ A [`../conftest.py`](../conftest.py) fixture substitutes the fake clients before
 
 ## Feature Flags
 
-TODO:
+TODO: feature flags
 
 ## Observability
 

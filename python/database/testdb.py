@@ -5,7 +5,7 @@ import yoyo
 from sqlalchemy import text
 
 from database.conn import connect_db_admin
-from database.lock import lock
+from database.lock import pg_advisory_lock
 from foundation.env import ENV
 from foundation.observability.logs import get_logger
 from foundation.stdlib.paths import PYTHON_ROOT
@@ -35,7 +35,7 @@ class TestDB:
         """Create a template database for the current schema version."""
         tmpl_name = self._compute_template_name()
 
-        async with lock("testdb"), connect_db_admin() as conn:
+        async with pg_advisory_lock("testdb"), connect_db_admin() as conn:
             cursor = await conn.execute(text("SELECT 1 FROM pg_database WHERE datname = :name"), {"name": tmpl_name})
             if cursor.first():
                 logger.debug("template database already exists, reusing it", tmpl_name=tmpl_name)

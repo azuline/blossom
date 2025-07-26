@@ -93,9 +93,9 @@ We spin up a new Test DB for each test session and share it between every test r
 
 ## Locking
 
-[Advisory locks](https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS) can be taken out with the `lock` context manager, like so:
+[Advisory locks](https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS) can be taken out with the `pg_advisory_lock` context manager, like so:
 
 ```python
-async with database.lock.lock("lock_name"):
+async with database.lock.pg_advisory_lock("lock_name"):
     ...
 ```

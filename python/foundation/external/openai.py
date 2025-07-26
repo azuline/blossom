@@ -95,7 +95,6 @@ class OpenAICache:
             raise ConfigurationError("OPENAI_API_KEY is not set")
         self.real_client = openai.AsyncOpenAI(api_key=ENV.openai_api_key)
 
-        # TODO: We shouldn't depend on this, figure out how to get the path properly later.
         pytest_current_test = os.environ.get("PYTEST_CURRENT_TEST")
         if not pytest_current_test:
             raise LLMTestCacheError("PYTEST_CURRENT_TEST not set - are you running in pytest?")
