@@ -14,7 +14,8 @@ from foundation.observability.metrics import metric_count_and_time
 
 logger = get_logger()
 
-SlackChannelEnum = Literal["#eng-testing"]
+type SlackChannelEnum = Literal["#eng-testing"]
+
 CHANNEL_TO_IDS: dict[SlackChannelEnum, str] = {
     "#eng-testing": "CXXXXXXXXXX",
 }

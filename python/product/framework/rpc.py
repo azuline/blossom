@@ -21,7 +21,7 @@ logger = get_logger()
 
 SESSION_ID_KEY = "session_id"
 
-Authorization = Literal[
+type Authorization = Literal[
     # Public means that anyone can access this endpoint.
     "public",
     # User means that any logged in user can access this endpoint, even if they are not authed with an

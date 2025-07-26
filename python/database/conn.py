@@ -14,8 +14,8 @@ from foundation.stdlib.tasks import create_unsupervised_task
 
 logger = get_logger()
 
-DBConn = AsyncConnection
-DBConnPool = AsyncEngine
+type DBConn = AsyncConnection
+type DBConnPool = AsyncEngine
 
 USER_ID_SAFETY_REGEX = re.compile(r"usr_[A-Za-z0-9]+$")
 ORGANIZATION_ID_SAFETY_REGEX = re.compile(r"org_[A-Za-z0-9]+$")

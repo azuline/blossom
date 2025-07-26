@@ -85,7 +85,7 @@ async def main():
 
 from typing import Literal
 
-DatabaseTablePrefixEnum = Literal[{", ".join(f'"{d}"' for _, d in defaults)}]
+type DatabaseTablePrefixEnum = Literal[{", ".join(f'"{d}"' for _, d in defaults)}]
 
 DATABASE_TABLE_PREFIX_MAP: dict[DatabaseTablePrefixEnum, str] = {{
     {",\n    ".join(f'"{default}": "{table}"' for table, default in defaults)},

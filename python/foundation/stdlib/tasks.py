@@ -1,12 +1,11 @@
 from __future__ import annotations
-import traceback
 
 import asyncio
 import time
 from asyncio import Task
 from collections.abc import Callable, Coroutine
 from functools import partial
-from typing import LiteralString, TypeVar
+from typing import LiteralString
 
 from foundation.observability.errors import BaseError
 from foundation.observability.logs import get_logger
@@ -14,9 +13,6 @@ from foundation.observability.metrics import metric_increment, metric_timing
 from foundation.observability.spans import span_dump, span_restore
 
 logger = get_logger()
-
-
-T = TypeVar("T")
 
 
 class UnsupervisedTasksTimeoutError(BaseError):

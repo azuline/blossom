@@ -29,9 +29,9 @@ class EnvironmentVariableMissingError(Exception):
     pass
 
 
-EnvironmentEnum = Literal["production", "development"]
-LogLevelEnum = Literal["debug", "info"]
-ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
+type EnvironmentEnum = Literal["production", "development"]
+type LogLevelEnum = Literal["debug", "info"]
+type ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
 
 
 @dataclasses.dataclass(slots=True)

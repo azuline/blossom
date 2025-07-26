@@ -4,7 +4,7 @@ from foundation.crypto.crypt import decrypt_symmetric, encrypt_symmetric
 from foundation.observability.errors import BaseError
 from foundation.stdlib.convert import cast_notnull
 
-Secret = str
+type Secret = str
 
 
 async def vault_secret(q: DBQuerier, organization_id: str, secret: Secret) -> models.VaultedSecret:

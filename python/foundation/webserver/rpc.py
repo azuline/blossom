@@ -5,7 +5,7 @@ import functools
 import json
 from collections import defaultdict
 from collections.abc import Awaitable, Callable
-from typing import Any, Literal, TypeVar, cast, get_args, get_type_hints
+from typing import Any, Literal, cast, get_args, get_type_hints
 
 import pydantic
 import quart
@@ -24,7 +24,7 @@ from foundation.stdlib.unset import Unset
 
 logger = get_logger()
 
-MethodEnum = Literal["GET", "POST"]
+type MethodEnum = Literal["GET", "POST"]
 
 
 @dataclasses.dataclass(slots=True)
@@ -203,9 +203,6 @@ def rpc_common(
         return RPCRoute(name=name, in_=in_, out=out, errors=errors, method=method, handler=common_wrapper)
 
     return decorator
-
-
-T = TypeVar("T")
 
 
 async def _parse_request[T](spec: Callable[[Any], T] | None, req: quart.Request) -> T:

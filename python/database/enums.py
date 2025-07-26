@@ -1,3 +1,3 @@
 # TODO(enum): Replace.
-OrganizationsInboundSourceEnum = str
-UserSignupStepEnum = str
+type OrganizationsInboundSourceEnum = str
+type UserSignupStepEnum = str

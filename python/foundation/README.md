@@ -307,3 +307,6 @@ parsed_out_data = await t.rpc.parse_response(resp)  # or t.rpc.parse_error(resp,
 t.snapshot.assert_snapshot(value)
 ```
 
+## Evals
+
+TODO: currently at basic prototype system, will evolve

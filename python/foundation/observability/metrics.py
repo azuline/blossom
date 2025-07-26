@@ -16,8 +16,8 @@ from foundation.observability.logs import get_logger
 
 logger = get_logger()
 
-MetricTagValue = int | float | str | bool | None
-MetricTagDict = dict[str, MetricTagValue]
+type MetricTagValue = int | float | str | bool | None
+type MetricTagDict = dict[str, MetricTagValue]
 
 DEFAULT_SAMPLE_RATE = 1
 
