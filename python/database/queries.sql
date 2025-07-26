@@ -14,7 +14,7 @@ INSERT INTO organizations (name, inbound_source)
 VALUES ($1, $2)
 RETURNING *;
 
--- name: OrganizationAddUser :one
+-- name: OrganizationUserAdd :one
 INSERT INTO organizations_users (organization_id, user_id)
 VALUES ($1, $2)
 RETURNING *;

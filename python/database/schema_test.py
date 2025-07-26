@@ -3,6 +3,7 @@ import re
 
 from sqlalchemy import text
 
+from database.conn import connect_db_admin
 from database.xact import xact_admin
 
 # TODO(md): Check for *_id which are not FK-ed; they should probably be _extid.
@@ -11,8 +12,8 @@ nl = "\n"  # can't put backslash in f-string expression
 
 
 async def test_all_tables_have_primary_keys():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text(
                 """
                 SELECT t.table_name
@@ -47,8 +48,8 @@ DEFAULT_REGEX = re.compile(r"generate_id\('([^']+)'::text\)")
 
 
 async def test_id_prefix_validation():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT c.table_name, c.column_name, c.column_default
                 FROM information_schema.columns c
@@ -80,8 +81,8 @@ Table {table} has an invalid `{column}` column prefix. Prefixes must be 2-3 lowe
 
 
 async def test_all_tables_have_metadata_columns():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT t.table_name
                 FROM information_schema.tables t
@@ -121,8 +122,8 @@ Failing tables:
 
 
 async def test_all_created_and_updated_at_definition():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
@@ -148,8 +149,8 @@ Failing columns:
 
 
 async def test_all_updated_at_columns_have_trigger():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT c.table_name
                 FROM information_schema.columns c
@@ -182,8 +183,8 @@ Fixes:
 
 
 async def test_integers_should_be_bigints():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
@@ -207,8 +208,8 @@ Failing columns:
 
 
 async def test_timestamps_should_be_timestamptz():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT c.table_name, c.column_name
                 FROM information_schema.columns c
@@ -236,8 +237,8 @@ class MissingFK:
 
 
 async def test_foreign_key_indexes():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 -- Based on https://www.cybertec-postgresql.com/en/index-your-foreign-key/.
                 SELECT
@@ -294,8 +295,8 @@ Fixes:
 
 
 async def test_id_columns_have_check_constraint():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text(
                 """
                 SELECT c.table_name, c.column_name
@@ -311,7 +312,7 @@ async def test_id_columns_have_check_constraint():
         )
         cols = [(x[0], x[1]) for x in cursor.fetchall()]
 
-        cursor = await q.conn.execute(
+        cursor = await conn.execute(
             text("""
                 SELECT tc.table_name, kcu.column_name
                 FROM information_schema.table_constraints tc
@@ -331,8 +332,8 @@ Please add a CHECK constraint with a prefix match to the following columns:
 
 
 async def test_id_columns_have_collation_c():
-    async with xact_admin() as q:
-        cursor = await q.conn.execute(
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
             text("""
                 SELECT t.table_name, c.column_name, c.collation_name
                 FROM information_schema.tables t
@@ -357,4 +358,65 @@ ID columns should be defined as:
 
 Foreign key columns referencing ID columns should be defined as:
     other_id TEXT COLLATE "C" REFERENCES other_table(id)
+"""  # pragma: no cover
+
+
+async def test_all_tables_have_row_security_policy() -> None:
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
+            text("""
+                SELECT c.relname
+                FROM pg_class c
+                JOIN pg_namespace n ON n.oid = c.relnamespace
+                -- Only check tables in the public namespace.
+                WHERE n.nspname = 'public'
+                    -- Only check "ordinary tables."
+                    AND c.relkind = 'r'
+                    -- Check for tables where there is no Row Level Security policy defined.
+                    AND NOT c.relrowsecurity
+                    -- Ignore migration tables.
+                    AND c.relname NOT LIKE '%yoyo%'
+                    AND c.relname NOT LIKE '%_enum'
+            """),
+        )
+        failing = [x[0] for x in cursor.fetchall()]
+        assert not failing, f"""\
+Please add a Row Level Security policy to {", ".join(failing)}.
+
+Row Level Security policies by default restrict customer access to data, and an explicit policy is
+required to give them access to that data.
+
+Failing tables:
+{nl.join(f"- {t}" for t in failing)}
+"""  # pragma: no cover
+
+
+async def test_all_views_have_security_invoker_true() -> None:
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
+            text("""
+                SELECT c.relname
+                FROM pg_class c
+                JOIN pg_namespace n ON n.oid = c.relnamespace
+                -- Only check views in the public namespace.
+                WHERE n.nspname = 'public'
+                    -- Only check relations that are views or materialized views.
+                    AND c.relkind IN ('v', 'm')
+                    -- Check for views without security invoker.
+                    AND NOT ('security_invoker=true' = ANY(COALESCE(c.reloptions, array[]::text[])))
+            """)
+        )
+        failing = [x[0] for x in cursor.fetchall()]
+        assert not failing, f"""\
+Please define the following views with security invoker: {", ".join(failing)}.
+
+Security Invoker ensures that Row Level Security is enforced based on the user querying the view. By
+default, Postgres enforces Row Level Security based on the owner of the view (aka Security Definer).
+
+To enable Security Invoker, please define the view as:
+
+    CREATE VIEW view_name WITH (security_invoker = true) AS ( ... );
+
+Failing views:
+{nl.join(f"- {t}" for t in failing)}
 """  # pragma: no cover
