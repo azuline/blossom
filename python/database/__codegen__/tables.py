@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-DatabaseTablePrefixEnum = Literal["usr", "inv", "org", "utn", "ses", "vsc"]
+type DatabaseTablePrefixEnum = Literal["usr", "inv", "org", "utn", "ses", "vsc"]
 
 DATABASE_TABLE_PREFIX_MAP: dict[DatabaseTablePrefixEnum, str] = {
     "usr": "users",

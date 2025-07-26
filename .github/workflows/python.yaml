@@ -19,7 +19,7 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - uses: actions/checkout@v4
-      # EXTENSION(namespace): addQ step
+      # EXTENSION(namespace): add step
       # - uses: namespacelabs/nscloud-cache-action@v1
       #   with:
       #     path: |
