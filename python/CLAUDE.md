@@ -55,6 +55,10 @@ Place exploratory scripts in `.debug_scripts/` and name them `YYMMDD_branch__scr
 
 # Design patterns
 
+## Database
+
+Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL.
+
 ## Dataclasses
 
 Use `@dataclass` for data containers. Reserve classic classes for third‑party interfaces or `abc.ABC` implementations. Enable `slots=True` for dataclasses unless `@cached_property` is needed.
@@ -135,7 +139,7 @@ Follow these testing conventions:
 
 - Place tests next to the code they cover; do not create a `tests/` directory.
 - Name files `<module>_test.py` or `__main__test.py`.
-- Tests are plain functions starting with `test_`.
+- Tests are plain functions starting with `test_`. Do not nest tests inside classes.
 
 Write or update tests for every behavioural change.
 
@@ -162,6 +166,8 @@ Create rows with `foundation.testing.factory:TestFactory`; never write raw SQL.
 ## Fakes & mocks
 
 Prefer writing and using typed fakes with minimal behavior reimplementations in `foundation/external/`. Do not use magic mocks and monkey‑patching.
+
+Each external service has a `client` field which is set to a fake client in tests (via `fake_ext`). Access them in a test via `client = cast(FakeServiceClient, EXT.service.client)`. Afterwards, keep on using `EXT.service`.
 
 ## LLM caching
 

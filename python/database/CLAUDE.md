@@ -90,7 +90,7 @@ async with xact() as q:
 
 Follow these conventions:
 
-- Avoid `q.conn` raw SQL except in SQLc edge cases.
+- Avoid `q.conn` and raw SQL except in SQLc edge cases.
 - Prefix test‑only query names with `Test`.
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
