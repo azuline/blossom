@@ -10,7 +10,7 @@ See [CLAUDE.md](./CLAUDE.md) for best practices, conventions, and patterns.
 
 The database schema is defined as a tree of migrations in [`./migrations`](./migrations). We use [yoyo-migrations](https://sr.ht/~olly/yoyo/) to apply the migrations. Run `just migrate` to apply the migrations and `just new-migration` to generate a new empty migration file.
 
-`just migrate` also uses [pgmigrate](https://github.com/peterldowns/pgmigrate) to generate the [`schema.sql`](./schema.sql) file, which contains the up-to-date materialized/squashed schema.
+`just codegen-db` uses [pgmigrate](https://github.com/peterldowns/pgmigrate) to generate the [`schema.sql`](./schema.sql) file, which contains the up-to-date materialized/squashed schema.
 
 We annotate the schema in [`schema_annotations.yaml`](./schema_annotations.yaml). We provide Claude with both schema files to optimize its understanding of the data model.
 

@@ -94,11 +94,16 @@ The `webserver/` package provides a high-level abstraction for building a backen
 [`webserver/rpc.py`](./webserver/rpc.py) provides `RPCRouter` and `rpc_common` for defining RPCs. Each application (e.g. product and panopticon) extends `rpc_common` with application-specific logic. So for an application `x`:
 
 ```python
-@rpc_x("list_bunnies", errors=[BunniesAreAsleep])  # Errors is used in the generated TypeScript bindings.
+@dataclasses.dataclass(slots=True)
+class BunniesAreAsleepError(RPCError):
+    pass
+
+
+@rpc_x("list_bunnies", errors=[BunniesAreAsleepError])  # `errors` is used to generate TypeScript error bindings.
 async def list_bunnies(req: ReqX[InputDataclassType]) -> OutputDataclassType:
     ...
     if ...:
-        raise BunniesAreAsleep
+        raise BunniesAreAsleepError
     return OutputDataclassType(...)
 
 

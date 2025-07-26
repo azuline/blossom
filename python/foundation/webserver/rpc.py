@@ -136,6 +136,7 @@ def rpc_common(
 
         1. Traps exceptions and convert them into API responses.
         2. If `in_` is not None, parses the input data into it.
+        3. Takes the output data and converts it to a HTTP response.
 
     This decorator is not meant for direct use by application users. It contains preflight and
     postflight code applicable to all applications. Each application should create a more specific

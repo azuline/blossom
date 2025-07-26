@@ -77,12 +77,13 @@ def rpc_product[In, Out](
                 tag_current_span(user_id=user.id)
 
             # 2. Set up transaction.
-            transaction = xact_customer(user.id, organization.id if organization else None) if user else xact_admin()
+            transaction = xact_customer(user.id, organization.id if authorization == "organization" and organization else None) if user else xact_admin()
             async with transaction as q:
                 req = ReqProduct(q=q, user=user, organization=organization, data=req.data, raw=req.raw)
                 logger.info("entering request handler in rpc_product", has_user=user is None, has_organization=organization is None)
                 rval = await func(req)
                 logger.info("exited request handler in rpc_product")
+
             return rval
 
         return wrapper
