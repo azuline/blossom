@@ -11,11 +11,11 @@ FROM organizations
 WHERE id = $1
 """
 
-async def OrganizationFetch(conn: DBConn, *, id: str) -> models.Organizations | None:
+async def OrganizationFetch(conn: DBConn, *, id: str) -> models.Organization | None:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATIONFETCH), {"p1": id})).first()
     if row is None:
         return None
-    return models.Organizations(
+    return models.Organization(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -31,10 +31,10 @@ JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1
 """
 
-async def OrganizationFetchAll(conn: DBConn, *, user_id: str) -> AsyncIterator[models.Organizations]:
+async def OrganizationFetchAll(conn: DBConn, *, user_id: str) -> AsyncIterator[models.Organization]:
     result = await conn.execute(sqlalchemy.text(ORGANIZATIONFETCHALL), {"p1": user_id})
     async for row in result:
-        yield models.Organizations(
+        yield models.Organization(
             id=row[0],
             created_at=row[1],
             updated_at=row[2],
@@ -49,11 +49,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
-async def OrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organizations | None:
+async def OrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization | None:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATIONCREATE), {"p1": name, "p2": inbound_source})).first()
     if row is None:
         return None
-    return models.Organizations(
+    return models.Organization(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -68,11 +68,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
-async def OrganizationUserAdd(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUsers | None:
+async def OrganizationUserAdd(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUser | None:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATIONUSERADD), {"p1": organization_id, "p2": user_id})).first()
     if row is None:
         return None
-    return models.OrganizationsUsers(
+    return models.OrganizationsUser(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -89,11 +89,11 @@ FROM users
 WHERE id = $1
 """
 
-async def UserFetch(conn: DBConn, *, id: str) -> models.Users | None:
+async def UserFetch(conn: DBConn, *, id: str) -> models.User | None:
     row = (await conn.execute(sqlalchemy.text(USERFETCH), {"p1": id})).first()
     if row is None:
         return None
-    return models.Users(
+    return models.User(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -112,11 +112,11 @@ VALUES ($1, $2, $3, $4)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def UserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.Users | None:
+async def UserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.User | None:
     row = (await conn.execute(sqlalchemy.text(USERCREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step})).first()
     if row is None:
         return None
-    return models.Users(
+    return models.User(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -135,11 +135,11 @@ FROM users
 WHERE email = $1
 """
 
-async def AuthnUserFetchByEmail(conn: DBConn, *, email: str) -> models.Users | None:
+async def AuthnUserFetchByEmail(conn: DBConn, *, email: str) -> models.User | None:
     row = (await conn.execute(sqlalchemy.text(AUTHNUSERFETCHBYEMAIL), {"p1": email})).first()
     if row is None:
         return None
-    return models.Users(
+    return models.User(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -158,11 +158,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
-async def AuthnSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.Sessions | None:
+async def AuthnSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.Session | None:
     row = (await conn.execute(sqlalchemy.text(AUTHNSESSIONCREATE), {"p1": user_id, "p2": organization_id})).first()
     if row is None:
         return None
-    return models.Sessions(
+    return models.Session(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -189,11 +189,11 @@ JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1 AND t.id = $2
 """
 
-async def AuthnLinkedOrganizationFetch(conn: DBConn, *, user_id: str, id: str) -> models.Organizations | None:
+async def AuthnLinkedOrganizationFetch(conn: DBConn, *, user_id: str, id: str) -> models.Organization | None:
     row = (await conn.execute(sqlalchemy.text(AUTHNLINKEDORGANIZATIONFETCH), {"p1": user_id, "p2": id})).first()
     if row is None:
         return None
-    return models.Organizations(
+    return models.Organization(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -212,11 +212,11 @@ ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
 """
 
-async def AuthnMostRecentlyAccessedOrganizationFetch(conn: DBConn, *, user_id: str) -> models.Organizations | None:
+async def AuthnMostRecentlyAccessedOrganizationFetch(conn: DBConn, *, user_id: str) -> models.Organization | None:
     row = (await conn.execute(sqlalchemy.text(AUTHNMOSTRECENTLYACCESSEDORGANIZATIONFETCH), {"p1": user_id})).first()
     if row is None:
         return None
-    return models.Organizations(
+    return models.Organization(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -233,11 +233,11 @@ ORDER BY last_seen_at DESC
 LIMIT 1
 """
 
-async def AuthnSessionFetchByUser(conn: DBConn, *, user_id: str) -> models.Sessions | None:
+async def AuthnSessionFetchByUser(conn: DBConn, *, user_id: str) -> models.Session | None:
     row = (await conn.execute(sqlalchemy.text(AUTHNSESSIONFETCHBYUSER), {"p1": user_id})).first()
     if row is None:
         return None
-    return models.Sessions(
+    return models.Session(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -254,11 +254,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
 """
 
-async def VaultSecretCreate(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecrets | None:
+async def VaultSecretCreate(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecret | None:
     row = (await conn.execute(sqlalchemy.text(VAULTSECRETCREATE), {"p1": organization_id, "p2": ciphertext})).first()
     if row is None:
         return None
-    return models.VaultedSecrets(
+    return models.VaultedSecret(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -273,11 +273,11 @@ FROM vaulted_secrets
 WHERE id = $1
 """
 
-async def VaultSecretFetch(conn: DBConn, *, id: str) -> models.VaultedSecrets | None:
+async def VaultSecretFetch(conn: DBConn, *, id: str) -> models.VaultedSecret | None:
     row = (await conn.execute(sqlalchemy.text(VAULTSECRETFETCH), {"p1": id})).first()
     if row is None:
         return None
-    return models.VaultedSecrets(
+    return models.VaultedSecret(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -303,11 +303,11 @@ AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
 
-async def RpcUnexpiredSessionFetch(conn: DBConn, *, id: str) -> models.Sessions | None:
+async def RpcUnexpiredSessionFetch(conn: DBConn, *, id: str) -> models.Session | None:
     row = (await conn.execute(sqlalchemy.text(RPCUNEXPIREDSESSIONFETCH), {"p1": id})).first()
     if row is None:
         return None
-    return models.Sessions(
+    return models.Session(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -322,10 +322,10 @@ PIPELINEORGANIZATIONIDFETCHALL = """-- name: PipelineOrganizationIDFetchAll :man
 SELECT id FROM organizations ORDER BY id
 """
 
-async def PipelineOrganizationIDFetchAll(conn: DBConn) -> AsyncIterator[models.Organizations]:
+async def PipelineOrganizationIDFetchAll(conn: DBConn) -> AsyncIterator[models.Organization]:
     result = await conn.execute(sqlalchemy.text(PIPELINEORGANIZATIONIDFETCHALL), {})
     async for row in result:
-        yield models.Organizations(
+        yield models.Organization(
             id=row[0],
         )
 
@@ -336,11 +336,11 @@ VALUES ($1, $2, $3, $4, $5)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def TestUserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.Users | None:
+async def TestUserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.User | None:
     row = (await conn.execute(sqlalchemy.text(TESTUSERCREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step, "p5": is_enabled})).first()
     if row is None:
         return None
-    return models.Users(
+    return models.User(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -359,11 +359,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
-async def TestOrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organizations | None:
+async def TestOrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization | None:
     row = (await conn.execute(sqlalchemy.text(TESTORGANIZATIONCREATE), {"p1": name, "p2": inbound_source})).first()
     if row is None:
         return None
-    return models.Organizations(
+    return models.Organization(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -378,11 +378,11 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
-async def TestOrganizationUserCreate(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUsers | None:
+async def TestOrganizationUserCreate(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUser | None:
     row = (await conn.execute(sqlalchemy.text(TESTORGANIZATIONUSERCREATE), {"p1": user_id, "p2": organization_id})).first()
     if row is None:
         return None
-    return models.OrganizationsUsers(
+    return models.OrganizationsUser(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
@@ -399,11 +399,11 @@ VALUES ($1, $2, $3, $4)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
-async def TestSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.Sessions | None:
+async def TestSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.Session | None:
     row = (await conn.execute(sqlalchemy.text(TESTSESSIONCREATE), {"p1": user_id, "p2": organization_id, "p3": expired_at, "p4": last_seen_at})).first()
     if row is None:
         return None
-    return models.Sessions(
+    return models.Session(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],

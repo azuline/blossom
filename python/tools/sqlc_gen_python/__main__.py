@@ -154,9 +154,15 @@ def generate_models(catalog: Catalog) -> str:
     # Prepare template data
     tables = []
     for schema in catalog.schemas:
+        # Filter out non-public schema tables
+        if schema.name != "public":
+            continue
+
         for table in schema.tables:
+            # De-pluralize table name for class name
+            singular_name = _depluralize_table_name(table.rel.name)
             table_data = {
-                "class_name": _to_pascal_case(table.rel.name),
+                "class_name": _to_pascal_case(singular_name),
                 "columns": [{"name": column.name, "python_type": map_postgres_type_to_python(column)} for column in table.columns],
             }
             tables.append(table_data)
@@ -169,6 +175,21 @@ def generate_models(catalog: Catalog) -> str:
 def _to_pascal_case(snake_str: str) -> str:
     """Convert snake_case to PascalCase."""
     return "".join(word.capitalize() for word in snake_str.split("_"))
+
+
+def _depluralize_table_name(table_name: str) -> str:
+    """Convert plural table names to singular model names."""
+    # Simple rules for common English pluralization patterns
+    if table_name.endswith("ies"):
+        return table_name[:-3] + "y"  # companies -> company
+    elif table_name.endswith("ves"):
+        return table_name[:-3] + "f"  # wolves -> wolf
+    elif table_name.endswith(("ses", "ches", "xes")):
+        return table_name[:-2]  # boxes -> box, watches -> watch
+    elif table_name.endswith("s") and not table_name.endswith("ss"):
+        return table_name[:-1]  # users -> user, but pass -> pass
+    else:
+        return table_name  # already singular or unknown pattern
 
 
 def generate_queries(queries: list[Query]) -> str:
@@ -245,12 +266,14 @@ def _infer_model_name(query: Query) -> str:
     """Infer model name from query columns or table."""
     # Try to get from insert_into_table first
     if query.insert_into_table and query.insert_into_table.name:
-        return _to_pascal_case(query.insert_into_table.name)
+        singular_name = _depluralize_table_name(query.insert_into_table.name)
+        return _to_pascal_case(singular_name)
 
     # Try to infer from first column's table
     for column in query.columns:
         if column.table and column.table.name:
-            return _to_pascal_case(column.table.name)
+            singular_name = _depluralize_table_name(column.table.name)
+            return _to_pascal_case(singular_name)
 
     # Fallback: use query name
     return _to_pascal_case(query.name.replace("_", ""))

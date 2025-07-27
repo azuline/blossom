@@ -46,16 +46,34 @@ class BaseError(Exception):
 
 
 class ImpossibleError(BaseError):
-    """
-    Errors that are used to indicate an impossible code path. Always indicates a mistaken assumption
-    and subsequent bug.
-    """
+    """Errors that are used to indicate an impossible code path. Always indicates a mistaken assumption and subsequent bug."""
 
 
 class ConfigurationError(BaseError):
-    """
-    This error is raised when something is wrong with the configuration.
-    """
+    """This error is raised when something is wrong with the configuration."""
+
+
+@dataclasses.dataclass(slots=True)
+class RPCError(BaseError):
+    """This is the base error class for all errors returned from the RPC system."""
+
+    def __post_init__(self) -> None:
+        self.message = self.__class__.__name__
+
+    def serialize(self) -> dict[str, Any]:
+        return {"error": self.__class__.__name__, "data": dataclasses.asdict(self)}
+
+
+@dataclasses.dataclass(slots=True)
+class NotFoundError(RPCError):
+    """This error is raised when a resource is not found. Integrated with the RPC system."""
+
+    resource: str
+    key_name: str
+    key_value: str
+
+    def __post_init__(self) -> None:
+        self.message = f"{self.resource} with {self.key_name}={self.key_value} was not found"
 
 
 class suppress_error(contextlib.AbstractContextManager):

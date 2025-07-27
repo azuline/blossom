@@ -59,4 +59,16 @@
   - Maintain exact same output format for backward compatibility
   - All tests pass with deterministic string comparisons
 
+## ✅ BONUS: Schema Filtering and Name De-pluralization
+- [x] Filter out non-public schema tables from code generation
+  - Only include tables from "public" schema in generated models
+  - Skip all tables from other schemas (internal, etc.)
+- [x] De-pluralize table names for model class names
+  - Implement `_depluralize_table_name()` with common English patterns
+  - Handle: companies→Company, users→User, boxes→Box, etc.
+  - Apply de-pluralization to both model generation and query inference
+- [x] Update tests to reflect schema filtering and de-pluralization
+  - Updated existing tests to expect singular model names
+  - Added comprehensive test for both filtering and de-pluralization features
+
 Each milestone includes focused unit tests and can be completed independently.
