@@ -9,4 +9,4 @@ sql:
 plugins:
   - name: "py"
     process: { cmd: "sqlc-gen-python" }
-    env: [ "MONOREPO_ROOT", "PATH", "LD_LIBRARY_PATH", "PYTHONPATH", "VIRTUAL_ENV" ]
+    env: [ "MONOREPO_ROOT", "PATH", "LD_LIBRARY_PATH", "PYTHONPATH", "VIRTUAL_ENV", "DATABASE_URI" ]

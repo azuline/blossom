@@ -1,6 +1,7 @@
 """Run SQLc codegen using a test database."""
 
 import asyncio
+import os
 import re
 import shutil
 import subprocess
@@ -47,6 +48,8 @@ async def main():
             config["sql"][0]["database"]["uri"] = ENV.database_uri
             with Path(tmp_config.name).open("w") as tmp:
                 yaml.dump(config, tmp, default_flow_style=False)
+            # Set DATABASE_URI for the generation plugin.
+            os.environ["DATABASE_URI"] = ENV.database_uri
 
             logger.info("validating database queries")
             subprocess.run(["sqlc", "vet", "-f", tmp_config.name], check=True)
