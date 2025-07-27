@@ -123,13 +123,13 @@
   - Add unit tests for partial model generation with various query patterns
   - Ensure backward compatibility with existing full-model queries (test passes)
 
-## Milestone 13: Batch Operations Support (:batch*)
-- [ ] Add support for `executemany` using psycopg (drop down) to implement `:batch*` for sqlc
+## ✅ Milestone 13: Batch Operations Support (:batch*)
+- [x] Add support for `executemany` using psycopg (drop down) to implement `:batch*` for sqlc
   - Parse `:batchexec`, `:batchone`, `:batchmany` query annotations
   - Generate functions that use psycopg's `executemany()` for batch operations
-  - Handle parameter lists for batch operations
+  - Handle parameter lists for batch operations (using `list[dict[str, Any]]` parameter type)
   - Implement proper return types for each batch operation type
-  - Add comprehensive tests for all batch operation variants
+  - Add comprehensive tests for all batch operation variants including custom dataclass generation
   - Reference: https://docs.sqlc.dev/en/latest/reference/query-annotations.html#batchexec
 
 Each milestone includes focused unit tests and can be completed independently.

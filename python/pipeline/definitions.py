@@ -1,7 +1,6 @@
 import asyncio
 
 import dagster
-import sqlalchemy
 
 from database.xact import xact_admin
 from foundation.observability.metrics import metric_count_and_time

@@ -14,7 +14,7 @@ async def test_bulk_inserts() -> None:
         f"test_org_{secrets.token_hex(8)}",
         f"test_org_{secrets.token_hex(8)}",
     ]
-    
+
     # Prepare test data
     test_data = [
         TestBulkInsertsData(name=org_names[0], inbound_source="organic"),
@@ -27,15 +27,11 @@ async def test_bulk_inserts() -> None:
         await query_test_bulk_inserts(conn, test_data)
 
         # Verify the specific rows exist by querying for our random names
-        cursor = await conn.execute(
-            text("SELECT name, inbound_source FROM organizations WHERE name = ANY(:names)"),
-            {"names": org_names}
-        )
+        cursor = await conn.execute(text("SELECT name, inbound_source FROM organizations WHERE name = ANY(:names)"), {"names": org_names})
         rows = cursor.fetchall()
 
         assert len(rows) == 3
         # Use sets for comparison
-        expected = {(name, source) for name, source in zip(org_names, ["organic", "referral", "outreach"])}
+        expected = {(name, source) for name, source in zip(org_names, ["organic", "referral", "outreach"], strict=False)}
         actual = set(rows)
         assert actual == expected
-

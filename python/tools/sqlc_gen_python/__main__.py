@@ -56,6 +56,14 @@ class {{ query.copyfrom_dataclass_name }}:
 {%- endfor %}
 
 {% endif -%}
+{%- if query.cmd.startswith(":batch") -%}
+@dataclasses.dataclass(slots=True)
+class {{ query.batch_dataclass_name }}:
+{%- for param in query.batch_params %}
+    {{ param.name }}: {{ param.python_type }}
+{%- endfor %}
+
+{% endif -%}
 {%- if query.needs_custom_dataclass -%}
 @dataclasses.dataclass(slots=True)
 class {{ query.custom_dataclass_name }}:
@@ -105,6 +113,54 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
         )
 {%- else %}
         yield row
+{%- endif %}
+{%- elif query.cmd == ":batchexec" %}
+    # Use psycopg connection for batch execution
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
+{%- elif query.cmd == ":batchone" %}
+    # Use psycopg connection for batch execution returning one result per batch
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
+        results = await cursor.fetchall()
+        for row in results:
+{%- if query.columns %}
+            {%- if query.needs_custom_dataclass %}
+            yield {{ query.custom_dataclass_name }}(
+            {%- else %}
+            yield models.{{ query.model_name }}(
+            {%- endif %}
+{%- for column in query.columns %}
+                {{ column.name }}=row[{{ loop.index0 }}],
+{%- endfor %}
+            )
+{%- else %}
+            yield row
+{%- endif %}
+{%- elif query.cmd == ":batchmany" %}
+    # Use psycopg connection for batch execution returning many results per batch
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
+        results = await cursor.fetchall()
+        for row in results:
+{%- if query.columns %}
+            {%- if query.needs_custom_dataclass %}
+            yield {{ query.custom_dataclass_name }}(
+            {%- else %}
+            yield models.{{ query.model_name }}(
+            {%- endif %}
+{%- for column in query.columns %}
+                {{ column.name }}=row[{{ loop.index0 }}],
+{%- endfor %}
+            )
+{%- else %}
+            yield row
 {%- endif %}
 {%- elif query.cmd == ":copyfrom" %}
     # Use psycopg connection for bulk insert via COPY FROM
@@ -296,6 +352,19 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
         dataclass_name = get_copyfrom_dataclass_name(query)
         return f"list[{dataclass_name}]"
 
+    def parse_batch_params(query: Query) -> list[dict[str, str]]:
+        """Extract parameters for batch operations."""
+        if not query.cmd.startswith(":batch"):
+            return []
+        return [{"name": param.column.name, "python_type": _map_postgres_type_to_python(param.column)} for param in query.params]
+
+    def get_batch_dataclass_name(query: Query) -> str:
+        """Generate dataclass name for batch operations."""
+        if not query.cmd.startswith(":batch"):
+            return ""
+        # Convert query name to PascalCase for dataclass name
+        return "".join(word.capitalize() for word in query.name.split("_")) + "Data"
+
     def convert_sql_params(sql: str, params: list[Parameter]) -> str:
         """Convert PostgreSQL positional parameters ($1, $2) to SQLAlchemy named parameters (:p1, :p2, etc.)."""
         # First escape all existing colons to prevent SQLAlchemy from treating them as parameters
@@ -327,6 +396,8 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             "params_signature": (
                 f", data: {get_copyfrom_data_type(query)}"
                 if query.cmd == ":copyfrom"
+                else f", batch_data: list[{get_batch_dataclass_name(query)}]"
+                if query.cmd.startswith(":batch")
                 else (f", *, {', '.join(f'{get_param_name(p)}: {_map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "")
             ),
             "return_type": {
@@ -336,8 +407,18 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
                 if query.columns
                 else "AsyncIterator[Any]",
                 ":copyfrom": "None",
+                ":batchexec": "None",
+                ":batchone": (f"AsyncIterator[{get_model_name(query)}]" if needs_custom_dataclass(query) else f"AsyncIterator[models.{get_model_name(query)}]")
+                if query.columns
+                else "AsyncIterator[Any]",
+                ":batchmany": (f"AsyncIterator[{get_model_name(query)}]" if needs_custom_dataclass(query) else f"AsyncIterator[models.{get_model_name(query)}]")
+                if query.columns
+                else "AsyncIterator[Any]",
             }.get(query.cmd, "Any"),
             "param_dict": "{" + ", ".join(f'"p{p.number}": {get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
+            "batch_param_dict": "{" + ", ".join(f'"p{p.number}": batch_item.{get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
+            "batch_params": parse_batch_params(query),
+            "batch_dataclass_name": get_batch_dataclass_name(query),
             "model_name": get_model_name(query) if query.columns else None,
             "columns": [{"name": col.name, "python_type": _map_postgres_type_to_python(col)} for col in query.columns] if query.columns else None,
             "needs_custom_dataclass": needs_custom_dataclass(query),

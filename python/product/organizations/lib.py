@@ -1,6 +1,6 @@
+from database.__codegen_db__.enums import OrganizationsInboundSourceEnum
 from database.__codegen_db__.models import OrganizationModel, OrganizationsUserModel
 from database.conn import DBConn
-from database.enums import OrganizationsInboundSourceEnum
 from foundation.observability.errors import BaseError, NotFoundError
 from product.organizations.__codegen_db__.queries import query_organization_create, query_organization_fetch, query_organization_user_add
 from product.users.__codegen_db__.queries import query_user_fetch
