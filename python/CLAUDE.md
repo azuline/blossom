@@ -16,6 +16,24 @@ just lint
 just test
 ```
 
+For test failures with detailed diff output:
+
+```bash
+just test -vv
+```
+
+## Testing multiline strings
+
+Assert on entire multiline strings using triple quotes:
+
+```python
+assert queries_code == """expected
+multiline
+content"""
+```
+
+NOT individual line assertions.
+
 If the Dagster pipeline (`pipeline` DAG) changes, validate it:
 
 ```bash

@@ -876,17 +876,17 @@ class BatchUpsertProductsData:
     category_id: int
 
 @dataclasses.dataclass(slots=True)
-class BatchUpdateInventoryData:
-    quantity_delta: int
-    product_id: int
-
-@dataclasses.dataclass(slots=True)
 class BatchUpsertProductsResult:
     id: int
     name: str
     price: float
 
-BATCH_UPSERT_USERS = r"""-- name: batch_upsert_users \:batchexec
+@dataclasses.dataclass(slots=True)
+class BatchUpdateInventoryData:
+    quantity_delta: int
+    product_id: int
+
+BATCH_UPSERT_USERS = r"""-- name: batch_upsert_users \\:batchexec
 INSERT INTO users (name, email) VALUES (:p1, :p2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
 """
 
@@ -897,7 +897,7 @@ async def query_batch_upsert_users(conn: DBConn, batch_data: list[BatchUpsertUse
     async with raw_conn.driver_connection.cursor() as cursor:
         await cursor.executemany(BATCH_UPSERT_USERS, [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
 
-BATCH_UPSERT_PRODUCTS = r"""-- name: batch_upsert_products \:batchone
+BATCH_UPSERT_PRODUCTS = r"""-- name: batch_upsert_products \\:batchone
 INSERT INTO products (name, price, category_id) VALUES (:p1, :p2, :p3) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price
 """
 
@@ -915,7 +915,7 @@ async def query_batch_upsert_products(conn: DBConn, batch_data: list[BatchUpsert
                 price=row[2],
             )
 
-BATCH_UPDATE_INVENTORY = r"""-- name: batch_update_inventory \:batchmany
+BATCH_UPDATE_INVENTORY = r"""-- name: batch_update_inventory \\:batchmany
 UPDATE inventory SET quantity = quantity + :p1 WHERE product_id = :p2 RETURNING product_id, quantity
 """
 
