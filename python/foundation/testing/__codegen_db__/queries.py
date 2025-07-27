@@ -12,7 +12,7 @@ VALUES ($1, $2, $3, $4, $5)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def test_user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.UserModel:
+async def query_test_user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.UserModel:
     row = (await conn.execute(sqlalchemy.text(TEST_USER_CREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step, "p5": is_enabled})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="name", key_value=str(name))
@@ -35,7 +35,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
-async def test_organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.OrganizationModel:
+async def query_test_organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.OrganizationModel:
     row = (await conn.execute(sqlalchemy.text(TEST_ORGANIZATION_CREATE), {"p1": name, "p2": inbound_source})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
@@ -54,7 +54,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
-async def test_organization_user_create(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUserModel:
+async def query_test_organization_user_create(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUserModel:
     row = (await conn.execute(sqlalchemy.text(TEST_ORGANIZATION_USER_CREATE), {"p1": user_id, "p2": organization_id})).first()
     if row is None:
         raise NotFoundError(resource="organizationsuser", key_name="user_id", key_value=str(user_id))
@@ -75,7 +75,7 @@ VALUES ($1, $2, $3, $4)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
-async def test_session_create(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.SessionModel:
+async def query_test_session_create(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.SessionModel:
     row = (await conn.execute(sqlalchemy.text(TEST_SESSION_CREATE), {"p1": user_id, "p2": organization_id, "p3": expired_at, "p4": last_seen_at})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))

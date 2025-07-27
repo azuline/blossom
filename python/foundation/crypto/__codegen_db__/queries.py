@@ -12,7 +12,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
 """
 
-async def vault_secret_create(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecretModel:
+async def query_vault_secret_create(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecretModel:
     row = (await conn.execute(sqlalchemy.text(VAULT_SECRET_CREATE), {"p1": organization_id, "p2": ciphertext})).first()
     if row is None:
         raise NotFoundError(resource="vaultedsecret", key_name="organization_id", key_value=str(organization_id))
@@ -31,7 +31,7 @@ FROM vaulted_secrets
 WHERE id = $1
 """
 
-async def vault_secret_fetch(conn: DBConn, *, id: str) -> models.VaultedSecretModel:
+async def query_vault_secret_fetch(conn: DBConn, *, id: str) -> models.VaultedSecretModel:
     row = (await conn.execute(sqlalchemy.text(VAULT_SECRET_FETCH), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="vaultedsecret", key_name="id", key_value=str(id))
@@ -50,6 +50,6 @@ FROM vaulted_secrets
 WHERE id = $1
 """
 
-async def vault_secret_delete(conn: DBConn, *, id: str) -> None:
+async def query_vault_secret_delete(conn: DBConn, *, id: str) -> None:
     await conn.execute(sqlalchemy.text(VAULT_SECRET_DELETE), {"p1": id})
 

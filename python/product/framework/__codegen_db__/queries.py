@@ -14,7 +14,7 @@ AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
 
-async def rpc_unexpired_session_fetch(conn: DBConn, *, id: str) -> models.SessionModel:
+async def query_rpc_unexpired_session_fetch(conn: DBConn, *, id: str) -> models.SessionModel:
     row = (await conn.execute(sqlalchemy.text(RPC_UNEXPIRED_SESSION_FETCH), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="id", key_value=str(id))

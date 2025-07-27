@@ -12,7 +12,7 @@ FROM users
 WHERE email = $1
 """
 
-async def authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models.UserModel:
+async def query_authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models.UserModel:
     row = (await conn.execute(sqlalchemy.text(AUTHN_USER_FETCH_BY_EMAIL), {"p1": email})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="email", key_value=str(email))
@@ -35,7 +35,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
-async def authn_session_create(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.SessionModel:
+async def query_authn_session_create(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.SessionModel:
     row = (await conn.execute(sqlalchemy.text(AUTHN_SESSION_CREATE), {"p1": user_id, "p2": organization_id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))
@@ -56,7 +56,7 @@ SET expired_at = NOW()
 WHERE id = $1
 """
 
-async def authn_session_expire(conn: DBConn, *, id: str) -> None:
+async def query_authn_session_expire(conn: DBConn, *, id: str) -> None:
     await conn.execute(sqlalchemy.text(AUTHN_SESSION_EXPIRE), {"p1": id})
 
 AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch :one
@@ -66,7 +66,7 @@ JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1 AND t.id = $2
 """
 
-async def authn_linked_organization_fetch(conn: DBConn, *, user_id: str, id: str) -> models.OrganizationModel:
+async def query_authn_linked_organization_fetch(conn: DBConn, *, user_id: str, id: str) -> models.OrganizationModel:
     row = (await conn.execute(sqlalchemy.text(AUTHN_LINKED_ORGANIZATION_FETCH), {"p1": user_id, "p2": id})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="user_id", key_value=str(user_id))
@@ -89,7 +89,7 @@ ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
 """
 
-async def authn_most_recently_accessed_organization_fetch(conn: DBConn, *, user_id: str) -> models.OrganizationModel:
+async def query_authn_most_recently_accessed_organization_fetch(conn: DBConn, *, user_id: str) -> models.OrganizationModel:
     row = (await conn.execute(sqlalchemy.text(AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH), {"p1": user_id})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="user_id", key_value=str(user_id))
@@ -110,7 +110,7 @@ ORDER BY last_seen_at DESC
 LIMIT 1
 """
 
-async def authn_session_fetch_by_user(conn: DBConn, *, user_id: str) -> models.SessionModel:
+async def query_authn_session_fetch_by_user(conn: DBConn, *, user_id: str) -> models.SessionModel:
     row = (await conn.execute(sqlalchemy.text(AUTHN_SESSION_FETCH_BY_USER), {"p1": user_id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))

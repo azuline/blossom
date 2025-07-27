@@ -25,9 +25,8 @@ async def main():
     logger.info("cleaning up existing __codegen_db__ directories")
     for codegen_dir in PYTHON_ROOT.rglob("__codegen_db__"):
         if codegen_dir.is_dir():
-            logger.info("removing existing codegen directory", path=str(codegen_dir))
             shutil.rmtree(codegen_dir)
-    
+
     testdb = TestDB()
     out_dir = PYTHON_ROOT / "database/__codegen_db__"
 

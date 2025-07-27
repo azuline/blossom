@@ -12,7 +12,7 @@ FROM organizations
 WHERE id = $1
 """
 
-async def organization_fetch(conn: DBConn, *, id: str) -> models.OrganizationModel:
+async def query_organization_fetch(conn: DBConn, *, id: str) -> models.OrganizationModel:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATION_FETCH), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="id", key_value=str(id))
@@ -31,7 +31,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
-async def organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.OrganizationModel:
+async def query_organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.OrganizationModel:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATION_CREATE), {"p1": name, "p2": inbound_source})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
@@ -50,7 +50,7 @@ VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
-async def organization_user_add(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUserModel:
+async def query_organization_user_add(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUserModel:
     row = (await conn.execute(sqlalchemy.text(ORGANIZATION_USER_ADD), {"p1": organization_id, "p2": user_id})).first()
     if row is None:
         raise NotFoundError(resource="organizationsuser", key_name="organization_id", key_value=str(organization_id))
@@ -72,7 +72,7 @@ JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1
 """
 
-async def organization_fetch_all(conn: DBConn, *, user_id: str) -> AsyncIterator[models.OrganizationModel]:
+async def query_organization_fetch_all(conn: DBConn, *, user_id: str) -> AsyncIterator[models.OrganizationModel]:
     result = await conn.execute(sqlalchemy.text(ORGANIZATION_FETCH_ALL), {"p1": user_id})
     async for row in result:
         yield models.OrganizationModel(

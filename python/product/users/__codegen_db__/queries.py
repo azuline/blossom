@@ -12,7 +12,7 @@ FROM users
 WHERE id = $1
 """
 
-async def user_fetch(conn: DBConn, *, id: str) -> models.UserModel:
+async def query_user_fetch(conn: DBConn, *, id: str) -> models.UserModel:
     row = (await conn.execute(sqlalchemy.text(USER_FETCH), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="id", key_value=str(id))
@@ -35,7 +35,7 @@ VALUES ($1, $2, $3, $4)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.UserModel:
+async def query_user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.UserModel:
     row = (await conn.execute(sqlalchemy.text(USER_CREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="name", key_value=str(name))
