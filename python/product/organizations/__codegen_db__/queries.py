@@ -6,7 +6,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-ORGANIZATION_FETCH = """-- name: organization_fetch :one
+ORGANIZATION_FETCH = r"""-- name: organization_fetch \:one
 SELECT id, created_at, updated_at, storytime, name, inbound_source
 FROM organizations
 WHERE id = :p1
@@ -25,7 +25,7 @@ async def query_organization_fetch(conn: DBConn, *, id: str) -> models.Organizat
         inbound_source=row[5],
     )
 
-ORGANIZATION_CREATE = """-- name: organization_create :one
+ORGANIZATION_CREATE = r"""-- name: organization_create \:one
 INSERT INTO organizations (name, inbound_source)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
@@ -44,7 +44,7 @@ async def query_organization_create(conn: DBConn, *, name: str, inbound_source: 
         inbound_source=row[5],
     )
 
-ORGANIZATION_USER_ADD = """-- name: organization_user_add :one
+ORGANIZATION_USER_ADD = r"""-- name: organization_user_add \:one
 INSERT INTO organizations_users (organization_id, user_id)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
@@ -65,7 +65,7 @@ async def query_organization_user_add(conn: DBConn, *, organization_id: str, use
         removed_by_user=row[7],
     )
 
-ORGANIZATION_FETCH_ALL = """-- name: organization_fetch_all :many
+ORGANIZATION_FETCH_ALL = r"""-- name: organization_fetch_all \:many
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id

@@ -57,7 +57,7 @@ Logs from development and test are written to the `./claude/logs` directory. Tai
 
 ## Database
 
-Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL.
+Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL in Python files.
 
 ## Dataclasses
 

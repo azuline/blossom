@@ -6,7 +6,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-VAULT_SECRET_CREATE = """-- name: vault_secret_create :one
+VAULT_SECRET_CREATE = r"""-- name: vault_secret_create \:one
 INSERT INTO vaulted_secrets (organization_id, ciphertext)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
@@ -25,7 +25,7 @@ async def query_vault_secret_create(conn: DBConn, *, organization_id: str, ciphe
         ciphertext=row[5],
     )
 
-VAULT_SECRET_FETCH = """-- name: vault_secret_fetch :one
+VAULT_SECRET_FETCH = r"""-- name: vault_secret_fetch \:one
 SELECT id, created_at, updated_at, storytime, organization_id, ciphertext
 FROM vaulted_secrets
 WHERE id = :p1
@@ -44,7 +44,7 @@ async def query_vault_secret_fetch(conn: DBConn, *, id: str) -> models.VaultedSe
         ciphertext=row[5],
     )
 
-VAULT_SECRET_DELETE = """-- name: vault_secret_delete :exec
+VAULT_SECRET_DELETE = r"""-- name: vault_secret_delete \:exec
 DELETE
 FROM vaulted_secrets
 WHERE id = :p1

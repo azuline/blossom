@@ -46,7 +46,7 @@ from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
 {% for query in queries -%}
-{{ query.constant_name }} = """-- name: {{ query.name }} {{ query.cmd }}
+{{ query.constant_name }} = r"""-- name: {{ query.name }} \\{{ query.cmd }}
 {{ query.text }}
 """
 
@@ -231,7 +231,9 @@ def generate_queries(queries: list[Query]) -> str:
 
     def convert_sql_params(sql: str, params: list[Parameter]) -> str:
         """Convert PostgreSQL positional parameters ($1, $2) to SQLAlchemy named parameters (:p1, :p2, etc.)."""
-        result = sql
+        # First escape all existing colons to prevent SQLAlchemy from treating them as parameters
+        result = sql.replace(":", "\\:")
+        # Then convert PostgreSQL positional parameters to SQLAlchemy named parameters
         for param in params:
             result = result.replace(f"${param.number}", f":p{param.number}")
         return result
