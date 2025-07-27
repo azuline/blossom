@@ -60,6 +60,9 @@ test-parallel *ARGS:  ## Run the Python test suite in parallel. Supports filenam
     uv run -- pytest -n 2 {{ARGS}}
 test-snapshot *ARGS:  ## Update the cached LLM data in the Python test suite. Supports filename(s) parameters like in `just test`.
     UPDATE_SNAPSHOT=1 uv run -- pytest {{ARGS}}
+coverage:  ## View the test coverage. Prints to console and generates HTML.
+    uv run -- coverage report
+    uv run -- coverage html
 dag-check:  ## Check that the Dagster configuration is valid.
     dg check defs
 diff:
