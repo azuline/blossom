@@ -81,25 +81,28 @@ ALTER TABLE tbl ADD COLUMN col TEXT NOT NULL DEFAULT '';
 ALTER TABLE tbl ALTER COLUMN col DROP DEFAULT;
 ```
 
-# ORM & queries (SQLC)
+# Queries (SQLC)
 
-Write SQL queries in `database/queries.sql`, then regenerate the ORM:
+Write SQL queries in `queries.sql` files in each directory that needs database access, then regenerate the queries:
 
 ```bash
 just codegen-db
 ```
 
-Access the queries with:
+Access the queries by importing the generated functions and passing a connection:
 
 ```python
-async with xact() as q:
-    await q.orm.query_name(**kwargs)
+from directory.__codegen_db__.queries import query_name
+from database.xact import xact_admin
+
+async with xact_admin() as conn:
+    result = await query_name(conn, **kwargs)
 ```
 
 Follow these conventions:
 
-- Avoid `q.conn` and raw SQL except in SQLc edge cases.
-- Prefix test‑only query names with `Test`.
+- Use raw SQL only when necessary; prefer the generated query functions.
+- Prefix test‑only query names with `test_`.
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
-- Name queries as `{Resource}{Action}{Filter}`. For example, `BunniesListAll`, `BunniesGetByID`, `BunniesGetByName`, etc.
+- Name queries as `{resource}_{action}_{filter}`. For example, `user_create`, `user_get_by_id`, `user_list_by_organization`, etc.

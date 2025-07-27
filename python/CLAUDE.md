@@ -244,9 +244,10 @@ Follow these variable naming conventions:
 Import full modules rather than individual functions unless the name is unique or the path is unwieldy. For models:
 
 ```python
-from database.__codegen_db__ import models
-models.Organization
+from database.__codegen_db__.models import OrganizationModel, UserModel
 ```
+
+Since models now have a `Model` suffix, import them directly without the `models.` prefix.
 
 Avoid importing inside functions except to break circular dependencies.
 

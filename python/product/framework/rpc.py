@@ -10,12 +10,16 @@ from typing import Literal
 
 import quart
 
-from database.__codegen_db__ import models
-from database.xact import DBQuerier, xact_admin, xact_customer
-from foundation.observability.errors import ImpossibleError, RPCError
+from database.__codegen_db__.models import OrganizationModel, UserModel
+from database.conn import DBConn
+from database.xact import xact_admin, xact_customer
+from foundation.observability.errors import ImpossibleError, NotFoundError, RPCError
 from foundation.observability.logs import get_logger
 from foundation.observability.spans import tag_current_span
 from foundation.webserver.rpc import MethodEnum, ReqCommon, RPCRoute, rpc_common
+from product.framework.__codegen_db__.queries import query_rpc_unexpired_session_fetch
+from product.organizations.__codegen_db__.queries import query_organization_fetch
+from product.users.__codegen_db__.queries import query_user_fetch
 
 logger = get_logger()
 
@@ -34,9 +38,9 @@ type Authorization = Literal[
 
 @dataclasses.dataclass(slots=True)
 class ReqProduct[In](ReqCommon[In]):
-    q: DBQuerier
-    user: models.User | None
-    organization: models.Organization | None
+    conn: DBConn
+    user: UserModel | None
+    organization: OrganizationModel | None
     data: In
 
 
@@ -78,8 +82,8 @@ def rpc_product[In, Out](
 
             # 2. Set up transaction.
             transaction = xact_customer(user.id, organization.id if authorization == "organization" and organization else None) if user else xact_admin()
-            async with transaction as q:
-                req = ReqProduct(q=q, user=user, organization=organization, data=req.data, raw=req.raw)
+            async with transaction as conn:
+                req = ReqProduct(conn=conn, user=user, organization=organization, data=req.data, raw=req.raw)
                 logger.info("entering request handler in rpc_product", has_user=user is None, has_organization=organization is None)
                 rval = await func(req)
                 logger.info("exited request handler in rpc_product")
@@ -91,7 +95,7 @@ def rpc_product[In, Out](
     return decorator
 
 
-async def _check_session_auth() -> tuple[models.User | None, models.Organization | None]:
+async def _check_session_auth() -> tuple[UserModel | None, OrganizationModel | None]:
     """
     Check the current request's session authentication. If so, fetch the associated user
     and the organization they're logged in as.
@@ -103,18 +107,20 @@ async def _check_session_auth() -> tuple[models.User | None, models.Organization
 
     logger.info(f"Session ID found in session: {session_external_id is not None}")
     if session_external_id:
-        async with xact_admin() as q:
-            session = await q.orm.rpc_unexpired_session_fetch(id=session_external_id)
-            logger.info(f"Session found: {session is not None}")
-            if session is not None:
-                user = await q.orm.user_fetch(id=session.user_id)
+        async with xact_admin() as conn:
+            try:
+                session = await query_rpc_unexpired_session_fetch(conn, id=session_external_id)
+                logger.info("Session found: True")
+                user = await query_user_fetch(conn, id=session.user_id)
                 if session.organization_id is not None:
-                    organization = await q.orm.organization_fetch(id=session.organization_id)
+                    organization = await query_organization_fetch(conn, id=session.organization_id)
+            except NotFoundError:
+                logger.info("Session not found or expired")
 
     return user, organization
 
 
-async def _check_authorization(authorization: Authorization, user: models.User | None, organization: models.Organization | None) -> bool:
+async def _check_authorization(authorization: Authorization, user: UserModel | None, organization: OrganizationModel | None) -> bool:
     """
     Validate that the user is authorized to submit a request this endpoint. For now, we
     only check the existence of a user, but this function can be expanded to RBAC

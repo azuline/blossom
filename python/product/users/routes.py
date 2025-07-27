@@ -4,6 +4,7 @@ import dataclasses
 
 from database.xact import xact_admin
 from product.framework.rpc import ReqProduct, rpc_product
+from product.organizations.__codegen_db__.queries import query_organization_fetch_all
 
 
 @dataclasses.dataclass(slots=True)
@@ -37,8 +38,8 @@ async def init(req: ReqProduct[None]) -> GetPageLoadInfoOut:
 
     # By default, our Row Level Security only allow for the active organization to be read. So we need to
     # drop to admin to read all available organizations.
-    async with xact_admin() as q:
-        available_organizations = [x async for x in q.orm.organization_fetch_all(user_id=req.user.id)]
+    async with xact_admin() as conn:
+        available_organizations = [x async for x in query_organization_fetch_all(conn, user_id=req.user.id)]
 
     return GetPageLoadInfoOut(
         user=GetPageLoadInfoUser(id=req.user.id, name=req.user.name, email=req.user.email),

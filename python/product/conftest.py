@@ -5,7 +5,7 @@ import dataclasses
 import pytest
 from syrupy.assertion import SnapshotAssertion
 
-from database.__codegen_db__ import models
+from database.__codegen_db__.models import OrganizationModel, UserModel
 from foundation.observability.logs import get_logger
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory
@@ -20,7 +20,7 @@ logger = get_logger()
 class TestRPCProduct(TestRPC):
     __test__ = False
 
-    async def login_as(self, user: models.User, organization: models.Organization | None = None) -> None:
+    async def login_as(self, user: UserModel, organization: OrganizationModel | None = None) -> None:
         logger.debug("setting session to user", user_id=user.id, user_email=user.email)
         async with (await self.underlying_client()).session_transaction() as quart_sess:
             session = await self._factory.session(user=user, organization=organization)
