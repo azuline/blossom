@@ -40,7 +40,23 @@ def create_webserver(router: RPCRouter) -> quart.Quart:
 
 
 def start_webserver(app: str, host: str, port: int) -> None:  # pragma: no cover
-    subprocess.run(["hypercorn", app, "--bind", f"{host}:{port}", "--graceful-timeout", "30", "--worker-class", "uvloop", "--workers", str(ENV.webserver_num_workers)], check=True)
+    subprocess.run(
+        [
+            "hypercorn",
+            app,
+            "--bind",
+            f"{host}:{port}",
+            "--graceful-timeout",
+            "30",
+            "--statsd-host",
+            f"{ENV.datadog_agent_host}:8125",
+            "--worker-class",
+            "uvloop",
+            "--workers",
+            str(ENV.webserver_num_workers),
+        ],
+        check=True,
+    )
 
 
 def _ping_handler() -> quart.Response:

@@ -1,0 +1,16 @@
+{
+	"mcpServers": {
+		"mcp-language-server": {
+			"command": "mcp-language-server",
+			"args": [
+				"--workspace",
+				".",
+				"--lsp",
+				"pyright-langserver",
+				"--",
+				"--stdio"
+			],
+			"env": {}
+		}
+	}
+}

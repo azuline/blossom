@@ -23,21 +23,21 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci
       - name: Install Dependencies
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command pnpm install
       - name: Typecheck
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just typecheck
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just typecheck
       - name: Test
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just test
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just test
       - name: Lintcheck
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just lintcheck
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just lintcheck
       - name: Build
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just build-app
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just build-app
   visual:
     runs-on: ubuntu-latest
     env:
@@ -50,12 +50,12 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci
       - name: Install Dependencies
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command pnpm install
       - name: Visual Tests
         if: success() || failure()
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just test-visual
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just test-visual
   build-ladle:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -73,13 +73,13 @@ jobs:
           name: blossom
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Build Nix
-        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript
+        run: nix build -j8 ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci
       - name: Install Dependencies
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command pnpm install
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command pnpm install
       - name: Build Ladle
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command just build-stories
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command just build-stories
       - name: Create Tarball
-        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
+        run: nix develop ../infra/dev-shell/#devShells.x86_64-linux.typescript-ci --command bash -c '(cd ./stories/build && tar -czvf ../../ladle.tar.gz *)'
       - name: Create release and upload tarball
         id: upload
         run: |

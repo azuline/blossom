@@ -14,7 +14,7 @@ tags
 .*_cache
 
 .coverage
-.coverage.*
+coverage.*
 htmlcov
 
 result

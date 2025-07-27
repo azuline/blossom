@@ -7,6 +7,10 @@
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    mcp-language-server-src = {
+      url = "github:isaacphi/mcp-language-server";
+      flake = false;
+    };
   };
   outputs =
     {
@@ -14,6 +18,7 @@
       nixpkgs,
       flake-utils,
       pgmigrate-src,
+      mcp-language-server-src,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -21,7 +26,20 @@
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
-          overlays = [ (self: super: { pgmigrate = pgmigrate-src.packages.${system}.default; }) ];
+          overlays = [
+            (self: super: {
+              pgmigrate = pgmigrate-src.packages.${system}.default;
+              mcp-lsp-server = super.buildGoModule {
+                pname = "mcp-language-server";
+                version = "0.1.0";
+                src = mcp-language-server-src;
+                vendorHash = "sha256-5YUI1IujtJJBfxsT9KZVVFVib1cK/Alk73y5tqxi6pQ=";
+                proxyVendor = true;
+                subPackages = [ "." ];
+              };
+
+            })
+          ];
         };
         makeDevShell =
           {
@@ -53,12 +71,15 @@
             moreutils
             findutils
             docker
-            fd
             gnutar
             jq
             just
-            ripgrep
             (lib.hiPrio parallel-full) # parallel is also part of moreutils; have GNU parallel take priority.
+          ];
+          local = [
+            fd
+            mcp-language-server
+            ripgrep
           ];
           python = [
             biome # For frontend codegen.
@@ -89,15 +110,15 @@
             name = "blossom-default";
             packages = with toolchains; general ++ python ++ typescript ++ infra;
           };
-          python = makeDevShell {
+          python-ci = makeDevShell {
             name = "blossom-python";
             packages = with toolchains; general ++ python;
           };
-          typescript = makeDevShell {
+          typescript-ci = makeDevShell {
             name = "blossom-typescript";
             packages = with toolchains; general ++ typescript;
           };
-          infra = makeDevShell {
+          infra-ci = makeDevShell {
             name = "blossom-infra";
             packages = with toolchains; general ++ infra;
           };

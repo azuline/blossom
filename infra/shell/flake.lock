@@ -52,6 +52,22 @@
         "type": "github"
       }
     },
+    "mcp-language-server-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1748975355,
+        "narHash": "sha256-INyzT/8UyJfg1PW5+PqZkIy/MZrDYykql0rD2Sl97Gg=",
+        "owner": "isaacphi",
+        "repo": "mcp-language-server",
+        "rev": "e4395849a52e18555361abab60a060802c06bf50",
+        "type": "github"
+      },
+      "original": {
+        "owner": "isaacphi",
+        "repo": "mcp-language-server",
+        "type": "github"
+      }
+    },
     "nix-filter": {
       "locked": {
         "lastModified": 1710156097,
@@ -109,6 +125,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "mcp-language-server-src": "mcp-language-server-src",
         "nixpkgs": "nixpkgs",
         "pgmigrate-src": "pgmigrate-src"
       }
