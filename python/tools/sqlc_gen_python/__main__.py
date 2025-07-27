@@ -18,6 +18,10 @@ import dataclasses
 import datetime
 from typing import Any
 
+{% if has_enums -%}
+from database.__codegen__ import enums
+{% endif -%}
+
 {% for table in tables -%}
 @dataclasses.dataclass(slots=True)
 class {{ table.class_name }}:
@@ -134,10 +138,26 @@ POSTGRES_TO_PYTHON_TYPES = {
 }
 
 
-def map_postgres_type_to_python(column: Column) -> str:
+def map_postgres_type_to_python(column: Column, enum_tables: dict[str, str] | None = None) -> str:
     """Convert PostgreSQL column type to Python type annotation."""
     # Get the base type name
     type_name = column.type.name.lower()
+
+    # Check if this column references an enum table via foreign key
+    if enum_tables:
+        # Look for foreign key relationships to enum tables
+        # This is heuristic-based matching since we don't have explicit FK info
+        for enum_table, enum_type in enum_tables.items():
+            # Check if column name suggests it references this enum
+            enum_base = enum_table.replace("_enum", "")
+            if (
+                column.name == enum_base
+                or column.name.endswith(f"_{enum_base}")
+            ):
+                python_type = f"enums.{enum_type}"
+                if not column.not_null:
+                    python_type = f"{python_type} | None"
+                return python_type
 
     # Handle array types
     if column.is_array or column.array_dims > 0:
@@ -167,6 +187,17 @@ def serialize_response(response: GenerateResponse) -> None:
 
 def generate_models(catalog: Catalog) -> str:
     """Generate Python dataclass models from database catalog."""
+    # First, build a mapping of enum tables to their type names
+    enum_tables = {}
+    for schema in catalog.schemas:
+        if schema.name != "public":
+            continue
+        for table in schema.tables:
+            if table.rel.name.endswith("_enum"):
+                base_name = table.rel.name[:-5]  # Remove "_enum"
+                type_name = _to_pascal_case(base_name) + "Enum"
+                enum_tables[table.rel.name] = type_name
+
     # Prepare template data
     tables = []
     for schema in catalog.schemas:
@@ -183,13 +214,13 @@ def generate_models(catalog: Catalog) -> str:
             singular_name = _depluralize_table_name(table.rel.name)
             table_data = {
                 "class_name": _to_pascal_case(singular_name),
-                "columns": [{"name": column.name, "python_type": map_postgres_type_to_python(column)} for column in table.columns],
+                "columns": [{"name": column.name, "python_type": map_postgres_type_to_python(column, enum_tables)} for column in table.columns],
             }
             tables.append(table_data)
 
     # Render template
     template = jinja2.Template(MODELS_TEMPLATE)
-    return template.render(tables=tables)
+    return template.render(tables=tables, has_enums=bool(enum_tables))
 
 
 async def generate_enums(catalog: Catalog) -> str:
