@@ -262,37 +262,13 @@ async def generate_enums(catalog: Catalog) -> str:
     return jinja2.Template(ENUMS_TEMPLATE).render(enums=enums)
 
 
-def _is_full_model_query(query: Query, catalog: Catalog) -> tuple[bool, str | None]:
-    """Check if query returns all columns from a single table.
-
-    Returns (is_full_model, table_name) where is_full_model indicates
-    if the query selects ALL columns from a single table.
-    """
-    if not query.columns:
-        return False, None
-
-    # Group columns by table
-    table_columns = defaultdict(list)
-    for col in query.columns:
-        if col.table and col.table.name:
-            table_columns[col.table.name].append(col.name)
-
-    # Only consider single-table queries
-    if len(table_columns) != 1:
-        return False, None
-
-    table_name = next(iter(table_columns.keys()))
-    selected_columns = set(table_columns[table_name])
-
-    # Find the table schema to compare column counts
-    for schema in catalog.schemas:
-        if schema.name == "public":
-            for table in schema.tables:
-                if table.rel.name == table_name:
-                    all_columns = {col.name for col in table.columns}
-                    return selected_columns == all_columns, table_name
-
-    return False, table_name
+def _does_query_return_model(query: Query, catalog: Catalog) -> str | None:
+    if query.columns and len({c.table.name for c in query.columns}) == 1:
+        table_name = query.columns[0].table.name
+        table_def = next(t for s in catalog.schemas for t in s.tables if t.rel.name == table_name)
+        if {c.name for c in query.columns} == {c.name for c in table_def.columns}:
+            return table_name
+    return None
 
 
 def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> str:
@@ -332,25 +308,15 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
     def get_model_name(query: Query) -> str:
         if query.insert_into_table and query.insert_into_table.name:
             return "".join(w.capitalize() for w in _depluralize_table_name(query.insert_into_table.name).split("_")) + "Model"
-
-        # Check if this is a full model query
-        if catalog and query.columns:
-            is_full, table_name = _is_full_model_query(query, catalog)
-            if is_full and table_name:
-                return "".join(word.capitalize() for word in _depluralize_table_name(table_name).split("_")) + "Model"
-
-        # For partial queries, use a custom dataclass name
-        base_name = "".join(word.capitalize() for word in query.name.split("_"))
-        return f"{base_name}Result"
+        if catalog and query.columns and (table_name := _does_query_return_model(query, catalog)):
+            return "".join(word.capitalize() for word in _depluralize_table_name(table_name).split("_")) + "Model"
+        return f"{''.join(word.capitalize() for word in query.name.split('_'))}Result"
 
     def needs_custom_dataclass(query: Query) -> bool:
         """Check if query needs a custom dataclass for partial results."""
-        if not query.columns or query.cmd == ":copyfrom":
+        if not query.columns or query.cmd == ":copyfrom" or not catalog:
             return False
-        if not catalog:
-            return False
-        is_full, _ = _is_full_model_query(query, catalog)
-        return not is_full
+        return not _does_query_return_model(query, catalog)
 
     query_data = [
         {
