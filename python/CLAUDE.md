@@ -244,7 +244,7 @@ Follow these variable naming conventions:
 Import full modules rather than individual functions unless the name is unique or the path is unwieldy. For models:
 
 ```python
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 models.Organization
 ```
 

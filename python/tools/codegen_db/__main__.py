@@ -21,8 +21,15 @@ logger = get_logger()
 
 async def main():
     """Run SQLc codegen."""
+    # Clean up all existing __codegen_db__ directories
+    logger.info("cleaning up existing __codegen_db__ directories")
+    for codegen_dir in PYTHON_ROOT.rglob("__codegen_db__"):
+        if codegen_dir.is_dir():
+            logger.info("removing existing codegen directory", path=str(codegen_dir))
+            shutil.rmtree(codegen_dir)
+    
     testdb = TestDB()
-    out_dir = PYTHON_ROOT / "database/__codegen__"
+    out_dir = PYTHON_ROOT / "database/__codegen_db__"
 
     db_name = await testdb.create_db()
     original_database_uri = ENV.database_uri

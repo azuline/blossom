@@ -71,7 +71,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", ".*_cache", ".tach", "**/__codegen__", "claude", "./tools/sqlc_gen_python/proto.py"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen_db__", "claude", "./tools/sqlc_gen_python/proto.py"]
 target-version = "py313"
 preview = true
 

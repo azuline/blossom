@@ -5,7 +5,7 @@ import dataclasses
 import pytest
 from syrupy.assertion import SnapshotAssertion
 
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 from foundation.observability.logs import get_logger
 from foundation.testing.errors import TestErrors
 from foundation.testing.factory import TestFactory

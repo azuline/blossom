@@ -2,7 +2,7 @@ import contextlib
 import dataclasses
 from collections.abc import AsyncGenerator
 
-from database.__codegen__.queries import AsyncQuerier
+from database.__codegen_db__.queries import AsyncQuerier
 from database.conn import DBConn, DBConnPool, connect_db_admin, connect_db_customer
 from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_increment

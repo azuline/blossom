@@ -7,6 +7,10 @@
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sqlc-src = {
+      url = "github:azuline/sqlc";
+      flake = false;
+    };
     mcp-language-server-src = {
       url = "github:isaacphi/mcp-language-server";
       flake = false;
@@ -18,6 +22,7 @@
       nixpkgs,
       flake-utils,
       pgmigrate-src,
+      sqlc-src,
       mcp-language-server-src,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -29,6 +34,10 @@
           overlays = [
             (self: super: {
               pgmigrate = pgmigrate-src.packages.${system}.default;
+              sqlc = super.sqlc.overrideAttrs {
+                src = sqlc-src;
+                vendorHash = "sha256-JIbSagv5JP7pMaGpy/2y1LvMGv2WKjPLxUOirZOcpL0=";
+              };
               mcp-lsp-server = super.buildGoModule {
                 pname = "mcp-language-server";
                 version = "0.1.0";

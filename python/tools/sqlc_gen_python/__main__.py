@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Generate proto.py with:
+# python -m grpc_tools.protoc -I tools/sqlc_gen_python --python_betterproto_out=tools/sqlc_gen_python
+
 import asyncio
 import itertools
 import sys
@@ -20,7 +23,7 @@ import datetime
 from typing import Any
 
 {% if has_enums -%}
-from database.__codegen__ import enums
+from database.__codegen_db__ import enums
 {% endif -%}
 
 {% for table in tables -%}
@@ -39,7 +42,7 @@ import datetime
 from typing import AsyncIterator
 import sqlalchemy
 from database.conn import DBConn
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
 {% for query in queries -%}
@@ -268,22 +271,30 @@ async def _main_coro() -> None:
 
     # Models
     models_content = await generate_models(request.catalog)
-    response.files.append(File(name="database/__codegen__/models.py", contents=models_content.encode("utf-8")))
+    response.files.append(File(name="database/__codegen_db__/models.py", contents=models_content.encode("utf-8")))
 
     # Enums
     enums_content = await generate_enums(request.catalog)
-    response.files.append(File(name="database/__codegen__/enums.py", contents=enums_content.encode("utf-8")))
+    response.files.append(File(name="database/__codegen_db__/enums.py", contents=enums_content.encode("utf-8")))
 
     # Queries.
-    queries_by_filename = defaultdict(list)
+    queries_by_filepath = defaultdict(list)
     for query in request.queries:
-        queries_by_filename[query.filename].append(query)
-    for filename, queries in queries_by_filename.items():
-        sql_path = Path(filename)
+        queries_by_filepath[query.filepath].append(query)
+    cwd = str(Path.cwd().absolute())
+    for filepath, queries in queries_by_filepath.items():
+        sql_path = Path(filepath)
         assert sql_path.name == "queries.sql"
-        output_path = sql_path.parent / "__generated__" / "queries.py"
+        output_dir = sql_path.parent / "__codegen_db__"
+        output_path = output_dir / "queries.py"
+        
+        # Add empty __init__.py to make the directory a Python package
+        init_path = output_dir / "__init__.py"
+        response.files.append(File(name=str(init_path).removeprefix(cwd), contents=b""))
+        
+        # Add queries.py file
         queries_content = generate_queries(queries)
-        response.files.append(File(name=str(output_path), contents=queries_content.encode("utf-8")))
+        response.files.append(File(name=str(output_path).removeprefix(cwd), contents=queries_content.encode("utf-8")))
 
     # Respond
     sys.stdout.buffer.write(bytes(response))

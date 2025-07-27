@@ -74,8 +74,8 @@ def test_cli_basic_functionality():
 
     # Verify response structure and exact content
     assert len(response.files) == 2
-    assert response.files[0].name == "database/__codegen__/models.py"
-    assert response.files[1].name == "database/__codegen__/enums.py"
+    assert response.files[0].name == "database/__codegen_db__/models.py"
+    assert response.files[1].name == "database/__codegen_db__/enums.py"
 
     # Check exact models.py content (empty catalog should produce minimal output)
     expected_models = """\
@@ -107,8 +107,8 @@ def test_cli_with_service_method():
 
     response = GenerateResponse().parse(result.stdout_bytes)
     assert len(response.files) == 2
-    assert response.files[0].name == "database/__codegen__/models.py"
-    assert response.files[1].name == "database/__codegen__/enums.py"
+    assert response.files[0].name == "database/__codegen_db__/models.py"
+    assert response.files[1].name == "database/__codegen_db__/enums.py"
 
 
 async def test_model_generation():
@@ -202,7 +202,7 @@ import datetime
 from typing import AsyncIterator
 import sqlalchemy
 from database.conn import DBConn
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
 GET_USER = """-- name: get_user :one
@@ -333,7 +333,7 @@ import dataclasses
 import datetime
 from typing import Any
 
-from database.__codegen__ import enums
+from database.__codegen_db__ import enums
 @dataclasses.dataclass(slots=True)
 class UserModel:
     id: int
@@ -431,7 +431,7 @@ import dataclasses
 import datetime
 from typing import Any
 
-from database.__codegen__ import enums
+from database.__codegen_db__ import enums
 @dataclasses.dataclass(slots=True)
 class TestUserModel:
     id: int
@@ -451,12 +451,12 @@ def test_query_grouping_by_filename():
     """Test that queries are grouped by filename and generate separate query files."""
     runner = CliRunner()
 
-    # Create queries with different filenames
+    # Create queries with different filepaths
     queries = [
-        Query(name="get_user", text="SELECT * FROM users WHERE id = $1", cmd=":one", filename="database/queries.sql"),
-        Query(name="list_users", text="SELECT * FROM users", cmd=":many", filename="database/queries.sql"),
-        Query(name="get_product", text="SELECT * FROM products WHERE id = $1", cmd=":one", filename="product/queries.sql"),
-        Query(name="list_products", text="SELECT * FROM products", cmd=":many", filename="product/queries.sql"),
+        Query(name="get_user", text="SELECT * FROM users WHERE id = $1", cmd=":one", filepath="database/queries.sql"),
+        Query(name="list_users", text="SELECT * FROM users", cmd=":many", filepath="database/queries.sql"),
+        Query(name="get_product", text="SELECT * FROM products WHERE id = $1", cmd=":one", filepath="product/queries.sql"),
+        Query(name="list_products", text="SELECT * FROM products", cmd=":many", filepath="product/queries.sql"),
     ]
 
     request = GenerateRequest(
@@ -472,26 +472,35 @@ def test_query_grouping_by_filename():
 
     response = GenerateResponse().parse(result.stdout_bytes)
     
-    # Should have models.py, enums.py, and 2 query files
-    assert len(response.files) == 4
+    # Should have models.py, enums.py, 2 query files, and 2 __init__.py files
+    assert len(response.files) == 6
     
     # Check file names
     file_names = [f.name for f in response.files]
-    assert "database/__codegen__/models.py" in file_names
-    assert "database/__codegen__/enums.py" in file_names  
-    assert "database/__generated__/queries.py" in file_names
-    assert "product/__generated__/queries.py" in file_names
+    assert "database/__codegen_db__/models.py" in file_names
+    assert "database/__codegen_db__/enums.py" in file_names  
+    assert "database/__codegen_db__/queries.py" in file_names
+    assert "database/__codegen_db__/__init__.py" in file_names
+    assert "product/__codegen_db__/queries.py" in file_names
+    assert "product/__codegen_db__/__init__.py" in file_names
 
     # Check that database queries file contains both database queries
-    database_queries_file = next(f for f in response.files if f.name == "database/__generated__/queries.py")
+    database_queries_file = next(f for f in response.files if f.name == "database/__codegen_db__/queries.py")
     database_content = database_queries_file.contents.decode("utf-8")
     assert "get_user" in database_content
     assert "list_users" in database_content
     assert "get_product" not in database_content
 
     # Check that product queries file contains both product queries  
-    product_queries_file = next(f for f in response.files if f.name == "product/__generated__/queries.py")
+    product_queries_file = next(f for f in response.files if f.name == "product/__codegen_db__/queries.py")
     product_content = product_queries_file.contents.decode("utf-8")
     assert "get_product" in product_content
     assert "list_products" in product_content
     assert "get_user" not in product_content
+    
+    # Check that __init__.py files are empty
+    database_init_file = next(f for f in response.files if f.name == "database/__codegen_db__/__init__.py")
+    assert database_init_file.contents == b""
+    
+    product_init_file = next(f for f in response.files if f.name == "product/__codegen_db__/__init__.py")
+    assert product_init_file.contents == b""

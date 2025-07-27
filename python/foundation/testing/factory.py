@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 from database.enums import OrganizationsInboundSourceEnum, UserSignupStepEnum
 from database.xact import xact_admin
 from foundation.stdlib.clock import CLOCK

@@ -134,6 +134,7 @@ class Query(betterproto.Message):
     comments: List[str] = betterproto.string_field(6)
     filename: str = betterproto.string_field(7)
     insert_into_table: "Identifier" = betterproto.message_field(8)
+    filepath: str = betterproto.string_field(9)
 
 
 @dataclass(eq=False, repr=False)

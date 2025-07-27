@@ -3,7 +3,7 @@ import dataclasses
 import datetime
 from typing import Any
 
-from database.__codegen__ import enums
+from database.__codegen_db__ import enums
 @dataclasses.dataclass(slots=True)
 class InviteModel:
     id: str

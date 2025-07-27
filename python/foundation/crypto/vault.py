@@ -1,4 +1,4 @@
-from database.__codegen__ import models
+from database.__codegen_db__ import models
 from database.xact import DBQuerier
 from foundation.crypto.crypt import decrypt_symmetric, encrypt_symmetric
 from foundation.observability.errors import BaseError
