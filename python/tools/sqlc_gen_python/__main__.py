@@ -117,8 +117,14 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
 {%- elif query.cmd == ":batchexec" %}
     await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
 {%- elif query.cmd == ":batchone" %}
-    result = await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
-    for row in result:
+    # Use psycopg connection for batch execution with RETURNING
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        psycopg_sql = {{ query.psycopg_sql }}
+        await cursor.executemany(psycopg_sql, [{{ query.batch_param_dict }} for batch_item in batch_data], returning=True)
+        results = await cursor.fetchall()
+        for row in results:
 {%- if query.columns %}
             {%- if query.needs_custom_dataclass %}
             yield {{ query.custom_dataclass_name }}(
@@ -133,8 +139,14 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
             yield row
 {%- endif %}
 {%- elif query.cmd == ":batchmany" %}
-    result = await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
-    for row in result:
+    # Use psycopg connection for batch execution with RETURNING
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        psycopg_sql = {{ query.psycopg_sql }}
+        await cursor.executemany(psycopg_sql, [{{ query.batch_param_dict }} for batch_item in batch_data], returning=True)
+        results = await cursor.fetchall()
+        for row in results:
 {%- if query.columns %}
             {%- if query.needs_custom_dataclass %}
             yield {{ query.custom_dataclass_name }}(
@@ -360,6 +372,12 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             result = result.replace(f"${param.number}", f":p{param.number}")
         return result
 
+    def convert_to_psycopg_params(sql: str) -> str:
+        """Convert SQLAlchemy parameters (:p1, :p2) to psycopg named parameters (%(p1)s, %(p2)s) for raw psycopg usage."""
+        import re
+
+        return re.sub(r":p(\d+)", r"%(p\1)s", sql)
+
     def get_model_name(query: Query) -> str:
         if query.insert_into_table and query.insert_into_table.name:
             return "".join(w.capitalize() for w in _depluralize_table_name(query.insert_into_table.name).split("_")) + "Model"
@@ -378,6 +396,7 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             "name": query.name,
             "constant_name": query.name.upper(),
             "text": convert_sql_params(query.text, query.params),
+            "psycopg_sql": repr(convert_to_psycopg_params(convert_sql_params(query.text, query.params))),
             "cmd": query.cmd,
             "params_signature": (
                 f", data: {get_copyfrom_data_type(query)}"

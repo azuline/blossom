@@ -68,8 +68,14 @@ INSERT INTO users (name, email) VALUES (:p1, :p2) RETURNING id, name, email
 """
 
 async def query_test_batch_create_users(conn: DBConn, batch_data: list[TestBatchCreateUsersData]) -> AsyncIterator[UserModel]:
-    result = await conn.execute(sqlalchemy.text(TEST_BATCH_CREATE_USERS), [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
-    for row in result:
+    # Use psycopg connection for batch execution with RETURNING
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        psycopg_sql = 'INSERT INTO users (name, email) VALUES (%(p1)s, %(p2)s) RETURNING id, name, email'
+        await cursor.executemany(psycopg_sql, [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data], returning=True)
+        results = await cursor.fetchall()
+        for row in results:
             yield UserModel(
                 id=row[0],
                 name=row[1],
@@ -81,8 +87,14 @@ UPDATE users SET last_visited_at = NOW() WHERE name = :p1 RETURNING id, name, la
 """
 
 async def query_test_batch_update_user_visited(conn: DBConn, batch_data: list[TestBatchUpdateUserVisitedData]) -> AsyncIterator[TestBatchUpdateUserVisitedResult]:
-    result = await conn.execute(sqlalchemy.text(TEST_BATCH_UPDATE_USER_VISITED), [{"p1": batch_item.name} for batch_item in batch_data])
-    for row in result:
+    # Use psycopg connection for batch execution with RETURNING
+    raw_conn = await conn.get_raw_connection()
+    assert raw_conn.driver_connection
+    async with raw_conn.driver_connection.cursor() as cursor:
+        psycopg_sql = 'UPDATE users SET last_visited_at = NOW() WHERE name = %(p1)s RETURNING id, name, last_visited_at'
+        await cursor.executemany(psycopg_sql, [{"p1": batch_item.name} for batch_item in batch_data], returning=True)
+        results = await cursor.fetchall()
+        for row in results:
             yield TestBatchUpdateUserVisitedResult(
                 id=row[0],
                 name=row[1],
