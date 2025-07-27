@@ -1,8 +1,8 @@
 import datetime
 import inspect
 import logging
-import sys
 import logging.handlers
+import sys
 from typing import Any, cast
 
 import structlog

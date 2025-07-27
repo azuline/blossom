@@ -165,19 +165,23 @@ wheels = [
 
 [[package]]
 name = "betterproto"
-version = "1.2.5"
+version = "2.0.0b7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "grpclib" },
-    { name = "stringcase" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ff/2e/abfed7a721928e14aeb900182ff695be474c4ee5f07ef0874cc5ecd5b0b1/betterproto-1.2.5.tar.gz", hash = "sha256:74a3ab34646054f674d236d1229ba8182dc2eae86feb249b8590ef496ce9803d", size = 26098, upload-time = "2020-05-27T11:47:32.777Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4e/94/930a1368fbed92adc897a9a1fae282e3f9d608547dbf805034ca549f381a/betterproto-2.0.0b7.tar.gz", hash = "sha256:1b1458ca5278d519bcd62556a4c236f998a91d503f0f71c67b0b954747052af2", size = 101447, upload-time = "2024-08-14T21:26:01.314Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/9a/5db824c378f6f88b5c6366429f2f5169a10315e9e3d5ab754c4a8d1202aa/betterproto-2.0.0b7-py3-none-any.whl", hash = "sha256:401ab8055e2f814e77b9c88a74d0e1ae3d1e8a969cced6aeb1b59f71ad63fbd2", size = 105386, upload-time = "2024-08-14T21:25:59.826Z" },
+]
 
 [package.optional-dependencies]
 compiler = [
     { name = "black" },
+    { name = "isort" },
     { name = "jinja2" },
-    { name = "protobuf" },
 ]
 
 [[package]]
@@ -306,7 +310,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "betterproto", extras = ["compiler"], specifier = ">=1.2.5" },
+    { name = "betterproto", extras = ["compiler"], specifier = "==2.0.0b7" },
     { name = "dagster-dg-cli", specifier = ">=1.11.1" },
     { name = "grpcio-tools", specifier = ">=1.71.2" },
     { name = "ipython", specifier = ">=9.4.0" },
@@ -1298,6 +1302,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ef/4c/5dd1d8af08107f88c7f741ead7a40854b8ac24ddf9ae850afbcf698aa552/ipython_pygments_lexers-1.1.1.tar.gz", hash = "sha256:09c0138009e56b6854f9535736f4171d855c8c08a563a0dcd8022f78355c7e81", size = 8393, upload-time = "2025-01-17T11:24:34.505Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d9/33/1f075bf72b0b747cb3288d011319aaf64083cf2efef8354174e3ed4540e2/ipython_pygments_lexers-1.1.1-py3-none-any.whl", hash = "sha256:a9462224a505ade19a605f71f8fa63c2048833ce50abc86768a0d81d876dc81c", size = 8074, upload-time = "2025-01-17T11:24:33.271Z" },
+]
+
+[[package]]
+name = "isort"
+version = "5.13.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/87/f9/c1eb8635a24e87ade2efce21e3ce8cd6b8630bb685ddc9cdaca1349b2eb5/isort-5.13.2.tar.gz", hash = "sha256:48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109", size = 175303, upload-time = "2023-12-13T20:37:26.124Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/b3/8def84f539e7d2289a02f0524b944b15d7c75dab7628bedf1c4f0992029c/isort-5.13.2-py3-none-any.whl", hash = "sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6", size = 92310, upload-time = "2023-12-13T20:37:23.244Z" },
 ]
 
 [[package]]
@@ -2414,12 +2427,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/0a/69/662169fdb92fb96ec
 wheels = [
     { url = "https://files.pythonhosted.org/packages/82/95/38ef0cd7fa11eaba6a99b3c4f5ac948d8bc6ff199aabd327a29cc000840c/starlette-0.47.1-py3-none-any.whl", hash = "sha256:5e11c9f5c7c3f24959edbf2dffdc01bba860228acf657129467d8a7468591527", size = 72747, upload-time = "2025-06-21T04:03:15.705Z" },
 ]
-
-[[package]]
-name = "stringcase"
-version = "1.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f3/1f/1241aa3d66e8dc1612427b17885f5fcd9c9ee3079fc0d28e9a3aeeb36fa3/stringcase-1.2.0.tar.gz", hash = "sha256:48a06980661908efe8d9d34eab2b6c13aefa2163b3ced26972902e3bdfd87008", size = 2958, upload-time = "2017-08-06T01:40:57.021Z" }
 
 [[package]]
 name = "structlog"

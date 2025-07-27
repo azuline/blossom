@@ -1,10 +1,9 @@
 """Tests for sqlc_gen_python tool."""
 
-import subprocess
 from click.testing import CliRunner
 
-from tools.sqlc_gen_python.plugin import GenerateRequest, GenerateResponse, Settings, Catalog, Schema, Table, Query, Column, Identifier
-from tools.sqlc_gen_python.__main__ import main, deserialize_request, serialize_response, map_postgres_type_to_python, generate_models
+from tools.sqlc_gen_python.__main__ import generate_models, generate_queries, main, map_postgres_type_to_python
+from tools.sqlc_gen_python.proto import Catalog, Column, GenerateRequest, GenerateResponse, Identifier, Parameter, Query, Schema, Settings, Table
 
 
 def test_protobuf_serialization_roundtrip():
@@ -12,10 +11,7 @@ def test_protobuf_serialization_roundtrip():
     # Create a sample GenerateRequest
     request = GenerateRequest(
         sqlc_version="1.0.0",
-        settings=Settings(
-            version="1.0.0",
-            engine="postgresql"
-        ),
+        settings=Settings(version="1.0.0", engine="postgresql"),
         catalog=Catalog(
             name="test_db",
             default_schema="public",
@@ -25,39 +21,22 @@ def test_protobuf_serialization_roundtrip():
                     tables=[
                         Table(
                             rel=Identifier(name="users", schema="public"),
-                            columns=[
-                                Column(
-                                    name="id",
-                                    not_null=True,
-                                    type=Identifier(name="bigint")
-                                ),
-                                Column(
-                                    name="name", 
-                                    not_null=True,
-                                    type=Identifier(name="text")
-                                )
-                            ]
+                            columns=[Column(name="id", not_null=True, type=Identifier(name="bigint")), Column(name="name", not_null=True, type=Identifier(name="text"))],
                         )
-                    ]
+                    ],
                 )
-            ]
+            ],
         ),
-        queries=[
-            Query(
-                name="get_user",
-                text="SELECT id, name FROM users WHERE id = $1",
-                cmd=":one"
-            )
-        ]
+        queries=[Query(name="get_user", text="SELECT id, name FROM users WHERE id = $1", cmd=":one")],
     )
-    
+
     # Test serialization
     serialized = bytes(request)
     assert len(serialized) > 0
-    
+
     # Test deserialization
     deserialized = GenerateRequest().parse(serialized)
-    
+
     # Verify the data was preserved
     assert deserialized.sqlc_version == "1.0.0"
     assert deserialized.settings.version == "1.0.0"
@@ -74,29 +53,22 @@ def test_protobuf_serialization_roundtrip():
 def test_cli_basic_functionality():
     """Test that the CLI tool can handle basic protobuf input/output."""
     runner = CliRunner()
-    
+
     # Create a minimal GenerateRequest
-    request = GenerateRequest(
-        sqlc_version="1.0.0",
-        settings=Settings(
-            version="1.0.0",
-            engine="postgresql"
-        ),
-        catalog=Catalog(name="test")
-    )
-    
+    request = GenerateRequest(sqlc_version="1.0.0", settings=Settings(version="1.0.0", engine="postgresql"), catalog=Catalog(name="test"))
+
     # Serialize request
     input_data = bytes(request)
-    
+
     # Run the CLI tool
     result = runner.invoke(main, input=input_data)
-    
+
     # Check that it ran without errors
     assert result.exit_code == 0
-    
+
     # Parse the output as a GenerateResponse
     response = GenerateResponse().parse(result.stdout_bytes)
-    
+
     # Verify response structure
     assert len(response.files) == 2
     assert response.files[0].name == "models.py"
@@ -110,38 +82,38 @@ def test_type_mapping():
     # Test basic types
     text_col = Column(name="name", not_null=True, type=Identifier(name="text"))
     assert map_postgres_type_to_python(text_col) == "str"
-    
+
     # Test nullable types
     nullable_text_col = Column(name="name", not_null=False, type=Identifier(name="text"))
     assert map_postgres_type_to_python(nullable_text_col) == "str | None"
-    
+
     # Test array types
     array_col = Column(name="tags", not_null=True, is_array=True, type=Identifier(name="text"))
     assert map_postgres_type_to_python(array_col) == "list[str]"
-    
+
     # Test nullable array types
     nullable_array_col = Column(name="tags", not_null=False, is_array=True, type=Identifier(name="text"))
     assert map_postgres_type_to_python(nullable_array_col) == "list[str] | None"
-    
+
     # Test numeric types
     int_col = Column(name="count", not_null=True, type=Identifier(name="bigint"))
     assert map_postgres_type_to_python(int_col) == "int"
-    
+
     float_col = Column(name="price", not_null=True, type=Identifier(name="numeric"))
     assert map_postgres_type_to_python(float_col) == "float"
-    
+
     # Test datetime types
     timestamp_col = Column(name="created_at", not_null=True, type=Identifier(name="timestamptz"))
     assert map_postgres_type_to_python(timestamp_col) == "datetime.datetime"
-    
+
     # Test boolean type
     bool_col = Column(name="active", not_null=True, type=Identifier(name="boolean"))
     assert map_postgres_type_to_python(bool_col) == "bool"
-    
+
     # Test JSON types
     json_col = Column(name="metadata", not_null=False, type=Identifier(name="jsonb"))
     assert map_postgres_type_to_python(json_col) == "Any | None"
-    
+
     # Test unknown type fallback
     unknown_col = Column(name="custom", not_null=True, type=Identifier(name="custom_type"))
     assert map_postgres_type_to_python(unknown_col) == "Any"
@@ -159,42 +131,21 @@ def test_model_generation():
                     Table(
                         rel=Identifier(name="users", schema="public"),
                         columns=[
-                            Column(
-                                name="id",
-                                not_null=True,
-                                type=Identifier(name="bigint")
-                            ),
-                            Column(
-                                name="name", 
-                                not_null=True,
-                                type=Identifier(name="text")
-                            ),
-                            Column(
-                                name="email",
-                                not_null=False,
-                                type=Identifier(name="text")
-                            ),
-                            Column(
-                                name="created_at",
-                                not_null=True,
-                                type=Identifier(name="timestamptz")
-                            ),
-                            Column(
-                                name="tags",
-                                not_null=False,
-                                is_array=True,
-                                type=Identifier(name="text")
-                            )
-                        ]
+                            Column(name="id", not_null=True, type=Identifier(name="bigint")),
+                            Column(name="name", not_null=True, type=Identifier(name="text")),
+                            Column(name="email", not_null=False, type=Identifier(name="text")),
+                            Column(name="created_at", not_null=True, type=Identifier(name="timestamptz")),
+                            Column(name="tags", not_null=False, is_array=True, type=Identifier(name="text")),
+                        ],
                     )
-                ]
+                ],
             )
-        ]
+        ],
     )
-    
+
     # Generate models
     models_code = generate_models(catalog)
-    
+
     # Verify the generated code structure
     assert "# Code generated by sqlc. DO NOT EDIT." in models_code
     assert "import dataclasses" in models_code
@@ -207,3 +158,73 @@ def test_model_generation():
     assert "email: str | None" in models_code
     assert "created_at: datetime.datetime" in models_code
     assert "tags: list[str] | None" in models_code
+
+
+def test_query_generation():
+    """Test query function generation."""
+    # Create sample queries
+    queries = [
+        Query(
+            name="get_user",
+            text="SELECT id, name, email FROM users WHERE id = $1",
+            cmd=":one",
+            params=[Parameter(number=1, column=Column(name="id", not_null=True, type=Identifier(name="bigint")))],
+            columns=[
+                Column(name="id", not_null=True, type=Identifier(name="bigint"), table=Identifier(name="users")),
+                Column(name="name", not_null=True, type=Identifier(name="text"), table=Identifier(name="users")),
+                Column(name="email", not_null=False, type=Identifier(name="text"), table=Identifier(name="users")),
+            ],
+        ),
+        Query(
+            name="list_users",
+            text="SELECT id, name, email FROM users",
+            cmd=":many",
+            columns=[
+                Column(name="id", not_null=True, type=Identifier(name="bigint"), table=Identifier(name="users")),
+                Column(name="name", not_null=True, type=Identifier(name="text"), table=Identifier(name="users")),
+                Column(name="email", not_null=False, type=Identifier(name="text"), table=Identifier(name="users")),
+            ],
+        ),
+        Query(
+            name="delete_user",
+            text="DELETE FROM users WHERE id = $1",
+            cmd=":exec",
+            params=[Parameter(number=1, column=Column(name="id", not_null=True, type=Identifier(name="bigint")))],
+        ),
+    ]
+
+    # Generate queries
+    queries_code = generate_queries(queries)
+
+    # Verify the generated code structure
+    assert "# Code generated by sqlc. DO NOT EDIT." in queries_code
+    assert "import datetime" in queries_code
+    assert "from typing import AsyncIterator" in queries_code
+    assert "import sqlalchemy" in queries_code
+    assert "from database.conn import DBConn" in queries_code
+    assert "from database.__codegen__ import models" in queries_code
+
+    # Verify SQL constants
+    assert 'GET_USER = """-- name: get_user :one' in queries_code
+    assert "SELECT id, name, email FROM users WHERE id = $1" in queries_code
+    assert 'LIST_USERS = """-- name: list_users :many' in queries_code
+    assert 'DELETE_USER = """-- name: delete_user :exec' in queries_code
+
+    # Verify function signatures
+    assert "async def get_user(conn: DBConn, *, id: int) -> models.Users | None:" in queries_code
+    assert "async def list_users(conn: DBConn) -> AsyncIterator[models.Users]:" in queries_code
+    assert "async def delete_user(conn: DBConn, *, id: int) -> None:" in queries_code
+
+    # Verify function bodies
+    assert "row = (await conn.execute(sqlalchemy.text(GET_USER)," in queries_code
+    assert "if row is None:" in queries_code
+    assert "return models.Users(" in queries_code
+    assert "id=row[0]," in queries_code
+    assert "name=row[1]," in queries_code
+    assert "email=row[2]," in queries_code
+
+    assert "result = await conn.execute(sqlalchemy.text(LIST_USERS)," in queries_code
+    assert "async for row in result:" in queries_code
+    assert "yield models.Users(" in queries_code
+
+    assert "await conn.execute(sqlalchemy.text(DELETE_USER)," in queries_code
