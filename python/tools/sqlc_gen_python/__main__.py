@@ -3,6 +3,8 @@
 import asyncio
 import itertools
 import sys
+from collections import defaultdict
+from pathlib import Path
 
 import click
 import jinja2
@@ -263,16 +265,27 @@ async def _main_coro() -> None:
     """Async main function to handle database connections."""
     request = GenerateRequest().parse(sys.stdin.buffer.read())
     response = GenerateResponse()
+
     # Models
     models_content = await generate_models(request.catalog)
     response.files.append(File(name="database/__codegen__/models.py", contents=models_content.encode("utf-8")))
+
     # Enums
     enums_content = await generate_enums(request.catalog)
     response.files.append(File(name="database/__codegen__/enums.py", contents=enums_content.encode("utf-8")))
-    # Queries
-    queries_content = generate_queries(request.queries)
-    response.files.append(File(name="database/__codegen__/queries.py", contents=queries_content.encode("utf-8")))
-    # Respond.
+
+    # Queries.
+    queries_by_filename = defaultdict(list)
+    for query in request.queries:
+        queries_by_filename[query.filename].append(query)
+    for filename, queries in queries_by_filename.items():
+        sql_path = Path(filename)
+        assert sql_path.name == "queries.sql"
+        output_path = sql_path.parent / "__generated__" / "queries.py"
+        queries_content = generate_queries(queries)
+        response.files.append(File(name=str(output_path), contents=queries_content.encode("utf-8")))
+
+    # Respond
     sys.stdout.buffer.write(bytes(response))
 
 
