@@ -71,7 +71,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", ".*_cache", ".tach", "**/__codegen*__", "claude", "./tools/sqlc_gen_python/proto.py"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen*__", "claude", "./tools/codegen_db_plugin/proto.py"]
 target-version = "py313"
 preview = true
 
@@ -128,7 +128,7 @@ ban-relative-imports = "all"
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 # Environment options.
-exclude = [".venv", "tools/sqlc_gen_python/proto.py"]
+exclude = [".venv", "tools/codegen_db_plugin/proto.py"]
 norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
 venvPath = "."
 venv = ".venv"

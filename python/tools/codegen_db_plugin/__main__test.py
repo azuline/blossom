@@ -1,11 +1,11 @@
-"""Tests for sqlc_gen_python tool."""
+"""Tests for codegen_db_plugin tool."""
 
 import sqlalchemy
 from click.testing import CliRunner
 
 from database.conn import connect_db_admin
-from tools.sqlc_gen_python.__main__ import generate_enums, generate_models, generate_queries, main
-from tools.sqlc_gen_python.proto import Catalog, Column, GenerateRequest, GenerateResponse, Identifier, Parameter, Query, Schema, Settings, Table
+from tools.codegen_db_plugin.__main__ import generate_enums, generate_models, generate_queries, main
+from tools.codegen_db_plugin.proto import Catalog, Column, GenerateRequest, GenerateResponse, Identifier, Parameter, Query, Schema, Settings, Table
 
 
 def test_protobuf_serialization_roundtrip():
@@ -212,7 +212,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-GET_USER = r"""-- name: get_user \\:one
+GET_USER = r"""\\
 SELECT id, name, email FROM users WHERE id = :p1
 """
 
@@ -226,7 +226,7 @@ async def query_get_user(conn: DBConn, *, id: int) -> models.GetUserResult:
         email=row[2],
     )
 
-LIST_USERS = r"""-- name: list_users \\:many
+LIST_USERS = r"""\\
 SELECT id, name, email FROM users
 """
 
@@ -239,7 +239,7 @@ async def query_list_users(conn: DBConn) -> AsyncIterator[models.ListUsersResult
             email=row[2],
         )
 
-DELETE_USER = r"""-- name: delete_user \\:exec
+DELETE_USER = r"""\\
 DELETE FROM users WHERE id = :p1
 """
 
@@ -286,18 +286,15 @@ class BulkInsertUsersData:
     name: str
     email: str | None
 
-BULK_INSERT_USERS = r"""-- name: bulk_insert_users \\:copyfrom
-INSERT INTO users (name, email) VALUES (:p1, :p2)
+BULK_INSERT_USERS = r"""\\
+COPY users (name, email) FROM STDIN
 """
 
 async def query_bulk_insert_users(conn: DBConn, data: list[BulkInsertUsersData]) -> None:
-    # Use psycopg connection for bulk insert via COPY FROM
     raw_conn = await conn.get_raw_connection()
     assert raw_conn.driver_connection
     async with raw_conn.driver_connection.cursor() as cursor:
-        # Convert INSERT statement to COPY FROM format
-        copy_sql = f"COPY users (name, email) FROM STDIN"
-        async with cursor.copy(copy_sql) as copy:
+        async with cursor.copy(BULK_INSERT_USERS) as copy:
             for item in data:
                 await copy.write_row((item.name, item.email))
 
@@ -649,7 +646,7 @@ class GetUserWithPostsCountResult:
     name: str
     post_count: int
 
-GET_USER_FULL = r"""-- name: get_user_full \\:one
+GET_USER_FULL = r"""\\
 SELECT id, name, email, created_at, metadata FROM users WHERE id = :p1
 """
 
@@ -665,7 +662,7 @@ async def query_get_user_full(conn: DBConn, *, id: int) -> models.UserModel:
         metadata=row[4],
     )
 
-GET_USER_SUMMARY = r"""-- name: get_user_summary \\:one
+GET_USER_SUMMARY = r"""\\
 SELECT id, name FROM users WHERE id = :p1
 """
 
@@ -678,7 +675,7 @@ async def query_get_user_summary(conn: DBConn, *, id: int) -> GetUserSummaryResu
         name=row[1],
     )
 
-GET_USER_WITH_POSTS_COUNT = r"""-- name: get_user_with_posts_count \\:one
+GET_USER_WITH_POSTS_COUNT = r"""\\
 SELECT u.name, COUNT(p.id) as post_count FROM users u LEFT JOIN posts p ON u.id = p.user_id WHERE u.id = :p1
 """
 
@@ -754,7 +751,7 @@ class ListProductSummariesResult:
     name: str
     price: float
 
-LIST_PRODUCT_SUMMARIES = r"""-- name: list_product_summaries \\:many
+LIST_PRODUCT_SUMMARIES = r"""\\
 SELECT id, name, price FROM products
 """
 
@@ -886,24 +883,22 @@ class BatchUpdateInventoryData:
     quantity_delta: int
     product_id: int
 
-BATCH_UPSERT_USERS = r"""-- name: batch_upsert_users \\:batchexec
-INSERT INTO users (name, email) VALUES (:p1, :p2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
+BATCH_UPSERT_USERS = r"""\\
+INSERT INTO users (name, email) VALUES (%(p1)s, %(p2)s) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
 """
 
 async def query_batch_upsert_users(conn: DBConn, batch_data: list[BatchUpsertUsersData]) -> None:
     await conn.execute(sqlalchemy.text(BATCH_UPSERT_USERS), [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
 
-BATCH_UPSERT_PRODUCTS = r"""-- name: batch_upsert_products \\:batchone
-INSERT INTO products (name, price, category_id) VALUES (:p1, :p2, :p3) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price
+BATCH_UPSERT_PRODUCTS = r"""\\
+INSERT INTO products (name, price, category_id) VALUES (%(p1)s, %(p2)s, %(p3)s) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price
 """
 
 async def query_batch_upsert_products(conn: DBConn, batch_data: list[BatchUpsertProductsData]) -> AsyncIterator[BatchUpsertProductsResult]:
-    # Use psycopg connection for batch execution with RETURNING
     raw_conn = await conn.get_raw_connection()
     assert raw_conn.driver_connection
     async with raw_conn.driver_connection.cursor() as cursor:
-        psycopg_sql = 'INSERT INTO products (name, price, category_id) VALUES (%(p1)s, %(p2)s, %(p3)s) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price'
-        await cursor.executemany(psycopg_sql, [{"p1": batch_item.name, "p2": batch_item.price, "p3": batch_item.category_id} for batch_item in batch_data], returning=True)
+        await cursor.executemany(BATCH_UPSERT_PRODUCTS, [{"p1": batch_item.name, "p2": batch_item.price, "p3": batch_item.category_id} for batch_item in batch_data], returning=True)
         # For executemany with returning=True, we need to iterate through all result sets
         assert cursor.pgresult
         while True:
@@ -916,17 +911,15 @@ async def query_batch_upsert_products(conn: DBConn, batch_data: list[BatchUpsert
             if not cursor.nextset():
                 break
 
-BATCH_UPDATE_INVENTORY = r"""-- name: batch_update_inventory \\:batchmany
-UPDATE inventory SET quantity = quantity + :p1 WHERE product_id = :p2 RETURNING product_id, quantity
+BATCH_UPDATE_INVENTORY = r"""\\
+UPDATE inventory SET quantity = quantity + %(p1)s WHERE product_id = %(p2)s RETURNING product_id, quantity
 """
 
 async def query_batch_update_inventory(conn: DBConn, batch_data: list[BatchUpdateInventoryData]) -> AsyncIterator[models.InventoryModel]:
-    # Use psycopg connection for batch execution with RETURNING
     raw_conn = await conn.get_raw_connection()
     assert raw_conn.driver_connection
     async with raw_conn.driver_connection.cursor() as cursor:
-        psycopg_sql = 'UPDATE inventory SET quantity = quantity + %(p1)s WHERE product_id = %(p2)s RETURNING product_id, quantity'
-        await cursor.executemany(psycopg_sql, [{"p1": batch_item.quantity_delta, "p2": batch_item.product_id} for batch_item in batch_data], returning=True)
+        await cursor.executemany(BATCH_UPDATE_INVENTORY, [{"p1": batch_item.quantity_delta, "p2": batch_item.product_id} for batch_item in batch_data], returning=True)
         # For executemany with returning=True, we need to iterate through all result sets
         assert cursor.pgresult
         while True:

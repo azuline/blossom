@@ -49,7 +49,7 @@
               sqlc-gen-python = super.writeShellScriptBin "sqlc-gen-python" ''
                 #!/usr/bin/env bash
                 cd "$MONOREPO_ROOT/python"
-                uv run -- python -m tools.sqlc_gen_python $@
+                uv run -- python -m tools.codegen_db_plugin $@
               '';
             })
           ];

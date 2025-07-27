@@ -2,7 +2,7 @@
 
 ## Overview
 
-Build a custom SQLc code generation plugin (`tools/sqlc_gen_python/__main__.py`) that reads protobuf input from stdin and generates Python code for database models and query functions.
+Build a custom SQLc code generation plugin (`tools/codegen_db_plugin/__main__.py`) that reads protobuf input from stdin and generates Python code for database models and query functions.
 
 ## End State
 
@@ -15,7 +15,7 @@ The tool will replace the current SQLc Go-based code generation with a Python-na
 ## Input/Output Flow
 
 ```
-[SQLc] -> [stdin: protobuf GenerateRequest] -> [sqlc_gen_python] -> [stdout: protobuf GenerateResponse] -> [SQLc]
+[SQLc] -> [stdin: protobuf GenerateRequest] -> [codegen_db_plugin] -> [stdout: protobuf GenerateResponse] -> [SQLc]
 ```
 
 ## Generated Code Structure
