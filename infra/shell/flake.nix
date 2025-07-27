@@ -80,6 +80,7 @@
             fd
             mcp-language-server
             ripgrep
+            protobuf
           ];
           python = [
             biome # For frontend codegen.

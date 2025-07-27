@@ -42,7 +42,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "betterproto[compiler]>=1.2.5",
     "dagster-dg-cli>=1.11.1",
+    "grpcio-tools>=1.71.2",
     "ipython>=9.4.0",
     "pyright>=1.1.402",
     "pytest>=8.4.0",

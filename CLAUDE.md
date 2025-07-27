@@ -14,6 +14,8 @@
 
 When you are given an issue to problem, first create a directory named `$(pwd)/claude/issue_YYMMDD_{issue_name}`. Put all temporary files in there: design docs, plans, debug scripts, etc.
 
-For every issue, draft two documents: a `DESIGN.md` describing the end state and necessary changes, and a `WORKLIST.md` containing a tactical list of milestones.
+For every issue, draft two documents: a `DESIGN.md` describing the end state and necessary changes, and a `WORKLIST.md` containing a tactical checklist of milestones.
 
 Each milestone should be small, self-contained, and include at least one focused unit test. Do not make a separate milestone for unit tests.
+
+After you complete each item in `WORKLIST.md`, update `WORKLIST.md` and check the item off.
