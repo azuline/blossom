@@ -14,7 +14,7 @@ The [`framework/`] package extends [foundation](../foundation) with product-spec
 
 [`framework/rpc.py`](./framework/rpc.py) wraps foundation's RPC system and provides `@rpc_product` and `ReqProduct`.
 
-Each RPC must declare `authorization`. `@rpc_product` validates that the request meets the authorization requirements and sets `req.user` and `req.organization`. `@rpc_product` also begins a database transaction on `req.q` for the request, scoped to the `authorization` through Row Level Security. The `authorization` levels are:
+Each RPC must declare `authorization`. `@rpc_product` validates that the request meets the authorization requirements and sets `req.user` and `req.organization`. `@rpc_product` also begins a database transaction on `req.conn` for the request, scoped to the `authorization` through Row Level Security. The `authorization` levels are:
 
 - `authorization="public"` allows anyone to call the RPC and begins an admin-scoped transaction that access all resources.a
 - `authorization="user"` allows authenticated users to call the user and begins a user-scoped transaction that can access resources belonging to the user.
@@ -40,7 +40,7 @@ class BunniesAreAsleepError(RPCError):
 
 @rpc_product("list_bunnies", authorization="organization", errors=[...])
 async def list_bunnies(req: ReqProduct[ListBunniesIn]) -> ListBunniesOut:
-    bunnies_m = await req.q.list_bunnies(organization_id=req.organization.id, user_id=req.user.id, color=req.data.color)
+    bunnies_m = await query_list_bunnies(req.conn, organization_id=req.organization.id, user_id=req.user.id, color=req.data.color)
     return ListBunniesOut(...)
 ```
 

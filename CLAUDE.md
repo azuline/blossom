@@ -18,4 +18,4 @@ For every issue, draft two documents: a `DESIGN.md` describing the end state and
 
 Each milestone should be small, self-contained, and include at least one focused unit test. Do not make a separate milestone for unit tests.
 
-After you complete each item in `WORKLIST.md`, update `WORKLIST.md` and check the item off.
+After you complete each item in `WORKLIST.md`, update `WORKLIST.md` and check the item off. As new items are added to the scope, add them to `WORKLIST.md`.

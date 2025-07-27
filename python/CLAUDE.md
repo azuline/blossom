@@ -169,6 +169,7 @@ Follow these testing conventions:
 - Name files `<module>_test.py` or `__main__test.py`.
 - Tests are plain functions starting with `test_`. Do not nest tests inside classes.
 - You do not need to mark asynchronous tests with `@pytest.mark.asyncio`, they are automatically handled.
+- Express the test's expectations in the fewest number of asserts possible. If possible, assert on an entire structure rather than each individual field.
 
 Write or update tests for every behavioural change.
 

@@ -93,4 +93,32 @@
   - Update from `Any` to `dict[str, Any]` for better type safety
   - Update tests to reflect the new JSON type mapping
 
+## ✅ Milestone 10: SQLAlchemy Parameter Binding Fix
+- [x] Fix SQLAlchemy parameter binding by escaping colons in SQL queries
+  - Escape all colons in SQL query text with `\:` before parameter substitution
+  - Prevent SQLAlchemy from treating PostgreSQL syntax like `::INTERVAL` as parameters
+  - Use raw strings (`r"""`) for proper escape sequence handling
+  - Update tests to match new escaping behavior
+
+## ✅ Milestone 11: COPY FROM Support (:copy)
+- [x] Add support for `COPY FROM` using psycopg (drop down to psycopg connection) to implement `:copy` for sqlc
+  - Parse `:copy` query annotations from sqlc input
+  - Generate functions that drop down to psycopg connection for bulk data loading
+  - Implement `copy()` functionality using psycopg's copy operations
+  - Add conditional psycopg import only when `:copy` queries are present
+  - Generate proper function signatures with `data: AsyncIterator[tuple[Any, ...]]` parameter
+  - Use `conn.get_raw_connection().driver_connection` to access underlying psycopg connection
+  - Implement row-by-row data insertion using `copy.write_row(row)` within copy context
+  - Add comprehensive tests for COPY operations including generated code structure validation
+  - Reference: https://www.psycopg.org/psycopg3/docs/basic/copy.html and https://docs.sqlc.dev/en/latest/howto/insert.html
+
+## Milestone 12: Batch Operations Support (:batch*)
+- [ ] Add support for `executemany` using psycopg (drop down) to implement `:batch*` for sqlc
+  - Parse `:batchexec`, `:batchone`, `:batchmany` query annotations
+  - Generate functions that use psycopg's `executemany()` for batch operations
+  - Handle parameter lists for batch operations
+  - Implement proper return types for each batch operation type
+  - Add comprehensive tests for all batch operation variants
+  - Reference: https://docs.sqlc.dev/en/latest/reference/query-annotations.html#batchexec
+
 Each milestone includes focused unit tests and can be completed independently.

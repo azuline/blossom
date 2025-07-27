@@ -2,6 +2,7 @@
 import datetime
 from typing import Any, AsyncIterator
 import sqlalchemy
+import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError

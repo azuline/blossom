@@ -41,6 +41,7 @@ QUERIES_TEMPLATE = '''\
 import datetime
 from typing import Any, AsyncIterator
 import sqlalchemy
+import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
@@ -78,6 +79,13 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
 {%- else %}
         yield row
 {%- endif %}
+{%- elif query.cmd == ":copy" %}
+    # Drop down to psycopg connection for COPY operations
+    raw_conn = await conn.get_raw_connection()
+    async with raw_conn.driver_connection.cursor() as cursor:
+        async with cursor.copy({{ query.constant_name }}) as copy:
+            async for row in data:
+                copy.write_row(row)
 {%- endif %}
 
 {% endfor -%}
@@ -229,6 +237,36 @@ def generate_queries(queries: list[Query]) -> str:
     def get_param_name(param: Parameter) -> str:
         return param.column.name or f"p{param.number}"
 
+    def parse_copy_columns(query: Query) -> list[str]:
+        """Parse COPY statement to extract column names."""
+        if query.cmd != ":copy":
+            return []
+        
+        # Parse "COPY table_name (col1, col2, col3) FROM STDIN" format
+        import re
+        copy_match = re.search(r'COPY\s+\w+\s*\(([^)]+)\)', query.text, re.IGNORECASE)
+        if copy_match:
+            columns_str = copy_match.group(1)
+            # Split by comma and clean up whitespace
+            columns = [col.strip() for col in columns_str.split(',')]
+            return columns
+        return []
+
+    def get_copy_dataclass_name(query: Query) -> str:
+        """Generate dataclass name for COPY operations."""
+        if query.cmd != ":copy":
+            return ""
+        # Convert query name to PascalCase for dataclass name
+        return "".join(word.capitalize() for word in query.name.split("_")) + "Data"
+
+    def get_copy_data_type(query: Query) -> str:
+        """Generate type-safe data parameter type for COPY operations."""
+        if query.cmd != ":copy":
+            return ""
+        
+        dataclass_name = get_copy_dataclass_name(query)
+        return f"AsyncIterator[{dataclass_name}]"
+
     def convert_sql_params(sql: str, params: list[Parameter]) -> str:
         """Convert PostgreSQL positional parameters ($1, $2) to SQLAlchemy named parameters (:p1, :p2, etc.)."""
         # First escape all existing colons to prevent SQLAlchemy from treating them as parameters
@@ -252,15 +290,19 @@ def generate_queries(queries: list[Query]) -> str:
             "constant_name": query.name.upper(),
             "text": convert_sql_params(query.text, query.params),
             "cmd": query.cmd,
-            "params_signature": f", *, {', '.join(f'{get_param_name(p)}: {_map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "",
+            "params_signature": (f", *, {', '.join(f'{get_param_name(p)}: {_map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "")
+            + (f", data: {get_copy_data_type(query)}" if query.cmd == ":copy" else ""),
             "return_type": {
                 ":exec": "None",
                 ":one": f"models.{get_model_name(query)}" if query.columns else "Any",
                 ":many": f"AsyncIterator[models.{get_model_name(query)}]" if query.columns else "AsyncIterator[Any]",
+                ":copy": "None",
             }.get(query.cmd, "Any"),
             "param_dict": "{" + ", ".join(f'"p{p.number}": {get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
             "model_name": get_model_name(query) if query.columns else None,
             "columns": [{"name": col.name} for col in query.columns] if query.columns else None,
+            "copy_dataclass_name": get_copy_dataclass_name(query),
+            "copy_columns": parse_copy_columns(query),
             "error_params": (
                 f'resource="{get_model_name(query).replace("Model", "").lower() if query.columns else query.name.replace("_", " ")}", '
                 f'key_name="{get_param_name(query.params[0])}", key_value=str({get_param_name(query.params[0])})'
@@ -270,6 +312,7 @@ def generate_queries(queries: list[Query]) -> str:
         }
         for query in queries
     ]
+
     return jinja2.Template(QUERIES_TEMPLATE).render(queries=query_data)
 
 
