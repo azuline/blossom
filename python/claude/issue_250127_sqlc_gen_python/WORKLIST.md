@@ -26,7 +26,7 @@
   - Write unit test with sample table schema
 
 ## Milestone 4: Query Function Generation  
-- [ ] Implement standalone query function generation
+- [x] Implement standalone query function generation
   - Parse `queries[]` from protobuf input
   - Extract query name, SQL text, parameters, and return columns
   - Generate async function signatures with `DBConn` parameter
@@ -36,7 +36,7 @@
   - Write unit test with sample query definitions
 
 ## Milestone 5: Code Assembly and Output
-- [ ] Combine generated components into final output files
+- [x] Combine generated components into final output files
   - Assemble models.py with all dataclass definitions
   - Assemble queries.py with SQL constants and functions
   - Generate proper import statements and file headers
@@ -44,11 +44,19 @@
   - Write integration test with complete protobuf input/output
 
 ## Milestone 6: CLI Integration and Testing
-- [ ] Complete CLI tool and comprehensive testing
+- [x] Complete CLI tool and comprehensive testing
   - Implement `main()` function as Click CLI entry point  
   - Add error handling and validation
   - Write end-to-end test using actual database schema
   - Test integration with existing `just codegen-db` workflow
   - Validate generated code matches current output format
+
+## ✅ BONUS: Jinja Template Refactoring
+- [x] Refactor code generation to use Jinja2 templates
+  - Replace string concatenation with clean template-based approach
+  - Create `MODELS_TEMPLATE` and `QUERIES_TEMPLATE` constants
+  - Implement template data preparation functions
+  - Maintain exact same output format for backward compatibility
+  - All tests pass with deterministic string comparisons
 
 Each milestone includes focused unit tests and can be completed independently.
