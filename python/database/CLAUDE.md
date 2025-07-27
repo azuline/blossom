@@ -106,3 +106,4 @@ Follow these conventions:
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
 - Name queries as `{resource}_{action}_{filter}`. For example, `user_create`, `user_get_by_id`, `user_list_by_organization`, etc.
+- **NEVER modify files in `__codegen_db__/` directories** - these are auto-generated. If there are bugs in generated code, fix the source SQL in `queries.sql` and run `just codegen-db`.

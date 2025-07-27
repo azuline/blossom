@@ -5,6 +5,7 @@ import sqlalchemy
 
 from database.xact import xact_admin
 from foundation.observability.metrics import metric_count_and_time
+from pipeline.__codegen_db__.queries import query_pipeline_organization_id_fetch_all
 from pipeline.analytics import impressions_asset
 from pipeline.framework.dag import ORG_PARTITION
 from pipeline.product import datasource_ext_asset, datasource_raw_asset, ext_datasource_sensor
@@ -16,9 +17,7 @@ def dynamic_partition_sensor() -> dagster.SensorResult:
     # populate each partition with the organizations that depend on each partition's data source.
     async def _dynamic_partition_sensor_coro() -> dagster.SensorResult:
         async with xact_admin() as conn:
-            # TODO: Replace with generated query function when available
-            result = await conn.execute(sqlalchemy.text("SELECT id FROM organizations ORDER BY id"))
-            organization_ids = [row[0] for row in result.fetchall()]
+            organization_ids = [row.id async for row in query_pipeline_organization_id_fetch_all(conn)]
         return dagster.SensorResult(dynamic_partitions_requests=[ORG_PARTITION.build_add_request(organization_ids)])
 
     with metric_count_and_time("pipeline.org_partition.sensor"):

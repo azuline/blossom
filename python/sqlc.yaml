@@ -1,7 +1,7 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "**/*/queries.sql"
+    queries: [ "*/queries.sql", "**/*/queries.sql" ]
     schema: "database/schema.sql"
     database: { uri: "postgresql://postgresql:password@localhost:40801/postgres" }
     rules: [ "sqlc/db-prepare" ]

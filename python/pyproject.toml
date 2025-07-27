@@ -71,7 +71,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", ".*_cache", ".tach", "**/__codegen_db__", "claude", "./tools/sqlc_gen_python/proto.py"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen*__", "claude", "./tools/sqlc_gen_python/proto.py"]
 target-version = "py313"
 preview = true
 
@@ -164,7 +164,7 @@ reportUnusedCoroutine = "error"
 reportPrivateImportUsage = "none"
 
 [tool.pytest.ini_options]
-norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
+norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv", "__codegen*__"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 # Logs are emitted to stderr in a formatted way. When pytest captures logs,
@@ -178,6 +178,6 @@ markers = [
 DD_TRACE_ENABLED = "false"
 
 [tool.coverage.run]
-omit = ["*/__snapshots__/*", "*/__llmshots__/*"]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*", "__codegen*__"]
 [tool.coverage.report]
-omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*"]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*", "__codegen*__"]

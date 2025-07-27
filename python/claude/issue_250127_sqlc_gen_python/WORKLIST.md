@@ -112,7 +112,18 @@
   - Add comprehensive tests for COPY operations including generated code structure validation
   - Reference: https://www.psycopg.org/psycopg3/docs/basic/copy.html and https://docs.sqlc.dev/en/latest/howto/insert.html
 
-## Milestone 12: Batch Operations Support (:batch*)
+## ✅ Milestone 12: Partial Model Support for Subset Queries
+- [x] Generate custom dataclasses for queries that don't return full models
+  - Detect queries that select only a subset of table columns using column comparison with catalog
+  - Generate custom dataclasses with names like `GetUserSummaryResult` based on query names
+  - Only use the full Model class when ALL columns from the table are selected
+  - Handle queries with JOINs and computed columns by generating custom dataclasses
+  - Support queries with computed columns, aggregates, or expressions (no table association)
+  - Generate appropriate imports and type annotations for custom dataclasses in queries.py
+  - Add unit tests for partial model generation with various query patterns
+  - Ensure backward compatibility with existing full-model queries (test passes)
+
+## Milestone 13: Batch Operations Support (:batch*)
 - [ ] Add support for `executemany` using psycopg (drop down) to implement `:batch*` for sqlc
   - Parse `:batchexec`, `:batchone`, `:batchmany` query annotations
   - Generate functions that use psycopg's `executemany()` for batch operations
