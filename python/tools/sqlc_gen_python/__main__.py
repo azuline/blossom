@@ -257,8 +257,12 @@ def _infer_model_name(query: Query) -> str:
 
 
 @click.command()
-def main() -> None:
+@click.argument("service_method", required=False)
+def main(service_method: str | None = None) -> None:
     """SQLc Python code generation plugin main entry point."""
+    # Assert that we're being called with the expected gRPC service method
+    if service_method is not None:
+        assert service_method == "/plugin.CodegenService/Generate", f"Unexpected service method: {service_method}"
     try:
         # Deserialize request from stdin
         request = deserialize_request()

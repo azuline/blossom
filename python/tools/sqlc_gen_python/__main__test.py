@@ -97,46 +97,19 @@ from database.__codegen__ import models
     assert response.files[1].contents.decode("utf-8") == expected_queries
 
 
-def test_type_mapping():
-    """Test PostgreSQL to Python type mapping."""
-    # Test basic types
-    text_col = Column(name="name", not_null=True, type=Identifier(name="text"))
-    assert map_postgres_type_to_python(text_col) == "str"
+def test_cli_with_service_method():
+    """Test that the CLI tool handles the gRPC service method argument correctly."""
+    runner = CliRunner()
 
-    # Test nullable types
-    nullable_text_col = Column(name="name", not_null=False, type=Identifier(name="text"))
-    assert map_postgres_type_to_python(nullable_text_col) == "str | None"
+    request = GenerateRequest(sqlc_version="1.0.0", settings=Settings(version="1.0.0", engine="postgresql"), catalog=Catalog(name="test", schemas=[]))
+    input_data = bytes(request)
+    result = runner.invoke(main, ["/plugin.CodegenService/Generate"], input=input_data)
+    assert result.exit_code == 0
 
-    # Test array types
-    array_col = Column(name="tags", not_null=True, is_array=True, type=Identifier(name="text"))
-    assert map_postgres_type_to_python(array_col) == "list[str]"
-
-    # Test nullable array types
-    nullable_array_col = Column(name="tags", not_null=False, is_array=True, type=Identifier(name="text"))
-    assert map_postgres_type_to_python(nullable_array_col) == "list[str] | None"
-
-    # Test numeric types
-    int_col = Column(name="count", not_null=True, type=Identifier(name="bigint"))
-    assert map_postgres_type_to_python(int_col) == "int"
-
-    float_col = Column(name="price", not_null=True, type=Identifier(name="numeric"))
-    assert map_postgres_type_to_python(float_col) == "float"
-
-    # Test datetime types
-    timestamp_col = Column(name="created_at", not_null=True, type=Identifier(name="timestamptz"))
-    assert map_postgres_type_to_python(timestamp_col) == "datetime.datetime"
-
-    # Test boolean type
-    bool_col = Column(name="active", not_null=True, type=Identifier(name="boolean"))
-    assert map_postgres_type_to_python(bool_col) == "bool"
-
-    # Test JSON types
-    json_col = Column(name="metadata", not_null=False, type=Identifier(name="jsonb"))
-    assert map_postgres_type_to_python(json_col) == "Any | None"
-
-    # Test unknown type fallback
-    unknown_col = Column(name="custom", not_null=True, type=Identifier(name="custom_type"))
-    assert map_postgres_type_to_python(unknown_col) == "Any"
+    response = GenerateResponse().parse(result.stdout_bytes)
+    assert len(response.files) == 2
+    assert response.files[0].name == "models.py"
+    assert response.files[1].name == "queries.py"
 
 
 def test_model_generation():

@@ -37,7 +37,11 @@
                 proxyVendor = true;
                 subPackages = [ "." ];
               };
-
+              sqlc-gen-python = super.writeShellScriptBin "sqlc-gen-python" ''
+                #!/usr/bin/env bash
+                cd "$MONOREPO_ROOT/python"
+                uv run -- python -m tools.sqlc_gen_python $@
+              '';
             })
           ];
         };
@@ -57,7 +61,7 @@
                 done
                 echo "$path"
               }
-              export BLOSSOM_ROOT="$(find-up flake.nix)"
+              export MONOREPO_ROOT="$(find-up .monorepo-root)"
               # Default biome binary is dynamically linked.
               export BIOME_BINARY="${pkgs.biome}/bin/biome"
               export UV_PYTHON="${pkgs.python313}/bin/python"
@@ -91,6 +95,7 @@
             ruff
             semgrep
             sqlc
+            sqlc-gen-python
             uv
           ];
           typescript = [

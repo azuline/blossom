@@ -1,8 +1,4 @@
 version: "2"
-plugins:
-  - name: py
-    process:
-      cmd: "python -m tools.sqlc_gen_python"
 sql:
   - engine: "postgresql"
     queries: "database/queries.sql"
@@ -16,6 +12,13 @@ sql:
         plugin: py
         options:
           package: database.__codegen__
-          emit_sync_querier: false
-          emit_async_querier: true
-          query_parameter_limit: 100  # Always generate kwargs, never argument structs.
+plugins:
+  - name: py
+    env:
+      - MONOREPO_ROOT
+      - PATH
+      - LD_LIBRARY_PATH
+      - PYTHONPATH
+      - VIRTUAL_ENV
+    process:
+      cmd: "sqlc-gen-python"
