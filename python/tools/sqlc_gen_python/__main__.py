@@ -115,7 +115,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
         copy_sql = f"COPY {{ query.insert_into_table.name }} ({% for param in query.copyfrom_params %}{{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %}) FROM STDIN"
         async with cursor.copy(copy_sql) as copy:
             for item in data:
-                copy.write_row(({% for param in query.copyfrom_params %}item.{{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %}))
+                await copy.write_row(({% for param in query.copyfrom_params %}item.{{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %}))
 {%- endif %}
 
 {% endfor -%}
@@ -126,7 +126,6 @@ ENUMS_TEMPLATE = """\
 from typing import Literal
 
 {% for enum in enums -%}
-# Generated from {{ enum.table_name }} table
 type {{ enum.type_name }} = Literal[{{ enum.literal_values }}]
 {{ enum.values_name }} = {{ enum.values_list }}
 

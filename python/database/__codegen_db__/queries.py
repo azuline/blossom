@@ -26,5 +26,5 @@ async def query_test_bulk_inserts(conn: DBConn, data: list[TestBulkInsertsData])
         copy_sql = f"COPY organizations (name, inbound_source) FROM STDIN"
         async with cursor.copy(copy_sql) as copy:
             for item in data:
-                copy.write_row((item.name, item.inbound_source))
+                await copy.write_row((item.name, item.inbound_source))
 

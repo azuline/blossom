@@ -23,7 +23,7 @@ async def test_bulk_inserts() -> None:
     ]
 
     async with xact_admin() as conn:
-        # Execute bulk insert
+        # Execute bulk insert using the generated ORM function
         await query_test_bulk_inserts(conn, test_data)
 
         # Verify the specific rows exist by querying for our random names
