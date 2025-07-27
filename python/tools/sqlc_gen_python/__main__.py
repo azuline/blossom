@@ -287,12 +287,8 @@ async def _main_coro() -> None:
         assert sql_path.name == "queries.sql"
         output_dir = sql_path.parent / "__codegen_db__"
         output_path = output_dir / "queries.py"
-        
-        # Add empty __init__.py to make the directory a Python package
         init_path = output_dir / "__init__.py"
         response.files.append(File(name=str(init_path).removeprefix(cwd), contents=b""))
-        
-        # Add queries.py file
         queries_content = generate_queries(queries)
         response.files.append(File(name=str(output_path).removeprefix(cwd), contents=queries_content.encode("utf-8")))
 

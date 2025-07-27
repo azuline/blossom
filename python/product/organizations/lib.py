@@ -13,13 +13,13 @@ class UserNotFoundError(BaseError):
     pass
 
 
-async def organization_create(q: DBQuerier, *, name: str, inbound_source: OrganizationsInboundSourceEnum) -> models.Organization:
-    organization = await q.orm.organization_create(name=name, inbound_source=inbound_source)
+async def organization_create(conn: DBConn, *, name: str, inbound_source: OrganizationsInboundSourceEnum) -> models.Organization:
+    organization = await organization_create(conn, name=name, inbound_source=inbound_source)
     assert organization is not None
     return organization
 
 
-async def organization_add_user(q: DBQuerier, *, organization_id: str, user_id: str) -> models.OrganizationsUser:
+async def organization_add_user(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUser:
     organization = await q.orm.organization_fetch(id=organization_id)
     if not organization:
         raise OrganizationNotFoundError
