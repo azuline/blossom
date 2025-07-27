@@ -1,8 +1,8 @@
 version: "2"
 sql:
   - engine: "postgresql"
-    queries: "database/queries.sql"
-    schema: "database/migrations/"
+    queries: "**/*/queries.sql"
+    schema: "database/schema.sql"
     database:
       uri: postgresql://postgresql:password@localhost:40801/postgres
     rules:

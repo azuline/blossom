@@ -3,18 +3,28 @@ import dataclasses
 import datetime
 from typing import Any
 
+from database.__codegen__ import enums
 @dataclasses.dataclass(slots=True)
-class User:
+class YoyoLog:
     id: str
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    storytime: dict[str, Any] | None
-    name: str
-    email: str
-    password_hash: str | None
-    signup_step: str
-    is_enabled: bool
-    last_visited_at: datetime.datetime | None
+    migration_hash: str | None
+    migration_id: str | None
+    operation: str | None
+    username: str | None
+    hostname: str | None
+    comment: str | None
+    created_at_utc: datetime.datetime | None
+
+@dataclasses.dataclass(slots=True)
+class YoyoMigration:
+    migration_hash: str
+    migration_id: str | None
+    applied_at_utc: datetime.datetime | None
+
+@dataclasses.dataclass(slots=True)
+class YoyoVersion:
+    version: int
+    installed_at_utc: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
 class Invite:
@@ -28,13 +38,26 @@ class Invite:
     accepted_at: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
+class User:
+    id: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    storytime: dict[str, Any] | None
+    name: str
+    email: str
+    password_hash: str | None
+    signup_step: enums.UserSignupStepEnum
+    is_enabled: bool
+    last_visited_at: datetime.datetime | None
+
+@dataclasses.dataclass(slots=True)
 class Organization:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
     storytime: dict[str, Any] | None
     name: str
-    inbound_source: str
+    inbound_source: enums.OrganizationsInboundSourceEnum
 
 @dataclasses.dataclass(slots=True)
 class OrganizationsUser:
@@ -66,4 +89,10 @@ class VaultedSecret:
     storytime: dict[str, Any] | None
     organization_id: str
     ciphertext: str
+
+@dataclasses.dataclass(slots=True)
+class YoyoLock:
+    locked: int
+    ctime: datetime.datetime | None
+    pid: int
 

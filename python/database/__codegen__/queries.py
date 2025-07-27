@@ -6,115 +6,61 @@ from database.conn import DBConn
 from database.__codegen__ import models
 from foundation.observability.errors import NotFoundError
 
-ORGANIZATIONFETCH = """-- name: OrganizationFetch :one
-SELECT id, created_at, updated_at, storytime, name, inbound_source
-FROM organizations
+VAULT_SECRET_CREATE = """-- name: vault_secret_create :one
+INSERT INTO vaulted_secrets (organization_id, ciphertext)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
+"""
+
+async def vault_secret_create(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecret:
+    row = (await conn.execute(sqlalchemy.text(VAULT_SECRET_CREATE), {"p1": organization_id, "p2": ciphertext})).first()
+    if row is None:
+        raise NotFoundError(resource="vaultedsecret", key_name="organization_id", key_value=str(organization_id))
+    return models.VaultedSecret(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        organization_id=row[4],
+        ciphertext=row[5],
+    )
+
+VAULT_SECRET_FETCH = """-- name: vault_secret_fetch :one
+SELECT id, created_at, updated_at, storytime, organization_id, ciphertext
+FROM vaulted_secrets
 WHERE id = $1
 """
 
-async def OrganizationFetch(conn: DBConn, *, id: str) -> models.Organization:
-    row = (await conn.execute(sqlalchemy.text(ORGANIZATIONFETCH), {"p1": id})).first()
+async def vault_secret_fetch(conn: DBConn, *, id: str) -> models.VaultedSecret:
+    row = (await conn.execute(sqlalchemy.text(VAULT_SECRET_FETCH), {"p1": id})).first()
     if row is None:
-        raise NotFoundError(resource="organization", key_name="id", key_value=str(id))
-    return models.Organization(
+        raise NotFoundError(resource="vaultedsecret", key_name="id", key_value=str(id))
+    return models.VaultedSecret(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
         storytime=row[3],
-        name=row[4],
-        inbound_source=row[5],
+        organization_id=row[4],
+        ciphertext=row[5],
     )
 
-ORGANIZATIONFETCHALL = """-- name: OrganizationFetchAll :many
-SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
-FROM organizations t
-JOIN organizations_users tu ON tu.organization_id = t.id
-WHERE tu.user_id = $1
-"""
-
-async def OrganizationFetchAll(conn: DBConn, *, user_id: str) -> AsyncIterator[models.Organization]:
-    result = await conn.execute(sqlalchemy.text(ORGANIZATIONFETCHALL), {"p1": user_id})
-    async for row in result:
-        yield models.Organization(
-            id=row[0],
-            created_at=row[1],
-            updated_at=row[2],
-            storytime=row[3],
-            name=row[4],
-            inbound_source=row[5],
-        )
-
-ORGANIZATIONCREATE = """-- name: OrganizationCreate :one
-INSERT INTO organizations (name, inbound_source)
-VALUES ($1, $2)
-RETURNING id, created_at, updated_at, storytime, name, inbound_source
-"""
-
-async def OrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization:
-    row = (await conn.execute(sqlalchemy.text(ORGANIZATIONCREATE), {"p1": name, "p2": inbound_source})).first()
-    if row is None:
-        raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
-    return models.Organization(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        name=row[4],
-        inbound_source=row[5],
-    )
-
-ORGANIZATIONUSERADD = """-- name: OrganizationUserAdd :one
-INSERT INTO organizations_users (organization_id, user_id)
-VALUES ($1, $2)
-RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
-"""
-
-async def OrganizationUserAdd(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUser:
-    row = (await conn.execute(sqlalchemy.text(ORGANIZATIONUSERADD), {"p1": organization_id, "p2": user_id})).first()
-    if row is None:
-        raise NotFoundError(resource="organizationsuser", key_name="organization_id", key_value=str(organization_id))
-    return models.OrganizationsUser(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        user_id=row[4],
-        organization_id=row[5],
-        removed_at=row[6],
-        removed_by_user=row[7],
-    )
-
-USERFETCH = """-- name: UserFetch :one
-SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
-FROM users
+VAULT_SECRET_DELETE = """-- name: vault_secret_delete :exec
+DELETE
+FROM vaulted_secrets
 WHERE id = $1
 """
 
-async def UserFetch(conn: DBConn, *, id: str) -> models.User:
-    row = (await conn.execute(sqlalchemy.text(USERFETCH), {"p1": id})).first()
-    if row is None:
-        raise NotFoundError(resource="user", key_name="id", key_value=str(id))
-    return models.User(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        name=row[4],
-        email=row[5],
-        password_hash=row[6],
-        signup_step=row[7],
-        is_enabled=row[8],
-        last_visited_at=row[9],
-    )
+async def vault_secret_delete(conn: DBConn, *, id: str) -> None:
+    await conn.execute(sqlalchemy.text(VAULT_SECRET_DELETE), {"p1": id})
 
-USERCREATE = """-- name: UserCreate :one
-INSERT INTO users (name, email, password_hash, signup_step)
-VALUES ($1, $2, $3, $4)
+TEST_USER_CREATE = """-- name: test_user_create :one
+INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
+VALUES ($1, $2, $3, $4, $5)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def UserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.User:
-    row = (await conn.execute(sqlalchemy.text(USERCREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step})).first()
+async def test_user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.User:
+    row = (await conn.execute(sqlalchemy.text(TEST_USER_CREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step, "p5": is_enabled})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="name", key_value=str(name))
     return models.User(
@@ -130,14 +76,75 @@ async def UserCreate(conn: DBConn, *, name: str, email: str, password_hash: str 
         last_visited_at=row[9],
     )
 
-AUTHNUSERFETCHBYEMAIL = """-- name: AuthnUserFetchByEmail :one
+TEST_ORGANIZATION_CREATE = """-- name: test_organization_create :one
+INSERT INTO organizations (name, inbound_source)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, storytime, name, inbound_source
+"""
+
+async def test_organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization:
+    row = (await conn.execute(sqlalchemy.text(TEST_ORGANIZATION_CREATE), {"p1": name, "p2": inbound_source})).first()
+    if row is None:
+        raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
+    return models.Organization(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        name=row[4],
+        inbound_source=row[5],
+    )
+
+TEST_ORGANIZATION_USER_CREATE = """-- name: test_organization_user_create :one
+INSERT INTO organizations_users (user_id, organization_id)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
+"""
+
+async def test_organization_user_create(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUser:
+    row = (await conn.execute(sqlalchemy.text(TEST_ORGANIZATION_USER_CREATE), {"p1": user_id, "p2": organization_id})).first()
+    if row is None:
+        raise NotFoundError(resource="organizationsuser", key_name="user_id", key_value=str(user_id))
+    return models.OrganizationsUser(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        user_id=row[4],
+        organization_id=row[5],
+        removed_at=row[6],
+        removed_by_user=row[7],
+    )
+
+TEST_SESSION_CREATE = """-- name: test_session_create :one
+INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
+VALUES ($1, $2, $3, $4)
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
+"""
+
+async def test_session_create(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.Session:
+    row = (await conn.execute(sqlalchemy.text(TEST_SESSION_CREATE), {"p1": user_id, "p2": organization_id, "p3": expired_at, "p4": last_seen_at})).first()
+    if row is None:
+        raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))
+    return models.Session(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        user_id=row[4],
+        organization_id=row[5],
+        last_seen_at=row[6],
+        expired_at=row[7],
+    )
+
+AUTHN_USER_FETCH_BY_EMAIL = """-- name: authn_user_fetch_by_email :one
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
 WHERE email = $1
 """
 
-async def AuthnUserFetchByEmail(conn: DBConn, *, email: str) -> models.User:
-    row = (await conn.execute(sqlalchemy.text(AUTHNUSERFETCHBYEMAIL), {"p1": email})).first()
+async def authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models.User:
+    row = (await conn.execute(sqlalchemy.text(AUTHN_USER_FETCH_BY_EMAIL), {"p1": email})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="email", key_value=str(email))
     return models.User(
@@ -153,14 +160,14 @@ async def AuthnUserFetchByEmail(conn: DBConn, *, email: str) -> models.User:
         last_visited_at=row[9],
     )
 
-AUTHNSESSIONCREATE = """-- name: AuthnSessionCreate :one
+AUTHN_SESSION_CREATE = """-- name: authn_session_create :one
 INSERT INTO sessions (user_id, organization_id)
 VALUES ($1, $2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
-async def AuthnSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.Session:
-    row = (await conn.execute(sqlalchemy.text(AUTHNSESSIONCREATE), {"p1": user_id, "p2": organization_id})).first()
+async def authn_session_create(conn: DBConn, *, user_id: str, organization_id: str | None) -> models.Session:
+    row = (await conn.execute(sqlalchemy.text(AUTHN_SESSION_CREATE), {"p1": user_id, "p2": organization_id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))
     return models.Session(
@@ -174,24 +181,24 @@ async def AuthnSessionCreate(conn: DBConn, *, user_id: str, organization_id: str
         expired_at=row[7],
     )
 
-AUTHNSESSIONEXPIRE = """-- name: AuthnSessionExpire :exec
+AUTHN_SESSION_EXPIRE = """-- name: authn_session_expire :exec
 UPDATE sessions
 SET expired_at = NOW() 
 WHERE id = $1
 """
 
-async def AuthnSessionExpire(conn: DBConn, *, id: str) -> None:
-    await conn.execute(sqlalchemy.text(AUTHNSESSIONEXPIRE), {"p1": id})
+async def authn_session_expire(conn: DBConn, *, id: str) -> None:
+    await conn.execute(sqlalchemy.text(AUTHN_SESSION_EXPIRE), {"p1": id})
 
-AUTHNLINKEDORGANIZATIONFETCH = """-- name: AuthnLinkedOrganizationFetch :one
+AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch :one
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
 WHERE tu.user_id = $1 AND t.id = $2
 """
 
-async def AuthnLinkedOrganizationFetch(conn: DBConn, *, user_id: str, id: str) -> models.Organization:
-    row = (await conn.execute(sqlalchemy.text(AUTHNLINKEDORGANIZATIONFETCH), {"p1": user_id, "p2": id})).first()
+async def authn_linked_organization_fetch(conn: DBConn, *, user_id: str, id: str) -> models.Organization:
+    row = (await conn.execute(sqlalchemy.text(AUTHN_LINKED_ORGANIZATION_FETCH), {"p1": user_id, "p2": id})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="user_id", key_value=str(user_id))
     return models.Organization(
@@ -203,7 +210,7 @@ async def AuthnLinkedOrganizationFetch(conn: DBConn, *, user_id: str, id: str) -
         inbound_source=row[5],
     )
 
-AUTHNMOSTRECENTLYACCESSEDORGANIZATIONFETCH = """-- name: AuthnMostRecentlyAccessedOrganizationFetch :one
+AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH = """-- name: authn_most_recently_accessed_organization_fetch :one
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
@@ -213,8 +220,8 @@ ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
 """
 
-async def AuthnMostRecentlyAccessedOrganizationFetch(conn: DBConn, *, user_id: str) -> models.Organization:
-    row = (await conn.execute(sqlalchemy.text(AUTHNMOSTRECENTLYACCESSEDORGANIZATIONFETCH), {"p1": user_id})).first()
+async def authn_most_recently_accessed_organization_fetch(conn: DBConn, *, user_id: str) -> models.Organization:
+    row = (await conn.execute(sqlalchemy.text(AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH), {"p1": user_id})).first()
     if row is None:
         raise NotFoundError(resource="organization", key_name="user_id", key_value=str(user_id))
     return models.Organization(
@@ -226,7 +233,7 @@ async def AuthnMostRecentlyAccessedOrganizationFetch(conn: DBConn, *, user_id: s
         inbound_source=row[5],
     )
 
-AUTHNSESSIONFETCHBYUSER = """-- name: AuthnSessionFetchByUser :one
+AUTHN_SESSION_FETCH_BY_USER = """-- name: authn_session_fetch_by_user :one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE user_id = $1
@@ -234,8 +241,8 @@ ORDER BY last_seen_at DESC
 LIMIT 1
 """
 
-async def AuthnSessionFetchByUser(conn: DBConn, *, user_id: str) -> models.Session:
-    row = (await conn.execute(sqlalchemy.text(AUTHNSESSIONFETCHBYUSER), {"p1": user_id})).first()
+async def authn_session_fetch_by_user(conn: DBConn, *, user_id: str) -> models.Session:
+    row = (await conn.execute(sqlalchemy.text(AUTHN_SESSION_FETCH_BY_USER), {"p1": user_id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))
     return models.Session(
@@ -249,54 +256,7 @@ async def AuthnSessionFetchByUser(conn: DBConn, *, user_id: str) -> models.Sessi
         expired_at=row[7],
     )
 
-VAULTSECRETCREATE = """-- name: VaultSecretCreate :one
-INSERT INTO vaulted_secrets (organization_id, ciphertext)
-VALUES ($1, $2)
-RETURNING id, created_at, updated_at, storytime, organization_id, ciphertext
-"""
-
-async def VaultSecretCreate(conn: DBConn, *, organization_id: str, ciphertext: str) -> models.VaultedSecret:
-    row = (await conn.execute(sqlalchemy.text(VAULTSECRETCREATE), {"p1": organization_id, "p2": ciphertext})).first()
-    if row is None:
-        raise NotFoundError(resource="vaultedsecret", key_name="organization_id", key_value=str(organization_id))
-    return models.VaultedSecret(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        organization_id=row[4],
-        ciphertext=row[5],
-    )
-
-VAULTSECRETFETCH = """-- name: VaultSecretFetch :one
-SELECT id, created_at, updated_at, storytime, organization_id, ciphertext
-FROM vaulted_secrets
-WHERE id = $1
-"""
-
-async def VaultSecretFetch(conn: DBConn, *, id: str) -> models.VaultedSecret:
-    row = (await conn.execute(sqlalchemy.text(VAULTSECRETFETCH), {"p1": id})).first()
-    if row is None:
-        raise NotFoundError(resource="vaultedsecret", key_name="id", key_value=str(id))
-    return models.VaultedSecret(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        organization_id=row[4],
-        ciphertext=row[5],
-    )
-
-VAULTSECRETDELETE = """-- name: VaultSecretDelete :exec
-DELETE
-FROM vaulted_secrets
-WHERE id = $1
-"""
-
-async def VaultSecretDelete(conn: DBConn, *, id: str) -> None:
-    await conn.execute(sqlalchemy.text(VAULTSECRETDELETE), {"p1": id})
-
-RPCUNEXPIREDSESSIONFETCH = """-- name: RpcUnexpiredSessionFetch :one
+RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch :one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE id = $1
@@ -304,8 +264,8 @@ AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """
 
-async def RpcUnexpiredSessionFetch(conn: DBConn, *, id: str) -> models.Session:
-    row = (await conn.execute(sqlalchemy.text(RPCUNEXPIREDSESSIONFETCH), {"p1": id})).first()
+async def rpc_unexpired_session_fetch(conn: DBConn, *, id: str) -> models.Session:
+    row = (await conn.execute(sqlalchemy.text(RPC_UNEXPIRED_SESSION_FETCH), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="session", key_name="id", key_value=str(id))
     return models.Session(
@@ -319,28 +279,94 @@ async def RpcUnexpiredSessionFetch(conn: DBConn, *, id: str) -> models.Session:
         expired_at=row[7],
     )
 
-PIPELINEORGANIZATIONIDFETCHALL = """-- name: PipelineOrganizationIDFetchAll :many
-SELECT id FROM organizations ORDER BY id
+ORGANIZATION_FETCH = """-- name: organization_fetch :one
+SELECT id, created_at, updated_at, storytime, name, inbound_source
+FROM organizations
+WHERE id = $1
 """
 
-async def PipelineOrganizationIDFetchAll(conn: DBConn) -> AsyncIterator[models.Organization]:
-    result = await conn.execute(sqlalchemy.text(PIPELINEORGANIZATIONIDFETCHALL), {})
+async def organization_fetch(conn: DBConn, *, id: str) -> models.Organization:
+    row = (await conn.execute(sqlalchemy.text(ORGANIZATION_FETCH), {"p1": id})).first()
+    if row is None:
+        raise NotFoundError(resource="organization", key_name="id", key_value=str(id))
+    return models.Organization(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        name=row[4],
+        inbound_source=row[5],
+    )
+
+ORGANIZATION_CREATE = """-- name: organization_create :one
+INSERT INTO organizations (name, inbound_source)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, storytime, name, inbound_source
+"""
+
+async def organization_create(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization:
+    row = (await conn.execute(sqlalchemy.text(ORGANIZATION_CREATE), {"p1": name, "p2": inbound_source})).first()
+    if row is None:
+        raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
+    return models.Organization(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        name=row[4],
+        inbound_source=row[5],
+    )
+
+ORGANIZATION_USER_ADD = """-- name: organization_user_add :one
+INSERT INTO organizations_users (organization_id, user_id)
+VALUES ($1, $2)
+RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
+"""
+
+async def organization_user_add(conn: DBConn, *, organization_id: str, user_id: str) -> models.OrganizationsUser:
+    row = (await conn.execute(sqlalchemy.text(ORGANIZATION_USER_ADD), {"p1": organization_id, "p2": user_id})).first()
+    if row is None:
+        raise NotFoundError(resource="organizationsuser", key_name="organization_id", key_value=str(organization_id))
+    return models.OrganizationsUser(
+        id=row[0],
+        created_at=row[1],
+        updated_at=row[2],
+        storytime=row[3],
+        user_id=row[4],
+        organization_id=row[5],
+        removed_at=row[6],
+        removed_by_user=row[7],
+    )
+
+ORGANIZATION_FETCH_ALL = """-- name: organization_fetch_all :many
+SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
+FROM organizations t
+JOIN organizations_users tu ON tu.organization_id = t.id
+WHERE tu.user_id = $1
+"""
+
+async def organization_fetch_all(conn: DBConn, *, user_id: str) -> AsyncIterator[models.Organization]:
+    result = await conn.execute(sqlalchemy.text(ORGANIZATION_FETCH_ALL), {"p1": user_id})
     async for row in result:
         yield models.Organization(
             id=row[0],
+            created_at=row[1],
+            updated_at=row[2],
+            storytime=row[3],
+            name=row[4],
+            inbound_source=row[5],
         )
 
-TESTUSERCREATE = """-- name: TestUserCreate :one
-
-INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
-VALUES ($1, $2, $3, $4, $5)
-RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
+USER_FETCH = """-- name: user_fetch :one
+SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
+FROM users
+WHERE id = $1
 """
 
-async def TestUserCreate(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str, is_enabled: bool) -> models.User:
-    row = (await conn.execute(sqlalchemy.text(TESTUSERCREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step, "p5": is_enabled})).first()
+async def user_fetch(conn: DBConn, *, id: str) -> models.User:
+    row = (await conn.execute(sqlalchemy.text(USER_FETCH), {"p1": id})).first()
     if row is None:
-        raise NotFoundError(resource="user", key_name="name", key_value=str(name))
+        raise NotFoundError(resource="user", key_name="id", key_value=str(id))
     return models.User(
         id=row[0],
         created_at=row[1],
@@ -354,64 +380,26 @@ async def TestUserCreate(conn: DBConn, *, name: str, email: str, password_hash: 
         last_visited_at=row[9],
     )
 
-TESTORGANIZATIONCREATE = """-- name: TestOrganizationCreate :one
-INSERT INTO organizations (name, inbound_source)
-VALUES ($1, $2)
-RETURNING id, created_at, updated_at, storytime, name, inbound_source
+USER_CREATE = """-- name: user_create :one
+INSERT INTO users (name, email, password_hash, signup_step)
+VALUES ($1, $2, $3, $4)
+RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
-async def TestOrganizationCreate(conn: DBConn, *, name: str, inbound_source: str) -> models.Organization:
-    row = (await conn.execute(sqlalchemy.text(TESTORGANIZATIONCREATE), {"p1": name, "p2": inbound_source})).first()
+async def user_create(conn: DBConn, *, name: str, email: str, password_hash: str | None, signup_step: str) -> models.User:
+    row = (await conn.execute(sqlalchemy.text(USER_CREATE), {"p1": name, "p2": email, "p3": password_hash, "p4": signup_step})).first()
     if row is None:
-        raise NotFoundError(resource="organization", key_name="name", key_value=str(name))
-    return models.Organization(
+        raise NotFoundError(resource="user", key_name="name", key_value=str(name))
+    return models.User(
         id=row[0],
         created_at=row[1],
         updated_at=row[2],
         storytime=row[3],
         name=row[4],
-        inbound_source=row[5],
-    )
-
-TESTORGANIZATIONUSERCREATE = """-- name: TestOrganizationUserCreate :one
-INSERT INTO organizations_users (user_id, organization_id)
-VALUES ($1, $2)
-RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
-"""
-
-async def TestOrganizationUserCreate(conn: DBConn, *, user_id: str, organization_id: str) -> models.OrganizationsUser:
-    row = (await conn.execute(sqlalchemy.text(TESTORGANIZATIONUSERCREATE), {"p1": user_id, "p2": organization_id})).first()
-    if row is None:
-        raise NotFoundError(resource="organizationsuser", key_name="user_id", key_value=str(user_id))
-    return models.OrganizationsUser(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        user_id=row[4],
-        organization_id=row[5],
-        removed_at=row[6],
-        removed_by_user=row[7],
-    )
-
-TESTSESSIONCREATE = """-- name: TestSessionCreate :one
-INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
-VALUES ($1, $2, $3, $4)
-RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
-"""
-
-async def TestSessionCreate(conn: DBConn, *, user_id: str, organization_id: str | None, expired_at: Any | None, last_seen_at: Any) -> models.Session:
-    row = (await conn.execute(sqlalchemy.text(TESTSESSIONCREATE), {"p1": user_id, "p2": organization_id, "p3": expired_at, "p4": last_seen_at})).first()
-    if row is None:
-        raise NotFoundError(resource="session", key_name="user_id", key_value=str(user_id))
-    return models.Session(
-        id=row[0],
-        created_at=row[1],
-        updated_at=row[2],
-        storytime=row[3],
-        user_id=row[4],
-        organization_id=row[5],
-        last_seen_at=row[6],
-        expired_at=row[7],
+        email=row[5],
+        password_hash=row[6],
+        signup_step=row[7],
+        is_enabled=row[8],
+        last_visited_at=row[9],
     )
 

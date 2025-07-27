@@ -30,6 +30,10 @@ async def main():
     try:
         logger.info("using test database for codegen", db_name=db_name)
 
+        logger.info("generating schema.sql")
+        subprocess.run(["pgmigrate", "dump", "-d", ENV.database_uri, "--out", str(PYTHON_ROOT / "database/schema.sql")], check=True)
+        logger.info("schema.sql generated successfully")
+
         # Generate sqlc :: models.py and queries.py
         with tempfile.NamedTemporaryFile(prefix=".sqlc.config", suffix=".yaml", dir=".") as tmp_config:
             with Path("sqlc.yaml").open("r") as f:
@@ -47,10 +51,6 @@ async def main():
             (out_dir / "__init__.py").touch()
             subprocess.run(["sqlc", "generate", "-f", tmp_config.name], check=True)
             logger.info("codegen completed successfully")
-
-            logger.info("generating schema.sql")
-            subprocess.run(["pgmigrate", "dump", "-d", ENV.database_uri, "--out", str(PYTHON_ROOT / "database/schema.sql")], check=True)
-            logger.info("schema.sql generated successfully")
 
         # Generate table map :: tables.py
         table_map_filepath = out_dir / "tables.py"
