@@ -58,19 +58,17 @@ async def main():
         defaults: list[tuple[str, str]] = []
         async with connect_db_admin() as conn:
             cursor = await conn.execute(
-                text(
-                    """
-                SELECT c.table_name, c.column_default
-                FROM information_schema.columns c
-                JOIN information_schema.tables t
-                    ON c.table_name = t.table_name
-                WHERE c.column_name = 'id'
-                AND t.table_schema = 'public'
-                AND t.table_type = 'BASE TABLE'
-                AND t.table_name NOT LIKE '%yoyo%'
-                AND c.column_default LIKE  'generate_id(%'
-                """
-                )
+                text("""
+                    SELECT c.table_name, c.column_default
+                    FROM information_schema.columns c
+                    JOIN information_schema.tables t
+                        ON c.table_name = t.table_name
+                    WHERE c.column_name = 'id'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND c.column_default LIKE  'generate_id(%'
+                """)
             )
             pattern = re.compile(r"generate_id\('([^']+)'::text\)")
             for row in cursor:

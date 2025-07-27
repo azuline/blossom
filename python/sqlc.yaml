@@ -3,20 +3,10 @@ sql:
   - engine: "postgresql"
     queries: "**/*/queries.sql"
     schema: "database/schema.sql"
-    database:
-      uri: postgresql://postgresql:password@localhost:40801/postgres
-    rules:
-      - sqlc/db-prepare
-    codegen:
-      - out: database/__codegen__
-        plugin: py
+    database: { uri: "postgresql://postgresql:password@localhost:40801/postgres" }
+    rules: [ "sqlc/db-prepare" ]
+    codegen: [ { out: ".", plugin: "py" }]
 plugins:
-  - name: py
-    env:
-      - MONOREPO_ROOT
-      - PATH
-      - LD_LIBRARY_PATH
-      - PYTHONPATH
-      - VIRTUAL_ENV
-    process:
-      cmd: "sqlc-gen-python"
+  - name: "py"
+    process: { cmd: "sqlc-gen-python" }
+    env: [ "MONOREPO_ROOT", "PATH", "LD_LIBRARY_PATH", "PYTHONPATH", "VIRTUAL_ENV" ]

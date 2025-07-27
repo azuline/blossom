@@ -5,29 +5,7 @@ from typing import Any
 
 from database.__codegen__ import enums
 @dataclasses.dataclass(slots=True)
-class YoyoLog:
-    id: str
-    migration_hash: str | None
-    migration_id: str | None
-    operation: str | None
-    username: str | None
-    hostname: str | None
-    comment: str | None
-    created_at_utc: datetime.datetime | None
-
-@dataclasses.dataclass(slots=True)
-class YoyoMigration:
-    migration_hash: str
-    migration_id: str | None
-    applied_at_utc: datetime.datetime | None
-
-@dataclasses.dataclass(slots=True)
-class YoyoVersion:
-    version: int
-    installed_at_utc: datetime.datetime | None
-
-@dataclasses.dataclass(slots=True)
-class Invite:
+class InviteModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -38,7 +16,7 @@ class Invite:
     accepted_at: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
-class User:
+class UserModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -51,7 +29,7 @@ class User:
     last_visited_at: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
-class Organization:
+class OrganizationModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -60,7 +38,7 @@ class Organization:
     inbound_source: enums.OrganizationsInboundSourceEnum
 
 @dataclasses.dataclass(slots=True)
-class OrganizationsUser:
+class OrganizationsUserModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -71,7 +49,7 @@ class OrganizationsUser:
     removed_by_user: str | None
 
 @dataclasses.dataclass(slots=True)
-class Session:
+class SessionModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -82,7 +60,7 @@ class Session:
     expired_at: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
-class VaultedSecret:
+class VaultedSecretModel:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -91,7 +69,7 @@ class VaultedSecret:
     ciphertext: str
 
 @dataclasses.dataclass(slots=True)
-class YoyoLock:
+class YoyoLockModel:
     locked: int
     ctime: datetime.datetime | None
     pid: int

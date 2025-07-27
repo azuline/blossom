@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""SQLc Python code generation plugin."""
 
 import asyncio
+import itertools
 import sys
 
 import click
@@ -91,61 +91,71 @@ type {{ enum.type_name }} = Literal[{{ enum.literal_values }}]
 """
 
 POSTGRES_TO_PYTHON_TYPES = {
-    "text": "str", "varchar": "str", "char": "str", "bpchar": "str",
-    "timestamptz": "datetime.datetime", "timestamp": "datetime.datetime",
-    "date": "datetime.date", "time": "datetime.time", "timetz": "datetime.time",
-    "interval": "datetime.timedelta", "boolean": "bool", "bool": "bool",
-    "jsonb": "dict[str, Any]", "json": "dict[str, Any]",
-    "bigint": "int", "int8": "int", "integer": "int", "int4": "int",
-    "smallint": "int", "int2": "int", "serial": "int", "bigserial": "int",
-    "real": "float", "float4": "float", "double precision": "float", "float8": "float",
-    "numeric": "float", "decimal": "float", "money": "float",
-    "uuid": "str", "bytea": "bytes", "inet": "str", "cidr": "str", "macaddr": "str",
-    "point": "str", "line": "str", "lseg": "str", "box": "str", "path": "str",
-    "polygon": "str", "circle": "str",
+    "text": "str",
+    "varchar": "str",
+    "char": "str",
+    "bpchar": "str",
+    "timestamptz": "datetime.datetime",
+    "timestamp": "datetime.datetime",
+    "date": "datetime.date",
+    "time": "datetime.time",
+    "timetz": "datetime.time",
+    "interval": "datetime.timedelta",
+    "boolean": "bool",
+    "bool": "bool",
+    "jsonb": "dict[str, Any]",
+    "json": "dict[str, Any]",
+    "bigint": "int",
+    "int8": "int",
+    "integer": "int",
+    "int4": "int",
+    "smallint": "int",
+    "int2": "int",
+    "serial": "int",
+    "bigserial": "int",
+    "real": "float",
+    "float4": "float",
+    "double precision": "float",
+    "float8": "float",
+    "numeric": "float",
+    "decimal": "float",
+    "money": "float",
+    "uuid": "str",
+    "bytea": "bytes",
+    "inet": "str",
+    "cidr": "str",
+    "macaddr": "str",
+    "point": "str",
+    "line": "str",
+    "lseg": "str",
+    "box": "str",
+    "path": "str",
+    "polygon": "str",
+    "circle": "str",
 }
 
 
-def _is_valid_table(table_name: str) -> bool:
-    """Check if table should be included in code generation."""
-    return not (table_name.endswith("_enum") or table_name.startswith("yoyo"))
-
-
-def _get_public_tables(catalog: Catalog, include_enums: bool = False):
-    """Get all valid public schema tables."""
-    for schema in catalog.schemas:
-        if schema.name == "public":
-            for table in schema.tables:
-                if table.rel.name.startswith("yoyo"):
-                    continue
-                if include_enums and table.rel.name.endswith("_enum"):
-                    yield table
-                elif not include_enums and not table.rel.name.endswith("_enum"):
-                    yield table
-
-
-async def get_enum_foreign_keys() -> dict[tuple[str, str], str]:
+async def _get_enum_foreign_keys() -> dict[tuple[str, str], str]:
     """Query PostgreSQL catalog to get foreign key relationships to enum tables."""
     async with connect_db_admin() as conn:
-        result = await conn.execute(sqlalchemy.text("""
-        SELECT tc.table_name, kcu.column_name, ccu.table_name AS foreign_table_name
-        FROM information_schema.table_constraints AS tc 
-            JOIN information_schema.key_column_usage AS kcu
-                ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema
-            JOIN information_schema.constraint_column_usage AS ccu
-                ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
-        WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public'
-            AND ccu.table_name LIKE '%_enum'
-        ORDER BY tc.table_name, kcu.column_name
-        """))
-        
-        return {
-            (table_name, column_name): "".join(word.capitalize() for word in foreign_table_name[:-5].split("_")) + "Enum"
-            for table_name, column_name, foreign_table_name in result
-        }
+        result = await conn.execute(
+            sqlalchemy.text("""
+                SELECT tc.table_name, kcu.column_name, ccu.table_name AS foreign_table_name
+                FROM information_schema.table_constraints AS tc 
+                    JOIN information_schema.key_column_usage AS kcu
+                        ON tc.constraint_name = kcu.constraint_name AND tc.table_schema = kcu.table_schema
+                    JOIN information_schema.constraint_column_usage AS ccu
+                        ON ccu.constraint_name = tc.constraint_name AND ccu.table_schema = tc.table_schema
+                WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_schema = 'public'
+                    AND ccu.table_name LIKE '%_enum'
+                ORDER BY tc.table_name, kcu.column_name
+            """)
+        )
+
+        return {(tbl, col): "".join(w.capitalize() for w in fk_tbl.split("_")) for tbl, col, fk_tbl in result}
 
 
-def map_postgres_type_to_python(column: Column, enum_fk_mapping: dict[tuple[str, str], str] | None = None) -> str:
+def _map_postgres_type_to_python(column: Column, enum_fk_mapping: dict[tuple[str, str], str] | None = None) -> str:
     """Convert PostgreSQL column type to Python type annotation."""
     type_name = column.type.name.lower()
 
@@ -175,64 +185,52 @@ def _depluralize_table_name(table_name: str) -> str:
 async def generate_models(catalog: Catalog) -> str:
     """Generate Python dataclass models from database catalog."""
     enum_tables = {
-        table.rel.name: "".join(word.capitalize() for word in table.rel.name[:-5].split("_")) + "Enum"
-        for table in _get_public_tables(catalog, include_enums=True)
+        table.rel.name: "".join(word.capitalize() for word in table.rel.name.split("_"))
+        for table in itertools.chain(*[s.tables for s in catalog.schemas if s.name == "public"])
         if table.rel.name.endswith("_enum")
     }
-    
-    enum_fk_mapping = await get_enum_foreign_keys() if enum_tables else None
-    
+    enum_fk_mapping = await _get_enum_foreign_keys() if enum_tables else None
     tables = [
         {
-            "class_name": "".join(word.capitalize() for word in _depluralize_table_name(table.rel.name).split("_")),
-            "columns": [
-                {"name": column.name, "python_type": map_postgres_type_to_python(column, enum_fk_mapping)} 
-                for column in table.columns
-            ],
+            "class_name": "".join(word.capitalize() for word in _depluralize_table_name(table.rel.name).split("_")) + "Model",
+            "columns": [{"name": column.name, "python_type": _map_postgres_type_to_python(column, enum_fk_mapping)} for column in table.columns],
         }
-        for table in _get_public_tables(catalog)
-        if _is_valid_table(table.rel.name)
+        for table in itertools.chain(*[s.tables for s in catalog.schemas if s.name == "public"])
+        if not table.rel.name.endswith("_enum") and not table.rel.name.startswith("_yoyo")
     ]
-
     return jinja2.Template(MODELS_TEMPLATE).render(tables=tables, has_enums=bool(enum_tables))
 
 
 async def generate_enums(catalog: Catalog) -> str:
     """Generate Python enum types from _enum suffixed tables."""
-    enum_tables = [table.rel.name for table in _get_public_tables(catalog, include_enums=True) if table.rel.name.endswith("_enum")]
-    
-    if not enum_tables:
-        return ""
-
     enums = []
     async with connect_db_admin() as conn:
-        for table_name in enum_tables:
-            result = await conn.execute(sqlalchemy.text(f"SELECT value FROM {table_name} ORDER BY value"))
-            if values := [row[0] for row in result]:
-                base_name = table_name[:-5]
-                enums.append({
-                    "table_name": table_name,
-                    "type_name": "".join(word.capitalize() for word in base_name.split("_")) + "Enum",
-                    "values_name": base_name.upper() + "_ENUM_VALUES",
-                    "literal_values": ", ".join(f'"{value}"' for value in values),
-                    "values_list": str(values),
-                })
-
+        for t in itertools.chain(*[s.tables for s in catalog.schemas if s.name == "public"]):
+            if t.rel.name.endswith("_enum"):
+                result = await conn.execute(sqlalchemy.text(f"SELECT value FROM {t.rel.name} ORDER BY value"))
+                if values := [row[0] for row in result]:
+                    base_name = t.rel.name[:-5]
+                    enums.append({
+                        "table_name": t.rel.name,
+                        "type_name": "".join(word.capitalize() for word in base_name.split("_")) + "Enum",
+                        "values_name": base_name.upper() + "_ENUM_VALUES",
+                        "literal_values": ", ".join(f'"{value}"' for value in values),
+                        "values_list": str(values),
+                    })
     return jinja2.Template(ENUMS_TEMPLATE).render(enums=enums)
 
 
 def generate_queries(queries: list[Query]) -> str:
-    """Generate Python query functions from SQLc queries."""
     def get_param_name(param: Parameter) -> str:
         return param.column.name or f"p{param.number}"
-    
+
     def get_model_name(query: Query) -> str:
         if query.insert_into_table and query.insert_into_table.name:
-            return "".join(word.capitalize() for word in _depluralize_table_name(query.insert_into_table.name).split("_"))
+            return "".join(w.capitalize() for w in _depluralize_table_name(query.insert_into_table.name).split("_")) + "Model"
         for column in query.columns or []:
             if column.table and column.table.name:
-                return "".join(word.capitalize() for word in _depluralize_table_name(column.table.name).split("_"))
-        return "".join(word.capitalize() for word in query.name.replace("_", "").split("_"))
+                return "".join(word.capitalize() for word in _depluralize_table_name(column.table.name).split("_")) + "Model"
+        return "".join(word.capitalize() for word in query.name.replace("_", "").split("_")) + "Model"
 
     query_data = [
         {
@@ -240,53 +238,50 @@ def generate_queries(queries: list[Query]) -> str:
             "constant_name": query.name.upper(),
             "text": query.text,
             "cmd": query.cmd,
-            "params_signature": f", *, {', '.join(f'{get_param_name(p)}: {map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "",
+            "params_signature": f", *, {', '.join(f'{get_param_name(p)}: {_map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "",
             "return_type": {
                 ":exec": "None",
                 ":one": f"models.{get_model_name(query)}" if query.columns else "Any",
-                ":many": f"AsyncIterator[models.{get_model_name(query)}]" if query.columns else "AsyncIterator[Any]"
+                ":many": f"AsyncIterator[models.{get_model_name(query)}]" if query.columns else "AsyncIterator[Any]",
             }.get(query.cmd, "Any"),
             "param_dict": "{" + ", ".join(f'"p{p.number}": {get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
             "model_name": get_model_name(query) if query.columns else None,
             "columns": [{"name": col.name} for col in query.columns] if query.columns else None,
             "error_params": (
-                f'resource="{get_model_name(query).lower() if query.columns else query.name.replace("_", " ")}", '
+                f'resource="{get_model_name(query).replace("Model", "").lower() if query.columns else query.name.replace("_", " ")}", '
                 f'key_name="{get_param_name(query.params[0])}", key_value=str({get_param_name(query.params[0])})'
-                if query.params else
-                f'resource="{get_model_name(query).lower() if query.columns else query.name.replace("_", " ")}", '
-                f'key_name="query", key_value="{query.name}"'
+                if query.params
+                else f'resource="{get_model_name(query).lower() if query.columns else query.name.replace("_", " ")}", key_name="query", key_value="{query.name}"'
             ),
         }
         for query in queries
     ]
-
     return jinja2.Template(QUERIES_TEMPLATE).render(queries=query_data)
 
 
+async def _main_coro() -> None:
+    """Async main function to handle database connections."""
+    request = GenerateRequest().parse(sys.stdin.buffer.read())
+    response = GenerateResponse()
+    # Models
+    models_content = await generate_models(request.catalog)
+    response.files.append(File(name="database/__codegen__/models.py", contents=models_content.encode("utf-8")))
+    # Enums
+    enums_content = await generate_enums(request.catalog)
+    response.files.append(File(name="database/__codegen__/enums.py", contents=enums_content.encode("utf-8")))
+    # Queries
+    queries_content = generate_queries(request.queries)
+    response.files.append(File(name="database/__codegen__/queries.py", contents=queries_content.encode("utf-8")))
+    # Respond.
+    sys.stdout.buffer.write(bytes(response))
+
+
 @click.command()
-@click.argument("service_method", required=False)
+@click.argument("service_method", required=True)
 def main(service_method: str | None = None) -> None:
     """SQLc Python code generation plugin main entry point."""
     assert service_method == "/plugin.CodegenService/Generate", f"Unexpected service method: {service_method}"
-    asyncio.run(_async_main())
-
-
-async def _async_main() -> None:
-    """Async main function to handle database connections."""
-    request = GenerateRequest().parse(sys.stdin.buffer.read())
-    
-    models_content = await generate_models(request.catalog)
-    enums_content = await generate_enums(request.catalog)
-    queries_content = generate_queries(request.queries)
-
-    response = GenerateResponse()
-    response.files.append(File(name="models.py", contents=models_content.encode("utf-8")))
-    
-    if enums_content.strip():
-        response.files.append(File(name="enums.py", contents=enums_content.encode("utf-8")))
-    
-    response.files.append(File(name="queries.py", contents=queries_content.encode("utf-8")))
-    sys.stdout.buffer.write(bytes(response))
+    asyncio.run(_main_coro())
 
 
 if __name__ == "__main__":
