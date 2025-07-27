@@ -168,6 +168,7 @@ Follow these testing conventions:
 - Place tests next to the code they cover; do not create a `tests/` directory.
 - Name files `<module>_test.py` or `__main__test.py`.
 - Tests are plain functions starting with `test_`. Do not nest tests inside classes.
+- You do not need to mark asynchronous tests with `@pytest.mark.asyncio`, they are automatically handled.
 
 Write or update tests for every behavioural change.
 

@@ -99,6 +99,8 @@ select = [
     "INP",  # flake8-no-pep420
     "T20",  # flake8-print
     "PTH",  # flake8-use-pathlib
+    # Individual rules.
+    "PLC0415",  # https://docs.astral.sh/ruff/rules/import-outside-top-level/
 ]
 ignore = [
     # Line too long; this happens with long strings etc. If it can't be autoformatted, nbd.

@@ -4,15 +4,11 @@ import datetime
 from typing import Any
 
 @dataclasses.dataclass(slots=True)
-class UserSignupStepEnum:
-    value: str
-
-@dataclasses.dataclass(slots=True)
 class User:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     name: str
     email: str
     password_hash: str | None
@@ -25,22 +21,18 @@ class Invite:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     user_id: str
     code_hash: str
     expires_at: datetime.datetime
     accepted_at: datetime.datetime | None
 
 @dataclasses.dataclass(slots=True)
-class OrganizationsInboundSourceEnum:
-    value: str
-
-@dataclasses.dataclass(slots=True)
 class Organization:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     name: str
     inbound_source: str
 
@@ -49,7 +41,7 @@ class OrganizationsUser:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     user_id: str
     organization_id: str
     removed_at: datetime.datetime | None
@@ -60,7 +52,7 @@ class Session:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     user_id: str
     organization_id: str | None
     last_seen_at: datetime.datetime
@@ -71,7 +63,7 @@ class VaultedSecret:
     id: str
     created_at: datetime.datetime
     updated_at: datetime.datetime
-    storytime: Any | None
+    storytime: dict[str, Any] | None
     organization_id: str
     ciphertext: str
 

@@ -71,4 +71,26 @@
   - Updated existing tests to expect singular model names
   - Added comprehensive test for both filtering and de-pluralization features
 
+## ✅ Milestone 7: Error Handling Enhancement
+- [x] Replace None returns with NotFoundError for :one queries
+  - Import `NotFoundError` from `foundation.observability.errors`
+  - Update `:one` query template to raise `NotFoundError` instead of returning `None`
+  - Update return type annotations to remove `| None` for `:one` queries
+  - Update tests to expect `NotFoundError` when no row is found
+
+## ✅ Milestone 8: Enum Type Generation
+- [x] Generate enum types from _enum suffixed tables
+  - Detect tables with `_enum` suffix in model generation
+  - Connect to database using `connect_db_admin()` and query enum values
+  - Generate `enums.py` file with `Literal` types and value lists
+  - Format: `type XEnum = Literal["a", "b"]` and `X_ENUM_VALUES = ["a", "b"]`
+  - Exclude `_enum` tables from regular model generation
+  - Add comprehensive tests for enum generation functionality
+
+## ✅ Milestone 9: Type System Improvements
+- [x] Update JSON/JSONB types to dict[str, Any]
+  - Change `POSTGRES_TO_PYTHON_TYPES` mapping for `json` and `jsonb`
+  - Update from `Any` to `dict[str, Any]` for better type safety
+  - Update tests to reflect the new JSON type mapping
+
 Each milestone includes focused unit tests and can be completed independently.
