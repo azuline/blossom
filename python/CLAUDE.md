@@ -49,9 +49,9 @@ Existing tools are:
 - `just list-errors` prints a tree of the first-party error taxonomy.
 - `just list-symbols` prints one line per symbol as `module:name # docstring`. Combine it with shell filters to explore the codebase.
 
-## Debug scripts
+## Logs
 
-Place exploratory scripts in `.debug_scripts/` and name them `YYMMDD_branch__script_name.py`, e.g. `250714_cereal__check_parsing.py`. Debug scripts aid investigation; they do **not** replace unit tests and need not be deleted.
+Logs from development and test are written to the `./claude/logs` directory. Tail those logs when debugging.
 
 # Design patterns
 
@@ -95,7 +95,7 @@ raise CustomError("failed to read file: file not found", path=path)
 
 Fail fast. Do not silently skip, fallback, or continue unless instructed. For ambiguous fallback behaviors, add a `TODO(god)` comment and ask.
 
-Use `foundation.observability.errors:suppress_error` when intentionally ignoring specific errors.
+Use `foundation.observability.errors:suppress_error` when intentionally ignoring specific error
 
 ## Retries
 
@@ -189,9 +189,15 @@ The fixtures which are automatically ran in test setup are:
 
 ## Test data
 
-Each test should create a new organization and scope test data to it.
+Each test should create a new organization and scope test data to it. Data creation should be concise; create abstractions for generating test data to spec.
 
-Create rows with `foundation.testing.factory:TestFactory`; never write raw SQL.
+For seeding database data, use the test factory:
+
+```python
+org = await t.factory.organization()  # or any other table in the database.
+```
+
+For seeding third-party data into fakes, TODO.
 
 ## Fakes & mocks
 

@@ -18,7 +18,7 @@ def _inspect_error_classes(root_dir: Path) -> list[ErrorClass]:
     """Inspect codebase and extract all error classes."""
     error_classes: list[ErrorClass] = []
 
-    exclude_dirs = {"tools", ".debug_scripts", "__pycache__", ".git", ".venv", "venv", "env"}
+    exclude_dirs = {"tools", "claude", "__pycache__", ".git", ".venv", "venv", "env"}
     python_files = [
         path
         for path in root_dir.rglob("*.py")

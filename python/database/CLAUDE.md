@@ -17,6 +17,7 @@ Add a comment whenever a column’s purpose is not obvious.
 ```bash
 just new-migration <name>          # scaffold
 just test database/schema_test.py  # test
+just codegen-db                    # check ORM compatibility & regenerate schema.sql
 just migrate                       # apply
 ```
 

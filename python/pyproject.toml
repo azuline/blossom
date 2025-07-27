@@ -69,7 +69,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", ".*_cache", ".tach", "**/__codegen__", ".debug_scripts"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen__", "claude"]
 target-version = "py313"
 preview = true
 
