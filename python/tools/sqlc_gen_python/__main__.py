@@ -5,6 +5,7 @@
 
 import asyncio
 import itertools
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -123,21 +124,25 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
     async with raw_conn.driver_connection.cursor() as cursor:
         psycopg_sql = {{ query.psycopg_sql }}
         await cursor.executemany(psycopg_sql, [{{ query.batch_param_dict }} for batch_item in batch_data], returning=True)
-        results = await cursor.fetchall()
-        for row in results:
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
 {%- if query.columns %}
-            {%- if query.needs_custom_dataclass %}
-            yield {{ query.custom_dataclass_name }}(
-            {%- else %}
-            yield models.{{ query.model_name }}(
-            {%- endif %}
+                {%- if query.needs_custom_dataclass %}
+                yield {{ query.custom_dataclass_name }}(
+                {%- else %}
+                yield models.{{ query.model_name }}(
+                {%- endif %}
 {%- for column in query.columns %}
-                {{ column.name }}=row[{{ loop.index0 }}],
+                    {{ column.name }}=row[{{ loop.index0 }}],
 {%- endfor %}
-            )
+                )
 {%- else %}
-            yield row
+                yield row
 {%- endif %}
+            if not cursor.nextset():
+                break
 {%- elif query.cmd == ":batchmany" %}
     # Use psycopg connection for batch execution with RETURNING
     raw_conn = await conn.get_raw_connection()
@@ -145,21 +150,25 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
     async with raw_conn.driver_connection.cursor() as cursor:
         psycopg_sql = {{ query.psycopg_sql }}
         await cursor.executemany(psycopg_sql, [{{ query.batch_param_dict }} for batch_item in batch_data], returning=True)
-        results = await cursor.fetchall()
-        for row in results:
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
 {%- if query.columns %}
-            {%- if query.needs_custom_dataclass %}
-            yield {{ query.custom_dataclass_name }}(
-            {%- else %}
-            yield models.{{ query.model_name }}(
-            {%- endif %}
+                {%- if query.needs_custom_dataclass %}
+                yield {{ query.custom_dataclass_name }}(
+                {%- else %}
+                yield models.{{ query.model_name }}(
+                {%- endif %}
 {%- for column in query.columns %}
-                {{ column.name }}=row[{{ loop.index0 }}],
+                    {{ column.name }}=row[{{ loop.index0 }}],
 {%- endfor %}
-            )
+                )
 {%- else %}
-            yield row
+                yield row
 {%- endif %}
+            if not cursor.nextset():
+                break
 {%- elif query.cmd == ":copyfrom" %}
     # Use psycopg connection for bulk insert via COPY FROM
     raw_conn = await conn.get_raw_connection()
@@ -374,8 +383,6 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
 
     def convert_to_psycopg_params(sql: str) -> str:
         """Convert SQLAlchemy parameters (:p1, :p2) to psycopg named parameters (%(p1)s, %(p2)s) for raw psycopg usage."""
-        import re
-
         return re.sub(r":p(\d+)", r"%(p\1)s", sql)
 
     def get_model_name(query: Query) -> str:

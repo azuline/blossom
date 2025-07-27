@@ -74,13 +74,17 @@ async def query_test_batch_create_users(conn: DBConn, batch_data: list[TestBatch
     async with raw_conn.driver_connection.cursor() as cursor:
         psycopg_sql = 'INSERT INTO users (name, email) VALUES (%(p1)s, %(p2)s) RETURNING id, name, email'
         await cursor.executemany(psycopg_sql, [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data], returning=True)
-        results = await cursor.fetchall()
-        for row in results:
-            yield UserModel(
-                id=row[0],
-                name=row[1],
-                email=row[2],
-            )
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
+                yield UserModel(
+                    id=row[0],
+                    name=row[1],
+                    email=row[2],
+                )
+            if not cursor.nextset():
+                break
 
 TEST_BATCH_UPDATE_USER_VISITED = r"""-- name: test_batch_update_user_visited \:batchmany
 UPDATE users SET last_visited_at = NOW() WHERE name = :p1 RETURNING id, name, last_visited_at
@@ -93,11 +97,15 @@ async def query_test_batch_update_user_visited(conn: DBConn, batch_data: list[Te
     async with raw_conn.driver_connection.cursor() as cursor:
         psycopg_sql = 'UPDATE users SET last_visited_at = NOW() WHERE name = %(p1)s RETURNING id, name, last_visited_at'
         await cursor.executemany(psycopg_sql, [{"p1": batch_item.name} for batch_item in batch_data], returning=True)
-        results = await cursor.fetchall()
-        for row in results:
-            yield TestBatchUpdateUserVisitedResult(
-                id=row[0],
-                name=row[1],
-                last_visited_at=row[2],
-            )
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
+                yield TestBatchUpdateUserVisitedResult(
+                    id=row[0],
+                    name=row[1],
+                    last_visited_at=row[2],
+                )
+            if not cursor.nextset():
+                break
 
