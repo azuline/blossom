@@ -209,7 +209,7 @@ GET_USER = """-- name: get_user :one
 SELECT id, name, email FROM users WHERE id = $1
 """
 
-async def get_user(conn: DBConn, *, id: int) -> models.UserModel:
+async def query_get_user(conn: DBConn, *, id: int) -> models.UserModel:
     row = (await conn.execute(sqlalchemy.text(GET_USER), {"p1": id})).first()
     if row is None:
         raise NotFoundError(resource="user", key_name="id", key_value=str(id))
@@ -223,7 +223,7 @@ LIST_USERS = """-- name: list_users :many
 SELECT id, name, email FROM users
 """
 
-async def list_users(conn: DBConn) -> AsyncIterator[models.UserModel]:
+async def query_list_users(conn: DBConn) -> AsyncIterator[models.UserModel]:
     result = await conn.execute(sqlalchemy.text(LIST_USERS), {})
     async for row in result:
         yield models.UserModel(
@@ -236,7 +236,7 @@ DELETE_USER = """-- name: delete_user :exec
 DELETE FROM users WHERE id = $1
 """
 
-async def delete_user(conn: DBConn, *, id: int) -> None:
+async def query_delete_user(conn: DBConn, *, id: int) -> None:
     await conn.execute(sqlalchemy.text(DELETE_USER), {"p1": id})
 
 '''
@@ -487,16 +487,16 @@ def test_query_grouping_by_filename():
     # Check that database queries file contains both database queries
     database_queries_file = next(f for f in response.files if f.name == "database/__codegen_db__/queries.py")
     database_content = database_queries_file.contents.decode("utf-8")
-    assert "get_user" in database_content
-    assert "list_users" in database_content
-    assert "get_product" not in database_content
+    assert "query_get_user" in database_content
+    assert "query_list_users" in database_content
+    assert "query_get_product" not in database_content
 
     # Check that product queries file contains both product queries  
     product_queries_file = next(f for f in response.files if f.name == "product/__codegen_db__/queries.py")
     product_content = product_queries_file.contents.decode("utf-8")
-    assert "get_product" in product_content
-    assert "list_products" in product_content
-    assert "get_user" not in product_content
+    assert "query_get_product" in product_content
+    assert "query_list_products" in product_content
+    assert "query_get_user" not in product_content
     
     # Check that __init__.py files are empty
     database_init_file = next(f for f in response.files if f.name == "database/__codegen_db__/__init__.py")

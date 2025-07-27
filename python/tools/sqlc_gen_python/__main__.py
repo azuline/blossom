@@ -50,7 +50,7 @@ from foundation.observability.errors import NotFoundError
 {{ query.text }}
 """
 
-async def {{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{ query.return_type }}:
+async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{ query.return_type }}:
 {%- if query.cmd == ":exec" %}
     await conn.execute(sqlalchemy.text({{ query.constant_name }}), {{ query.param_dict }})
 {%- elif query.cmd == ":one" %}
