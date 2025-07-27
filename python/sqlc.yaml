@@ -10,8 +10,6 @@ sql:
     codegen:
       - out: database/__codegen__
         plugin: py
-        options:
-          package: database.__codegen__
 plugins:
   - name: py
     env:

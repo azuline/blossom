@@ -144,7 +144,7 @@ async def get_enum_foreign_keys() -> dict[tuple[str, str], str]:
     Returns a mapping of (table_name, column_name) -> enum_type_name
     """
     fk_mapping = {}
-    
+
     async with connect_db_admin() as conn:
         # Query foreign key relationships where the referenced table ends with '_enum'
         query = """
@@ -166,15 +166,15 @@ async def get_enum_foreign_keys() -> dict[tuple[str, str], str]:
             AND ccu.table_name LIKE '%_enum'
         ORDER BY tc.table_name, kcu.column_name
         """
-        
+
         result = await conn.execute(sqlalchemy.text(query))
         for row in result:
             table_name, column_name, foreign_table_name = row
             # Generate enum type name from foreign table name
             base_name = foreign_table_name[:-5]  # Remove "_enum"
             enum_type = _to_pascal_case(base_name) + "Enum"
-            fk_mapping[(table_name, column_name)] = enum_type
-    
+            fk_mapping[table_name, column_name] = enum_type
+
     return fk_mapping
 
 
@@ -232,7 +232,7 @@ async def generate_models(catalog: Catalog) -> str:
                 base_name = table.rel.name[:-5]  # Remove "_enum"
                 type_name = _to_pascal_case(base_name) + "Enum"
                 enum_tables[table.rel.name] = type_name
-    
+
     # Get foreign key mappings for enum tables
     enum_fk_mapping = await get_enum_foreign_keys() if enum_tables else None
 
