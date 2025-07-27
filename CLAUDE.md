@@ -6,7 +6,7 @@
 
 **Test-driven development:** For a bug fix, first write or update a test that reproduces the bug and ensure it fails. Only then fix the code and make the test pass. For a new feature, stub the API with `NotImplementedError`, write failing tests that capture the required behaviour, then implement the code until all tests pass.
 
-**Out-of-band changes:** Never revert changes made by the user to files you previously edited. Assume the changes are deliberate unless told otherwise; modify the REMAINING code to conform to the user's changed code.
+**Out-of-band changes:** Never revert changes made by the user to files you previously edited, even if they are not part of your changes. Modify the REMAINING code to conform to the user's changed code.
 
 **Fail fast, fail early:** The common definition of defensive programming is wrong, as is the robustness principle. Assert expectations and hard fail when they are not met. Assume all other systems are robust; do not accommodate their failings.
 
