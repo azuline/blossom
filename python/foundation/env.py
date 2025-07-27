@@ -9,12 +9,6 @@ from dotenv import dotenv_values
 
 from foundation.stdlib.convert import enum_type_to_values
 
-
-def initialize_env() -> None:
-    # TODO: Don't load in global scope.
-    pass
-
-
 defaults = {}
 if os.getenv("ENVIRONMENT") != "production":
     defaults = dotenv_values(".env.example")

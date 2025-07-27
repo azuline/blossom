@@ -17,6 +17,7 @@ Add a comment whenever a column’s purpose is not obvious.
 ```bash
 just new-migration <name>          # scaffold
 just test database/schema_test.py  # test
+just codegen-db                    # check ORM compatibility & regenerate schema.sql
 just migrate                       # apply
 ```
 
@@ -37,12 +38,19 @@ CREATE TABLE new_table (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   storytime JSONB,
-  organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id) ON DELETE CASCADE -- Scope data to organizations.
+  organization_id TEXT COLLATE "C" NOT NULL REFERENCES organizations(id) -- Scope data to organizations.
 );
 CREATE TRIGGER updated_at BEFORE UPDATE ON new_table FOR EACH ROW EXECUTE PROCEDURE updated_at();
 ```
 
-- TODO: row level security
+Enable Row Level Security for all tables. First decide whether a table "belongs" to an organization or a user, and then:
+
+```sql
+ALTER TABLE new_table ENABLE ROW LEVEL SECURITY;
+CREATE POLICY new_table_self_all ON new_table USING (organization_id = current_organization_id());
+-- Or, if the table is "user-scoped":
+CREATE POLICY new_table_self_all ON new_table USING (user_id = current_user_id());
+```
 
 Express enums as enum tables:
 
@@ -94,6 +102,4 @@ Follow these conventions:
 - Prefix test‑only query names with `Test`.
 - Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
 - Never set `created_at` or `updated_at` in code; DB triggers handle them.
-- TODO: naming guidelines
-
-TODO: Row level security
+- Name queries as `{Resource}{Action}{Filter}`. For example, `BunniesListAll`, `BunniesGetByID`, `BunniesGetByName`, etc.

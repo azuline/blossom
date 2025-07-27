@@ -16,7 +16,7 @@ class CodeEntity:
 
 
 def _inspect_codebase(root_dir: Path) -> list[CodeEntity]:
-    exclude_dirs = {"tools", ".debug_scripts", "__pycache__", ".git", ".venv", "venv", "env"}
+    exclude_dirs = {"tools", "claude", "__pycache__", ".git", ".venv", "venv", "env"}
     python_files = [
         path
         for path in root_dir.rglob("*.py")

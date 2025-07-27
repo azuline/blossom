@@ -2,7 +2,7 @@ import datetime
 import inspect
 import logging
 import sys
-from logging import StreamHandler
+import logging.handlers
 from typing import Any, cast
 
 import structlog
@@ -12,6 +12,7 @@ from structlog.stdlib import BoundLogger
 from structlog.typing import EventDict
 
 from foundation.env import ENV
+from foundation.stdlib.paths import PYTHON_ROOT
 
 
 def get_logger(force_debug: bool = False) -> BoundLogger:
@@ -53,10 +54,10 @@ def initialize_logging() -> None:
         cache_logger_on_first_use=not ENV.testing,
     )
 
-    # Define renderer.
-    renderer = structlog.processors.JSONRenderer()
+    # Assemble formatters.
+    stderr_renderer = structlog.processors.JSONRenderer()
     if ENV.environment == "development":
-        renderer = ConsoleRenderer(
+        stderr_renderer = ConsoleRenderer(
             columns=[
                 Column("timestamp", KeyValueColumnFormatter(key_style=None, value_style=Fore.LIGHTBLACK_EX, reset_style="", value_repr=_format_timestamp)),
                 Column("service", KeyValueColumnFormatter(key_style=None, value_style=Fore.YELLOW, reset_style=Style.RESET_ALL, value_repr=str)),
@@ -68,17 +69,33 @@ def initialize_logging() -> None:
             exception_formatter=plain_traceback,
             pad_level=False,
         )
+    stderr_formatter = structlog.stdlib.ProcessorFormatter(
+        foreign_pre_chain=common_processors,
+        processors=[structlog.stdlib.ProcessorFormatter.remove_processors_meta, stderr_renderer],
+    )
+    file_renderer = ConsoleRenderer(
+        columns=[Column("", KeyValueColumnFormatter(key_style="", value_style="", reset_style="", value_repr=str))],
+        exception_formatter=plain_traceback,
+        pad_level=False,
+    )
+    file_formatter = structlog.stdlib.ProcessorFormatter(
+        foreign_pre_chain=common_processors,
+        processors=[structlog.stdlib.ProcessorFormatter.remove_processors_meta, file_renderer],
+    )
 
-    # Configure formatter.
     root_logger = logging.getLogger()  # noqa: TID251
     root_logger.setLevel(level)
-    formatter = structlog.stdlib.ProcessorFormatter(
-        foreign_pre_chain=common_processors,
-        processors=[structlog.stdlib.ProcessorFormatter.remove_processors_meta, renderer],
-    )
-    handler = StreamHandler(sys.stderr)
-    handler.setFormatter(formatter)
+    # Configure stderr handler.
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(stderr_formatter)
     root_logger.handlers = [handler]
+    # Configure file handler.
+    if ENV.environment == "development":
+        log_file = PYTHON_ROOT / f"claude/logs/{ENV.service}.log"
+        log_file.parent.mkdir(exist_ok=True, parents=True)
+        file_handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=20 * 1024 * 1024, backupCount=10)
+        file_handler.setFormatter(file_formatter)
+        root_logger.addHandler(file_handler)
 
 
 def _processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:

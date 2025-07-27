@@ -49,9 +49,9 @@ Existing tools are:
 - `just list-errors` prints a tree of the first-party error taxonomy.
 - `just list-symbols` prints one line per symbol as `module:name # docstring`. Combine it with shell filters to explore the codebase.
 
-## Debug scripts
+## Logs
 
-Place exploratory scripts in `.debug_scripts/` and name them `YYMMDD_branch__script_name.py`, e.g. `250714_cereal__check_parsing.py`. Debug scripts aid investigation; they do **not** replace unit tests and need not be deleted.
+Logs from development and test are written to the `./claude/logs` directory. Tail those logs when debugging.
 
 # Design patterns
 
@@ -87,7 +87,7 @@ Access variables exclusively through `foundation.env:ENV`, and declare them in `
 
 ## Errors
 
-First-party errors subclass `foundation.errors:BaseError`. Messages are lowercase phrases separated by colons:
+First-party errors subclass `foundation.observability.errors:BaseError`. Messages are lowercase phrases separated by colons:
 
 ```python
 raise CustomError("failed to read file: file not found", path=path)
@@ -95,16 +95,25 @@ raise CustomError("failed to read file: file not found", path=path)
 
 Fail fast. Do not silently skip, fallback, or continue unless instructed. For ambiguous fallback behaviors, add a `TODO(god)` comment and ask.
 
-Use `foundation.errors:suppress_error` when intentionally ignoring specific errors.
+Use `foundation.observability.errors:suppress_error` when intentionally ignoring specific error
 
 ## Retries
 
-- TODO: retry network requests with exponential backoff and jitter with retryer
+Wrap all external network requests in `foundation.stdlib.retry:AsyncRetryer` to enable exponential backoff and jitter:
+
+```python
+retryer = AsyncRetryer(name="request_fn_name")
+await retryer.execute(request_fn, arg1, arg2=val2)
+```
 
 ## Locks
 
-- TODO: db locks
-- TODO: aiorwlock
+If necessary, linearize operations by taking out a Postgres advisory lock:
+
+```python
+async with pg_advisory_lock("lock_name"):
+    ...
+```
 
 # Observability
 
@@ -113,7 +122,7 @@ Use `foundation.errors:suppress_error` when intentionally ignoring specific erro
 Use structured logging:
 
 ```python
-from foundation.logs import get_logger
+from foundation.observability.logs import get_logger
 logger = get_logger()
 logger.info("user logged in", user_id=id)
 ```
@@ -126,14 +135,33 @@ Follow these logging conventions:
 
 ## Traces & Spans
 
-- TODO: api
+Start a new span in a trace like so:
+
+```python
+from foundation.observability.spans import span
+with span("span_name", **tags):
+    ...
+```
+
+Use spans to divide the trace of a large feature into smaller pieces. Spans should reflect important sub-operations.
+
+Logs emitted within a span inherit the tags of the span. Add tags to the active span with `tag_current_span(key=value, **kwargs)`.
+
+Keep the cardinality of span names and tags (both keys and values) low. Do not use any per-user or per-organization values in tags (e.g. NO `organization_id`).
 
 ## Metrics
 
-- TODO: where to read API - list-symbols filter
-- TODO: restrict cardinality heuristics
+Emit metrics with the following functions (import from `foundation.observability.metrics`):
+
+- Count Metric: `metric_increment`, `metric_increment_abnormal`, `metric_decrement`, `metric_decrement_abnormal`.
+- Gauge Metric: `metric_gauge`.
+- Timing Metric: `metric_timing`.
+- Distribution Metric: `metric_distribution`.
+- Count + Time Metric: `count_and_time` context manager.
 
 # Testing
+
+Treat tests as first-class citizens of the codebase. They are equal in importance to the implementation.
 
 Follow these testing conventions:
 
@@ -149,9 +177,9 @@ Prefer a few high‑value tests over many redundant ones. Combine related assert
 
 ## Fixtures
 
-Run `just list-fixtures` to see available helpers. They are available as properties on the `t: TFix` fixture. Add optional fixtures to this system (`foundation/testing/`). Do not define new fixtures in `conftest` unless they are `autouse=True`.
+Run `just list-fixtures` to see available helpers. They are available as properties on the `t: XFixture` fixture. Add optional fixtures to the fixtures sub-objects in `foundation/testing/` (or make a new one). Do not define new fixtures in `conftest` unless they are `autouse=True`.
 
-TODO: fixture is directory dependent, no tfix anymore
+Each project defines its own `t` fixture (`FoundationFixture`, `ProductFixture`, `PanopticonFixture`, `PipelineFixture`) in `{project}/conftest.py`. Import the correct type for each project.
 
 The fixtures which are automatically ran in test setup are:
 
@@ -159,9 +187,17 @@ The fixtures which are automatically ran in test setup are:
 - `fake_settings` — stubbed env vars (omit with `@pytest.mark.live`).
 - `fake_ext` — fake third‑party clients (omit with `@pytest.mark.live`).
 
-## Database factory
+## Test data
 
-Create rows with `foundation.testing.factory:TestFactory`; never write raw SQL.
+Each test should create a new organization and scope test data to it. Data creation should be concise; create abstractions for generating test data to spec.
+
+For seeding database data, use the test factory:
+
+```python
+org = await t.factory.organization()  # or any other table in the database.
+```
+
+For seeding third-party data into fakes, TODO.
 
 ## Fakes & mocks
 
