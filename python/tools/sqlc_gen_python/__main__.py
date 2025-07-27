@@ -138,26 +138,61 @@ POSTGRES_TO_PYTHON_TYPES = {
 }
 
 
-def map_postgres_type_to_python(column: Column, enum_tables: dict[str, str] | None = None) -> str:
+async def get_enum_foreign_keys() -> dict[tuple[str, str], str]:
+    """Query PostgreSQL catalog to get foreign key relationships to enum tables.
+    
+    Returns a mapping of (table_name, column_name) -> enum_type_name
+    """
+    fk_mapping = {}
+    
+    async with connect_db_admin() as conn:
+        # Query foreign key relationships where the referenced table ends with '_enum'
+        query = """
+        SELECT 
+            tc.table_name,
+            kcu.column_name,
+            ccu.table_name AS foreign_table_name
+        FROM 
+            information_schema.table_constraints AS tc 
+            JOIN information_schema.key_column_usage AS kcu
+                ON tc.constraint_name = kcu.constraint_name
+                AND tc.table_schema = kcu.table_schema
+            JOIN information_schema.constraint_column_usage AS ccu
+                ON ccu.constraint_name = tc.constraint_name
+                AND ccu.table_schema = tc.table_schema
+        WHERE 
+            tc.constraint_type = 'FOREIGN KEY' 
+            AND tc.table_schema = 'public'
+            AND ccu.table_name LIKE '%_enum'
+        ORDER BY tc.table_name, kcu.column_name
+        """
+        
+        result = await conn.execute(sqlalchemy.text(query))
+        for row in result:
+            table_name, column_name, foreign_table_name = row
+            # Generate enum type name from foreign table name
+            base_name = foreign_table_name[:-5]  # Remove "_enum"
+            enum_type = _to_pascal_case(base_name) + "Enum"
+            fk_mapping[(table_name, column_name)] = enum_type
+    
+    return fk_mapping
+
+
+def map_postgres_type_to_python(column: Column, enum_fk_mapping: dict[tuple[str, str], str] | None = None) -> str:
     """Convert PostgreSQL column type to Python type annotation."""
     # Get the base type name
     type_name = column.type.name.lower()
 
-    # Check if this column references an enum table via foreign key
-    if enum_tables:
-        # Look for foreign key relationships to enum tables
-        # This is heuristic-based matching since we don't have explicit FK info
-        for enum_table, enum_type in enum_tables.items():
-            # Check if column name suggests it references this enum
-            enum_base = enum_table.replace("_enum", "")
-            if (
-                column.name == enum_base
-                or column.name.endswith(f"_{enum_base}")
-            ):
-                python_type = f"enums.{enum_type}"
-                if not column.not_null:
-                    python_type = f"{python_type} | None"
-                return python_type
+    # Check if this column has a foreign key to an enum table
+    if enum_fk_mapping and column.table:
+        table_name = column.table.name
+        fk_key = (table_name, column.name)
+        if fk_key in enum_fk_mapping:
+            enum_type = enum_fk_mapping[fk_key]
+            python_type = f"enums.{enum_type}"
+            if not column.not_null:
+                python_type = f"{python_type} | None"
+            return python_type
 
     # Handle array types
     if column.is_array or column.array_dims > 0:
@@ -185,7 +220,7 @@ def serialize_response(response: GenerateResponse) -> None:
     sys.stdout.buffer.write(data)
 
 
-def generate_models(catalog: Catalog) -> str:
+async def generate_models(catalog: Catalog) -> str:
     """Generate Python dataclass models from database catalog."""
     # First, build a mapping of enum tables to their type names
     enum_tables = {}
@@ -197,6 +232,9 @@ def generate_models(catalog: Catalog) -> str:
                 base_name = table.rel.name[:-5]  # Remove "_enum"
                 type_name = _to_pascal_case(base_name) + "Enum"
                 enum_tables[table.rel.name] = type_name
+    
+    # Get foreign key mappings for enum tables
+    enum_fk_mapping = await get_enum_foreign_keys() if enum_tables else None
 
     # Prepare template data
     tables = []
@@ -214,7 +252,7 @@ def generate_models(catalog: Catalog) -> str:
             singular_name = _depluralize_table_name(table.rel.name)
             table_data = {
                 "class_name": _to_pascal_case(singular_name),
-                "columns": [{"name": column.name, "python_type": map_postgres_type_to_python(column, enum_tables)} for column in table.columns],
+                "columns": [{"name": column.name, "python_type": map_postgres_type_to_python(column, enum_fk_mapping)} for column in table.columns],
             }
             tables.append(table_data)
 
@@ -410,7 +448,7 @@ async def _async_main() -> None:
     request = deserialize_request()
 
     # Generate models, enums, and queries
-    models_content = generate_models(request.catalog)
+    models_content = await generate_models(request.catalog)
     enums_content = await generate_enums(request.catalog)
     queries_content = generate_queries(request.queries)
 
