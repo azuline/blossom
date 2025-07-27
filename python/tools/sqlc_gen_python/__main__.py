@@ -15,8 +15,6 @@ import jinja2
 import sqlalchemy
 
 from database.conn import connect_db_admin
-from database.testdb import TestDB
-from foundation.env import ENV
 from tools.sqlc_gen_python.proto import Catalog, Column, File, GenerateRequest, GenerateResponse, Parameter, Query
 
 MODELS_TEMPLATE = """\

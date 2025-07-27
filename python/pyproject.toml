@@ -164,7 +164,8 @@ reportUnusedCoroutine = "error"
 reportPrivateImportUsage = "none"
 
 [tool.pytest.ini_options]
-norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv", "__codegen*__"]
+norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv", "**/__codegen*__"]
+collect_imported_tests = false
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 # Logs are emitted to stderr in a formatted way. When pytest captures logs,

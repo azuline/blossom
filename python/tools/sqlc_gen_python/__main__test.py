@@ -891,46 +891,52 @@ INSERT INTO users (name, email) VALUES (:p1, :p2) ON CONFLICT (email) DO UPDATE 
 """
 
 async def query_batch_upsert_users(conn: DBConn, batch_data: list[BatchUpsertUsersData]) -> None:
-    # Use psycopg connection for batch execution
-    raw_conn = await conn.get_raw_connection()
-    assert raw_conn.driver_connection
-    async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany(BATCH_UPSERT_USERS, [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
+    await conn.execute(sqlalchemy.text(BATCH_UPSERT_USERS), [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
 
 BATCH_UPSERT_PRODUCTS = r"""-- name: batch_upsert_products \\:batchone
 INSERT INTO products (name, price, category_id) VALUES (:p1, :p2, :p3) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price
 """
 
 async def query_batch_upsert_products(conn: DBConn, batch_data: list[BatchUpsertProductsData]) -> AsyncIterator[BatchUpsertProductsResult]:
-    # Use psycopg connection for batch execution returning one result per batch
+    # Use psycopg connection for batch execution with RETURNING
     raw_conn = await conn.get_raw_connection()
     assert raw_conn.driver_connection
     async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany(BATCH_UPSERT_PRODUCTS, [{"p1": batch_item.name, "p2": batch_item.price, "p3": batch_item.category_id} for batch_item in batch_data])
-        results = await cursor.fetchall()
-        for row in results:
-            yield BatchUpsertProductsResult(
-                id=row[0],
-                name=row[1],
-                price=row[2],
-            )
+        psycopg_sql = 'INSERT INTO products (name, price, category_id) VALUES (%(p1)s, %(p2)s, %(p3)s) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price'
+        await cursor.executemany(psycopg_sql, [{"p1": batch_item.name, "p2": batch_item.price, "p3": batch_item.category_id} for batch_item in batch_data], returning=True)
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
+                yield BatchUpsertProductsResult(
+                    id=row[0],
+                    name=row[1],
+                    price=row[2],
+                )
+            if not cursor.nextset():
+                break
 
 BATCH_UPDATE_INVENTORY = r"""-- name: batch_update_inventory \\:batchmany
 UPDATE inventory SET quantity = quantity + :p1 WHERE product_id = :p2 RETURNING product_id, quantity
 """
 
 async def query_batch_update_inventory(conn: DBConn, batch_data: list[BatchUpdateInventoryData]) -> AsyncIterator[models.InventoryModel]:
-    # Use psycopg connection for batch execution returning many results per batch
+    # Use psycopg connection for batch execution with RETURNING
     raw_conn = await conn.get_raw_connection()
     assert raw_conn.driver_connection
     async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany(BATCH_UPDATE_INVENTORY, [{"p1": batch_item.quantity_delta, "p2": batch_item.product_id} for batch_item in batch_data])
-        results = await cursor.fetchall()
-        for row in results:
-            yield models.InventoryModel(
-                product_id=row[0],
-                quantity=row[1],
-            )
+        psycopg_sql = 'UPDATE inventory SET quantity = quantity + %(p1)s WHERE product_id = %(p2)s RETURNING product_id, quantity'
+        await cursor.executemany(psycopg_sql, [{"p1": batch_item.quantity_delta, "p2": batch_item.product_id} for batch_item in batch_data], returning=True)
+        # For executemany with returning=True, we need to iterate through all result sets
+        assert cursor.pgresult
+        while True:
+            async for row in cursor:
+                yield models.InventoryModel(
+                    product_id=row[0],
+                    quantity=row[1],
+                )
+            if not cursor.nextset():
+                break
 
 '''
     assert queries_code == expected_code
