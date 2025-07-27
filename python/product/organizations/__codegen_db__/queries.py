@@ -9,7 +9,7 @@ from foundation.observability.errors import NotFoundError
 ORGANIZATION_FETCH = """-- name: organization_fetch :one
 SELECT id, created_at, updated_at, storytime, name, inbound_source
 FROM organizations
-WHERE id = $1
+WHERE id = :p1
 """
 
 async def query_organization_fetch(conn: DBConn, *, id: str) -> models.OrganizationModel:
@@ -27,7 +27,7 @@ async def query_organization_fetch(conn: DBConn, *, id: str) -> models.Organizat
 
 ORGANIZATION_CREATE = """-- name: organization_create :one
 INSERT INTO organizations (name, inbound_source)
-VALUES ($1, $2)
+VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
@@ -46,7 +46,7 @@ async def query_organization_create(conn: DBConn, *, name: str, inbound_source: 
 
 ORGANIZATION_USER_ADD = """-- name: organization_user_add :one
 INSERT INTO organizations_users (organization_id, user_id)
-VALUES ($1, $2)
+VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
@@ -69,7 +69,7 @@ ORGANIZATION_FETCH_ALL = """-- name: organization_fetch_all :many
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
-WHERE tu.user_id = $1
+WHERE tu.user_id = :p1
 """
 
 async def query_organization_fetch_all(conn: DBConn, *, user_id: str) -> AsyncIterator[models.OrganizationModel]:

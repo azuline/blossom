@@ -8,7 +8,7 @@ from foundation.observability.errors import NotFoundError
 
 TEST_USER_CREATE = """-- name: test_user_create :one
 INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
-VALUES ($1, $2, $3, $4, $5)
+VALUES (:p1, :p2, :p3, :p4, :p5)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
@@ -31,7 +31,7 @@ async def query_test_user_create(conn: DBConn, *, name: str, email: str, passwor
 
 TEST_ORGANIZATION_CREATE = """-- name: test_organization_create :one
 INSERT INTO organizations (name, inbound_source)
-VALUES ($1, $2)
+VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
 """
 
@@ -50,7 +50,7 @@ async def query_test_organization_create(conn: DBConn, *, name: str, inbound_sou
 
 TEST_ORGANIZATION_USER_CREATE = """-- name: test_organization_user_create :one
 INSERT INTO organizations_users (user_id, organization_id)
-VALUES ($1, $2)
+VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
 """
 
@@ -71,7 +71,7 @@ async def query_test_organization_user_create(conn: DBConn, *, user_id: str, org
 
 TEST_SESSION_CREATE = """-- name: test_session_create :one
 INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
-VALUES ($1, $2, $3, $4)
+VALUES (:p1, :p2, :p3, :p4)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 

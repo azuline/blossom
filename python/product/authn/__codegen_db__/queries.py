@@ -9,7 +9,7 @@ from foundation.observability.errors import NotFoundError
 AUTHN_USER_FETCH_BY_EMAIL = """-- name: authn_user_fetch_by_email :one
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
-WHERE email = $1
+WHERE email = :p1
 """
 
 async def query_authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models.UserModel:
@@ -31,7 +31,7 @@ async def query_authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models
 
 AUTHN_SESSION_CREATE = """-- name: authn_session_create :one
 INSERT INTO sessions (user_id, organization_id)
-VALUES ($1, $2)
+VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 """
 
@@ -53,7 +53,7 @@ async def query_authn_session_create(conn: DBConn, *, user_id: str, organization
 AUTHN_SESSION_EXPIRE = """-- name: authn_session_expire :exec
 UPDATE sessions
 SET expired_at = NOW() 
-WHERE id = $1
+WHERE id = :p1
 """
 
 async def query_authn_session_expire(conn: DBConn, *, id: str) -> None:
@@ -63,7 +63,7 @@ AUTHN_LINKED_ORGANIZATION_FETCH = """-- name: authn_linked_organization_fetch :o
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
-WHERE tu.user_id = $1 AND t.id = $2
+WHERE tu.user_id = :p1 AND t.id = :p2
 """
 
 async def query_authn_linked_organization_fetch(conn: DBConn, *, user_id: str, id: str) -> models.OrganizationModel:
@@ -84,7 +84,7 @@ SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
 LEFT JOIN sessions s ON s.organization_id = t.id AND s.user_id = tu.user_id
-WHERE tu.user_id = $1
+WHERE tu.user_id = :p1
 ORDER BY s.last_seen_at DESC NULLS LAST, t.id ASC
 LIMIT 1
 """
@@ -105,7 +105,7 @@ async def query_authn_most_recently_accessed_organization_fetch(conn: DBConn, *,
 AUTHN_SESSION_FETCH_BY_USER = """-- name: authn_session_fetch_by_user :one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
-WHERE user_id = $1
+WHERE user_id = :p1
 ORDER BY last_seen_at DESC
 LIMIT 1
 """

@@ -229,6 +229,13 @@ def generate_queries(queries: list[Query]) -> str:
     def get_param_name(param: Parameter) -> str:
         return param.column.name or f"p{param.number}"
 
+    def convert_sql_params(sql: str, params: list[Parameter]) -> str:
+        """Convert PostgreSQL positional parameters ($1, $2) to SQLAlchemy named parameters (:p1, :p2, etc.)."""
+        result = sql
+        for param in params:
+            result = result.replace(f"${param.number}", f":p{param.number}")
+        return result
+
     def get_model_name(query: Query) -> str:
         if query.insert_into_table and query.insert_into_table.name:
             return "".join(w.capitalize() for w in _depluralize_table_name(query.insert_into_table.name).split("_")) + "Model"
@@ -241,7 +248,7 @@ def generate_queries(queries: list[Query]) -> str:
         {
             "name": query.name,
             "constant_name": query.name.upper(),
-            "text": query.text,
+            "text": convert_sql_params(query.text, query.params),
             "cmd": query.cmd,
             "params_signature": f", *, {', '.join(f'{get_param_name(p)}: {_map_postgres_type_to_python(p.column)}' for p in query.params)}" if query.params else "",
             "return_type": {

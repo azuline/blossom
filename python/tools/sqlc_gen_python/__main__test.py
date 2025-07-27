@@ -205,7 +205,7 @@ from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
 GET_USER = """-- name: get_user :one
-SELECT id, name, email FROM users WHERE id = $1
+SELECT id, name, email FROM users WHERE id = :p1
 """
 
 async def query_get_user(conn: DBConn, *, id: int) -> models.UserModel:
@@ -232,7 +232,7 @@ async def query_list_users(conn: DBConn) -> AsyncIterator[models.UserModel]:
         )
 
 DELETE_USER = """-- name: delete_user :exec
-DELETE FROM users WHERE id = $1
+DELETE FROM users WHERE id = :p1
 """
 
 async def query_delete_user(conn: DBConn, *, id: int) -> None:

@@ -9,7 +9,7 @@ from foundation.observability.errors import NotFoundError
 RPC_UNEXPIRED_SESSION_FETCH = """-- name: rpc_unexpired_session_fetch :one
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
-WHERE id = $1
+WHERE id = :p1
 AND expired_at IS NULL
 AND last_seen_at > NOW() - '14 days'::INTERVAL
 """

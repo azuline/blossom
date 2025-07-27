@@ -9,7 +9,7 @@ from foundation.observability.errors import NotFoundError
 USER_FETCH = """-- name: user_fetch :one
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
-WHERE id = $1
+WHERE id = :p1
 """
 
 async def query_user_fetch(conn: DBConn, *, id: str) -> models.UserModel:
@@ -31,7 +31,7 @@ async def query_user_fetch(conn: DBConn, *, id: str) -> models.UserModel:
 
 USER_CREATE = """-- name: user_create :one
 INSERT INTO users (name, email, password_hash, signup_step)
-VALUES ($1, $2, $3, $4)
+VALUES (:p1, :p2, :p3, :p4)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 """
 
