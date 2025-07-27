@@ -115,19 +115,10 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
         yield row
 {%- endif %}
 {%- elif query.cmd == ":batchexec" %}
-    # Use psycopg connection for batch execution
-    raw_conn = await conn.get_raw_connection()
-    assert raw_conn.driver_connection
-    async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
+    await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
 {%- elif query.cmd == ":batchone" %}
-    # Use psycopg connection for batch execution returning one result per batch
-    raw_conn = await conn.get_raw_connection()
-    assert raw_conn.driver_connection
-    async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
-        results = await cursor.fetchall()
-        for row in results:
+    result = await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
+    for row in result:
 {%- if query.columns %}
             {%- if query.needs_custom_dataclass %}
             yield {{ query.custom_dataclass_name }}(
@@ -142,13 +133,8 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
             yield row
 {%- endif %}
 {%- elif query.cmd == ":batchmany" %}
-    # Use psycopg connection for batch execution returning many results per batch
-    raw_conn = await conn.get_raw_connection()
-    assert raw_conn.driver_connection
-    async with raw_conn.driver_connection.cursor() as cursor:
-        await cursor.executemany({{ query.constant_name }}, [{{ query.batch_param_dict }} for batch_item in batch_data])
-        results = await cursor.fetchall()
-        for row in results:
+    result = await conn.execute(sqlalchemy.text({{ query.constant_name }}), [{{ query.batch_param_dict }} for batch_item in batch_data])
+    for row in result:
 {%- if query.columns %}
             {%- if query.needs_custom_dataclass %}
             yield {{ query.custom_dataclass_name }}(

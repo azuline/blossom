@@ -13,6 +13,33 @@ class TestBulkInsertsData:
     name: str
     inbound_source: str
 
+@dataclasses.dataclass(slots=True)
+class TestBatchUpsertOrganizationsData:
+    id: str
+    name: str
+    inbound_source: str
+
+@dataclasses.dataclass(slots=True)
+class TestBatchCreateUsersData:
+    name: str
+    email: str
+
+@dataclasses.dataclass(slots=True)
+class UserModel:
+    id: str
+    name: str
+    email: str
+
+@dataclasses.dataclass(slots=True)
+class TestBatchUpdateUserVisitedData:
+    name: str
+
+@dataclasses.dataclass(slots=True)
+class TestBatchUpdateUserVisitedResult:
+    id: str
+    name: str
+    last_visited_at: datetime.datetime | None
+
 TEST_BULK_INSERTS = r"""-- name: test_bulk_inserts \:copyfrom
 INSERT INTO organizations (name, inbound_source) VALUES (:p1, :p2)
 """
@@ -27,4 +54,38 @@ async def query_test_bulk_inserts(conn: DBConn, data: list[TestBulkInsertsData])
         async with cursor.copy(copy_sql) as copy:
             for item in data:
                 await copy.write_row((item.name, item.inbound_source))
+
+TEST_BATCH_UPSERT_ORGANIZATIONS = r"""-- name: test_batch_upsert_organizations \:batchexec
+INSERT INTO organizations (id, name, inbound_source) VALUES (:p1, :p2, :p3) 
+ON CONFLICT (id) DO UPDATE SET inbound_source = EXCLUDED.inbound_source
+"""
+
+async def query_test_batch_upsert_organizations(conn: DBConn, batch_data: list[TestBatchUpsertOrganizationsData]) -> None:
+    await conn.execute(sqlalchemy.text(TEST_BATCH_UPSERT_ORGANIZATIONS), [{"p1": batch_item.id, "p2": batch_item.name, "p3": batch_item.inbound_source} for batch_item in batch_data])
+
+TEST_BATCH_CREATE_USERS = r"""-- name: test_batch_create_users \:batchone
+INSERT INTO users (name, email) VALUES (:p1, :p2) RETURNING id, name, email
+"""
+
+async def query_test_batch_create_users(conn: DBConn, batch_data: list[TestBatchCreateUsersData]) -> AsyncIterator[UserModel]:
+    result = await conn.execute(sqlalchemy.text(TEST_BATCH_CREATE_USERS), [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
+    for row in result:
+            yield UserModel(
+                id=row[0],
+                name=row[1],
+                email=row[2],
+            )
+
+TEST_BATCH_UPDATE_USER_VISITED = r"""-- name: test_batch_update_user_visited \:batchmany
+UPDATE users SET last_visited_at = NOW() WHERE name = :p1 RETURNING id, name, last_visited_at
+"""
+
+async def query_test_batch_update_user_visited(conn: DBConn, batch_data: list[TestBatchUpdateUserVisitedData]) -> AsyncIterator[TestBatchUpdateUserVisitedResult]:
+    result = await conn.execute(sqlalchemy.text(TEST_BATCH_UPDATE_USER_VISITED), [{"p1": batch_item.name} for batch_item in batch_data])
+    for row in result:
+            yield TestBatchUpdateUserVisitedResult(
+                id=row[0],
+                name=row[1],
+                last_visited_at=row[2],
+            )
 
