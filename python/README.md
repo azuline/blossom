@@ -35,6 +35,8 @@ Refer to [`foundation`](./foundation) and [CLAUDE.md](./CLAUDE.md) for best prac
 - Large Language Model: [OpenAI](https://openai.com/)
 - Observability: [Datadog](https://www.datadoghq.com/)
 
+See [`.env.example`](./env.example) for instructions on provisioning API keys.
+
 ## Major Dependencies
 
 - Background Jobs: [dramatiq](https://github.com/Bogdanp/dramatiq)
