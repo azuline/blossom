@@ -8,12 +8,12 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-RPC_UNEXPIRED_SESSION_FETCH = r"""-- name: rpc_unexpired_session_fetch \:one
+RPC_UNEXPIRED_SESSION_FETCH = """\
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE id = :p1
 AND expired_at IS NULL
-AND last_seen_at > NOW() - '14 days'\:\:INTERVAL
+AND last_seen_at > NOW() - '14 days'\\:\\:INTERVAL
 """
 
 async def query_rpc_unexpired_session_fetch(conn: DBConn, *, id: str) -> models.SessionModel:

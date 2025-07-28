@@ -12,7 +12,7 @@ from foundation.observability.errors import NotFoundError
 class PipelineOrganizationIdFetchAllResult:
     id: str
 
-PIPELINE_ORGANIZATION_ID_FETCH_ALL = r"""-- name: pipeline_organization_id_fetch_all \:many
+PIPELINE_ORGANIZATION_ID_FETCH_ALL = """\
 SELECT id FROM organizations ORDER BY id
 """
 

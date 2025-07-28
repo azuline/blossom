@@ -8,7 +8,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-USER_FETCH = r"""-- name: user_fetch \:one
+USER_FETCH = """\
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
 WHERE id = :p1
@@ -31,7 +31,7 @@ async def query_user_fetch(conn: DBConn, *, id: str) -> models.UserModel:
         last_visited_at=row[9],
     )
 
-USER_CREATE = r"""-- name: user_create \:one
+USER_CREATE = """\
 INSERT INTO users (name, email, password_hash, signup_step)
 VALUES (:p1, :p2, :p3, :p4)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at

@@ -15,6 +15,7 @@ import jinja2
 import sqlalchemy
 
 from database.conn import connect_db_admin
+from foundation.stdlib.convert import snake_case_to_pascal_case
 from tools.codegen_db_plugin.proto import Catalog, Column, File, GenerateRequest, GenerateResponse, Parameter, Query
 
 MODELS_TEMPLATE = """\
@@ -75,7 +76,7 @@ class {{ query.custom_dataclass_name }}:
 {% endif -%}
 {%- endfor -%}
 {%- for query in queries -%}
-{{ query.constant_name }} = r"""\\
+{{ query.constant_name }} = """\\
 {{ query.text }}
 """
 
@@ -250,7 +251,7 @@ async def _get_enum_foreign_keys() -> dict[tuple[str, str], str]:
             """)
         )
 
-        return {(tbl, col): "".join(w.capitalize() for w in fk_tbl.split("_")) for tbl, col, fk_tbl in result}
+        return {(tbl, col): snake_case_to_pascal_case(fk_tbl) for tbl, col, fk_tbl in result}
 
 
 def _map_postgres_type_to_python(column: Column, enum_fk_mapping: dict[tuple[str, str], str] | None = None) -> str:
@@ -283,14 +284,14 @@ def _depluralize_table_name(table_name: str) -> str:
 async def generate_models(catalog: Catalog) -> str:
     """Generate Python dataclass models from database catalog."""
     enum_tables = {
-        table.rel.name: "".join(word.capitalize() for word in table.rel.name.split("_"))
+        table.rel.name: snake_case_to_pascal_case(table.rel.name)
         for table in itertools.chain(*[s.tables for s in catalog.schemas if s.name == "public"])
         if table.rel.name.endswith("_enum")
     }
     enum_fk_mapping = await _get_enum_foreign_keys() if enum_tables else None
     tables = [
         {
-            "class_name": "".join(word.capitalize() for word in _depluralize_table_name(table.rel.name).split("_")) + "Model",
+            "class_name": f"{snake_case_to_pascal_case(_depluralize_table_name(table.rel.name))}Model",
             "columns": [{"name": column.name, "python_type": _map_postgres_type_to_python(column, enum_fk_mapping)} for column in table.columns],
         }
         for table in itertools.chain(*[s.tables for s in catalog.schemas if s.name == "public"])
@@ -310,7 +311,7 @@ async def generate_enums(catalog: Catalog) -> str:
                     base_name = t.rel.name[:-5]
                     enums.append({
                         "table_name": t.rel.name,
-                        "type_name": "".join(word.capitalize() for word in base_name.split("_")) + "Enum",
+                        "type_name": f"{snake_case_to_pascal_case(base_name)}Enum",
                         "values_name": base_name.upper() + "_ENUM_VALUES",
                         "literal_values": ", ".join(f'"{value}"' for value in values),
                         "values_list": str(values),
@@ -333,18 +334,11 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
 
     def get_copyfrom_dataclass_name(query: Query) -> str:
         """Generate dataclass name for copyfrom operations."""
-        if query.cmd != ":copyfrom":
-            return ""
-        # Convert query name to PascalCase for dataclass name
-        return "".join(word.capitalize() for word in query.name.split("_")) + "Data"
+        return f"{snake_case_to_pascal_case(query.name)}Data" if query.cmd == ":copyfrom" else ""
 
     def get_copyfrom_data_type(query: Query) -> str:
         """Generate type-safe data parameter type for copyfrom operations."""
-        if query.cmd != ":copyfrom":
-            return ""
-
-        dataclass_name = get_copyfrom_dataclass_name(query)
-        return f"list[{dataclass_name}]"
+        return f"list[{get_copyfrom_dataclass_name(query)}]" if query.cmd == ":copyfrom" else ""
 
     def parse_batch_params(query: Query) -> list[dict[str, str]]:
         """Extract parameters for batch operations."""
@@ -357,7 +351,7 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
         if not query.cmd.startswith(":batch"):
             return ""
         # Convert query name to PascalCase for dataclass name
-        return "".join(word.capitalize() for word in query.name.split("_")) + "Data"
+        return snake_case_to_pascal_case(query.name) + "Data"
 
     def process_query_text(query: Query) -> str:
         """Convert PostgreSQL positional parameters ($1, $2) to SQLAlchemy named parameters (:p1, :p2, etc.)."""
@@ -367,22 +361,22 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             return f"COPY {query.insert_into_table.name} ({', '.join(param_names)}) FROM STDIN"
 
         # For regular queries, escape colons and convert positional parameters
-        result = query.text.replace(":", "\\:")
+        result = query.text.replace(":", r"\\:")
         for param in query.params:
             result = result.replace(f"${param.number}", f":p{param.number}")
 
         # For batch operations using psycopg, convert to psycopg format
-        if query.cmd.startswith(":batch"):
+        if query.cmd in (":batchone", ":batchmany"):
             result = re.sub(r":p(\d+)", r"%(p\1)s", result)
 
         return result
 
     def get_model_name(query: Query) -> str:
         if query.insert_into_table and query.insert_into_table.name:
-            return "".join(w.capitalize() for w in _depluralize_table_name(query.insert_into_table.name).split("_")) + "Model"
+            return snake_case_to_pascal_case(_depluralize_table_name(query.insert_into_table.name)) + "Model"
         if catalog and query.columns and (table_name := _does_query_return_model(query, catalog)):
-            return "".join(word.capitalize() for word in _depluralize_table_name(table_name).split("_")) + "Model"
-        return f"{''.join(word.capitalize() for word in query.name.split('_'))}Result"
+            return snake_case_to_pascal_case(_depluralize_table_name(table_name)) + "Model"
+        return f"{snake_case_to_pascal_case(query.name)}Result"
 
     def needs_custom_dataclass(query: Query) -> bool:
         """Check if query needs a custom dataclass for partial results."""

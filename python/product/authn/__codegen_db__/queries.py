@@ -8,7 +8,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-AUTHN_USER_FETCH_BY_EMAIL = r"""-- name: authn_user_fetch_by_email \:one
+AUTHN_USER_FETCH_BY_EMAIL = """\
 SELECT id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
 FROM users
 WHERE email = :p1
@@ -31,7 +31,7 @@ async def query_authn_user_fetch_by_email(conn: DBConn, *, email: str) -> models
         last_visited_at=row[9],
     )
 
-AUTHN_SESSION_CREATE = r"""-- name: authn_session_create \:one
+AUTHN_SESSION_CREATE = """\
 INSERT INTO sessions (user_id, organization_id)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
@@ -52,7 +52,7 @@ async def query_authn_session_create(conn: DBConn, *, user_id: str, organization
         expired_at=row[7],
     )
 
-AUTHN_SESSION_EXPIRE = r"""-- name: authn_session_expire \:exec
+AUTHN_SESSION_EXPIRE = """\
 UPDATE sessions
 SET expired_at = NOW() 
 WHERE id = :p1
@@ -61,7 +61,7 @@ WHERE id = :p1
 async def query_authn_session_expire(conn: DBConn, *, id: str) -> None:
     await conn.execute(sqlalchemy.text(AUTHN_SESSION_EXPIRE), {"p1": id})
 
-AUTHN_LINKED_ORGANIZATION_FETCH = r"""-- name: authn_linked_organization_fetch \:one
+AUTHN_LINKED_ORGANIZATION_FETCH = """\
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
@@ -81,7 +81,7 @@ async def query_authn_linked_organization_fetch(conn: DBConn, *, user_id: str, i
         inbound_source=row[5],
     )
 
-AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH = r"""-- name: authn_most_recently_accessed_organization_fetch \:one
+AUTHN_MOST_RECENTLY_ACCESSED_ORGANIZATION_FETCH = """\
 SELECT t.id, t.created_at, t.updated_at, t.storytime, t.name, t.inbound_source
 FROM organizations t
 JOIN organizations_users tu ON tu.organization_id = t.id
@@ -104,7 +104,7 @@ async def query_authn_most_recently_accessed_organization_fetch(conn: DBConn, *,
         inbound_source=row[5],
     )
 
-AUTHN_SESSION_FETCH_BY_USER = r"""-- name: authn_session_fetch_by_user \:one
+AUTHN_SESSION_FETCH_BY_USER = """\
 SELECT id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at
 FROM sessions
 WHERE user_id = :p1

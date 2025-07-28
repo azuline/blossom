@@ -8,7 +8,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-TEST_USER_CREATE = r"""-- name: test_user_create \:one
+TEST_USER_CREATE = """\
 INSERT INTO users (name, email, password_hash, signup_step, is_enabled)
 VALUES (:p1, :p2, :p3, :p4, :p5)
 RETURNING id, created_at, updated_at, storytime, name, email, password_hash, signup_step, is_enabled, last_visited_at
@@ -31,7 +31,7 @@ async def query_test_user_create(conn: DBConn, *, name: str, email: str, passwor
         last_visited_at=row[9],
     )
 
-TEST_ORGANIZATION_CREATE = r"""-- name: test_organization_create \:one
+TEST_ORGANIZATION_CREATE = """\
 INSERT INTO organizations (name, inbound_source)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, name, inbound_source
@@ -50,7 +50,7 @@ async def query_test_organization_create(conn: DBConn, *, name: str, inbound_sou
         inbound_source=row[5],
     )
 
-TEST_ORGANIZATION_USER_CREATE = r"""-- name: test_organization_user_create \:one
+TEST_ORGANIZATION_USER_CREATE = """\
 INSERT INTO organizations_users (user_id, organization_id)
 VALUES (:p1, :p2)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, removed_at, removed_by_user
@@ -71,7 +71,7 @@ async def query_test_organization_user_create(conn: DBConn, *, user_id: str, org
         removed_by_user=row[7],
     )
 
-TEST_SESSION_CREATE = r"""-- name: test_session_create \:one
+TEST_SESSION_CREATE = """\
 INSERT INTO sessions (user_id, organization_id, expired_at, last_seen_at)
 VALUES (:p1, :p2, :p3, :p4)
 RETURNING id, created_at, updated_at, storytime, user_id, organization_id, last_seen_at, expired_at

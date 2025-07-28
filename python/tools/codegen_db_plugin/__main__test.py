@@ -212,7 +212,7 @@ from database.conn import DBConn
 from database.__codegen_db__ import models
 from foundation.observability.errors import NotFoundError
 
-GET_USER = r"""\\
+GET_USER = """\\
 SELECT id, name, email FROM users WHERE id = :p1
 """
 
@@ -226,7 +226,7 @@ async def query_get_user(conn: DBConn, *, id: int) -> models.GetUserResult:
         email=row[2],
     )
 
-LIST_USERS = r"""\\
+LIST_USERS = """\\
 SELECT id, name, email FROM users
 """
 
@@ -239,7 +239,7 @@ async def query_list_users(conn: DBConn) -> AsyncIterator[models.ListUsersResult
             email=row[2],
         )
 
-DELETE_USER = r"""\\
+DELETE_USER = """\\
 DELETE FROM users WHERE id = :p1
 """
 
@@ -286,7 +286,7 @@ class BulkInsertUsersData:
     name: str
     email: str | None
 
-BULK_INSERT_USERS = r"""\\
+BULK_INSERT_USERS = """\\
 COPY users (name, email) FROM STDIN
 """
 
@@ -646,7 +646,7 @@ class GetUserWithPostsCountResult:
     name: str
     post_count: int
 
-GET_USER_FULL = r"""\\
+GET_USER_FULL = """\\
 SELECT id, name, email, created_at, metadata FROM users WHERE id = :p1
 """
 
@@ -662,7 +662,7 @@ async def query_get_user_full(conn: DBConn, *, id: int) -> models.UserModel:
         metadata=row[4],
     )
 
-GET_USER_SUMMARY = r"""\\
+GET_USER_SUMMARY = """\\
 SELECT id, name FROM users WHERE id = :p1
 """
 
@@ -675,7 +675,7 @@ async def query_get_user_summary(conn: DBConn, *, id: int) -> GetUserSummaryResu
         name=row[1],
     )
 
-GET_USER_WITH_POSTS_COUNT = r"""\\
+GET_USER_WITH_POSTS_COUNT = """\\
 SELECT u.name, COUNT(p.id) as post_count FROM users u LEFT JOIN posts p ON u.id = p.user_id WHERE u.id = :p1
 """
 
@@ -751,7 +751,7 @@ class ListProductSummariesResult:
     name: str
     price: float
 
-LIST_PRODUCT_SUMMARIES = r"""\\
+LIST_PRODUCT_SUMMARIES = """\\
 SELECT id, name, price FROM products
 """
 
@@ -883,14 +883,14 @@ class BatchUpdateInventoryData:
     quantity_delta: int
     product_id: int
 
-BATCH_UPSERT_USERS = r"""\\
-INSERT INTO users (name, email) VALUES (%(p1)s, %(p2)s) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
+BATCH_UPSERT_USERS = """\\
+INSERT INTO users (name, email) VALUES (:p1, :p2) ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
 """
 
 async def query_batch_upsert_users(conn: DBConn, batch_data: list[BatchUpsertUsersData]) -> None:
     await conn.execute(sqlalchemy.text(BATCH_UPSERT_USERS), [{"p1": batch_item.name, "p2": batch_item.email} for batch_item in batch_data])
 
-BATCH_UPSERT_PRODUCTS = r"""\\
+BATCH_UPSERT_PRODUCTS = """\\
 INSERT INTO products (name, price, category_id) VALUES (%(p1)s, %(p2)s, %(p3)s) ON CONFLICT (name) DO UPDATE SET price = EXCLUDED.price, category_id = EXCLUDED.category_id RETURNING id, name, price
 """
 
@@ -911,7 +911,7 @@ async def query_batch_upsert_products(conn: DBConn, batch_data: list[BatchUpsert
             if not cursor.nextset():
                 break
 
-BATCH_UPDATE_INVENTORY = r"""\\
+BATCH_UPDATE_INVENTORY = """\\
 UPDATE inventory SET quantity = quantity + %(p1)s WHERE product_id = %(p2)s RETURNING product_id, quantity
 """
 
