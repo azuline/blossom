@@ -2,6 +2,7 @@ import asyncio
 import functools
 import inspect
 from collections.abc import Callable
+import threading
 
 from foundation.observability.errors import suppress_error
 
@@ -62,5 +63,27 @@ def run_once(func: Callable[..., None]):
             if not has_run:
                 has_run = True
                 func(*args, **kwargs)
+
+        return sync_wrapper
+
+
+def linearize(func):
+    if asyncio.iscoroutinefunction(func):
+        lock = asyncio.Lock()
+
+        @functools.wraps(func)
+        async def async_wrapper(*args, **kwargs):
+            async with lock:
+                return await func(*args, **kwargs)
+
+        return async_wrapper
+
+    else:
+        lock = threading.Lock()
+
+        @functools.wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            with lock:
+                return func(*args, **kwargs)
 
         return sync_wrapper
