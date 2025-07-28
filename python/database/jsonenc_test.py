@@ -1,7 +1,10 @@
 import dataclasses
 import datetime
 
+import pytest
+
 from database.conn import dump_json_pg, load_json_pg
+from database.jsonenc import JsonInjectionError
 from foundation.stdlib.parse import parse_dataclass
 
 
@@ -28,3 +31,7 @@ def test_postgres_json_serde():
     decoded = load_json_pg(encoded)
 
     assert parse_dataclass(Event, decoded) == raw
+
+    # Test for injection
+    with pytest.raises(JsonInjectionError):
+        encoded = dump_json_pg({"fake_sentinel_to_cause_crash": {"__sentinel": "date", "value": "lalala"}})

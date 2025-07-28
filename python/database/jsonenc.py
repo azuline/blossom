@@ -4,6 +4,12 @@ from dataclasses import asdict, is_dataclass
 from datetime import date, datetime
 from typing import Any
 
+from foundation.observability.errors import BaseError
+
+
+class JsonInjectionError(BaseError):
+    pass
+
 
 # Since JSON does not support dates natively, For that reason we store dates in Postgres in a
 # special format, similar to how we do it on the wire for the RPCs:
@@ -31,7 +37,7 @@ class PostgresJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime):
             return {"__sentinel": "timestamp", "value": o.isoformat()}
-        if isinstance(o, date):
+        elif isinstance(o, date):
             return {"__sentinel": "date", "value": o.isoformat()}
         elif is_dataclass(o):
             return asdict(o)  # type: ignore
@@ -41,6 +47,7 @@ class PostgresJSONEncoder(json.JSONEncoder):
 def dump_json_pg(x: Any, **kwargs) -> str:
     if dataclasses.is_dataclass(x):
         x = dataclasses.asdict(x)  # type: ignore
+    _check_for_json_injection(x)
     return json.dumps(x, cls=PostgresJSONEncoder, **kwargs)
 
 
@@ -48,3 +55,14 @@ def load_json_pg(x: str | bytes, **kwargs) -> dict[str, Any]:
     if isinstance(x, bytes):
         x = x.decode("utf-8")
     return json.loads(x, cls=PostgresJSONDecoder, **kwargs)
+
+
+def _check_for_json_injection(o: Any, *, root: Any = None):
+    if isinstance(o, dict):
+        if "__sentinel" in o:
+            raise JsonInjectionError("__sentinel key detected in user-supplied JSON", data=root or o)
+        for v in o.values():
+            _check_for_json_injection(v, root=root or o)
+    elif isinstance(o, list):
+        for v in o:
+            _check_for_json_injection(v, root=root or o)

@@ -1,8 +1,8 @@
 import asyncio
 import functools
 import inspect
-from collections.abc import Callable
 import threading
+from collections.abc import Callable
 
 from foundation.observability.errors import suppress_error
 
