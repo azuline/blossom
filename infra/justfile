@@ -5,7 +5,7 @@ help:  ## Describe the available commands.
 
 # DEPENDENCY MANAGEMENT.
 
-install:  ## Install terraform dependencies.
+install:  ## Install Terraform dependencies.
     cd gcp && terraform init -upgrade
 
 # CODE CHECKS.

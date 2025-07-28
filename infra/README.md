@@ -11,14 +11,17 @@ The projects in this directory are:
 ### Enterprise (TODO)
 
 - Terraform + GCP
-- Debt:
-  - Project ID hardcoded
 - Setup:
+  - `$ just install`
   - `$ gcloud auth application-default login`
+  - `$ cp gcp/terraform.tfvars{.example,}`
+  - `$ cd gcp && terraform ...`
+- Dev Loop:
+  - `$ just lint`
 
 ### Hobbyist (TODO)
 
-- My homelab set up is Nomad on NixOS in a corner of my apartment.
+- Homelab: Nomad + NixOS
 
 ## Vendors
 
