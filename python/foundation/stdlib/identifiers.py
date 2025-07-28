@@ -3,7 +3,7 @@ import secrets
 import coolname
 from tsidpy import TSID
 
-from database.__codegen__.tables import DatabaseTablePrefixEnum
+from database.__codegen_db__.tables import DatabaseTablePrefixEnum
 
 
 def _pg_b58_encode(num: int) -> str:

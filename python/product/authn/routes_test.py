@@ -1,5 +1,6 @@
 from database.xact import xact_admin
 from foundation.stdlib.identifiers import generate_email
+from product.authn.__codegen_db__.queries import query_authn_session_fetch_by_user
 from product.authn.routes import (
     AuthOrganizationNotFoundError,
     InvalidCredentialsError,
@@ -15,8 +16,8 @@ async def test_auth_login_success(t: ProductFixture) -> None:
     user = await t.factory.user()
     resp = await t.rpc.call(login, LoginIn(email=user.email, password="password", permanent=True, organization_id=None))
     await t.rpc.assert_success(resp)
-    async with xact_admin() as q:
-        session = await q.orm.authn_session_fetch_by_user(user_id=user.id)
+    async with xact_admin() as conn:
+        session = await query_authn_session_fetch_by_user(conn, user_id=user.id)
     assert session is not None
     assert session.user_id == user.id
     assert session.organization_id is None
@@ -43,8 +44,8 @@ async def test_auth_login_external_organization_id(t: ProductFixture) -> None:
 
     resp = await t.rpc.call(login, LoginIn(email=user.email, password="password", permanent=True, organization_id=organization2.id))
     await t.rpc.assert_success(resp)
-    async with xact_admin() as q:
-        session = await q.orm.authn_session_fetch_by_user(user_id=user.id)
+    async with xact_admin() as conn:
+        session = await query_authn_session_fetch_by_user(conn, user_id=user.id)
     assert session is not None
     assert session.user_id == user.id
     # Ignore the default (oldest organization) and fetch the passed-in organization.
@@ -68,8 +69,8 @@ async def test_auth_login_default_organization_most_recent(t: ProductFixture) ->
 
     resp = await t.rpc.call(login, LoginIn(email=user.email, password="password", permanent=True, organization_id=None))
     await t.rpc.assert_success(resp)
-    async with xact_admin() as q:
-        session = await q.orm.authn_session_fetch_by_user(user_id=user.id)
+    async with xact_admin() as conn:
+        session = await query_authn_session_fetch_by_user(conn, user_id=user.id)
     assert session is not None
     assert session.user_id == user.id
     # Default to the most recently accessed organization since one has had a previous login.
@@ -86,8 +87,8 @@ async def test_auth_login_default_organization_oldest(t: ProductFixture) -> None
 
     resp = await t.rpc.call(login, LoginIn(email=user.email, password="password", permanent=True, organization_id=None))
     await t.rpc.assert_success(resp)
-    async with xact_admin() as q:
-        session = await q.orm.authn_session_fetch_by_user(user_id=user.id)
+    async with xact_admin() as conn:
+        session = await query_authn_session_fetch_by_user(conn, user_id=user.id)
     assert session is not None
     assert session.user_id == user.id
     # Default to the oldest organization because no organizations have been accessed.

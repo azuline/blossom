@@ -1,8 +1,8 @@
 import datetime
 import inspect
 import logging
-import sys
 import logging.handlers
+import sys
 from typing import Any, cast
 
 import structlog
@@ -99,8 +99,8 @@ def initialize_logging() -> None:
 
 
 def _processor(_: logging.Logger, _2: str, event_dict: EventDict) -> EventDict:
-    from foundation.observability.errors import report_error
-    from foundation.observability.spans import current_span
+    from foundation.observability.errors import report_error  # noqa: PLC0415
+    from foundation.observability.spans import current_span  # noqa: PLC0415
 
     # Add custom keys.
     event_dict["service"] = ENV.service

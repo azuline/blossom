@@ -3,7 +3,14 @@ import dataclasses
 import quart
 from werkzeug.security import check_password_hash
 
-from foundation.webserver.rpc import RPCError
+from foundation.observability.errors import NotFoundError, RPCError
+from product.authn.__codegen_db__.queries import (
+    query_authn_linked_organization_fetch,
+    query_authn_most_recently_accessed_organization_fetch,
+    query_authn_session_create,
+    query_authn_session_expire,
+    query_authn_user_fetch_by_email,
+)
 from product.framework.rpc import SESSION_ID_KEY, ReqProduct, rpc_product
 
 BOGUS_PASSWORD_HASH = "pbkdf2:sha256:260000$HdBKH9zwdJpNsm8I$a0adb646f827525b478cc13db89e6ade694d2951987572edabf354b1821ae498"
@@ -35,7 +42,10 @@ async def login(req: ReqProduct[LoginIn]) -> None:
     This function is ran with an admin database connection, which means there is no Row Level
     Security.
     """
-    user = await req.q.orm.authn_user_fetch_by_email(email=req.data.email)
+    try:
+        user = await query_authn_user_fetch_by_email(req.conn, email=req.data.email)
+    except NotFoundError:
+        user = None
 
     # Fail auth if:
     # 1. No user with this email exists
@@ -54,15 +64,17 @@ async def login(req: ReqProduct[LoginIn]) -> None:
     # session is tied to the most recently accessed organization.
     organization = None
     if req.data.organization_id is not None:
-        organization = await req.q.orm.authn_linked_organization_fetch(user_id=user.id, id=req.data.organization_id)
-        # If the passed in organization ID doesn't exist, raise an error.
-        if organization is None:
-            raise AuthOrganizationNotFoundError
+        try:
+            organization = await query_authn_linked_organization_fetch(req.conn, user_id=user.id, id=req.data.organization_id)
+        except NotFoundError:
+            raise AuthOrganizationNotFoundError from None
     else:
-        organization = await req.q.orm.authn_most_recently_accessed_organization_fetch(user_id=user.id)
+        try:
+            organization = await query_authn_most_recently_accessed_organization_fetch(req.conn, user_id=user.id)
+        except NotFoundError:
+            organization = None
 
-    session = await req.q.orm.authn_session_create(user_id=user.id, organization_id=organization.id if organization else None)
-    assert session is not None
+    session = await query_authn_session_create(req.conn, user_id=user.id, organization_id=organization.id if organization else None)
     quart.session[SESSION_ID_KEY] = session.id
     quart.session.permanent = req.data.permanent
     return None
@@ -77,6 +89,6 @@ async def logout(req: ReqProduct[None]) -> None:
     expose this endpoint.
     """
     session_id = quart.session[SESSION_ID_KEY]
-    await req.q.orm.authn_session_expire(id=session_id)
+    await query_authn_session_expire(req.conn, id=session_id)
     quart.session.clear()
     return None

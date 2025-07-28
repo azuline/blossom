@@ -16,6 +16,24 @@ just lint
 just test
 ```
 
+For test failures with detailed diff output:
+
+```bash
+just test -vv
+```
+
+## Testing multiline strings
+
+Assert on entire multiline strings using triple quotes:
+
+```python
+assert queries_code == """expected
+multiline
+content"""
+```
+
+NOT individual line assertions.
+
 If the Dagster pipeline (`pipeline` DAG) changes, validate it:
 
 ```bash
@@ -57,7 +75,7 @@ Logs from development and test are written to the `./claude/logs` directory. Tai
 
 ## Database
 
-Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL.
+Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL in Python files.
 
 ## Dataclasses
 
@@ -168,6 +186,8 @@ Follow these testing conventions:
 - Place tests next to the code they cover; do not create a `tests/` directory.
 - Name files `<module>_test.py` or `__main__test.py`.
 - Tests are plain functions starting with `test_`. Do not nest tests inside classes.
+- You do not need to mark asynchronous tests with `@pytest.mark.asyncio`, they are automatically handled.
+- Express the test's expectations in the fewest number of asserts possible. If possible, assert on an entire structure rather than each individual field.
 
 Write or update tests for every behavioural change.
 
@@ -243,9 +263,10 @@ Follow these variable naming conventions:
 Import full modules rather than individual functions unless the name is unique or the path is unwieldy. For models:
 
 ```python
-from database.__codegen__ import models
-models.Organization
+from database.__codegen_db__.models import OrganizationModel, UserModel
 ```
+
+Since models now have a `Model` suffix, import them directly without the `models.` prefix.
 
 Avoid importing inside functions except to break circular dependencies.
 

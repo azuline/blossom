@@ -7,6 +7,10 @@
       url = "github:peterldowns/pgmigrate";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sqlc-src = {
+      url = "github:azuline/sqlc";
+      flake = false;
+    };
     mcp-language-server-src = {
       url = "github:isaacphi/mcp-language-server";
       flake = false;
@@ -18,6 +22,7 @@
       nixpkgs,
       flake-utils,
       pgmigrate-src,
+      sqlc-src,
       mcp-language-server-src,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -29,6 +34,10 @@
           overlays = [
             (self: super: {
               pgmigrate = pgmigrate-src.packages.${system}.default;
+              sqlc = super.sqlc.overrideAttrs {
+                src = sqlc-src;
+                vendorHash = "sha256-JIbSagv5JP7pMaGpy/2y1LvMGv2WKjPLxUOirZOcpL0=";
+              };
               mcp-lsp-server = super.buildGoModule {
                 pname = "mcp-language-server";
                 version = "0.1.0";
@@ -37,7 +46,11 @@
                 proxyVendor = true;
                 subPackages = [ "." ];
               };
-
+              sqlc-gen-python = super.writeShellScriptBin "sqlc-gen-python" ''
+                #!/usr/bin/env bash
+                cd "$MONOREPO_ROOT/python"
+                uv run -- python -m tools.codegen_db_plugin $@
+              '';
             })
           ];
         };
@@ -57,7 +70,7 @@
                 done
                 echo "$path"
               }
-              export BLOSSOM_ROOT="$(find-up flake.nix)"
+              export MONOREPO_ROOT="$(find-up .monorepo-root)"
               # Default biome binary is dynamically linked.
               export BIOME_BINARY="${pkgs.biome}/bin/biome"
               export UV_PYTHON="${pkgs.python313}/bin/python"
@@ -80,6 +93,7 @@
             fd
             mcp-language-server
             ripgrep
+            protobuf
           ];
           python = [
             biome # For frontend codegen.
@@ -90,6 +104,7 @@
             ruff
             semgrep
             sqlc
+            sqlc-gen-python
             uv
           ];
           typescript = [

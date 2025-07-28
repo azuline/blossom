@@ -39,12 +39,8 @@ codegen-rpc:  ## Codegens the frontend RPC routes and types from the defined pro
 
 install:  ## Install Python dependencies using `uv` according to the lockfile.
     uv sync
-    @echo "# THIS FILE IS FOR LEGACY COMPATIBILITY. SEE COMMENT IN SETUP.PY. DO NOT EDIT." > requirements.txt
-    uv export --format requirements.txt >> requirements.txt
 update *ARGS:  ## Update Python dependencies using `uv`.
     uv sync --upgrade {{ARGS}}
-    @echo "# THIS FILE IS FOR LEGACY COMPATIBILITY. SEE COMMENT IN SETUP.PY. DO NOT EDIT." > requirements.txt
-    uv export --format requirements.txt >> requirements.txt
 
 # CODE CHECKS.
 

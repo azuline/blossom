@@ -1,6 +1,7 @@
 """Run SQLc codegen using a test database."""
 
 import asyncio
+import os
 import re
 import shutil
 import subprocess
@@ -21,14 +22,24 @@ logger = get_logger()
 
 async def main():
     """Run SQLc codegen."""
+    # Clean up all existing __codegen_db__ directories
+    logger.info("cleaning up existing __codegen_db__ directories")
+    for codegen_dir in PYTHON_ROOT.rglob("__codegen_db__"):
+        if codegen_dir.is_dir():
+            shutil.rmtree(codegen_dir)
+
     testdb = TestDB()
-    out_dir = PYTHON_ROOT / "database/__codegen__"
+    out_dir = PYTHON_ROOT / "database/__codegen_db__"
 
     db_name = await testdb.create_db()
     original_database_uri = ENV.database_uri
     ENV.database_uri = testdb.database_uri(db_name)
     try:
         logger.info("using test database for codegen", db_name=db_name)
+
+        logger.info("generating schema.sql")
+        subprocess.run(["pgmigrate", "dump", "-d", ENV.database_uri, "--out", str(PYTHON_ROOT / "database/schema.sql")], check=True)
+        logger.info("schema.sql generated successfully")
 
         # Generate sqlc :: models.py and queries.py
         with tempfile.NamedTemporaryFile(prefix=".sqlc.config", suffix=".yaml", dir=".") as tmp_config:
@@ -37,6 +48,8 @@ async def main():
             config["sql"][0]["database"]["uri"] = ENV.database_uri
             with Path(tmp_config.name).open("w") as tmp:
                 yaml.dump(config, tmp, default_flow_style=False)
+            # Set DATABASE_URI for the generation plugin.
+            os.environ["DATABASE_URI"] = ENV.database_uri
 
             logger.info("validating database queries")
             subprocess.run(["sqlc", "vet", "-f", tmp_config.name], check=True)
@@ -48,29 +61,23 @@ async def main():
             subprocess.run(["sqlc", "generate", "-f", tmp_config.name], check=True)
             logger.info("codegen completed successfully")
 
-            logger.info("generating schema.sql")
-            subprocess.run(["pgmigrate", "dump", "-d", ENV.database_uri, "--out", str(PYTHON_ROOT / "database/schema.sql")], check=True)
-            logger.info("schema.sql generated successfully")
-
         # Generate table map :: tables.py
         table_map_filepath = out_dir / "tables.py"
         table_map_filepath.unlink(missing_ok=True)
         defaults: list[tuple[str, str]] = []
         async with connect_db_admin() as conn:
             cursor = await conn.execute(
-                text(
-                    """
-                SELECT c.table_name, c.column_default
-                FROM information_schema.columns c
-                JOIN information_schema.tables t
-                    ON c.table_name = t.table_name
-                WHERE c.column_name = 'id'
-                AND t.table_schema = 'public'
-                AND t.table_type = 'BASE TABLE'
-                AND t.table_name NOT LIKE '%yoyo%'
-                AND c.column_default LIKE  'generate_id(%'
-                """
-                )
+                text("""
+                    SELECT c.table_name, c.column_default
+                    FROM information_schema.columns c
+                    JOIN information_schema.tables t
+                        ON c.table_name = t.table_name
+                    WHERE c.column_name = 'id'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND c.column_default LIKE  'generate_id(%'
+                """)
             )
             pattern = re.compile(r"generate_id\('([^']+)'::text\)")
             for row in cursor:

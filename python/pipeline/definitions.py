@@ -4,6 +4,7 @@ import dagster
 
 from database.xact import xact_admin
 from foundation.observability.metrics import metric_count_and_time
+from pipeline.__codegen_db__.queries import query_pipeline_organization_id_fetch_all
 from pipeline.analytics import impressions_asset
 from pipeline.framework.dag import ORG_PARTITION
 from pipeline.product import datasource_ext_asset, datasource_raw_asset, ext_datasource_sensor
@@ -14,8 +15,8 @@ def dynamic_partition_sensor() -> dagster.SensorResult:
     # We define one partition per external data sources that a customer may have. Dynamically
     # populate each partition with the organizations that depend on each partition's data source.
     async def _dynamic_partition_sensor_coro() -> dagster.SensorResult:
-        async with xact_admin() as q:
-            organization_ids = [x async for x in q.orm.pipeline_organization_id_fetch_all()]
+        async with xact_admin() as conn:
+            organization_ids = [row.id async for row in query_pipeline_organization_id_fetch_all(conn)]
         return dagster.SensorResult(dynamic_partitions_requests=[ORG_PARTITION.build_add_request(organization_ids)])
 
     with metric_count_and_time("pipeline.org_partition.sensor"):

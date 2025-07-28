@@ -11,7 +11,7 @@ import pydantic
 import quart
 
 from foundation.env import ENV
-from foundation.observability.errors import BaseError, ConfigurationError, ImpossibleError
+from foundation.observability.errors import BaseError, ConfigurationError, ImpossibleError, RPCError
 from foundation.observability.logs import get_logger
 from foundation.observability.metrics import metric_count_and_time
 from foundation.observability.spans import span, tag_current_span
@@ -25,15 +25,6 @@ from foundation.stdlib.unset import Unset
 logger = get_logger()
 
 type MethodEnum = Literal["GET", "POST"]
-
-
-@dataclasses.dataclass(slots=True)
-class RPCError(BaseError):
-    def __init__(self) -> None:
-        self.message = self.__class__.__name__
-
-    def serialize(self) -> dict[str, Any]:
-        return {"error": self.__class__.__name__, "data": dataclasses.asdict(self)}
 
 
 class RPCOutputJSONEncoder(json.JSONEncoder):

@@ -42,7 +42,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "betterproto[compiler]==2.0.0b7",
     "dagster-dg-cli>=1.11.1",
+    "grpcio-tools>=1.71.2",
     "ipython>=9.4.0",
     "pyright>=1.1.402",
     "pytest>=8.4.0",
@@ -69,7 +71,7 @@ code_location_target_module = "pipeline.definitions"
 
 [tool.ruff]
 line-length = 180
-exclude = [".venv", ".*_cache", ".tach", "**/__codegen__", "claude"]
+exclude = [".venv", ".*_cache", ".tach", "**/__codegen*__", "claude", "./tools/codegen_db_plugin/proto.py"]
 target-version = "py313"
 preview = true
 
@@ -97,6 +99,8 @@ select = [
     "INP",  # flake8-no-pep420
     "T20",  # flake8-print
     "PTH",  # flake8-use-pathlib
+    # Individual rules.
+    "PLC0415",  # https://docs.astral.sh/ruff/rules/import-outside-top-level/
 ]
 ignore = [
     # Line too long; this happens with long strings etc. If it can't be autoformatted, nbd.
@@ -124,7 +128,7 @@ ban-relative-imports = "all"
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 # Environment options.
-exclude = [".venv"]
+exclude = [".venv", "tools/codegen_db_plugin/proto.py"]
 norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
 venvPath = "."
 venv = ".venv"
@@ -160,7 +164,8 @@ reportUnusedCoroutine = "error"
 reportPrivateImportUsage = "none"
 
 [tool.pytest.ini_options]
-norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv"]
+norecursedirs = [".venv", ".*_cache", ".tach", "__pycache__", ".direnv", "**/__codegen*__"]
+collect_imported_tests = false
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 # Logs are emitted to stderr in a formatted way. When pytest captures logs,
@@ -174,6 +179,6 @@ markers = [
 DD_TRACE_ENABLED = "false"
 
 [tool.coverage.run]
-omit = ["*/__snapshots__/*", "*/__llmshots__/*"]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*", "__codegen*__"]
 [tool.coverage.report]
-omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*"]
+omit = ["*/__snapshots__/*", "*/__llmshots__/*", ".venv/*", ".direnv/*", "__codegen*__"]

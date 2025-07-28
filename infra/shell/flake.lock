@@ -127,7 +127,24 @@
         "flake-utils": "flake-utils",
         "mcp-language-server-src": "mcp-language-server-src",
         "nixpkgs": "nixpkgs",
-        "pgmigrate-src": "pgmigrate-src"
+        "pgmigrate-src": "pgmigrate-src",
+        "sqlc-src": "sqlc-src"
+      }
+    },
+    "sqlc-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753643902,
+        "narHash": "sha256-36uVLFH19D8CjG/uCza31U9CbgNZ2ezgO9xjjkpURnI=",
+        "owner": "azuline",
+        "repo": "sqlc",
+        "rev": "d1b99716d279ab088b6a4d0f793bd644f93ee88f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "azuline",
+        "repo": "sqlc",
+        "type": "github"
       }
     },
     "systems": {
