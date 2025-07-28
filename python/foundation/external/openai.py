@@ -103,6 +103,7 @@ class OpenAICache:
         if " (call)" in pytest_current_test:
             pytest_current_test = pytest_current_test.split(" (call)")[0]
         cache_dir = cache_dir or Path(pytest_current_test.split("::")[0]).parent / "__llmshots__"
+        cache_dir.mkdir(exist_ok=True)
         self._test_name = re.sub(r"[^A-Za-z0-9_\-]", "_", pytest_current_test)
         self._cache_path = cache_dir / f"{self._test_name}.json"
 

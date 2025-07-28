@@ -7,8 +7,6 @@ from typing import Literal, cast
 
 from dotenv import dotenv_values
 
-from foundation.stdlib.convert import enum_type_to_values
-
 defaults = {}
 if os.getenv("ENVIRONMENT") != "production":
     defaults = dotenv_values(".env.example")
@@ -26,11 +24,11 @@ class EnvironmentVariableMissingError(Exception):
 
 
 type EnvironmentEnum = Literal["production", "development"]
-ENVIRONMENT_VALUES = enum_type_to_values(EnvironmentEnum)
+ENVIRONMENT_ENUM_VALUES = ["production", "development"]
 type LogLevelEnum = Literal["debug", "info"]
-LOG_LEVEL_VALUES = enum_type_to_values(LogLevelEnum)
+LOG_LEVEL_ENUM_VALUES = ["debug", "info"]
 type ServiceEnum = Literal["product", "panopticon", "pipeline", "development"]
-SERVICE_VALUES = enum_type_to_values(ServiceEnum)
+SERVICE_ENUM_VALUES = ["product", "panopticon", "pipeline", "development"]
 
 
 @dataclasses.dataclass(slots=True)
@@ -117,9 +115,9 @@ class _Env:
             brex_token=cls._optional("BREX_TOKEN"),
             ramp_token=cls._optional("RAMP_TOKEN"),
         )
-        assert c.environment in ENVIRONMENT_VALUES, f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(ENVIRONMENT_VALUES)}"
-        assert c.log_level in LOG_LEVEL_VALUES, f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(LOG_LEVEL_VALUES)}"
-        assert c.service in SERVICE_VALUES, f"SERVICE is invalid: {c.service} not one of {', '.join(SERVICE_VALUES)}"
+        assert c.environment in ENVIRONMENT_ENUM_VALUES, f"ENVIRONMENT is invalid: {c.environment} not one of {', '.join(ENVIRONMENT_ENUM_VALUES)}"
+        assert c.log_level in LOG_LEVEL_ENUM_VALUES, f"LOG_LEVEL is invalid: {c.log_level} not one of {', '.join(LOG_LEVEL_ENUM_VALUES)}"
+        assert c.service in SERVICE_ENUM_VALUES, f"SERVICE is invalid: {c.service} not one of {', '.join(SERVICE_ENUM_VALUES)}"
         assert c.service != "development" or c.environment == "development", "SERVICE is invalid: must be set in production and value must not be `development`"
         return c
 

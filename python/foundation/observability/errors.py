@@ -10,7 +10,7 @@ import sentry_sdk.integrations.asyncio
 import sentry_sdk.integrations.quart
 import sentry_sdk.types
 
-from foundation.env import ENV, ENVIRONMENT_VALUES, EnvironmentEnum
+from foundation.env import ENV, ENVIRONMENT_ENUM_VALUES, EnvironmentEnum
 from foundation.observability.logs import get_logger
 
 logger = get_logger()
@@ -83,7 +83,7 @@ class suppress_error(contextlib.AbstractContextManager):
 
     def __init__(self, *errors: type[BaseException], environments: tuple[EnvironmentEnum, ...] | None = None, print_traceback: bool = True):
         self.errors = errors
-        self.environments = environments or ENVIRONMENT_VALUES
+        self.environments = environments or ENVIRONMENT_ENUM_VALUES
         self.print_traceback = print_traceback
         assert self.errors, "cannot pass no errors into suppress_error, must pass at least 1 (e.g. Exception)"
 

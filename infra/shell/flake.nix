@@ -38,7 +38,7 @@
                 src = sqlc-src;
                 vendorHash = "sha256-JIbSagv5JP7pMaGpy/2y1LvMGv2WKjPLxUOirZOcpL0=";
               };
-              mcp-lsp-server = super.buildGoModule {
+              mcp-language-server = super.buildGoModule {
                 pname = "mcp-language-server";
                 version = "0.1.0";
                 src = mcp-language-server-src;

@@ -19,7 +19,6 @@ from foundation.stdlib.parse import make_pydantic_validator
 from foundation.stdlib.unset import Unset
 
 # TODO: CORS
-# TODO: Metrics
 # TODO: Request ID
 
 logger = get_logger()

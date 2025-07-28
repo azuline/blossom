@@ -96,12 +96,12 @@ def tag_current_span(**kwargs: Any) -> None:
 @dataclasses.dataclass(slots=True)
 class SpanDump:
     ctx: ddtrace.trace.Context | None
-    spanz: Span | None
+    span: Span | None
 
 
 def span_dump() -> SpanDump:
     """Dump span context for transfer between runtime contexts (process, thread, async). Pass the output to `span_restore`."""
-    return SpanDump(ctx=ddtrace.tracer.current_trace_context(), spanz=current_span())
+    return SpanDump(ctx=ddtrace.tracer.current_trace_context(), span=current_span())
 
 
 @contextlib.contextmanager
@@ -109,6 +109,6 @@ def span_restore(name: LiteralString, dump: SpanDump) -> Generator[None]:
     """Restore the span context in a different runtime context (process, thread, async). Get the dump from `span_dump`."""
     if dump.ctx:
         ddtrace.tracer.context_provider.activate(dump.ctx)
-    tags = dump.spanz.tags if dump.spanz else {}
+    tags = dump.span.tags if dump.span else {}
     with span(name, **tags):
         yield
