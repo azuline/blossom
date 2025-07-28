@@ -80,30 +80,3 @@ just test database/schema_test.py
 ALTER TABLE tbl ADD COLUMN col TEXT NOT NULL DEFAULT '';
 ALTER TABLE tbl ALTER COLUMN col DROP DEFAULT;
 ```
-
-# Queries (SQLC)
-
-Write SQL queries in `queries.sql` files in each directory that needs database access, then regenerate the queries:
-
-```bash
-just codegen-db
-```
-
-Access the queries by importing the generated functions and passing a connection:
-
-```python
-from directory.__codegen_db__.queries import query_name
-from database.xact import xact_admin
-
-async with xact_admin() as conn:
-    result = await query_name(conn, **kwargs)
-```
-
-Follow these conventions:
-
-- Use raw SQL only when necessary; prefer the generated query functions.
-- Prefix test‑only query names with `test_`.
-- Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
-- Never set `created_at` or `updated_at` in code; DB triggers handle them.
-- Name queries as `{resource}_{action}_{filter}`. For example, `user_create`, `user_get_by_id`, `user_list_by_organization`, etc.
-- **NEVER modify files in `__codegen_db__/` directories** - these are auto-generated. If there are bugs in generated code, fix the source SQL in `queries.sql` and run `just codegen-db`.

@@ -13,26 +13,8 @@ Run linting and tests after **every** change:
 
 ```bash
 just lint
-just test
+just test [-vv]  # Use -vv when debugging test failures.
 ```
-
-For test failures with detailed diff output:
-
-```bash
-just test -vv
-```
-
-## Testing multiline strings
-
-Assert on entire multiline strings using triple quotes:
-
-```python
-assert queries_code == """expected
-multiline
-content"""
-```
-
-NOT individual line assertions.
 
 If the Dagster pipeline (`pipeline` DAG) changes, validate it:
 
@@ -73,17 +55,42 @@ Logs from development and test are written to the `./claude/logs` directory. Tai
 
 # Design patterns
 
-## Database
+## Database queries
 
-Before writing or modifying a SQL query or database operation, read `./database/CLAUDE.md`. Do not write raw SQL in Python files.
+Write SQL queries in a `queries.sql` files adjacent to the module that uses the query. After editing `queries.sql`, regenerate the ORM with:
+
+```bash
+just codegen-db
+```
+
+Access the queries by importing the generated functions and passing a connection:
+
+```python
+from directory.__codegen_db__.queries import query_name
+from database.xact import xact_admin
+
+async with xact_admin() as conn:
+    result = await query_name(conn, **kwargs)
+```
+
+Follow these conventions:
+
+- Never use raw SQL in Python, always use the ORM.
+- Prefix test‑only query names with `test_`.
+- Serialize JSONB with `foundation.jsonenc:serialize_json_pg`.
+- Never set `created_at` or `updated_at` in code; DB triggers handle them.
+- Name queries as `{resource}_{action}_{filter}`. For example, `user_create`, `user_get_by_id`, `user_list_by_organization`, etc.
+- Never directly modify anything in a `__codegen_db__` directory, as they are generated artifacts.
+
+## Enums
+
+`foundation.__codegen_db__.enums` is generated from the `%_enum` database tables and used in database models.
+
+Do not use `enum.Enum` for any enums. Instead, use `typing.Literal[...]` and suffix the alias with `Enum`.
 
 ## Dataclasses
 
 Use `@dataclass` for data containers. Reserve classic classes for third‑party interfaces or `abc.ABC` implementations. Enable `slots=True` for dataclasses unless `@cached_property` is needed.
-
-## Literal enums
-
-Replace `enum.Enum` with `typing.Literal[...]` and suffix the alias with `Enum`.
 
 ## Private functions
 
@@ -187,7 +194,7 @@ Follow these testing conventions:
 - Name files `<module>_test.py` or `__main__test.py`.
 - Tests are plain functions starting with `test_`. Do not nest tests inside classes.
 - You do not need to mark asynchronous tests with `@pytest.mark.asyncio`, they are automatically handled.
-- Express the test's expectations in the fewest number of asserts possible. If possible, assert on an entire structure rather than each individual field.
+- Express the test's expectations in the fewest number of asserts possible. If possible, assert on an entire structure rather than each individual field, or a multi-line string instead of individual lines.
 
 Write or update tests for every behavioural change.
 
@@ -260,13 +267,7 @@ Follow these variable naming conventions:
 
 ## Imports
 
-Import full modules rather than individual functions unless the name is unique or the path is unwieldy. For models:
-
-```python
-from database.__codegen_db__.models import OrganizationModel, UserModel
-```
-
-Since models now have a `Model` suffix, import them directly without the `models.` prefix.
+Import full modules rather than individual functions unless the name is unique or the path is unwieldy.
 
 Avoid importing inside functions except to break circular dependencies.
 

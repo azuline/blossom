@@ -49,7 +49,7 @@ CREATE TABLE new_table (
 );
 ```
 
-TODO: non-db enums + rpc integration
+[`__codegen_db__/enums.py`](./__codegen_db__/enums.py) is generated from the `%_enum` tables and can be used throughout the stack. To add a new enum to the stack, add it to the database (even if it is not referenced by a table).
 
 ## Accessing the Database
 
@@ -70,15 +70,20 @@ async with database.conn.connect_db_customer(user_id, organization_id) as conn:
 As working with raw database connections is unwieldy, we have the `xact` context manager which begins and commits a transaction with the context manager's enter and exit.
 
 ```python
-from directory.__codegen_db__.queries import query_name
-
 async with database.xact.xact_admin() as conn:  # or `xact_customer`
+    ...
+```
+
+We use [sqlc](https://sqlc.dev/) to generate our ORM from `queries.sql` files. The `just codegen-db` command turns each query in each `schema.sql` into a type-safe Python function. `sqlc` connects to the local Postgres instance to validate each query during code generation. We spin up and migrate an ephemeral database for each invocation of `just codegen-db` using [`testdb.py`](./testdb.py). Use generated queries like so:
+
+```python
+from some_module.__codegen_db__.queries import query_name
+
+with xact_admin() as conn:
     result = await query_name(conn, **kwargs)
 ```
 
-We use [sqlc](https://sqlc.dev/) with a custom Python code generator to create type-safe query functions. Query functions are generated from `queries.sql` files with the `just codegen-db` command. Each query becomes a standalone async function that accepts a database connection and returns typed results. `sqlc` connects to the local Postgres instance to validate each query during code generation. We spin up and migrate an ephemeral database for each invocation of `just codegen-db` using [`testdb.py`](./testdb.py).
-
-All static queries are managed by `sqlc`. Dynamic queries can be built using [SQLAlchemy core](https://docs.sqlalchemy.org/en/20/core/).
+All static queries are managed in `sqlc`. Dynamic queries can be built using [SQLAlchemy core](https://docs.sqlalchemy.org/en/20/core/).
 
 ### JSON Serialization
 
