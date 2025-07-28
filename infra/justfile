@@ -1,0 +1,17 @@
+# HELP
+
+help:  ## Describe the available commands.
+    @grep -E '^[a-z][^:]+:.*?## .*$$' justfile | sed 's/^/just /' | sed 's/ \*ARGS:/:/'
+
+# DEPENDENCY MANAGEMENT.
+
+install:  ## Install terraform dependencies.
+    cd gcp && terraform init -upgrade
+
+# CODE CHECKS.
+
+lint:  ## Run the configured linters.
+    # Nix.
+    treefmt
+    # Hashicorp.
+    cd gcp && terraform validate && terraform fmt

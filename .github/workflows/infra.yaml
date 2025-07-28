@@ -1,0 +1,39 @@
+name: python
+on: 
+  push:
+    paths:
+      - infra/
+      - .github/workflows/infra.yaml
+      - '!**/*.md'
+defaults:
+  run:
+    working-directory: infra/
+jobs:
+  check:
+    # EXTENSION(namespace): replace runs-on
+    # runs-on: namespace-profile-python
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - uses: actions/checkout@v4
+      # EXTENSION(namespace): add step
+      # - uses: namespacelabs/nscloud-cache-action@v1
+      #   with:
+      #     path: |
+      #       /nix
+      #       /home/runner/.cache/uv
+      - uses: cachix/install-nix-action@v31
+      # EXTENSION(namespace): delete next step
+      - uses: cachix/cachix-action@v15
+        with:
+          name: blossom
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Build Nix
+        run: nix build -j8 ../infra/shell/#devShells.x86_64-linux.infra-ci
+      - name: Lint
+        if: success() || failure()
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.infra-ci --command just lint
+      - name: Diff
+        if: success() || failure()
+        run: nix develop ../infra/shell/#devShells.x86_64-linux.infra-ci --command just diff

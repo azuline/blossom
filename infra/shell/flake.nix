@@ -114,6 +114,12 @@
             semgrep
           ];
           infra = [
+            nixfmt-rfc-style
+            nixfmt-tree
+            # Enterprise
+            google-cloud-sdk
+            terraform
+            # Hobby
             nomad
             levant
           ];

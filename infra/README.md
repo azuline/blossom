@@ -2,13 +2,23 @@
 
 The projects in this directory are:
 
-- [`shell` (Nix Dev Shell)](../flake.nix)
-- [`deploy` (Continuous Deployment)](./deploys)
+- [`shell` (Nix Dev Shell)](../shell)
+- [`deploy` (Continuous Deployment)](./deploy)
 - [`vpn` (Virtual Private Network)](./vpn)
 
 ## Deployment Setup
 
-todo, unsure if i want to put nomad homelab in this template or a GCP setup
+### Enterprise (TODO)
+
+- Terraform + GCP
+- Debt:
+  - Project ID hardcoded
+- Setup:
+  - `$ gcloud auth application-default login`
+
+### Hobbyist (TODO)
+
+- My homelab set up is Nomad on NixOS in a corner of my apartment.
 
 ## Vendors
 
