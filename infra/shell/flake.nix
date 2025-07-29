@@ -57,11 +57,11 @@
         makeDevShell =
           {
             name,
-            packages,
+            paths,
             shellHook ? "",
           }:
           pkgs.mkShell {
-            inherit name packages;
+            buildInputs = [ (pkgs.buildEnv { inherit name paths; }) ];
             shellHook = ''
               find-up () {
                 path=$(pwd)
@@ -123,19 +123,19 @@
         devShells = {
           default = makeDevShell {
             name = "blossom-default";
-            packages = with toolchains; general ++ python ++ typescript ++ infra;
+            paths = with toolchains; general ++ python ++ typescript ++ infra;
           };
           python-ci = makeDevShell {
             name = "blossom-python";
-            packages = with toolchains; general ++ python;
+            paths = with toolchains; general ++ python;
           };
           typescript-ci = makeDevShell {
             name = "blossom-typescript";
-            packages = with toolchains; general ++ typescript;
+            paths = with toolchains; general ++ typescript;
           };
           infra-ci = makeDevShell {
             name = "blossom-infra";
-            packages = with toolchains; general ++ infra;
+            paths = with toolchains; general ++ infra;
           };
         };
       }

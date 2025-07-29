@@ -6,6 +6,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 RPC_UNEXPIRED_SESSION_FETCH = """\

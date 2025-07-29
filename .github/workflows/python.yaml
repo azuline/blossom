@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      DD_TRACE_ENABLED: false
     steps:
       - uses: actions/checkout@v4
       # EXTENSION(namespace): add step

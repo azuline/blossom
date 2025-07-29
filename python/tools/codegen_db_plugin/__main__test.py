@@ -210,6 +210,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 GET_USER = """\\
@@ -279,6 +280,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 @dataclasses.dataclass(slots=True)
@@ -634,6 +636,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 @dataclasses.dataclass(slots=True)
@@ -743,6 +746,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 @dataclasses.dataclass(slots=True)
@@ -859,6 +863,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 @dataclasses.dataclass(slots=True)

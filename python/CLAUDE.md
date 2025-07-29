@@ -140,6 +140,10 @@ async with pg_advisory_lock("lock_name"):
     ...
 ```
 
+## Bespoke Code
+
+Any code or vendored data specific to a single customer must be placed inside a `{package}/bespoke/{organization}.py` file.
+
 # Observability
 
 ## Logging

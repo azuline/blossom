@@ -47,6 +47,7 @@ import sqlalchemy
 import psycopg
 from database.conn import DBConn
 from database.__codegen_db__ import models
+from database.jsonenc import dump_json_pg
 from foundation.observability.errors import NotFoundError
 
 {% for query in queries -%}
@@ -94,7 +95,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
     return models.{{ query.model_name }}(
     {%- endif %}
 {%- for column in query.columns %}
-        {{ column.name }}=row[{{ loop.index0 }}],
+        {{ column.name }}={{ column.assignment }},
 {%- endfor %}
     )
 {%- else %}
@@ -110,7 +111,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
         yield models.{{ query.model_name }}(
         {%- endif %}
 {%- for column in query.columns %}
-            {{ column.name }}=row[{{ loop.index0 }}],
+            {{ column.name }}={{ column.assignment }},
 {%- endfor %}
         )
 {%- else %}
@@ -134,7 +135,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
                 yield models.{{ query.model_name }}(
                 {%- endif %}
 {%- for column in query.columns %}
-                    {{ column.name }}=row[{{ loop.index0 }}],
+                    {{ column.name }}={{ column.assignment }},
 {%- endfor %}
                 )
 {%- else %}
@@ -158,7 +159,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
                 yield models.{{ query.model_name }}(
                 {%- endif %}
 {%- for column in query.columns %}
-                    {{ column.name }}=row[{{ loop.index0 }}],
+                    {{ column.name }}={{ column.assignment }},
 {%- endfor %}
                 )
 {%- else %}
@@ -172,7 +173,7 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
     async with raw_conn.driver_connection.cursor() as cursor:
         async with cursor.copy({{ query.constant_name }}) as copy:
             for item in data:
-                await copy.write_row(({% for param in query.copyfrom_params %}item.{{ param.name }}{% if not loop.last %}, {% endif %}{% endfor %}))
+                await copy.write_row(({% for param in query.copyfrom_params %}{{ param.value }}{% if not loop.last %}, {% endif %}{% endfor %}))
 {%- endif %}
 
 {% endfor -%}
@@ -322,8 +323,9 @@ async def generate_enums(catalog: Catalog) -> str:
 def _does_query_return_model(query: Query, catalog: Catalog) -> str | None:
     if query.columns and len({c.table.name for c in query.columns}) == 1:
         table_name = query.columns[0].table.name
-        table_def = next(t for s in catalog.schemas for t in s.tables if t.rel.name == table_name)
-        if {c.name for c in query.columns} == {c.name for c in table_def.columns}:
+        if (table_def := next((t for s in catalog.schemas for t in s.tables if t.rel.name == table_name), None)) and {c.name for c in query.columns} == {
+            c.name for c in table_def.columns
+        }:
             return table_name
     return None
 
@@ -412,16 +414,61 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
                 if query.columns
                 else "AsyncIterator[Any]",
             }.get(query.cmd, "Any"),
-            "param_dict": "{" + ", ".join(f'"p{p.number}": {get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
-            "batch_param_dict": "{" + ", ".join(f'"p{p.number}": batch_item.{get_param_name(p)}' for p in query.params) + "}" if query.params else "{}",
+            "param_dict": "{"
+            + ", ".join(
+                f'"p{p.number}": dump_json_pg({get_param_name(p)}) if {get_param_name(p)} is not None else None'
+                if p.column.type.name.lower() in ("jsonb", "json") and not p.column.not_null
+                else f'"p{p.number}": dump_json_pg({get_param_name(p)})'
+                if p.column.type.name.lower() in ("jsonb", "json")
+                else f'"p{p.number}": {get_param_name(p)}'
+                for p in query.params
+            )
+            + "}"
+            if query.params
+            else "{}",
+            "batch_param_dict": "{"
+            + ", ".join(
+                f'"p{p.number}": dump_json_pg(batch_item.{get_param_name(p)}) if batch_item.{get_param_name(p)} is not None else None'
+                if p.column.type.name.lower() in ("jsonb", "json") and not p.column.not_null
+                else f'"p{p.number}": dump_json_pg(batch_item.{get_param_name(p)})'
+                if p.column.type.name.lower() in ("jsonb", "json")
+                else f'"p{p.number}": batch_item.{get_param_name(p)}'
+                for p in query.params
+            )
+            + "}"
+            if query.params
+            else "{}",
             "batch_params": parse_batch_params(query),
             "batch_dataclass_name": get_batch_dataclass_name(query),
             "model_name": get_model_name(query) if query.columns else None,
-            "columns": [{"name": col.name, "python_type": _map_postgres_type_to_python(col)} for col in query.columns] if query.columns else None,
+            "columns": [
+                {
+                    "name": col.name,
+                    "python_type": _map_postgres_type_to_python(col),
+                    "type_name": col.type.name.lower(),
+                    "assignment": f"row[{i}]",
+                }
+                for i, col in enumerate(query.columns)
+            ]
+            if query.columns
+            else None,
             "needs_custom_dataclass": needs_custom_dataclass(query),
             "custom_dataclass_name": get_model_name(query) if needs_custom_dataclass(query) else None,
             "copyfrom_dataclass_name": get_copyfrom_dataclass_name(query),
-            "copyfrom_params": [{"name": param.column.name, "python_type": _map_postgres_type_to_python(param.column)} for param in query.params]
+            "copyfrom_params": [
+                {
+                    "name": param.column.name,
+                    "python_type": _map_postgres_type_to_python(param.column),
+                    "value": (
+                        f"dump_json_pg(item.{param.column.name}) if item.{param.column.name} is not None else None"
+                        if param.column.type.name.lower() in ("jsonb", "json") and not param.column.not_null
+                        else f"dump_json_pg(item.{param.column.name})"
+                        if param.column.type.name.lower() in ("jsonb", "json")
+                        else f"item.{param.column.name}"
+                    ),
+                }
+                for param in query.params
+            ]
             if query.cmd == ":copyfrom"
             else [],
             "insert_into_table": query.insert_into_table,
