@@ -1,1 +1,2 @@
 project = "your-project-id"
+environment = "development"  # or production
