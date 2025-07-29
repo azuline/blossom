@@ -2,7 +2,7 @@
 -- depends: 20230220_01_ZJvx5-sessions
 
 CREATE TABLE vaulted_secrets (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('vsc') CHECK (id LIKE 'vsc_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('vsc') CHECK (id LIKE 'vsc\_%'),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,

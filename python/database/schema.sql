@@ -125,7 +125,7 @@ CREATE INDEX invites_user_id_idx1 ON public.invites USING btree (user_id);
 
 ALTER TABLE public.invites
 ADD CONSTRAINT invites_id_check
-CHECK ((id ~~ 'inv_%'::text));
+CHECK ((id ~~ 'inv\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.invites FOR EACH ROW EXECUTE FUNCTION updated_at();
 
@@ -150,7 +150,7 @@ CHECK (((signup_step = 'created'::text) = (password_hash IS NULL)));
 
 ALTER TABLE public.users
 ADD CONSTRAINT users_id_check
-CHECK ((id ~~ 'usr_%'::text));
+CHECK ((id ~~ 'usr\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION updated_at();
 
@@ -171,7 +171,7 @@ CREATE INDEX organizations_inbound_source_idx ON public.organizations USING btre
 
 ALTER TABLE public.organizations
 ADD CONSTRAINT organizations_id_check
-CHECK ((id ~~ 'org_%'::text));
+CHECK ((id ~~ 'org\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.organizations FOR EACH ROW EXECUTE FUNCTION updated_at();
 
@@ -204,7 +204,7 @@ CREATE INDEX organizations_users_user_id_idx ON public.organizations_users USING
 
 ALTER TABLE public.organizations_users
 ADD CONSTRAINT organizations_users_id_check
-CHECK ((id ~~ 'utn_%'::text));
+CHECK ((id ~~ 'utn\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.organizations_users FOR EACH ROW EXECUTE FUNCTION updated_at();
 
@@ -237,7 +237,7 @@ CREATE INDEX sessions_user_id_idx ON public.sessions USING btree (user_id);
 
 ALTER TABLE public.sessions
 ADD CONSTRAINT sessions_id_check
-CHECK ((id ~~ 'ses_%'::text));
+CHECK ((id ~~ 'ses\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.sessions FOR EACH ROW EXECUTE FUNCTION updated_at();
 
@@ -270,7 +270,7 @@ CREATE INDEX vaulted_secrets_organization_id_idx ON public.vaulted_secrets USING
 
 ALTER TABLE public.vaulted_secrets
 ADD CONSTRAINT vaulted_secrets_id_check
-CHECK ((id ~~ 'vsc_%'::text));
+CHECK ((id ~~ 'vsc\_%'::text));
 
 CREATE TRIGGER updated_at BEFORE UPDATE ON public.vaulted_secrets FOR EACH ROW EXECUTE FUNCTION updated_at();
 

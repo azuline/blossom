@@ -5,7 +5,7 @@ CREATE TABLE user_signup_step_enum (value TEXT PRIMARY KEY);
 INSERT INTO user_signup_step_enum (value) VALUES ('created'), ('complete');
 
 CREATE TABLE users (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('usr') CHECK (id LIKE 'usr_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('usr') CHECK (id LIKE 'usr\_%'),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
@@ -39,7 +39,7 @@ CREATE INDEX ON users(signup_step);
 -- invites. Upon invite completion, the user transitions to a `completed`
 -- signup step and has already been added to the organization.
 CREATE TABLE invites (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('inv') CHECK (id LIKE 'inv_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('inv') CHECK (id LIKE 'inv\_%'),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
     storytime  JSONB,

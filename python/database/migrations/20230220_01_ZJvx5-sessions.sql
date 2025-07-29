@@ -2,7 +2,7 @@
 -- depends: 20230127_04_5yl8v-organizations
 
 CREATE TABLE sessions (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ses') CHECK (id LIKE 'ses_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('ses') CHECK (id LIKE 'ses\_%'),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,

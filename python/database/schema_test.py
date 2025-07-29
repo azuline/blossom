@@ -8,74 +8,6 @@ from database.conn import connect_db_admin
 nl = "\n"  # can't put backslash in f-string expression
 
 
-async def test_id_columns_foreign_key_requirements():
-    async with connect_db_admin() as conn:
-        # Get all _id columns (excluding 'id' primary key columns) that are NOT foreign keys
-        cursor = await conn.execute(
-            text("""
-                SELECT c.table_name, c.column_name
-                FROM information_schema.columns c
-                JOIN information_schema.tables t
-                    ON c.table_name = t.table_name
-                LEFT JOIN information_schema.key_column_usage kcu
-                    ON c.table_name = kcu.table_name
-                    AND c.column_name = kcu.column_name
-                LEFT JOIN information_schema.table_constraints tc
-                    ON kcu.constraint_name = tc.constraint_name
-                    AND kcu.table_schema = tc.table_schema
-                    AND tc.constraint_type = 'FOREIGN KEY'
-                WHERE c.column_name LIKE '%_id'
-                    AND t.table_schema = 'public'
-                    AND t.table_type = 'BASE TABLE'
-                    AND t.table_name NOT LIKE '%yoyo%'
-                    AND t.table_name NOT LIKE '%_enum'
-                    AND tc.constraint_name IS NULL
-            """)
-        )
-        non_fk_id_columns = [(row[0], row[1]) for row in cursor.fetchall()]
-
-        # Get all _extid columns that ARE foreign keys (they shouldn't be)
-        cursor = await conn.execute(
-            text("""
-                SELECT c.table_name, c.column_name
-                FROM information_schema.columns c
-                JOIN information_schema.tables t
-                    ON c.table_name = t.table_name
-                JOIN information_schema.key_column_usage kcu
-                    ON c.table_name = kcu.table_name
-                    AND c.column_name = kcu.column_name
-                JOIN information_schema.table_constraints tc
-                    ON kcu.constraint_name = tc.constraint_name
-                    AND kcu.table_schema = tc.table_schema
-                    AND tc.constraint_type = 'FOREIGN KEY'
-                WHERE c.column_name LIKE '%_extid'
-                    AND t.table_schema = 'public'
-                    AND t.table_type = 'BASE TABLE'
-                    AND t.table_name NOT LIKE '%yoyo%'
-                    AND t.table_name NOT LIKE '%_enum'
-            """)
-        )
-        fk_extid_columns = [(row[0], row[1]) for row in cursor.fetchall()]
-
-        # Check that all _id columns are foreign keys
-        assert not non_fk_id_columns, f"""\\
-Columns ending in '_id' should reference other tables primary keys. If they store external system IDs, rename them to '_extid'.
-
-The following *_id columns should be foreign keys (or renamed to *_extid if they are third-party external IDs):
-
-{nl.join(f"- {table}.{col}" for table, col in non_fk_id_columns)}
-"""
-
-        # Check that no _extid columns are foreign keys
-        assert not fk_extid_columns, f"""\\
-Columns ending in '_extid' should store third-party external system IDs, not reference other tables in this database.
-
-The following *_extid columns should NOT be foreign keys (rename to *_id if they reference other tables):
-
-{nl.join(f"- {table}.{col}" for table, col in fk_extid_columns)}
-"""
-
-
 async def test_all_tables_have_primary_keys():
     async with connect_db_admin() as conn:
         cursor = await conn.execute(
@@ -92,7 +24,7 @@ async def test_all_tables_have_primary_keys():
                         AND c.column_name = 'id'
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
-                    AND t.table_name NOT LIKE '%_enum'
+                    AND t.table_name NOT LIKE '%\\_enum'
                 """
             )
         )
@@ -102,7 +34,7 @@ Please update tables {", ".join(failing)} to have an `id` primary key column.
 
 Primary keys should be defined as:
 
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>\\_%'),
 
 Failing tables:
 {nl.join(f"- {t}" for t in failing)}
@@ -174,7 +106,7 @@ async def test_all_tables_have_metadata_columns():
                         )
                     )
                     AND t.table_name NOT LIKE '%yoyo%'
-                    AND t.table_name NOT LIKE '%_enum'
+                    AND t.table_name NOT LIKE '%\\_enum'
             """)
         )
         failing = [row[0] for row in cursor.fetchall()]
@@ -405,7 +337,7 @@ async def test_id_columns_have_collation_c():
                 JOIN information_schema.columns c ON c.table_name = t.table_name
                 WHERE t.table_type = 'BASE TABLE'
                     AND t.table_schema = 'public'
-                    AND (c.column_name = 'id' OR c.column_name LIKE '%_id')
+                    AND (c.column_name = 'id' OR c.column_name LIKE '%\\_id')
                     AND (c.collation_name != 'C' OR c.collation_name IS NULL)
                     AND t.table_name NOT LIKE '%yoyo%'
             """)
@@ -419,7 +351,7 @@ The following ID columns must use COLLATE "C":
 
 ID columns should be defined as:
 
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('<prefix>') CHECK (id LIKE '<prefix>\\_%'),
 
 Foreign key columns referencing ID columns should be defined as:
     other_id TEXT COLLATE "C" REFERENCES other_table(id)
@@ -441,7 +373,7 @@ async def test_all_tables_have_row_security_policy() -> None:
                     AND NOT c.relrowsecurity
                     -- Ignore migration tables.
                     AND c.relname NOT LIKE '%yoyo%'
-                    AND c.relname NOT LIKE '%_enum'
+                    AND c.relname NOT LIKE '%\\_enum'
             """),
         )
         failing = [x[0] for x in cursor.fetchall()]
@@ -485,3 +417,73 @@ To enable Security Invoker, please define the view as:
 Failing views:
 {nl.join(f"- {t}" for t in failing)}
 """  # pragma: no cover
+
+
+async def test_id_columns_foreign_key_requirements():
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
+            text("""
+                SELECT c.table_name, c.column_name
+                FROM information_schema.columns c
+                JOIN information_schema.tables t
+                    ON c.table_name = t.table_name
+                WHERE c.column_name LIKE '%\\_id'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND t.table_name NOT LIKE '%\\_enum'
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM information_schema.key_column_usage kcu
+                        JOIN information_schema.table_constraints tc
+                            ON kcu.constraint_name = tc.constraint_name
+                            AND kcu.table_schema = tc.table_schema
+                        WHERE kcu.table_name = c.table_name
+                            AND kcu.column_name = c.column_name
+                            AND kcu.table_schema = 'public'
+                            AND tc.constraint_type = 'FOREIGN KEY'
+                    )
+            """)
+        )
+        non_fk_id_columns = [(row[0], row[1]) for row in cursor.fetchall()]
+
+        assert not non_fk_id_columns, f"""\
+Columns ending in '_id' should reference other tables primary keys. If they store external system IDs, rename them to '_extid'.
+
+The following *_id columns should be foreign keys (or renamed to *_extid if they are third-party external IDs):
+
+{nl.join(f"- {table}.{col}" for table, col in non_fk_id_columns)}
+"""
+
+
+async def test_extid_columns_non_foreign_key_requirements():
+    async with connect_db_admin() as conn:
+        cursor = await conn.execute(
+            text("""
+                SELECT c.table_name, c.column_name
+                FROM information_schema.columns c
+                JOIN information_schema.tables t
+                    ON c.table_name = t.table_name
+                JOIN information_schema.key_column_usage kcu
+                    ON c.table_name = kcu.table_name
+                    AND c.column_name = kcu.column_name
+                JOIN information_schema.table_constraints tc
+                    ON kcu.constraint_name = tc.constraint_name
+                    AND kcu.table_schema = tc.table_schema
+                    AND tc.constraint_type = 'FOREIGN KEY'
+                WHERE c.column_name LIKE '%\\_extid'
+                    AND t.table_schema = 'public'
+                    AND t.table_type = 'BASE TABLE'
+                    AND t.table_name NOT LIKE '%yoyo%'
+                    AND t.table_name NOT LIKE '%\\_enum'
+            """)
+        )
+        fk_extid_columns = [(row[0], row[1]) for row in cursor.fetchall()]
+
+        assert not fk_extid_columns, f"""\
+Columns ending in '_extid' should store third-party external system IDs, not reference other tables in this database.
+
+The following *_extid columns should NOT be foreign keys (rename to *_id if they reference other tables):
+
+{nl.join(f"- {table}.{col}" for table, col in fk_extid_columns)}
+"""

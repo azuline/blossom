@@ -270,7 +270,7 @@ with count_and_time("name", **tags) as ct:
 
 ### Traces & Spans
 
-[`observability/spans.py`](./observability/spans.py) provides functions for managing traces & spans. A root span begins a trace; child spans are nested within. Like metrics, each span has a name and tags. Like metrics, the cardinality should be minimized to keep costs under control. Begin a span like so:
+[`observability/spans.py`](./observability/spans.py) provides functions for managing traces & spans. A root span begins a trace; child spans are nested within. The cardinality of span names should be minimized to avoid polluting the namespace. Unlike metrics, span tags can have arbitrary cardinality (they are more similar to log fields). Begin a span like so:
 
 ```python
 with span("span_name", **tags) as cspan:  # The resource and span_type params have special meanings in Datadog APM.

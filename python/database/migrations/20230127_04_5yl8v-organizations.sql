@@ -5,7 +5,7 @@ CREATE TABLE organizations_inbound_source_enum (value TEXT PRIMARY KEY);
 INSERT INTO organizations_inbound_source_enum (value) VALUES ('outreach'), ('organic'), ('word_of_mouth'), ('referral'), ('unknown');
 
 CREATE TABLE organizations (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('org') CHECK (id LIKE 'org_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('org') CHECK (id LIKE 'org\_%'),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,
@@ -22,7 +22,7 @@ CREATE POLICY organizations_self_all ON organizations USING (id = current_organi
 CREATE INDEX ON organizations(inbound_source);
 
 CREATE TABLE organizations_users (
-    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('utn') CHECK (id LIKE 'utn_%'),
+    id TEXT COLLATE "C" PRIMARY KEY DEFAULT generate_id('utn') CHECK (id LIKE 'utn\_%'),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     storytime  JSONB,

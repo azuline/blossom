@@ -176,8 +176,6 @@ Use spans to divide the trace of a large feature into smaller pieces. Spans shou
 
 Logs emitted within a span inherit the tags of the span. Add tags to the active span with `tag_current_span(key=value, **kwargs)`.
 
-Keep the cardinality of span names and tags (both keys and values) low. Do not use any per-user or per-organization values in tags (e.g. NO `organization_id`).
-
 ## Metrics
 
 Emit metrics with the following functions (import from `foundation.observability.metrics`):
@@ -187,6 +185,8 @@ Emit metrics with the following functions (import from `foundation.observability
 - Timing Metric: `metric_timing`.
 - Distribution Metric: `metric_distribution`.
 - Count + Time Metric: `count_and_time` context manager.
+
+Keep the cardinality of metric names and tags (both keys and values) low. Do not use any per-user or per-organization values in tags (e.g. NO `organization_id`).
 
 # Testing
 

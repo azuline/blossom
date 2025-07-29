@@ -89,15 +89,19 @@ async def query_{{ query.name }}(conn: DBConn{{ query.params_signature }}) -> {{
     if row is None:
         raise NotFoundError({{ query.error_params }})
 {%- if query.columns %}
-    {%- if query.needs_custom_dataclass %}
+    {%- if query.columns|length == 1 %}
+    return {{ query.columns[0].assignment }}
+    {%- elif query.needs_custom_dataclass %}
     return {{ query.custom_dataclass_name }}(
     {%- else %}
     return models.{{ query.model_name }}(
     {%- endif %}
+{%- if query.columns|length > 1 %}
 {%- for column in query.columns %}
         {{ column.name }}={{ column.assignment }},
 {%- endfor %}
     )
+{%- endif %}
 {%- else %}
     return row
 {%- endif %}
@@ -386,6 +390,10 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             return False
         return not _does_query_return_model(query, catalog)
 
+    def is_single_value_query(query: Query) -> bool:
+        """Check if query returns a single value that should be unwrapped."""
+        return bool(query.columns and len(query.columns) == 1)
+
     query_data = [
         {
             "name": query.name,
@@ -401,7 +409,13 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             ),
             "return_type": {
                 ":exec": "None",
-                ":one": (get_model_name(query) if needs_custom_dataclass(query) else f"models.{get_model_name(query)}") if query.columns else "Any",
+                ":one": (
+                    _map_postgres_type_to_python(query.columns[0])
+                    if is_single_value_query(query)
+                    else (get_model_name(query) if needs_custom_dataclass(query) else f"models.{get_model_name(query)}")
+                )
+                if query.columns
+                else "Any",
                 ":many": (f"AsyncIterator[{get_model_name(query)}]" if needs_custom_dataclass(query) else f"AsyncIterator[models.{get_model_name(query)}]")
                 if query.columns
                 else "AsyncIterator[Any]",
@@ -454,6 +468,7 @@ def generate_queries(queries: list[Query], catalog: Catalog | None = None) -> st
             else None,
             "needs_custom_dataclass": needs_custom_dataclass(query),
             "custom_dataclass_name": get_model_name(query) if needs_custom_dataclass(query) else None,
+            "is_single_value": is_single_value_query(query),
             "copyfrom_dataclass_name": get_copyfrom_dataclass_name(query),
             "copyfrom_params": [
                 {
