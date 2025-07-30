@@ -2,222 +2,224 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "6.45.0"
+      version = "~> 6.45"
     }
   }
 }
 
-# VARIABLES
+# ---------------- Variables ----------------
 
-variable "project" {
-  type = string
-}
+variable "project" { type = string }
+variable "terraform_sa" { type = string }
+variable "engineers_group" { type = string }
 variable "environment" {
   type = string
   validation {
     condition     = contains(["production", "sandbox"], var.environment)
-    error_message = "environment must be one of ('production', 'sandbox')"
+    error_message = "environment must be one of: production, sandbox"
   }
 }
-variable "terraform_sa" {
-  type = string
-}
-variable "engineers_group" {
-  type = string
-}
 
-# CLOUD
+# ---------------- Provider ----------------
 
+locals {
+  region = "us-west1"
+  zone   = "us-west1-a"
+}
 provider "google" {
   project                     = var.project
-  region                      = "us-west1"
-  zone                        = "us-west1-a"
+  region                      = local.region
+  zone                        = local.zone
   impersonate_service_account = var.terraform_sa
 }
 
-# GOOGLE APIs
+# ---------------- Enable APIs ----------------
 
-resource "google_project_service" "cloudresourcemanager" {
+locals {
+  apis = toset([
+    "cloudresourcemanager.googleapis.com",
+    "compute.googleapis.com",
+    "iam.googleapis.com",
+    "secretmanager.googleapis.com",
+    "servicenetworking.googleapis.com",
+    "sqladmin.googleapis.com",
+  ])
+}
+resource "google_project_service" "apis" {
+  for_each           = local.apis
   project            = var.project
-  service            = "cloudresourcemanager.googleapis.com"
+  service            = each.key
   disable_on_destroy = false
-}
-resource "google_project_service" "serviceusage" {
-  service            = "serviceusage.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "iam" {
-  service            = "iam.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "compute" {
-  service            = "compute.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "sqladmin" {
-  service            = "sqladmin.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "servicenetworking" {
-  service            = "servicenetworking.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "cloudidentity" {
-  service            = "cloudidentity.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
-}
-resource "google_project_service" "secretmanager" {
-  service            = "secretmanager.googleapis.com"
-  disable_on_destroy = false
-  depends_on         = [google_project_service.cloudresourcemanager]
 }
 
-# NETWORKS
+# ---------------- Network ----------------
 
 resource "google_compute_network" "primary" {
-  name       = "development-net"
-  depends_on = [google_project_service.compute]
+  name                    = "primary"
+  auto_create_subnetworks = true
 }
 
-# Set up the PSA.
-resource "google_compute_global_address" "psa_range" {
-  name          = "development-psa-range"
+resource "google_compute_global_address" "primary_psa" {
+  name          = "primary-psa-range"
   address_type  = "INTERNAL"
   purpose       = "VPC_PEERING"
   prefix_length = 16
   network       = google_compute_network.primary.id
-  depends_on    = [google_project_service.compute]
 }
-resource "google_service_networking_connection" "psa_connection" {
+resource "google_service_networking_connection" "primary_psa" {
   network                 = google_compute_network.primary.id
   service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.psa_range.name]
-  depends_on              = [google_project_service.servicenetworking]
+  reserved_peering_ranges = [google_compute_global_address.primary_psa.name]
 }
 
-# SERVICE ACCOUNTS
-
-resource "google_service_account" "god" {
-  account_id   = "sa-god"
-  display_name = "Emergency break-glass god mode"
+resource "google_compute_router" "nat" {
+  name    = "primary-nat-router"
+  region  = local.region
+  network = google_compute_network.primary.id
 }
-resource "google_service_account" "product" {
-  account_id   = "sa-product"
-  display_name = "Product service IAM login"
-}
-resource "google_service_account" "tailscale_subnet_router" {
-  account_id   = "sa-tailscale-subnet-router"
-  display_name = "Tailscale subnet router IAM login"
+resource "google_compute_router_nat" "default" {
+  name                               = "primary-nat"
+  region                             = local.region
+  router                             = google_compute_router.nat.name
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
-# Grant Engineers the ability to impersonate each service account.
-resource "google_service_account_iam_member" "god_engineers" {
-  service_account_id = google_service_account.god.name
+# ---------------- Service Accounts ----------------
+
+locals {
+  service_accounts = {
+    god                       = "Emergency break-glass"
+    product                   = "Product service IAM login"
+    "tailscale-subnet-router" = "Tailscale subnet router IAM login"
+  }
+}
+
+resource "google_service_account" "sa" {
+  for_each     = local.service_accounts
+  account_id   = "sa-${each.key}"
+  display_name = each.value
+}
+resource "google_service_account_iam_member" "sa_impersonate" {
+  for_each           = google_service_account.sa
+  service_account_id = each.value.name
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "group:${var.engineers_group}"
 }
-resource "google_service_account_iam_member" "product_engineers" {
-  service_account_id = google_service_account.product.name
-  role               = "roles/iam.serviceAccountTokenCreator"
-  member             = "group:${var.engineers_group}"
-}
-resource "google_service_account_iam_member" "tailscale_subnet_router_engineers" {
-  service_account_id = google_service_account.tailscale_subnet_router.name
-  role               = "roles/iam.serviceAccountTokenCreator"
-  member             = "group:${var.engineers_group}"
+
+# ---------------- Secrets ----------------
+
+locals {
+  secrets = toset([
+    "ts-authkey",
+  ])
+  secret_grants = {
+    ts-authkey = ["tailscale-subnet-router"]
+  }
 }
 
-# SECRETS
-
-resource "google_secret_manager_secret" "ts_authkey" {
-  secret_id = "ts-authkey"
+resource "google_secret_manager_secret" "secrets" {
+  for_each  = local.secrets
+  secret_id = each.key
   replication {
     auto {}
   }
 }
-resource "google_secret_manager_secret_iam_member" "ts_authkey_for_talscale_subnet_router" {
-  secret_id = google_secret_manager_secret.ts_authkey.id
+
+locals {
+  secret_grant_pairs = flatten([for sid, sa_keys in local.secret_grants : [for sak in sa_keys : { secret_id = sid, sa_key = sak }]])
+  secret_grant_map   = { for p in local.secret_grant_pairs : "${p.secret_id}:${p.sa_key}" => p }
+}
+resource "google_secret_manager_secret_iam_member" "access" {
+  for_each  = local.secret_grant_map
+  secret_id = google_secret_manager_secret.secrets[each.value.secret_id].id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.tailscale_subnet_router.email}"
+  member    = "serviceAccount:${google_service_account.sa[each.value.sa_key].email}"
 }
 
-# VPN
+# ---------------- Tailscale VPN ----------------
+
+locals {
+  psa_cidr = "${google_compute_global_address.primary_psa.address}/${google_compute_global_address.primary_psa.prefix_length}"
+}
 
 resource "google_compute_instance" "tailscale_subnet_router" {
   name           = "tailscale-subnet-router"
   machine_type   = "e2-micro"
   can_ip_forward = true
   boot_disk {
-    initialize_params {
-      image = "cos-cloud/cos-stable"
-    }
+    initialize_params { image = "cos-cloud/cos-stable" }
   }
-  network_interface {
-    network = google_compute_network.primary.id
-  }
+  network_interface { network = google_compute_network.primary.id }
   service_account {
-    email = google_service_account.tailscale_subnet_router.email
+    email = google_service_account.sa["tailscale-subnet-router"].email
     scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring.write",
     ]
   }
   metadata = {
-    "secret-ts-authkey"         = "projects/${var.project}/secrets/${google_secret_manager_secret.ts_authkey.secret_id}"
-    "gce-container-declaration" = <<-EOF
+    "secret-ts-authkey"         = "projects/${var.project}/secrets/${google_secret_manager_secret.secrets["ts-authkey"].secret_id}"
+    "gce-container-declaration" = <<-EOT
       spec:
         containers:
           - name: tailscale
-            image: ghcr.io/tailscale/tailscale:v1.84.3
+            image: ghcr.io/tailscale/tailscale:stable
+            securityContext:
+              privileged: true
             env:
-              - name: TS_ROUTES
-                value: "${google_compute_global_address.psa_range.address}/${google_compute_global_address.psa_range.prefix_length}"
-              - name: TS_STATE_DIR
-                value: "/var/lib/tailscale"
-              - name: TS_AUTH_ONCE
-                value: true
-              - name: TS_HOSTNAME
-                value: gcp
               - name: TS_AUTHKEY
                 valueFrom:
                   secretKeyRef:
                     name: "ts-authkey"
                     key: "latest"
+              - name: TS_ROUTES
+                value: "${local.psa_cidr}"
+              - name: TS_STATE_DIR
+                value: "/var/lib/tailscal
+              - name: TS_AUTH_ONCE
+                value: "true"
+              - name: TS_HOSTNAME
+                value: "gcp-${local.region}-subnet-router"
             volumeMounts:
               - name: ts-state
                 mountPath: /var/lib/tailscale
-            securityContext:
-              privileged: true
         volumes:
           - name: ts-state
             hostPath:
               path: /var/lib/tailscale
         restartPolicy: Always
-    EOF
+    EOT
   }
-  depends_on = [google_project_service.compute, google_secret_manager_secret_iam_member.ts_authkey_for_talscale_subnet_router]
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+  depends_on = [google_secret_manager_secret_iam_member.access["ts-authkey:tailscale_subnet_router"]]
 }
 
-# DATABASES
+# ---------------- Cloud SQL ----------------
+
+locals {
+  cloud_sql_sa_users = {
+    god     = google_service_account.sa["god"]
+    product = google_service_account.sa["product"]
+  }
+}
 
 resource "google_sql_database_instance" "product" {
-  name             = "product"
-  region           = "us-west1"
-  database_version = "POSTGRES_17"
+  name                = "product"
+  region              = local.region
+  database_version    = "POSTGRES_17"
+  deletion_protection = var.environment == "production"
   settings {
-    # TODO: when paying up, go to enterprise plus
     edition                     = "ENTERPRISE"
     tier                        = "db-f1-micro"
     deletion_protection_enabled = var.environment == "production"
-    disk_autoresize_limit       = 100
-    disk_size                   = 10
     disk_type                   = "PD_SSD"
+    disk_size                   = 10
+    disk_autoresize_limit       = 100
     backup_configuration {
       enabled                        = true
       point_in_time_recovery_enabled = var.environment == "production"
@@ -228,37 +230,21 @@ resource "google_sql_database_instance" "product" {
     }
     ip_configuration {
       ipv4_enabled                                  = false
-      private_network                               = "projects/${var.project}/global/networks/${google_compute_network.primary.name}"
+      private_network                               = google_compute_network.primary.self_link
       enable_private_path_for_google_cloud_services = true
     }
   }
-  deletion_protection = var.environment == "production"
-  depends_on          = [google_service_networking_connection.psa_connection, google_project_service.sqladmin]
+  depends_on = [google_service_networking_connection.primary_psa]
 }
 resource "google_sql_database" "primary" {
-  name            = "main-database"
+  name            = "primary"
   instance        = google_sql_database_instance.product.name
   deletion_policy = "ABANDON"
 }
-resource "google_sql_user" "product_god" {
-  name     = trimsuffix(google_service_account.god.email, ".gserviceaccount.com")
+
+resource "google_sql_user" "iam_users" {
+  for_each = local.cloud_sql_sa_users
+  name     = trimsuffix(each.value.email, ".gserviceaccount.com")
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
   instance = google_sql_database_instance.product.name
-}
-resource "google_sql_user" "product_product" {
-  name     = trimsuffix(google_service_account.product.email, ".gserviceaccount.com")
-  type     = "CLOUD_IAM_SERVICE_ACCOUNT"
-  instance = google_sql_database_instance.product.name
-}
-
-# OUTPUTS
-
-output "service_account_god_email" {
-  value = google_service_account.god.email
-}
-output "service_account_product_email" {
-  value = google_service_account.product.email
-}
-output "psa_cidr_range" {
-  value = "${google_compute_global_address.psa_range.address}/${google_compute_global_address.psa_range.prefix_length}"
 }

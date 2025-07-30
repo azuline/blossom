@@ -8,6 +8,7 @@ Manual steps:
 $ PROJECT="..."
 $ YOUR_EMAIL="..."
 $ gcloud auth application-default login
+$ gcloud config set-project "$PROJECT"
 $ gcloud iam service-accounts create terraform
 $ gcloud iam service-accounts add-iam-policy-binding \
     terraform@$PROJECT.iam.gserviceaccount.com \
