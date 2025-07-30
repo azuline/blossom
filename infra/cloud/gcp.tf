@@ -191,6 +191,37 @@ resource "google_secret_manager_secret_iam_member" "access" {
   member    = "serviceAccount:${google_service_account.sa[each.value.sa_key].email}"
 }
 
+# ---------------- Artifact Registry ----------------
+
+resource "google_artifact_registry_repository" "ghcr_remote" {
+  location      = local.region
+  repository_id = "ghcr-remote"
+  description   = "Remote repository for GitHub Container Registry"
+  format        = "DOCKER"
+  mode          = "REMOTE_REPOSITORY"
+  remote_repository_config {
+    description = "GitHub Container Registry remote"
+    docker_repository {
+      custom_repository {
+        uri = "https://ghcr.io"
+      }
+    }
+  }
+}
+
+# ---------------- IAP Access ----------------
+
+resource "google_compute_firewall" "allow_iap" {
+  name    = "allow-iap"
+  network = google_compute_network.primary.name
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+  source_ranges = ["35.235.240.0/20"]
+  target_tags   = ["iap-access"]
+}
+
 # ---------------- Tailscale VPN ----------------
 
 locals {
@@ -198,6 +229,8 @@ locals {
   psa_cidr          = "${google_compute_global_address.primary_psa.address}/${google_compute_global_address.primary_psa.prefix_length}"
 }
 
+# We use Tailscale to grant access to everything else (and perm through its
+# ACL), but for accessing the tailscale instance we use IAP.
 resource "google_compute_instance" "tailscale_subnet_router" {
   name                      = "tailscale-subnet-router"
   machine_type              = "e2-micro"
@@ -243,21 +276,6 @@ curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.l
       --hostname=gcloud \
       --timeout=30s
   EOF
-}
-
-# ---------------- IAP Access ----------------
-
-resource "google_compute_firewall" "allow_iap" {
-  name    = "allow-iap"
-  network = google_compute_network.primary.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  source_ranges = ["35.235.240.0/20"]
-  target_tags   = ["iap-access"]
 }
 
 # ---------------- Cloud SQL ----------------
@@ -308,24 +326,6 @@ resource "google_sql_user" "iam_users" {
   name     = trimsuffix(each.value.email, ".gserviceaccount.com")
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
   instance = google_sql_database_instance.product.name
-}
-
-# ---------------- Artifact Registry ----------------
-
-resource "google_artifact_registry_repository" "ghcr_remote" {
-  location      = local.region
-  repository_id = "ghcr-remote"
-  description   = "Remote repository for GitHub Container Registry"
-  format        = "DOCKER"
-  mode          = "REMOTE_REPOSITORY"
-  remote_repository_config {
-    description = "GitHub Container Registry remote"
-    docker_repository {
-      custom_repository {
-        uri = "https://ghcr.io"
-      }
-    }
-  }
 }
 
 # ---------------- Golink Cloud Run Service ----------------
