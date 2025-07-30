@@ -94,6 +94,8 @@
             mcp-language-server
             ripgrep
             protobuf
+            # Enterprise
+            google-cloud-sql-proxy
           ];
           python = [
             biome # For frontend codegen.
@@ -129,7 +131,7 @@
         devShells = {
           default = makeDevShell {
             name = "blossom-default";
-            paths = with toolchains; general ++ python ++ typescript ++ infra;
+            paths = with toolchains; general ++ local ++ python ++ typescript ++ infra;
           };
           python-ci = makeDevShell {
             name = "blossom-python";

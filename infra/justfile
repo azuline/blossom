@@ -6,7 +6,7 @@ help:  ## Describe the available commands.
 # DEPENDENCY MANAGEMENT.
 
 install:  ## Install Terraform dependencies.
-    cd gcp && terraform init -upgrade
+    cd cloud && terraform init -upgrade
 
 # CODE CHECKS.
 
@@ -14,4 +14,4 @@ lint:  ## Run the configured linters.
     # Nix.
     treefmt
     # Hashicorp.
-    cd gcp && terraform validate && terraform fmt
+    cd cloud && terraform validate && terraform fmt

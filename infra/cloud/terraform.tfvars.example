@@ -1,0 +1,4 @@
+project         = "your-project-id"
+environment     = "production"
+terraform_sa    = "terraform@<your-project-id>.iam.gserviceaccount.com"
+engineers_group = "engineers@<your-domain>.com"

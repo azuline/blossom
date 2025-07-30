@@ -1,17 +1,6 @@
 > [!NOTE]
 > All paths assume `cwd == python/`.
 
-# Schema sources
-
-- **`database/schema.sql`:** definitive schema snapshot. *Read, never edit.*
-- **`database/schema_annotations.yaml`:** — table / column comments. Query a comment:
-
-  ```bash
-  yq '.{table}.{column}' database/schema_annotations.yaml
-  ```
-
-Add a comment whenever a column’s purpose is not obvious.
-
 # Migrations
 
 ```bash
@@ -28,9 +17,12 @@ just migrate                       # apply
 
 Create at most one migration per branch. Find migrations created in the current branch with `just check-for-migration`.
 
+Add a column annotation to `database/schema_annotations.yaml` whenever a column’s purpose is not obvious.
+
+
 ## Table conventions
 
-Create tables using the following template:
+Create table the following template:
 
 ```sql
 CREATE TABLE new_table (

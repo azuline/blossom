@@ -82,6 +82,11 @@ Follow these conventions:
 - Name queries as `{resource}_{action}_{filter}`. For example, `user_create`, `user_get_by_id`, `user_list_by_organization`, etc.
 - Never directly modify anything in a `__codegen_db__` directory, as they are generated artifacts.
 
+Learn about the database schema with these files:
+
+- **`database/schema.sql`:** definitive schema snapshot. *Read, never edit.*
+- **`database/schema_annotations.yaml`:** — table / column comments. Query a comment with `yq '.{table}.{column}' database/schema_annotations.yaml`.
+
 ## Enums
 
 `foundation.__codegen_db__.enums` is generated from the `%_enum` database tables and used in database models.
