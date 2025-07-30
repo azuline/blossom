@@ -37,9 +37,12 @@ provider "google" {
 
 locals {
   apis = toset([
+    "artifactregistry.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "compute.googleapis.com",
     "iam.googleapis.com",
+    "iap.googleapis.com",
+    "run.googleapis.com",
     "secretmanager.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
@@ -89,22 +92,73 @@ resource "google_compute_router_nat" "default" {
 
 locals {
   service_accounts = {
-    god                       = "Emergency break-glass"
-    product                   = "Product service IAM login"
-    "tailscale-subnet-router" = "Tailscale subnet router IAM login"
+    god = {
+      account_id    = "sa-god"
+      display       = "Emergency break-glass"
+      project_roles = ["roles/owner"]
+    }
+    product = {
+      account_id    = "sa-product"
+      display       = "Product service IAM login"
+      project_roles = []
+    }
+    "tailscale_subnet_router" = {
+      account_id = "sa-tailscale-subnet-router"
+      display    = "Tailscale subnet router IAM login"
+      project_roles = [
+        "roles/logging.logWriter",
+        "roles/monitoring.metricWriter",
+      ]
+    }
+    golink = {
+      account_id = "sa-golink"
+      display    = "Golink service IAM login"
+      project_roles = [
+        "roles/artifactregistry.reader",
+        "roles/logging.logWriter",
+        "roles/monitoring.metricWriter",
+      ]
+    }
   }
 }
 
 resource "google_service_account" "sa" {
   for_each     = local.service_accounts
-  account_id   = "sa-${each.key}"
-  display_name = each.value
+  account_id   = each.value.account_id
+  display_name = each.value.display
 }
 resource "google_service_account_iam_member" "sa_impersonate" {
   for_each           = google_service_account.sa
   service_account_id = each.value.name
   role               = "roles/iam.serviceAccountTokenCreator"
   member             = "group:${var.engineers_group}"
+}
+
+resource "google_project_iam_member" "engineers_iap_tunnel" {
+  project = var.project
+  role    = "roles/iap.tunnelResourceAccessor"
+  member  = "group:${var.engineers_group}"
+}
+
+locals {
+  sa_project_role_pairs = flatten([
+    for sak, cfg in local.service_accounts : [
+      for r in coalesce(cfg.project_roles, []) : {
+        sa_key = sak
+        role   = r
+      }
+    ]
+  ])
+  sa_project_role_map = {
+    for p in local.sa_project_role_pairs : "${p.sa_key}:${p.role}" => p
+  }
+}
+
+resource "google_project_iam_member" "sa_roles" {
+  for_each = local.sa_project_role_map
+  project  = var.project
+  role     = each.value.role
+  member   = "serviceAccount:${google_service_account.sa[each.value.sa_key].email}"
 }
 
 # ---------------- Secrets ----------------
@@ -114,7 +168,7 @@ locals {
     "ts-authkey",
   ])
   secret_grants = {
-    ts-authkey = ["tailscale-subnet-router"]
+    ts-authkey = ["tailscale_subnet_router", "golink"]
   }
 }
 
@@ -140,63 +194,70 @@ resource "google_secret_manager_secret_iam_member" "access" {
 # ---------------- Tailscale VPN ----------------
 
 locals {
-  psa_cidr = "${google_compute_global_address.primary_psa.address}/${google_compute_global_address.primary_psa.prefix_length}"
+  tailscale_version = "1.86.2"
+  psa_cidr          = "${google_compute_global_address.primary_psa.address}/${google_compute_global_address.primary_psa.prefix_length}"
 }
 
 resource "google_compute_instance" "tailscale_subnet_router" {
-  name           = "tailscale-subnet-router"
-  machine_type   = "e2-micro"
-  can_ip_forward = true
+  name                      = "tailscale-subnet-router"
+  machine_type              = "e2-micro"
+  tags                      = ["iap-access"]
+  can_ip_forward            = true
+  allow_stopping_for_update = true
   boot_disk {
-    initialize_params { image = "cos-cloud/cos-stable" }
+    initialize_params { image = "debian-cloud/debian-12" }
   }
-  network_interface { network = google_compute_network.primary.id }
+  network_interface {
+    network = google_compute_network.primary.id
+  }
   service_account {
-    email = google_service_account.sa["tailscale-subnet-router"].email
-    scopes = [
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring.write",
-    ]
-  }
-  metadata = {
-    "secret-ts-authkey"         = "projects/${var.project}/secrets/${google_secret_manager_secret.secrets["ts-authkey"].secret_id}"
-    "gce-container-declaration" = <<-EOT
-      spec:
-        containers:
-          - name: tailscale
-            image: ghcr.io/tailscale/tailscale:stable
-            securityContext:
-              privileged: true
-            env:
-              - name: TS_AUTHKEY
-                valueFrom:
-                  secretKeyRef:
-                    name: "ts-authkey"
-                    key: "latest"
-              - name: TS_ROUTES
-                value: "${local.psa_cidr}"
-              - name: TS_STATE_DIR
-                value: "/var/lib/tailscal
-              - name: TS_AUTH_ONCE
-                value: "true"
-              - name: TS_HOSTNAME
-                value: "gcp-${local.region}-subnet-router"
-            volumeMounts:
-              - name: ts-state
-                mountPath: /var/lib/tailscale
-        volumes:
-          - name: ts-state
-            hostPath:
-              path: /var/lib/tailscale
-        restartPolicy: Always
-    EOT
+    email  = google_service_account.sa["tailscale_subnet_router"].email
+    scopes = ["cloud-platform"]
   }
   shielded_instance_config {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
-  depends_on = [google_secret_manager_secret_iam_member.access["ts-authkey:tailscale_subnet_router"]]
+  metadata = {
+    serial-port-enable         = "TRUE"
+    serial-port-logging-enable = "TRUE"
+    enable-oslogin             = "TRUE"
+  }
+  metadata_startup_script = <<-EOF
+    #!/bin/bash
+    set -euo pipefail
+
+    sysctl -w net.ipv4.ip_forward=1
+    sysctl -w net.ipv6.conf.all.forwarding=1
+
+    curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list
+
+    sudo apt-get update --yes
+    sudo apt-get install --yes tailscale
+    
+    tailscale up \
+      --authkey="$(gcloud secrets versions access latest --project="${var.project}" --secret="${google_secret_manager_secret.secrets["ts-authkey"].secret_id}")" \
+      --advertise-routes="${local.psa_cidr}" \
+      --hostname=gcloud \
+      --timeout=30s
+  EOF
+}
+
+# ---------------- IAP Access ----------------
+
+resource "google_compute_firewall" "allow_iap" {
+  name    = "allow-iap"
+  network = google_compute_network.primary.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["35.235.240.0/20"]
+  target_tags   = ["iap-access"]
 }
 
 # ---------------- Cloud SQL ----------------
@@ -248,3 +309,62 @@ resource "google_sql_user" "iam_users" {
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
   instance = google_sql_database_instance.product.name
 }
+
+# ---------------- Artifact Registry ----------------
+
+resource "google_artifact_registry_repository" "ghcr_remote" {
+  location      = local.region
+  repository_id = "ghcr-remote"
+  description   = "Remote repository for GitHub Container Registry"
+  format        = "DOCKER"
+  mode          = "REMOTE_REPOSITORY"
+  remote_repository_config {
+    description = "GitHub Container Registry remote"
+    docker_repository {
+      custom_repository {
+        uri = "https://ghcr.io"
+      }
+    }
+  }
+}
+
+# ---------------- Golink Cloud Run Service ----------------
+
+# resource "google_cloud_run_v2_service" "golink" {
+#   name     = "golink"
+#   location = local.region
+#   ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+#   deletion_protection = false
+#   template {
+#     service_account = google_service_account.sa["golink"].email
+#     containers {
+#       image = "${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest"
+#       env {
+#         name = "TS_AUTHKEY"
+#         value_source {
+#           secret_key_ref {
+#             secret  = google_secret_manager_secret.secrets["ts-authkey"].secret_id
+#             version = "latest"
+#           }
+#         }
+#       }
+#       ports {
+#         container_port = 80
+#       }
+#       resources {
+#         limits = {
+#           cpu    = "1000m"
+#           memory = "512Mi"
+#         }
+#       }
+#     }
+#     scaling {
+#       min_instance_count = 0
+#       max_instance_count = 2
+#     }
+#   }
+#   traffic {
+#     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+#     percent = 100
+#   }
+# }
