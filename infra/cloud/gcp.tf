@@ -231,6 +231,13 @@ locals {
 
 # We use Tailscale to grant access to everything else (and perm through its
 # ACL), but for accessing the tailscale instance we use IAP.
+resource "google_compute_disk" "tailscale_subnet_router" {
+  name = "tailscale-subnet-router-data"
+  type = "pd-standard"       
+  size = 1                    
+  zone = local.zone
+  lifecycle { prevent_destroy = true }
+}
 resource "google_compute_instance" "tailscale_subnet_router" {
   name                      = "tailscale-subnet-router"
   machine_type              = "e2-micro"
@@ -252,8 +259,13 @@ resource "google_compute_instance" "tailscale_subnet_router" {
     enable_vtpm                 = true
     enable_integrity_monitoring = true
   }
+  attached_disk {
+    source      = google_compute_disk.tailscale_subnet_router.id
+    device_name = "disk"
+    mode        = "READ_WRITE"
+  }
   metadata = {
-    serial-port-enable         = "TRUE"
+    serial-port                = "TRUE"
     serial-port-logging-enable = "TRUE"
     enable-oslogin             = "TRUE"
   }
@@ -263,6 +275,10 @@ resource "google_compute_instance" "tailscale_subnet_router" {
 
     sysctl -w net.ipv4.ip_forward=1
     sysctl -w net.ipv6.conf.all.forwarding=1
+
+    fsck.ext4 -tvy /dev/disk/by-id/google-disk
+    mkdir -p /var/lib/tailscale
+    mount -t ext4 -o defaults /dev/disk/by-id/google-disk /var/lib/tailscale
 
     curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg | tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
 curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list | tee /etc/apt/sources.list.d/tailscale.list
@@ -278,6 +294,13 @@ curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.l
   EOF
 }
 
+resource "google_compute_disk" "golink" {
+  name = "golink-data"
+  type = "pd-standard"       
+  size = 1                    
+  zone = local.zone
+  lifecycle { prevent_destroy = true }
+}
 resource "google_compute_instance" "golink" {
   name                      = "golink"
   machine_type              = "e2-micro"
@@ -299,6 +322,11 @@ resource "google_compute_instance" "golink" {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
+  }
+  attached_disk {
+    source      = google_compute_disk.golink.id
+    device_name = "disk"
+    mode        = "READ_WRITE"
   }
   metadata = {
     serial-port-enable         = "TRUE"
@@ -330,7 +358,7 @@ resource "google_compute_instance" "golink" {
           [Service]
           Type=simple
           ExecStartPre=sudo -u golink /usr/bin/docker pull ${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest
-          ExecStart=bash -c 'docker run --rm --name golink --user 2000 --volume /var/lib/golink:/home/nonroot --env TS_AUTHKEY="$(/run/fetch_secret "${google_secret_manager_secret.secrets["ts-authkey"].secret_id}" latest)" ${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest'
+          ExecStart=bash -c 'docker run --rm --name golink --user 2000 --volume /mnt/disks/golink:/home/nonroot --env TS_AUTHKEY="$(/run/fetch_secret "${google_secret_manager_secret.secrets["ts-authkey"].secret_id}" latest)" ${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest'
           ExecStop=/usr/bin/docker stop -t 10 golink
           Restart=always
           RestartSec=10
@@ -338,9 +366,13 @@ resource "google_compute_instance" "golink" {
           StandardError=journal
           [Install]
           WantedBy=multi-user.target
+      bootcmd:
+      - fsck.ext4 -tvy /dev/disk/by-id/google-disk
+      - mkdir -p /mnt/disks/golink
+      - mount -t ext4 -o defaults /dev/disk/by-id/google-disk /mnt/disks/golink
+      - chown 2000:2000 /mnt/disks/golink
       runcmd:
       - sudo -u golink /usr/bin/docker-credential-gcr configure-docker --registries=${local.region}-docker.pkg.dev
-      - mkdir -p /var/lib/golink
       - systemctl daemon-reload
       - systemctl start golink.service
     EOF
