@@ -278,6 +278,75 @@ curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.l
   EOF
 }
 
+resource "google_compute_instance" "golink" {
+  name                      = "golink"
+  machine_type              = "e2-micro"
+  tags                      = ["iap-access"]
+  allow_stopping_for_update = true
+  boot_disk {
+    initialize_params {
+      image = "cos-cloud/cos-stable"
+    }
+  }
+  network_interface {
+    network = google_compute_network.primary.id
+  }
+  service_account {
+    email  = google_service_account.sa["golink"].email
+    scopes = ["cloud-platform"]
+  }
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+  metadata = {
+    serial-port-enable         = "TRUE"
+    serial-port-logging-enable = "TRUE"
+    enable-oslogin             = "TRUE"
+    user-data                  = <<-EOF
+      #cloud-config
+      users:
+      - name: golink
+        uid: 2000
+        groups: docker
+      write_files:
+      - path: /run/fetch_secret
+        permissions: 0755
+        owner: root
+        content: |
+          #!/usr/bin/env bash
+          set -euo pipefail
+          TOKEN="$(curl -sfH 'Metadata-Flavor: Google' "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token" | jq -r .access_token)"
+          curl -sf -H "Authorization: Bearer $TOKEN" "https://secretmanager.googleapis.com/v1/projects/cfoadvisors-production/secrets/$1/versions/$2:access" | jq -r .payload.data | base64 -d
+      - path: /etc/systemd/system/golink.service
+        permissions: 0644
+        owner: root
+        content: |
+          [Unit]
+          Description=Golink service
+          Requires=docker.service
+          After=docker.service
+          [Service]
+          Type=simple
+          ExecStartPre=sudo -u golink /usr/bin/docker pull ${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest
+          ExecStart=bash -c 'docker run --rm --name golink --user 2000 --volume /var/lib/golink:/home/nonroot --env TS_AUTHKEY="$(/run/fetch_secret "${google_secret_manager_secret.secrets["ts-authkey"].secret_id}" latest)" ${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest'
+          ExecStop=/usr/bin/docker stop -t 10 golink
+          Restart=always
+          RestartSec=10
+          StandardOutput=journal
+          StandardError=journal
+          [Install]
+          WantedBy=multi-user.target
+      runcmd:
+      - sudo -u golink /usr/bin/docker-credential-gcr configure-docker --registries=${local.region}-docker.pkg.dev
+      - mkdir -p /var/lib/golink
+      - systemctl daemon-reload
+      - systemctl start golink.service
+    EOF
+  }
+}
+
 # ---------------- Cloud SQL ----------------
 
 locals {
@@ -327,44 +396,3 @@ resource "google_sql_user" "iam_users" {
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
   instance = google_sql_database_instance.product.name
 }
-
-# ---------------- Golink Cloud Run Service ----------------
-
-# resource "google_cloud_run_v2_service" "golink" {
-#   name     = "golink"
-#   location = local.region
-#   ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
-#   deletion_protection = false
-#   template {
-#     service_account = google_service_account.sa["golink"].email
-#     containers {
-#       image = "${local.region}-docker.pkg.dev/${var.project}/ghcr-remote/tailscale/golink:latest"
-#       env {
-#         name = "TS_AUTHKEY"
-#         value_source {
-#           secret_key_ref {
-#             secret  = google_secret_manager_secret.secrets["ts-authkey"].secret_id
-#             version = "latest"
-#           }
-#         }
-#       }
-#       ports {
-#         container_port = 80
-#       }
-#       resources {
-#         limits = {
-#           cpu    = "1000m"
-#           memory = "512Mi"
-#         }
-#       }
-#     }
-#     scaling {
-#       min_instance_count = 0
-#       max_instance_count = 2
-#     }
-#   }
-#   traffic {
-#     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
-#     percent = 100
-#   }
-# }
