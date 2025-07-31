@@ -8,11 +8,11 @@
 
 **Out-of-band changes:** Never revert changes made by the user to files you previously edited, even if they are not part of your changes. Modify the REMAINING code to conform to the user's changed code.
 
-**Fail fast, fail early:** The common definition of defensive programming is wrong, as is the robustness principle. Assert expectations and hard fail when they are not met. Assume all other systems are robust; do not accommodate their failings.
+**Fail fast, fail early:** The common definition of defensive programming is wrong, as is the robustness principle. Assert expectations and hard fail when they are not met. Assume all other systems are robust; do not silence their errors or failures.
 
 ## Working on Issues
 
-When you are given an issue to problem, first create a directory named `$(pwd)/claude/issue_YYMMDD_{issue_name}`. Put all temporary files in there: design docs, plans, debug scripts, etc.
+When you are given an issue to problem, first create a directory named `$(pwd)/claude/issue_YYMMDD_{issue_name}`. Put all temporary files in there: design docs, plans, debug scripts, etc. Get the current YYMMDD with `date +%y%m%d`.
 
 For every issue, draft two documents: a `DESIGN.md` describing the end state and necessary changes, and a `WORKLIST.md` containing a tactical checklist of milestones.
 
